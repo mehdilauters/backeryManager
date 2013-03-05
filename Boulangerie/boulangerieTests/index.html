@@ -1,0 +1,149 @@
+<style>
+body{
+  background-color: black;
+}
+#pains{
+  background-image: url("test.png");
+  height:531px;
+  width:800px;
+}
+
+
+
+
+
+
+dd#noixDesc{
+  position: absolute;
+
+  padding:0px;
+  margin:0px;
+  top:140px;
+  left:10px;
+
+  width: 310px;
+  height: 385px;
+}
+
+dd#noixDesc:hover{
+  background-image: url("testNoix.png");
+}
+
+
+dd#lardonsDesc{
+  position: absolute;
+
+  padding:0px;
+   margin:0px; 
+  top:15px;
+  left:220px;
+
+  width: 310px;
+  height: 320px;
+}
+
+dd#lardonsDesc:hover{
+  background-image: url("testLardons.png");
+}
+
+dd#olivesDesc{
+  position: absolute;
+
+  top:190px;
+  left:245px;
+
+  width: 400px;
+  height: 330px;
+z-index:9;
+}
+
+dd#olivesDesc:hover{
+  background-image: url("testOlive.png");
+}
+dl dd div{
+  margin-top:30%;
+  margin-left:30%;
+}
+dl dd div{
+  color: white;
+  display:none;
+}
+
+dl dd:hover div{
+  display: block;
+}
+
+dd#chocolatDesc{
+  position: absolute;
+
+  top:55px;
+  left:455px;
+
+  width: 255px;
+  height: 240px;
+}
+
+dd#chocolatDesc:hover{
+  background-image: url("testChocolat.png");
+}
+
+
+dd#oceanDef{ top: 165px; left: 63px; }
+dd#oceanDef a{ position: absolute; width: 205px; height: 70px; text-decoration: none; border: 1px solid #FFFCE6; 
+  background: transparent url(note.png) repeat; }
+dd#oceanDef a span{ display: none; }
+dd#oceanDef a:hover{ background: transparent url(hover.png) repeat; border: 1px solid #BCBCBC; }
+dd#oceanDef a:hover span{
+ display: block;
+ text-indent: 0;
+ vertical-align: top;
+ color: #000;
+ background-color: #F4F4F4;
+ font-weight: bold;
+ position: absolute;
+ border: 1px solid #BCBCBC;
+ bottom: 100%;
+ margin: 0;
+ padding: 5px;
+ width: 75%;
+ }
+</style>
+<div id="pains" >
+<dl id="painsDescritpion">
+  <dt id="olives">Pains aux olives</dt>
+    <dd id="olivesDesc">
+			<div><a href="" >Boudiou c'est bon</a>
+			    <ul>
+				<li>Farine</li>
+			      <li>Olive</li>
+			      <li>Levin</li>
+			  </ul>
+		      </div>
+    </dd>
+  <dt id="noix">Pains aux noix</dt>
+    <dd id="noixDesc"><div><a href="" >Boudiou c'est bon</a>
+			    <ul>
+				<li>Farine</li>
+			      <li>Noix</li>
+			      <li>Levin</li>
+			  </ul>
+			  </div></dd>
+  <dt id="lardons">Pains aux lardons</dt>
+    <dd id="lardonsDesc"><div><a href="" >Boudiou c'est bon</a>
+	  			    <ul>
+				<li>Farine</li>
+			      <li>Lardons</li>
+			      <li>Levin</li>
+			  </ul>
+		</div></dd>
+   <dt id="chocolat">Pains au chocolat</dt>
+    <dd id="chocolatDesc"><div><a href="" >Boudiou c'est bon</a>
+    			    <ul>
+				<li>Farine</li>
+			      <li>Chocolat</li>
+			      <li>Levin</li>
+			  </ul>
+
+	</div></dd>
+</dl>
+</div>

@@ -1,0 +1,309 @@
+<?php
+App::uses('AppController', 'Controller');
+/**
+ * Events Controller
+ *
+ * @property Event $Event
+ */
+class EventsController extends AppController {
+var $components = array('Session');
+var $helpers = array('Time');
+var $uses = array('Event','Gevent');
+/**
+ * index method
+ *
+ * @return void
+ */
+	public function index() {
+		$this->Event->recursive = 0;
+		$this->set('events', $this->paginate());
+	}
+
+/**
+ * view method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function view($id = null) {
+		if (!$this->Event->exists($id)) {
+			throw new NotFoundException(__('Invalid event'));
+		}
+		$options = array('conditions' => array('Event.' . $this->Event->primaryKey => $id));
+		$this->set('event', $this->Event->find('first', $options));
+	}
+
+/**
+ * add method
+ *
+ * @return void
+ */
+	public function add() {
+		if ($this->request->is('post')) {
+			$this->Event->create();
+			if ($this->Event->save($this->request->data)) {
+				$this->Session->setFlash(__('The event has been saved'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				debug($this->Events->validationErrors);
+				$this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+			}
+		}
+		$eventTypes = $this->Event->EventType->find('list');
+		$this->set(compact('eventTypes'));
+	}
+
+/**
+ * edit method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function edit($id = null) {
+		if (!$this->Event->exists($id)) {
+			throw new NotFoundException(__('Invalid event'));
+		}
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if ($this->Event->save($this->request->data)) {
+				$this->Session->setFlash(__('The event has been saved'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+			}
+		} else {
+			$options = array('conditions' => array('Event.' . $this->Event->primaryKey => $id));
+			$this->request->data = $this->Event->find('first', $options);
+		}
+		$eventTypes = $this->Event->EventType->find('list');
+		$this->set(compact('eventTypes'));
+	}
+
+/**
+ * delete method
+ *
+ * @throws NotFoundException
+ * @throws MethodNotAllowedException
+ * @param string $id
+ * @return void
+ */
+	public function delete($id = null) {
+		$this->Event->id = $id;
+		if (!$this->Event->exists()) {
+			throw new NotFoundException(__('Invalid event'));
+		}
+		$this->request->onlyAllow('post', 'delete');
+		if ($this->Event->delete()) {
+			$this->Session->setFlash(__('Event deleted'));
+			$this->redirect(array('action' => 'index'));
+		}
+		$this->Session->setFlash(__('Event was not deleted'));
+		$this->redirect(array('action' => 'index'));
+	}
+	
+	public function calendar()
+	{
+// 		debug($this->Event->find('all'));
+// 		debug($this->Gevent->find('all'));
+
+
+		
+// // 		$service = Zend_Gdata_Calendar::AUTH_SERVICE_NAME;
+// // 		$user = "mehdilauters@gmail.com";
+// // 		$pass = "mesezhdideezesl";
+		
+// // 		$client = Zend_Gdata_ClientLogin::getHttpClient($user, $pass, $service);
+// // 		$service = new Zend_Gdata_Calendar($client);
+		
+		
+// 		$service = new Zend_Gdata_Calendar();
+		
+// 		$query = $service->newEventQuery();
+		
+// 		$query->setUser('8l15dtn7pvqq2ilu6bi0j4016o@group.calendar.google.com');
+// 		$query->setVisibility('public');
+// 		$query->setProjection('full');
+// 		try { $eventFeed = $service->getCalendarEventFeed($query); }
+// catch (Zend_Gdata_App_Exception $e) { echo $e; }
+// echo "<ul>\n";
+//   foreach ($eventFeed as $event) {
+//     echo "\t<li>" . $event->title->text .  " \n";
+//     echo "\t\t<ul>\n";
+//     foreach ($event->when as $when) {
+//       echo "\t\t\t<li>Starts: " . $when->startTime . "</li>\n";
+//     }
+//     echo "\t\t</ul>\n";
+//     echo "\t</li>\n";
+//   }
+//   echo "</ul>\n";
+		
+		
+	}
+	
+	
+	function gcalendarFeed($id=null) {
+		$data = array();
+		$this->layout = "ajax";
+		$vars = $this->params['url'];
+		$conditions = array('conditions'=>array('start >=' => $vars['start'],
+							'start <=' => $vars['end']	));
+		$events = $this->Gevent->find('all', $conditions);
+		foreach($events as $event) {
+// 			debug($event);
+// 			if($event['Event']['all_day'] == 1) {
+// 				$allday = true;
+// 				$end = $event['Event']['start'];
+// 			} else {
+				$allday = false;
+				$end = $event['GeventDate'][0]['end'];
+// 			}
+				$data[] = array(
+						'id' => 'idiii',//$event['Gevent']['id'],
+						'title'=>$event['Gevent']['title'],
+						'start'=>strtotime($event['GeventDate'][0]['start']),
+						'end' => strtotime($event['GeventDate'][0]['end']),
+						'allDay' => $allday,
+						'url' => '/boulangerie/events/view/',//.$event['Gevent']['id'],
+						'details' => 'hoooooooo',//$event['Event']['details'],
+						'className' => 'red'//$event['EventType']['color']
+						);
+		}
+			$this->set("json", json_encode($data));
+			$this->render('feed');
+	}
+	
+	// The feed action is called from "webroot/js/ready.js" to get the list of events (JSON)
+	function feed($id=null) {
+		$data = array();
+		$this->layout = "ajax";
+		$vars = $this->params['url'];
+		
+		$recursiveTypes = array('ANY'=>'',
+								'DAYLY' => '+1 day',
+								'WEEKLY' => '+1 week',
+								'MONTHLY'=> '+ 1 month',
+								'YEARLY'=> '+ 1 year'
+				);
+		
+		foreach($recursiveTypes as $recursive => $addition)
+		{
+
+			
+			$conditions = array('conditions' =>
+					array( 'OR' => array(
+							array(
+							'UNIX_TIMESTAMP(start) >=' => $vars['start'],
+							'UNIX_TIMESTAMP(start) <=' => $vars['end'],
+							),
+							'AND' => array(
+									'OR' => array(
+										'ended = NULL',
+										'ended >= ' => $vars['end'],
+										),
+									'UNIX_TIMESTAMP(start) <=' => $vars['start'],
+									)
+							),
+							'recursive_type' => $recursive
+					)
+			
+			);
+			
+			$events = $this->Event->find('all', $conditions);
+			foreach($events as $event) {
+				if($event['Event']['all_day'] == 1) {
+					$allday = true;
+					$end = $event['Event']['start'];
+				} else {
+					$allday = false;
+					$end = $event['Event']['end'];
+				}
+				// 			strtotime('+3 weeks')
+				
+				
+				
+				$eventDuration = strtotime($end) - strtotime($event['Event']['start']);
+				$startDate = strtotime($event['Event']['start']);
+// 				debug($event['Event']['title']);
+// 				debug($event['Event']['start']);
+				$endDate = strtotime($event['Event']['ended']);
+				$i = 0;
+				while($startDate <= $endDate && $startDate <= $vars['end'])
+				{
+// 					debug($startDate);
+// 					debug($vars['start']);
+// 					debug($startDate >= $vars['start']);
+					if($startDate >= $vars['start'])
+					{
+						if($recursive == 'ANY')
+						{
+							$id = $event['Event']['id'];
+						}
+						else
+						{
+							$id = $event['Event']['id'].'.'.$i;
+						}
+						$data[] = array(
+								'id' => $id,
+								'title'=>$event['Event']['title'],
+								'start'=>$startDate,
+								'end' => $startDate+$eventDuration,
+								'allDay' => $allday,
+								'url' => '/boulangerie/events/view/'.$event['Event']['id'],
+								'details' => $event['Event']['details'],
+								'className' => 'red'//$event['EventType']['color']
+						);
+						if($addition == '')
+						{
+							break;
+						}
+					}
+					$startDate = strtotime($addition,$startDate);
+					$i++;
+				}
+			}			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+// 		$conditions = array('conditions' => array('UNIX_TIMESTAMP(start) >=' => $vars['start'], 'UNIX_TIMESTAMP(start) <=' => $vars['end']));
+// 		$events = $this->Event->find('all', $conditions);
+// 		foreach($events as $event) {
+// 			if($event['Event']['all_day'] == 1) {
+// 				$allday = true;
+// 				$end = $event['Event']['start'];
+// 			} else {
+// 				$allday = false;
+// 				$end = $event['Event']['end'];
+// 			}
+// 			$data[] = array(
+// 					'id' => $event['Event']['id'],
+// 					'title'=>$event['Event']['title'],
+// 					'start'=>$event['Event']['start'],
+// 					'end' => $end,
+// 					'allDay' => $allday,
+// 					'url' => '/boulangerie/events/view/'.$event['Event']['id'],
+// 					'details' => $event['Event']['details'],
+// 					'className' => 'red'//$event['EventType']['color']
+// 			);
+// 		}
+		$this->set("json", json_encode($data));
+	}
+	
+	// The update action is called from "webroot/js/ready.js" to update date/time when an event is dragged or resized
+	function update() {
+		$vars = $this->params['url'];
+		$this->Event->id = $vars['id'];
+		$this->Event->saveField('start', $vars['start']);
+		$this->Event->saveField('end', $vars['end']);
+		$this->Event->saveField('all_day', $vars['allday']);
+	}
+}
