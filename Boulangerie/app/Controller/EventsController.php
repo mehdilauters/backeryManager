@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
  * @property Event $Event
  */
 class EventsController extends AppController {
-  var $uses = array('Event', 'Gevent');
+  var $uses = array('Event', 'Gevent', 'EventType');
 
 /**
  * index method
@@ -16,9 +16,9 @@ class EventsController extends AppController {
   public function index() {
     $events = $this->Event->find('all');
 
-    
-//     debug($events);
-    //$this->set('events', $events);
+
+    //debug($events);
+    $this->set('events', $events);
 //     debug($this->Gevent->find('all'));
 //     $event = array();
 //     $event['Gevent']['title'] = 'NAZDAAAR';
@@ -52,22 +52,24 @@ class EventsController extends AppController {
  *
  * @return void
  */
-  public function add() {
+  public function add($eventTypeId = null, $geventId = null) {
     if ($this->request->is('post')) {
       $this->Event->create();
-      $this->request->data['Gevent']['title'] = $this->request->data['Event']['title'];
-      $this->request->data['Gevent']['description'] = $this->request->data['Event']['description'];
-      
-      $datetime= DateTime::createFromFormat("d/m/Y", $this->request->data['Event']['start']);
-      if($datetime == false)
+      if(!isset($this->request->data['Event']['gevent_id']))
       {
-        $this->Event->invalidateField('start');
-      }
-      else
-      {
-        $this->request->data['GeventDate']['start'] = $datetime->format('Y-m-d H:i:s');
-      }
+        $this->request->data['Gevent']['title'] = $this->request->data['Event']['title'];
+        $this->request->data['Gevent']['description'] = $this->request->data['Event']['description'];
       
+        $datetime= DateTime::createFromFormat("d/m/Y", $this->request->data['Event']['start']);
+        if($datetime == false)
+        {
+          $this->Event->invalidateField('start');
+        }
+        else
+        {
+          $this->request->data['GeventDate']['start'] = $datetime->format('Y-m-d H:i:s');
+        }
+       }
       
       if ($this->Event->save($this->request->data)) {
         $this->Session->setFlash(__('The event has been saved'));
@@ -76,9 +78,17 @@ class EventsController extends AppController {
         $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
       }
     }
+    if( $eventTypeId != null )
+    {
+       $this->request->data['Event']['event_type_id'] = $eventTypeId;
+      $this->set('geventId',$geventId);
+      
+    }
+    
     $media = $this->Event->Media->find('list');
     $products = $this->Event->Product->find('list');
-    $this->set(compact('media', 'products'));
+    $eventTypes = $this->Event->EventType->find('list');
+    $this->set(compact('media', 'products', 'eventTypes'));
   }
 
 /**
@@ -105,7 +115,8 @@ class EventsController extends AppController {
     }
     $media = $this->Event->Media->find('list');
     $products = $this->Event->Product->find('list');
-    $this->set(compact('media', 'products'));
+    $eventTypes = $this->Event->EventType->find('list');
+    $this->set(compact('media', 'products', 'eventTypes'));
   }
 
 /**

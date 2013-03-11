@@ -1,17 +1,20 @@
 <?php 
  if( isset($photo['Photo'] ))
  {
-   $key = 'Photo';
+   $data = $photo;
  }
  else
  {
-   $key = 'Media';
+ $data = $photo;
+ $data['Photo'] = $photo['Media']['Photo'];
  }
+ //debug($photo);
+
 ?>
 <div>
-  <span><?php echo $photo[$key]['name'] ?></span>
-  <img src="<?php echo $this->webroot.'img/photos/preview/'.$photo[$key]['path'] ?>" alt="<?php echo $photo[$key]['name'] ?>" />
+  <span><?php echo $data['Media']['name'] ?></span>
+  <img src="<?php echo $this->webroot.'img/photos/preview/'.$data['Media']['path'] ?>" alt="<?php echo $data['Media']['name'] ?>" />
   <p>
-    <?php echo $photo[$key]['description'] ?>
+    <?php echo $photo['Media']['description'] ?>
   </p>
 </div>
