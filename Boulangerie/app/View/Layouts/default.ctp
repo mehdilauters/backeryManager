@@ -83,6 +83,7 @@ echo $this->Html->css(
       </div>
   <div class="clear" ></div>
       <div id="footer">
+	<a href="<?php echo $this->webroot ?>config/setAdmin/1" >Admin</a>
 	<?php echo $this->Html->link(
 	    $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
 	    'http://www.cakephp.org/',

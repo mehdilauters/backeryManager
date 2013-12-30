@@ -26,6 +26,7 @@ class ConfigController extends AppController {
   public function setAdmin($admin)
   {
    $this->Session->write('isAdmin', $admin == 1); 
+   $this->redirect(array('action' => 'index'));
   }
   
   public function importProducts()
