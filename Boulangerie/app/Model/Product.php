@@ -51,14 +51,6 @@ class Product extends AppModel {
       ),
     ),
     'media_id' => array(
-      'notempty' => array(
-        'rule' => array('notempty'),
-        'message' => 'Product::media_id must be notempty',
-        //'allowEmpty' => false,
-        //'required' => false,
-        //'last' => false, // Stop validation after this rule
-        //'on' => 'create', // Limit validation to 'create' or 'update' operations
-      ),
       'numeric' => array(
         'rule' => array('numeric'),
         'message' => 'Product::media_id must be numeric',
