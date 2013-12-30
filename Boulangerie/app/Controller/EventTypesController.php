@@ -107,11 +107,13 @@ class EventTypesController extends AppController {
     $eventTypes = $this->EventType->find('all');
     foreach($eventTypes as $eventType)
     {
+      //debug($eventType['EventType']['name']);
       $notKnownEvents[$eventType['EventType']['id']]['events'] = array();
       $notKnownEvents[$eventType['EventType']['id']]['name'] = $eventType['EventType']['name'];
       $gevents = $this->Gevent->find('all', array('conditions'=>array('calendar_id'=>$eventType['EventType']['calendar_id'])));
       foreach($gevents as $gevent)
       {
+        //debug($gevent);
         $event = $this->Event->findByGeventId($gevent['Gevent']['id']);
         if( count( $event ) == 0 )
         {
@@ -119,7 +121,7 @@ class EventTypesController extends AppController {
         }
         else
         {
-          debug('event '.$gevent['Gevent']['id'].'=>'.$gevent['Gevent']['title'].' already known');
+          debug('event '.$eventType['EventType']['name'].'['.$gevent['Gevent']['id'].'] =>'.$gevent['Gevent']['title'].' already known');
         }
         //debug($title); */
       }

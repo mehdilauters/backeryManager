@@ -23,7 +23,8 @@ Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
     );
     
     public $service = null;
-
+    
+    private $m_isReady = false;
     
 
 
@@ -50,10 +51,17 @@ Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
         try {
           $client = Zend_Gdata_ClientLogin::getHttpClient($this->config['login'], $this->config['password'], $service);
           $this->service = new Zend_Gdata_Calendar($client);          
+	  $this->m_isReady = true;
         } catch (Exception $e) {
+	  $this->m_isReady = false;
           $this->log($e->getMessage(), 'debug');
         } 
   }
+
+public function isReady()
+{
+    return $this->m_isReady;
+}
 
 /**
  * Since datasources normally connect to a database there are a few things
@@ -284,84 +292,156 @@ Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
       $query->setUser($calendarId);
         $query->setVisibility('public');
 //         $query->setProjection('full');
-
-    if( isset($data['conditions']['id']))
-    {
-//       debug($data['conditions']['id']);          
-      $query->setEvent( $data['conditions']['id'] );
-      
-          try {
-            $eventFeed[] = $this->service->getCalendarEventEntry($query);
-          }
-          catch (Zend_Gdata_App_Exception $e) {
-            $this->log($e->getMessage(), 'debug');
-          }
-      
-      
-    }
-        else
+	$day = mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
+        if( !isset($data['conditions']['start >=']) )
         {
-          if( !isset($data['conditions']['start >=']) )
-          {
-            $data['conditions']['start >='] = time()-1*60*60;
-          }
-          
-          if( !isset($data['conditions']['start <=']) )
-          {
-            $data['conditions']['start <='] = time()+1*60*60*24*7;
-          }
-          
-          
-          $dateStart = new DateTime();
-          $dateStart->setTimestamp($data['conditions']['start >=']);
-          
-          $dateEnd = new DateTime();
-          $dateEnd->setTimestamp($data['conditions']['start <=']);
-          
-          $startDate=$dateStart->format(DateTime::RFC3339);
-          $endDate=$dateEnd->format(DateTime::RFC3339);
-          
-          $query->setStartMin($startDate);
-          $query->setStartMax($endDate);
-          
-          $query->setParam('singleevents','true');
-          $query->setProjection('composite');
-          
-          try { $eventFeed = $this->service->getCalendarEventFeed($query);
-          }
-          catch (Zend_Gdata_App_Exception $e) {
-            $this->log($e->getMessage(), 'debug');
-          }
+          $data['conditions']['start >='] = $day-1*60*60*24;
         }
-        $res = array();
-        $eventsKey = $Model->alias;
-//         debug($eventFeed->title->text);
-        foreach ($eventFeed as $event) {
-          $gevent = array();
-          
-          if( isset($data['conditions']['id']) )
+        
+        if( !isset($data['conditions']['start <=']) )
+        {
+          $data['conditions']['start <='] = $day+1*60*60*24*7;
+        }
+      
+
+      $cacheFolder = CACHE.'gcalendar/';
+      $res = $this->requestAction(
+        array('controller' => 'config', 'action' => 'deleteGcalCache')
+      );
+
+	$cacheFileName = $cacheFolder.$data['conditions']['start >='].'_'.md5(serialize($data)).'.gcal.tmp';
+	
+	
+	if(!file_exists($cacheFileName))
+	{
+	  $dateStart = new DateTime();
+	  $dateStart->setTimestamp($data['conditions']['start >=']);
+	  
+	  $dateEnd = new DateTime();
+	  $dateEnd->setTimestamp($data['conditions']['start <=']);
+	  
+	  $startDate=$dateStart->format(DateTime::RFC3339);
+	  $endDate=$dateEnd->format(DateTime::RFC3339);
+	  
+	  $query->setStartMin($startDate);
+	  $query->setStartMax($endDate);
+
+	  if( isset($data['conditions']['id']))
+	  {
+	    //       debug($data['conditions']['id']);          
+	    $query->setEvent( $data['conditions']['id'] );
+	
+	    try {
+	      $eventFeed[] = $this->service->getCalendarEventEntry($query);
+	    }
+	    catch (Zend_Gdata_App_Exception $e) {
+	      $this->log($e->getMessage(), 'debug');
+	    }
+	
+	
+	  }
+	  else
+	  {
+	  
+	    
+	    $query->setParam('singleevents','true');
+	    $query->setProjection('composite');
+	    
+	    try { $eventFeed = $this->service->getCalendarEventFeed($query);
+	    }
+	    catch (Zend_Gdata_App_Exception $e) {
+	      $this->log($e->getMessage(), 'debug');
+	    }
+	  }
+	  $res = array();
+	  $eventsKey = $Model->alias;
+  //         debug($eventFeed->title->text);
+	  foreach ($eventFeed as $event) {
+	    $gevent = array();
+	    
+	    if( isset($data['conditions']['id']) )
+	    {
+	      $gevent[$eventsKey]['id'] = $data['conditions']['id']; 
+	    }
+	    else
+	    {
+	      if(isset($event->originalEvent))
+		$gevent[$eventsKey]['id'] =  $this->getId( $event->originalEvent->id );
+	      else
+		$gevent[$eventsKey]['id'] = $this->getId( $event->id );
+	    }
+	    
+
+	    $gevent[$eventsKey]['title'] = $event->title->text;
+	    $gevent[$eventsKey]['description'] = $event->content->text;
+  //           $gevent[$eventsKey]['originalEvent'] = ;
+	    //$gevent[$eventsKey]['calendar'] = $this->service->summary;
+  //           debug($event->when);
+	    foreach ($event->when as $when) {
+	      $dateStart = new DateTime($when->startTime);
+	      $dateEnd = new DateTime($when->endTime);
+	      $gevent['Gevent']['GeventDate'][] = array('start' => $dateStart->format('Y-m-d H:i:s'), 'end' => $dateEnd->format('Y-m-d H:i:s'));
+	    }
+	    $res[]=$gevent;
+  //           debug($gevent);
+	  }
+	$handle = fopen($cacheFileName,"w");
+	fwrite($handle,'<?php $res = '.var_export($res,true).';');
+	fclose($handle);
+      }
+      else
+      {
+		include($cacheFileName);
+      }
+        
+
+        return $res;
+    }
+    
+    public function queryAssociation(Model $model, &$linkModel, $type, $association, $assocData, &$queryData, $external, &$resultSet, $recursive, $stack)
+    {
+//       debug($model->alias.'=====>'.$linkModel->alias.' ( '.$type.' )');
+      $data = array();
+      if($type == 'belongsTo')
+      {
+        //debug($resultSet);
+        //debug($assocData);
+        foreach ($resultSet as $id=>$result)
+        {
+          if($linkModel->alias == 'Gcalendar')
           {
-            $gevent[$eventsKey]['id'] = $data['conditions']['id']; 
+            if( isset( $result[$model->alias] ))
+            {
+               $data = $linkModel->find('first', array(
+                 'conditions' => array($linkModel->primaryKey => $result[$model->alias][$assocData['foreignKey']] )
+                 ));
+            }
           }
           else
           {
-            if(isset($event->originalEvent))
-              $gevent[$eventsKey]['id'] =  $this->getId( $event->originalEvent->id );
-            else
-              $gevent[$eventsKey]['id'] = $this->getId( $event->id );
+            
+            $data = $linkModel->find('first', array(
+                'conditions' => array(
+                      $linkModel->primaryKey => $result[$model->alias][$assocData['foreignKey']],
+                      'calendar_id' => $result['EventType']['calendar_id'] )
+            ));
+//             debug($data);
           }
-          
-
-          $gevent[$eventsKey]['title'] = $event->title->text;
-//           $gevent[$eventsKey]['originalEvent'] = ;
-          //$gevent[$eventsKey]['calendar'] = $this->service->summary;
-          foreach ($event->when as $when) {
-
-            $gevent['GeventDate'][] = array('start' => $when->startTime, 'end' => $when->endTime);
+          if( isset( $data[$linkModel->alias] ) )
+          {
+            $resultSet[$id][$linkModel->alias] = $data[$linkModel->alias];
           }
-          $res[]=$gevent;
         }
-        return $res;
+//         debug($resultSet);
+// debug($data[$linkModel->alias]);
+      }
+      else
+      {
+       debug($type.' not known');
+      }
+      
+      return array('claaaaudyyy');
+        
     }
 }
 ?>

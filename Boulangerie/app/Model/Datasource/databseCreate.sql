@@ -3,6 +3,8 @@ DROP TABLE IF EXISTS `acos`;
 DROP TABLE IF EXISTS `aros`;
 DROP TABLE IF EXISTS `aros_acos`;
 
+DROP TABLE IF EXISTS `breakages`;
+DROP TABLE IF EXISTS `sales`;
 DROP TABLE IF EXISTS `medias`;
 DROP TABLE IF EXISTS `photos`;
 DROP TABLE IF EXISTS `videos`;
@@ -11,6 +13,7 @@ DROP TABLE IF EXISTS `product_types`;
 DROP TABLE IF EXISTS `products`;
 DROP TABLE IF EXISTS `events`;
 DROP TABLE IF EXISTS `event_types`;
+DROP TABLE IF EXISTS `shops`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -118,12 +121,28 @@ create table if not exists products (
   media_id int(10), 
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   description text CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `price` float(3) NOT NULL,
+  `unity` boolean default TRUE,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_products_producttypes` (`product_types_id`),
   KEY `fk_products_media` (`media_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
+
+create table if not exists shops (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  media_id int(10),
+  `event_type_id` int(10) NOT NULL ,
+  name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  phone int not null ,
+  address text CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  description text CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_shops_eventTypes` (`event_type_id`),
+  KEY `fk_shops_media` (`media_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 --
 -- Table structure for table `event_types`
@@ -155,6 +174,35 @@ create table if not exists events (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 
+
+create table if not exists sales (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
+  `product_id` int(10) NOT NULL ,
+  `price` float(3) NOT NULL,
+  `unity` boolean default TRUE,
+  `shop_id` int(10) NOT NULL ,
+  `produced` int(10) ,
+  `sold` int(10) ,  
+  PRIMARY KEY (`id`),
+  KEY `fk_sales_products` (`product_id`),
+  KEY `fk_sales_shops` (`shop_id`),
+  UNIQUE KEY `unique_sales` (`date`,`shop_id`, `product_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+
+create table if not exists breakages (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
+  `shop_id` int(10) NOT NULL ,
+  `product_types_id` int(10) NOT NULL ,
+  `breakage` float(10) ,  
+  PRIMARY KEY (`id`),
+  KEY `fk_breakages_productsTypes` (`product_types_id`),
+  KEY `fk_breakages_shops` (`shop_id`),
+  UNIQUE KEY `unique_breakages` (`date`,`shop_id`, `product_types_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
 ALTER TABLE `photos`
   ADD CONSTRAINT `fk_photos_medias` FOREIGN KEY (`id`) REFERENCES `medias` (`id`);
 
@@ -170,8 +218,22 @@ ALTER TABLE `product_types`
 ALTER TABLE `products`
   ADD CONSTRAINT `fk_product_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
   
+ALTER TABLE `shops`
+  ADD CONSTRAINT `fk_shops_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
+
+ALTER TABLE `shops`
+  ADD CONSTRAINT `fk_shops_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);  
+
 ALTER TABLE `events`
   ADD CONSTRAINT `fk_events_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
 
 ALTER TABLE `events`
   ADD CONSTRAINT `fk_events_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
+
+ALTER TABLE `sales`
+  ADD CONSTRAINT `fk_sales_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `fk_sales_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
+
+ALTER TABLE `breakages`
+  ADD CONSTRAINT `fk_breakages_productsTypes` FOREIGN KEY (`product_types_id`) REFERENCES `product_types` (`id`),
+  ADD CONSTRAINT `fk_breakages_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);

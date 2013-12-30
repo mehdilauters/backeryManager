@@ -1,11 +1,24 @@
 <?php 
- if( isset($media['Media']['Photo'] ))
+$initConfig = array(
+                    'name'       => true,
+                    'description' => true
+                    );
+ if( isset($config) )
  {
-   echo $this->element('Medias/Photos/Preview', array('photo'=>$media));
+    $config = array_merge($initConfig , $config);
  }
  else
  {
-   debug('Preview not available');
+   $config = $initConfig;
+ }
+  
+ if( isset($media['Media']['Photo'] ))
+ {
+   echo $this->element('Medias/Photos/Preview', array('photo'=>$media, 'config' => $config));
+ }
+ else
+ {
+   //debug('Preview not available');
    $key = 'Media';
  }
 ?>

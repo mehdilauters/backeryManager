@@ -32,5 +32,31 @@ App::uses('Controller', 'Controller');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $components = array('DebugKit.Toolbar', 'Session');
+  public $components = array('DebugKit.Toolbar', 'Session');
+  public $menu = array('Menu' => 
+			array( 
+				'Nos Magasins' => 
+				  array( 'url' => 'WEBROOT/', 'active' => false ),
+				 'Produits' => 
+				    array( 'url' => 'WEBROOT/productTypes', 'active' => false ),
+				 'Horaires' => 
+				    array( 'url' => 'WEBROOT/events', 'active' => false ),
+				 'Contact' => 
+				    array( 'url' => 'WEBROOT/users/add', 'active' => false ),
+		    )
+			);
+  
+
+  public function beforeRender()
+  {
+    $isAdmin = false;
+    if($this->Session->check('isAdmin'))
+    {
+     $isAdmin =   $this->Session->read('isAdmin');
+    }
+  
+     $this->set('menu', $this->menu);
+    $tokens = array('isAdmin'=> $isAdmin ,'members'=>true);
+    $this->set('tokens', $tokens);
+  }
 }

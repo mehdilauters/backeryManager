@@ -90,7 +90,7 @@ var $controllerInvalidatesFields = array();
    */
   public function invalidateField($fieldName, $errorMessage = 'This field is not valid')
   {
-    debug($this->alias.'['.$fieldName.'] invalidated');
+    debug($this->alias.'['.$fieldName.'] invalidated : '.$errorMessage);
     $this->controllerInvalidatesFields[$fieldName][]=$errorMessage;
   }
   

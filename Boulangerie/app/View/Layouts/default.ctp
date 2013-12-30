@@ -29,32 +29,68 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
   <?php
     echo $this->Html->meta('icon');
 
-    echo $this->Html->css('cake.generic');
+    //echo $this->Html->css('cake.generic');
+    echo $this->Html->css('general');
+
+echo $this->Html->script(
+    array(   'jquery-1.9.1.min',
+        'jquery-ui-1.10.1.custom.min',
+         'fullcalendar.min',
+         'jquery.qtip-1.0.0-rc3.min',
+	  'jquery.fancybox.pack',
+	   'sly.min'
+        ),
+     array('inline' => 'false')
+  );
+echo $this->Html->css(
+          'fullcalendar',
+           null,
+           array('inline' => false)
+  );
+?>
+<!-- <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script> -->
+<?php
+    echo $this->Html->script('jquery.ui.datepicker-fr.js');
+    echo $this->Html->css('fancy/jquery.fancybox');
+
+    // TODO change to real stylesheet
+    echo $this->Html->css('humanity/jquery-ui-1.10.3.custom.min.css');
 
     echo $this->fetch('meta');
     echo $this->fetch('css');
     echo $this->fetch('script');
+    echo $this->Html->script('main');
   ?>
 </head>
 <body>
   <div id="container">
     <div id="header">
-      <h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
     </div>
-    <div id="content">
+    <div id="contentBox" >
+      <div id="contentHeader" >
+	<h2>&nbsp;<?php echo $title_for_layout ?></h2>
+    </div>
+    <div class="pannel" id="mainPannel" >
+	<h2>Boulangerie Faury</h2>
+	Christiane &amp; Thierry FAURY
+    </div>
+<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
+      <div id="content">
+      &nbsp;
+	<?php echo $this->Session->flash(); ?>
 
-      <?php echo $this->Session->flash(); ?>
-
-      <?php echo $this->fetch('content'); ?>
-    </div>
-    <div id="footer">
-      <?php echo $this->Html->link(
-          $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-          'http://www.cakephp.org/',
-          array('target' => '_blank', 'escape' => false)
-        );
-      ?>
-    </div>
+	<?php echo $this->fetch('content'); ?>
+      </div>
+  <div class="clear" ></div>
+      <div id="footer">
+	<?php echo $this->Html->link(
+	    $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
+	    'http://www.cakephp.org/',
+	    array('target' => '_blank', 'escape' => false)
+	  );
+	?>
+      </div>
+  </div>
   </div>
   <?php echo $this->element('sql_dump'); ?>
 </body>

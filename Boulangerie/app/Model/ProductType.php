@@ -13,7 +13,7 @@ class ProductType extends AppModel {
  * @var string
  */
   public $displayField = 'name';
-  
+  public $actsAs = array('Containable');
 
 /**
  * Validation rules
@@ -113,7 +113,7 @@ class ProductType extends AppModel {
   */
   public $hasMany = array(
     'Products' => array(
-      'className' => 'Products',
+      'className' => 'Product',
       'foreignKey' => 'product_types_id',
       'dependent' => false,
       'conditions' => '',

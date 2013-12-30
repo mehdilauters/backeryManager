@@ -14,7 +14,7 @@ class PhotosController extends AppController {
  * @return void
  */
   public function index() {
-    $this->Photo->recursive = 0;
+    //$this->Photo->recursive = 0;
     $this->set('photos', $this->paginate());
   }
 
@@ -33,13 +33,40 @@ class PhotosController extends AppController {
     $this->set('photo', $this->Photo->find('first', $options));
   }
 
+/*  function download($idPhoto,$miniature='true')
+	{
+		$this->viewClass = 'Media';
+		if($miniature=='true')
+			$path='miniatures/';
+		else
+			$path='normales/';
+		
+		$photo=$this->Photo->findByIdPhoto($idPhoto);
+		
+		$path_parts = pathinfo($photo['Photo']['path']);
+ 		$params = array(
+              'id' => $photo['Photo']['path'],
+              'name' => $photo['Media']['titre'],
+              'download' => true,
+              'extension' => $path_parts['extension'],
+              'path' => APP.'webroot/upload/photos/'.$path
+       );
+       $this->set($params);
+		
+	}
+*/
   
   public function upload()
   {
   
     if (isset($this->request->data['Photo']))
     {
-      if( !$this->Photo->checkType($this->data['Photo']['upload']['type']) )
+      if( $this->request->data['Photo']['upload']['size'] == 0 )
+      {
+        $this->Photo->invalidateField('upload','Please check the size of your image');
+        return false;
+      }
+      if( !$this->Photo->checkType($this->request->data['Photo']['upload']['type']) )
       {
         $this->Photo->invalidateField('upload','Veuillez fournir une image .png, .jpg');
         return false;
@@ -55,13 +82,22 @@ class PhotosController extends AppController {
   }
   
   
-  function saveFile()
+  function saveFile($filePath = null)
   {
-    if(empty($this->request->data['Photo']['upload']['name']))
+    if(empty($this->request->data['Photo']['upload']['name']) && $filePath == null)
     {
       return false;
     }
     
+    if( ! empty($this->request->data['Photo']['upload']['name']) )
+    {
+      $filePath = $this->request->data['Photo']['upload']['tmp_name'];
+      $filename = $this->request->data['Photo']['upload']['name'];
+    }
+    else
+    {
+        $filename = basename($filePath);
+    }
       $photoPath =   Configure::read('Medias.Photos.path');
       $xPreview = Configure::read('Medias.Photos.xPreview');  
       $yPreview = Configure::read('Medias.Photos.yPreview');
@@ -69,20 +105,24 @@ class PhotosController extends AppController {
       $xNormal = Configure::read('Medias.Photos.xNormal');  
       $yNormal = Configure::read('Medias.Photos.yNormal');
     
-    $path_parts = pathinfo($this->request->data['Photo']['upload']['name']);
+    $path_parts = pathinfo($filename);
     $filename = $this->Photo->getRandomName().'.'.strtolower($path_parts['extension']);
     
-    $this->request->data['Photo']['path'] = $filename;
-    if(move_uploaded_file($this->request->data['Photo']['upload']['tmp_name'],$photoPath.'normal/'.$filename) != true)
-    {
-      $this->log('move_uploaded_file failed', 'debug');
-      return false;
-    }
+    if(!empty($this->request->data['Photo']['upload']['name']) )
+     {
+       debug($filePath);
+       if(move_uploaded_file($filePath,$photoPath.'normal/'.$filename) != true)
+       {
+         $this->log('move_uploaded_file failed', 'debug');
+         return false;
+       }
+       $filePath = $photoPath.'normal/'.$filename;
+     }
     
 
     
     
-    if( !$this->Photo->redimentionnerImage($photoPath.'normal/'.$filename, $photoPath.'normal/'.$filename,$xNormal , $yNormal))
+    if( !$this->Photo->redimentionnerImage($filePath, $photoPath.'normal/'.$filename,$xNormal , $yNormal))
     {
       $this->log('Redimmentionner Image normal fail', 'debug');
       return false;
@@ -93,7 +133,7 @@ class PhotosController extends AppController {
       return false;
     }
     
-    return true;
+    return $filename;
   }
   
 /**
@@ -101,33 +141,79 @@ class PhotosController extends AppController {
  *
  * @return void
  */
-  public function add() {
+  public function add($filePath = null) {
     if ($this->request->is('post')) {
-      
+      $ok = true;
       if($this->upload())
       {
-        if(!$this->saveFile())
+        $imgName = $this->saveFile();
+
+        if($imgName == false)
         {
+          $ok = false;
           $this->Photo->deleteFile();
           $this->log('Could not save photo','debug');
           $this->Photo->invalidateField('upload','Erreur lors de l\'enregistrement du fichier');
         }
+        $this->request->data['Photo']['path'] = $imgName;
+
+	$this->Photo->create();
+	if ( $this->Photo->save($this->request->data)) {
+	  $this->Session->setFlash(__('The photo has been saved'));
+	  $this->redirect(array('action' => 'index'));
+	} else {
+	  $this->Photo->deleteFile();
+	  $this->Session->setFlash(__('The photo could not be saved. Please, try again.'));
+	}
       }
       else
       {
+       $ok = false;
        $this->log('Could not upload photo','debug');
        $this->Photo->invalidateField('upload','Erreur lors de l\'upload du fichier');
       }
-          
-      
-      $this->Photo->create();
-      if ($this->Photo->save($this->request->data)) {
-        $this->Session->setFlash(__('The photo has been saved'));
-        $this->redirect(array('action' => 'index'));
+    }
+    else
+    {
+      if($filePath != null)
+      {
+        $filePath = urldecode($filePath);
+        
+        $name = basename($filePath);
+        $name = str_replace ( '_' , ' ', $name );
+        
+        if(count( $this->Media->findByName($name)) != 0)
+        {
+         return true;
+        }
+        
+        
+        $imgName = $this->saveFile($filePath );
+
+        if($imgName == false)
+        {
+          $ok = false;
+          $this->Photo->deleteFile();
+          $this->log('Could not save photo','debug');
+          $this->Photo->invalidateField('upload','Erreur lors de l\'enregistrement du fichier');
+        }
+
+        $data = array(
+        'Photo' => array(
+             'path' => $imgName,
+              'name' => $name,
+              'description' => 'autoloaded picture'
+            )
+        );
+         $this->Photo->create();
+         $this->Media->create();
+      if ( $this->Photo->save($data)) {
+        return true;
       } else {
         $this->Photo->deleteFile();
-        $this->Session->setFlash(__('The photo could not be saved. Please, try again.'));
+        return false;
       }
+      } 
     }
     $media = $this->Photo->Media->find('list');
     $this->set(compact('media'));

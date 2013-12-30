@@ -58,6 +58,13 @@ class Photo extends AppModel {
     )
   );
   
+  /*
+  function create($data = array(), $filterKey = false)
+  {
+    $res = parent::create($data, $filterKey);
+    $res = $res && $this->Media->create($data, $filterKey); 
+    return $res;
+  }*/
   
   function beforeDelete($options = array())
   {

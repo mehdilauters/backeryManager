@@ -1,19 +1,27 @@
-<ul>
-  <li> Administration
-    <ul>
-      <li><a href="<?php echo $this->webroot ?>photos/add">ajouter une photo</a></li>
-      <li><a href="<?php echo $this->webroot ?>videos/add">ajouter une video</a></li>
-      <li><a href="<?php echo $this->webroot ?>users/add">ajouter un utilisateur</a></li>
-      <li><a href="<?php echo $this->webroot ?>productTypes/add">ajouter un type de produit</a></li>
-      <li><a href="<?php echo $this->webroot ?>products/add">ajouter un produit</a></li>
-      <li><a href="<?php echo $this->webroot ?>events/add">ajouter un evenement d'administration</a></li>
-    </ul>
-  </li>
-  <li> Visite
-    <ul>
-      <li><a href="<?php echo $this->webroot ?>productTypes">Voir la liste des types produits</a></li>
-      <li><a href="<?php echo $this->webroot ?>products">Voir la liste des produits</a></li>
-      <li><a href="<?php echo $this->webroot ?>events">Voir notre calendrier d'ouvertures</a></li>
-      <li><a href="<?php echo $this->webroot ?>users/add">s'inscrire à la mailing list</a></li>
-    </ul>
-  </li>
+<?php $slideshowInserted = false; ?>
+  <ul id="shopPreviewList">
+    <?php foreach($shops as $shop) { ?>
+    <li class="shop">
+     <?php   echo $this->element('Shops/Preview', array('shop'=>$shop, 'isCalendarAvailable' => $isCalendarAvailable)); ?>
+      <hr/>
+    </li>
+    <?php
+if(!$slideshowInserted)
+{ 
+  $slideshowInserted = true;
+  ?>
+   <li class="slideshow">
+      <center>
+      <ul class="slides" id="homeSlideshow">
+	<?php foreach($photos as $photo) {?>
+
+	  <li class="slide"><img src="<?php echo $this->webroot.'img/photos/normal/'.$photo['Photo']['path'] ?>" alt="<?php echo $photo['Photo']['name'] ?>" width="400" height="300" /></li>
+	<?php } ?>
+      </ul>
+     </center>
+   <li>
+<?php
+}
+
+ } ?>
+  </ul>

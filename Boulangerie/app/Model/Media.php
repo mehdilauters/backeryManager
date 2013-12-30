@@ -113,7 +113,14 @@ class Media extends AppModel {
       'conditions' => '',
       'fields' => '',
       'order' => ''
-    )
+    ),
+    'Photo' => array(
+      'className' => 'Photo',
+      'foreignKey' => 'id',
+      'conditions' => '',
+      'fields' => '',
+      'order' => ''
+    ),
   );
 
 /**
@@ -180,7 +187,7 @@ class Media extends AppModel {
   {
     foreach($results as $id => $data)
      {
-       if( isset( $data['Media'] ) ) // not 'count'
+       if( isset( $data['Media'] ) && count($data['Media']) != 0  ) // not 'count'
        {
        App::import('Model', 'Photo');
        $photo = new Photo();

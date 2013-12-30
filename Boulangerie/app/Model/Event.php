@@ -32,9 +32,9 @@ class Event extends AppModel {
       ),
       'notempty' => array(
         'rule' => array('notempty'),
-        'message' => 'Event::id mus be notempty',
+        'message' => 'Event::id must be notempty',
         //'allowEmpty' => false,
-        //'required' => false,
+        'required' => false,
         //'last' => false, // Stop validation after this rule
         //'on' => 'create', // Limit validation to 'create' or 'update' operations
       ),
@@ -42,8 +42,8 @@ class Event extends AppModel {
     'media_id' => array(
       'numeric' => array(
         'rule' => array('numeric'),
-        'message' => 'Event::media_id mus be numeric',
-        //'allowEmpty' => false,
+        'message' => 'Event::media_id must be numeric',
+        'allowEmpty' => true,
         //'required' => false,
         //'last' => false, // Stop validation after this rule
         //'on' => 'create', // Limit validation to 'create' or 'update' operations
@@ -52,8 +52,8 @@ class Event extends AppModel {
     'product_id' => array(
       'numeric' => array(
         'rule' => array('numeric'),
-        'message' => 'Event::product_id mus be numeric',
-        //'allowEmpty' => false,
+        'message' => 'Event::product_id must be numeric',
+        'allowEmpty' => true,
         //'required' => false,
         //'last' => false, // Stop validation after this rule
         //'on' => 'create', // Limit validation to 'create' or 'update' operations
@@ -141,7 +141,7 @@ class Event extends AppModel {
       {
         $this->log('could not delete gevent '.$this->data['Event']['gevent_id'], 'debug');
         debug('Gevent not deleted');
-        //$res = true;
+        $res = true;
       }
     }
     return $res;
@@ -238,33 +238,35 @@ class Event extends AppModel {
     parent::afterFind($results, $primary);
     
     App::import('Model', 'Gevent');
- 
     foreach($results as $key => $val){
-      //debug($key);
-       if( ! isset($val['EventType']) )
+      if( ! empty( $val['Event'] ) )
       {
-        $this->EventType->recursive = -1;
-        $eventTypeData = $this->EventType->findById($val['Event']['event_type_id']);
-        $results[$key]['EventType'] = $eventTypeData['EventType'];
-      }
-
-      $gevent = new GEvent();
-      $gevent = $gevent->find('first',
-          array(
-              'conditions'=>array(
-                        'id' => $results[$key]['Event']['gevent_id'],
-                        'calendar_id' => $results[$key]['EventType']['calendar_id']
-                        )
-              )
-          );
-//       debug($gevent);
-      if( count($gevent) != 0 )
-      {
-        $results[$key]['Gevent'] = $gevent['Gevent'];
-      }
-      else
-      {
-        debug('Gevent not found');
+        if( ! isset($val['EventType']) )
+        {
+          $this->EventType->recursive = -1;
+          
+          $eventTypeData = $this->EventType->findById($val['Event']['event_type_id']);
+          $results[$key]['EventType'] = $eventTypeData['EventType'];
+        }
+        
+        $gevent = new GEvent();
+        $gevent = $gevent->find('first',
+                                array(
+                                  'conditions'=>array(
+                                    'id' => $results[$key]['Event']['gevent_id'],
+                                    'calendar_id' => $results[$key]['EventType']['calendar_id']
+                                                                                 )
+                                )
+                               );
+        //       debug($gevent);
+        if( count($gevent) != 0 )
+        {
+          $results[$key]['Gevent'] = $gevent['Gevent'];
+        }
+        else
+        {
+          debug('Gevent not found');
+        }
       }
       
 //        debug($val);

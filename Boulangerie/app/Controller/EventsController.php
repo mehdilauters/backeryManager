@@ -8,12 +8,24 @@ App::uses('AppController', 'Controller');
 class EventsController extends AppController {
   var $uses = array('Event', 'Gevent', 'EventType');
 
+
+  public function calendar()
+  {
+    $this->set('title_for_layout', 'Horaires');
+    $this->menu['Menu']['Horaires']['active'] = true;
+    $events = $this->Event->find('all');
+    $this->set('events', $events);
+  }
+
 /**
  * index method
  *
  * @return void
  */
   public function index() {
+    $this->set('title_for_layout', 'Horaires');
+    $this->menu['Menu']['Horaires']['active'] = true;
+
     $events = $this->Event->find('all');
 
 
@@ -47,6 +59,11 @@ class EventsController extends AppController {
     $this->set('event', $this->Event->find('first', $options));
   }
 
+public function eventsAvailable()
+{
+  return $this->Gevent->getDataSource()->isReady();
+}
+
 /**
  * add method
  *
@@ -73,7 +90,14 @@ class EventsController extends AppController {
       
       if ($this->Event->save($this->request->data)) {
         $this->Session->setFlash(__('The event has been saved'));
-        $this->redirect(array('action' => 'index'));
+        if( isset( $this->request->named['idProduct'] ) )
+        {
+          $this->redirect(array('controller'=>'products','action' => 'view', $this->request->named['idProduct']));          
+        }
+        else
+        {
+          $this->redirect(array('action' => 'index'));
+        }
       } else {
         $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
       }
@@ -86,7 +110,24 @@ class EventsController extends AppController {
     }
     
     $media = $this->Event->Media->find('list');
-    $products = $this->Event->Product->find('list');
+    $media[''] = '';
+    
+    if(isset($this->request->named['idProduct']))
+    {
+      $products = $this->Event->Product->find('list', array('conditions'=>array('id'=>$this->request->named['idProduct'])));
+      $values = array_values($products);
+      $this->request->data['Event']['title'] = array_shift( $values );
+
+      $this->request->data['Event']['description'] = 'Fabrication';
+    }
+    else
+    {
+      $products = $this->Event->Product->find('list');
+      $products[''] = '';
+    }
+    $now = new DateTime();
+    $this->request->data['Event']['start'] = $now->format('d/m/Y');
+    
     $eventTypes = $this->Event->EventType->find('list');
     $this->set(compact('media', 'products', 'eventTypes'));
   }
@@ -114,11 +155,56 @@ class EventsController extends AppController {
       $this->request->data = $this->Event->find('first', $options);
     }
     $media = $this->Event->Media->find('list');
+    $media[''] = '';
+    
     $products = $this->Event->Product->find('list');
+    $products[''] = '';
+    
     $eventTypes = $this->Event->EventType->find('list');
     $this->set(compact('media', 'products', 'eventTypes'));
   }
 
+
+
+public function isToday($event)
+{
+    $isToday = false;
+    foreach($event['Events'] as $event_i)
+    {
+      //public function isEvent($gevent, $when = 'now')
+      $isToday = $this->isEvent($event_i);
+      if($isToday)
+      {
+       break; 
+      }
+
+     }
+  return $isToday;
+}
+  
+  /**
+  * @params : Gevent containing
+  * @ params : string (for DateTime
+  *
+  */
+  public function isEvent($gevent, $when = 'now')
+  {
+    $yes = false;
+      $when = new DateTime( $when );
+    
+      foreach($gevent['Gevent']['GeventDate'] as $geventDate)
+      {
+        $startDate = new DateTime($geventDate['start']);
+        $endDate = new DateTime($geventDate['end']);
+       if($startDate <= $when && $when <= $endDate)
+        {
+          $yes = true;
+          break;
+        }
+      }
+      return $yes;
+  }
+  
 /**
  * delete method
  *

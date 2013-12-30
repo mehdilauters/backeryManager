@@ -1,52 +1,39 @@
 <div class="productTypes index">
-	<h2><?php echo __('Product Types'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('media_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('description'); ?></th>
-			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	<?php foreach ($productTypes as $productType): ?>
-	<tr>
-		<td><?php echo h($productType['ProductType']['id']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($productType['Media']['name'], array('controller' => 'media', 'action' => 'view', $productType['Media']['id'])); ?>
-		</td>
-		<td><?php echo h($productType['ProductType']['name']); ?>&nbsp;</td>
-		<td><?php echo h($productType['ProductType']['description']); ?>&nbsp;</td>
-		<td><?php echo h($productType['ProductType']['created']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $productType['ProductType']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $productType['ProductType']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $productType['ProductType']['id']), null, __('Are you sure you want to delete # %s?', $productType['ProductType']['id'])); ?>
-		</td>
-	</tr>
+<ul>
+<?php foreach ($productTypes as $productType): ?>
+  <li>
+     <a href="#productType_<?php echo $productType['ProductType']['id']  ?>" ><?php echo $productType['ProductType']['name']  ?></a>
+  </li>
 <?php endforeach; ?>
-	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
-	</div>
+</ul>
+<ul id="productTypesList" >
+  <?php foreach ($productTypes as $productType): ?>
+  <li class="clear">
+    <hr/>
+    <a name="productType_<?php echo $productType['ProductType']['id'] ?>" />
+    <?php 
+//debug($productType);
+     echo $this->element('ProductTypes/Preview', array('productType'=>$productType)); ?>
+    <hr/>
+    <ul id="productList" >
+      <?php foreach ($productType['Products'] as $product): ?>
+	<li >
+	  <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable', $isCalendarAvailable)); ?>	  
+      </li>
+      <?php endforeach; ?>      
+    </ul>
+   
+  </li>
+<?php endforeach; ?>
+</ul>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Product Type'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Media'), array('controller' => 'media', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Products'), array('controller' => 'products', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+  <?php if($tokens['isAdmin']) : ?>
+    <div class="actions">
+      <h3><?php echo __('Actions'); ?></h3>
+      <ul>
+      <li><?php echo $this->Html->link(__('New Product Type'), array('action' => 'add')); ?></li>
+      <li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
+      <li><?php echo $this->Html->link(__('New Products'), array('controller' => 'products', 'action' => 'add')); ?> </li>
+  </ul>
+  </div>
+    <?php endif ?>

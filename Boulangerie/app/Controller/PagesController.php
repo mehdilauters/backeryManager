@@ -36,40 +36,55 @@ class PagesController extends AppController {
  *
  * @var string
  */
-	public $name = 'Pages';
+  public $name = 'Pages';
 
 /**
  * This controller does not use a model
  *
  * @var array
  */
-	public $uses = array();
+  public $uses = array('Shop', 'Photo');
 
+  
 /**
  * Displays a view
  *
  * @param mixed What page to display
  * @return void
  */
-	public function display() {
-		$path = func_get_args();
+  public function display() {
+    $path = func_get_args();
 
-		$count = count($path);
-		if (!$count) {
-			$this->redirect('/');
-		}
-		$page = $subpage = $title_for_layout = null;
+    $count = count($path);
+    if (!$count) {
+      $this->redirect('/');
+    }
+    $page = $subpage = $title_for_layout = null;
 
-		if (!empty($path[0])) {
-			$page = $path[0];
-		}
-		if (!empty($path[1])) {
-			$subpage = $path[1];
-		}
-		if (!empty($path[$count - 1])) {
-			$title_for_layout = Inflector::humanize($path[$count - 1]);
-		}
-		$this->set(compact('page', 'subpage', 'title_for_layout'));
-		$this->render(implode('/', $path));
-	}
+    if (!empty($path[0])) {
+      $page = $path[0];
+    }
+    if (!empty($path[1])) {
+      $subpage = $path[1];
+    }
+    if (!empty($path[$count - 1])) {
+      $title_for_layout = Inflector::humanize($path[$count - 1]);
+    }
+    
+    $title_for_layout = 'Nos magasins';
+    $this->menu['Menu']['Nos Magasins']['active'] = true;
+    $this->Shop->recursive = 3;
+    $shops = $this->Shop->find('all');
+    foreach ($shops as $id=>$shop)
+    {
+      $shops[$id]['Shop']['isOpened'] = $this->requestAction(array('controller'=>'shops', 'action'=>'isOpened'), array( 'pass'=>array($shop)));
+    }
+    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+    $this->set('isCalendarAvailable', $isCalendarAvailable);
+    $this->set('shops', $shops);
+
+    $photos = $this->Photo->find('all');
+    $this->set(compact('page', 'subpage', 'title_for_layout', 'photos'));
+    $this->render(implode('/', $path));
+  }
 }

@@ -15,7 +15,7 @@ class Product extends AppModel {
  * @var string
  */
   public $displayField = 'name';
-
+  public $actsAs = array('Containable');
 /**
  * Validation rules
  *
@@ -69,9 +69,9 @@ class Product extends AppModel {
       ),
     ),
     'name' => array(
-      'alphanumeric' => array(
-        'rule' => array('alphanumeric'),
-        'message' => 'Product::name must be alphanumeric',
+      'notempty' => array(
+        'rule' => array('notempty'),
+        'message' => 'Product::name must be notempty',
         //'allowEmpty' => false,
         //'required' => false,
         //'last' => false, // Stop validation after this rule
@@ -92,6 +92,34 @@ class Product extends AppModel {
       'datetime' => array(
         'rule' => array('datetime'),
         'message' => 'Product::created must be datetime',
+        //'allowEmpty' => false,
+        //'required' => false,
+        //'last' => false, // Stop validation after this rule
+        //'on' => 'create', // Limit validation to 'create' or 'update' operations
+      ),
+    ),
+     'price' => array(
+      'notempty' => array(
+        'rule' => array('notempty'),
+        'message' => 'Product::price must be notempty',
+        //'allowEmpty' => false,
+        //'required' => false,
+        //'last' => false, // Stop validation after this rule
+        //'on' => 'create', // Limit validation to 'create' or 'update' operations
+      ),
+      'numeric' => array(
+        'rule' => array('numeric'),
+        'message' => 'Product::price must be numeric',
+        //'allowEmpty' => false,
+        //'required' => false,
+        //'last' => false, // Stop validation after this rule
+        //'on' => 'create', // Limit validation to 'create' or 'update' operations
+      ),
+    ),
+      'unity' => array(
+      'boolean' => array(
+        'rule' => array('boolean'),
+        'message' => 'Product::unity be boolean',
         //'allowEmpty' => false,
         //'required' => false,
         //'last' => false, // Stop validation after this rule
@@ -130,8 +158,21 @@ class Product extends AppModel {
  * @var array
  */
   public $hasMany = array(
-    'Event' => array(
+    'Events' => array(
       'className' => 'Event',
+      'foreignKey' => 'product_id',
+      'dependent' => false,
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'limit' => '',
+      'offset' => '',
+      'exclusive' => '',
+      'finderQuery' => '',
+      'counterQuery' => ''
+    ),
+    'Sale' => array(
+      'className' => 'Sale',
       'foreignKey' => 'product_id',
       'dependent' => false,
       'conditions' => '',
