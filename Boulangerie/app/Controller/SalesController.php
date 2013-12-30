@@ -9,7 +9,7 @@ class SalesController extends AppController {
 
   var $helpers = array('Time');
   var $components = array('Functions');
-  var $uses = array('Sale', 'Product', 'Breakage', 'Shop', 'ProductType');
+  var $uses = array('Sale', 'Product', 'Shop', 'ProductType');
 /**
  * index method
  *
@@ -60,7 +60,7 @@ public function results()
     App::uses('CakeTime', 'Utility');
     $dateSelectSale = CakeTime::daysAsSql($this->Functions->viewDateToDateTime($dateStart)->format('Y-m-d H:i:s'), $this->Functions->viewDateToDateTime($dateEnd)->format('Y-m-d H:i:s'), 'Sale.date');
     
-    $dateSelectBreakage = CakeTime::daysAsSql($this->Functions->viewDateToDateTime($dateStart)->format('Y-m-d H:i:s'), $this->Functions->viewDateToDateTime($dateEnd)->format('Y-m-d H:i:s'), 'Breakage.date');
+    
     
     $shopData = array();
     $shops = $this->Shop->find('list');
@@ -82,16 +82,6 @@ public function results()
 										  //'Sale.date as date',
 										  'SUM(Sale.price * Sale.sold) as price')
 									 ));
-	   $this->Breakage->contain();
-	    $shopData[$shopId][$typeId]['Breakages'] =  $this->Breakage->find('all',
-									array('conditions'=>array('('.$dateSelectBreakage.')',
-									  'product_types_id = '.$typeId,
-									  'Breakage.shop_id' => $shopId
-									),
-									  'fields' => array(
-										//'Breakage.date as date',
-										'SUM(Breakage.breakage) as breakage')
-									  ));
 	   //$shopData[$shopId][$typeId]['results'] = array();
 	  }
     }
@@ -137,34 +127,10 @@ public function results()
 	}
       }
     }
-    foreach($this->request->data['breakage'] as $shopId => $shop)
-    {
-      foreach($shop as $productTypeId => $value)
-      {
-	  if($value['breakage'] != '' )
-	  {
-	    $data = array();
-	    $data['Breakage'] = array(
-				      'date' => $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),
-				      'shop_id' => $shopId,
-				      'product_types_id' => $productTypeId,
-				      'breakage' => $value['breakage']
-				      );
-	    //debug($value);
-	    if($value['breakageId'] != '')
-	    {
-	      $data['Breakage']['id'] = $value['breakageId'];
-	    }
-	    if (!$this->Breakage->save($data)) {
-	      $error ++;
-	    }
-	  }
-      }
-    }
     if($error == 0)
     {
 	$this->Session->setFlash(__('The sale has been saved'));
-        $this->redirect(array('action' => 'index'));
+        $this->redirect(array('action' => 'add'));
     }
     else
     {
@@ -187,9 +153,7 @@ public function results()
     //debug($products);
     $shops = $this->Sale->Shop->find('all');
 
-    $this->Breakage->contain();
-    $breakages = $this->Breakage->find('all', array('conditions'=>'Breakage.date = \''.$date.'\''));
-    $this->set(compact('products', 'shops', 'breakages'));
+    $this->set(compact('products', 'shops'));
   }
 
 /**

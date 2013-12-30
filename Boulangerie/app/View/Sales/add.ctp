@@ -30,23 +30,12 @@
 	  $productTypeId = $product['Product']['product_types_id'];
 	}
 	if($productTypeId != $product['Product']['product_types_id'])
-	{ 
-	  $breakageId = '';
-	  $breakageValue = '';
-	  foreach($breakages as $breakage)
-	  {
-	    if(($breakage['Breakage']['shop_id'] == $shop['Shop']['id']) && ($breakage['Breakage']['product_types_id'] ==$productTypeId) )
-	    {
-	      $breakageId = $breakage['Breakage']['id'];
-	      $breakageValue = $breakage['Breakage']['breakage'];
-	    }
-	  }
+	{
 
 	  ?>
 	  <tr class="subtotal productType_<?php echo $productTypeId ?>" id="subtotal_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" >
 	    <td>Total</td>
-	    <td><span>Casse</span> <input id="breakage_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" type="text" name="breakage[<?php echo $shop['Shop']['id'] ?>][<?php echo $productTypeId ?>][breakage]" value="<?php echo $breakageValue ?>" size="3" />
-	    <input type="hidden" name="breakage[<?php echo $shop['Shop']['id'] ?>][<?php echo $productTypeId ?>][breakageId]" value="<?php echo $breakageId ?>" /></td>
+	    <td></td>
 	    <td  id="totalProduced_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" ></td>
 	    <td id="totalSold_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>"></td>
 	    <td id="totalLost_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" class="lost" ></td>
@@ -85,8 +74,7 @@
     <?php } ?>
 <tr class="subtotal productType_<?php echo $productTypeId ?>" id="subtotal_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" >
 	    <td>Total</td>
-	    <td><span>Casse</span> <input id="breakage_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" type="text" name="breakage[<?php echo $shop['Shop']['id'] ?>][<?php echo $productTypeId ?>][breakage]" value="<?php echo $breakageValue ?>" size="3" />
-	    <input type="hidden" name="breakage[<?php echo $shop['Shop']['id'] ?>][<?php echo $productTypeId ?>][breakageId]" value="<?php echo $breakageId ?>" /></td>
+	    <td></td>
 	    <td  id="totalProduced_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" ></td>
 	    <td id="totalSold_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>"></td>
 	    <td id="totalLost_<?php echo $shop['Shop']['id'].'_'.$productTypeId ?>" class="lost" ></td>

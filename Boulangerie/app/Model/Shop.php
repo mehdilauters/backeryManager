@@ -110,10 +110,13 @@ class Shop extends AppModel {
   {
     foreach($results as $id => $shop)
     {
-      if( strlen($results[$id]['Shop']['phone']) == 9)
+      if(isset($results[$id]['Shop']['phone']))
       {
-	
-	$results[$id]['Shop']['phone'] = '0'.$results[$id]['Shop']['phone'];
+	if( strlen($results[$id]['Shop']['phone']) == 9)
+	{
+	  
+	  $results[$id]['Shop']['phone'] = '0'.$results[$id]['Shop']['phone'];
+	}
       }
     }
     return $results;

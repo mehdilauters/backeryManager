@@ -3,7 +3,8 @@ DROP TABLE IF EXISTS `acos`;
 DROP TABLE IF EXISTS `aros`;
 DROP TABLE IF EXISTS `aros_acos`;
 
-DROP TABLE IF EXISTS `breakages`;
+DROP TABLE IF EXISTS `results_entries`;
+DROP TABLE IF EXISTS `results`;
 DROP TABLE IF EXISTS `sales`;
 DROP TABLE IF EXISTS `medias`;
 DROP TABLE IF EXISTS `photos`;
@@ -191,17 +192,27 @@ create table if not exists sales (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 
-create table if not exists breakages (
+create table if not exists results (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `date` datetime NOT NULL,
   `shop_id` int(10) NOT NULL ,
-  `product_types_id` int(10) NOT NULL ,
-  `breakage` float(10) ,  
+  `date` datetime NOT NULL,
+  `cash` float(10) ,
+  `check` float(10) ,
   PRIMARY KEY (`id`),
-  KEY `fk_breakages_productsTypes` (`product_types_id`),
-  KEY `fk_breakages_shops` (`shop_id`),
-  UNIQUE KEY `unique_breakages` (`date`,`shop_id`, `product_types_id`)
+  KEY `fk_results_shops` (`shop_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+create table if not exists results_entries (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `result_id` int(10) NOT NULL,
+  `product_types_id` int(10) NOT NULL ,
+  `result` float(10) ,
+  PRIMARY KEY (`id`),
+  KEY `fk_results_entries_results` (`result_id`),
+  KEY `fk_results_entries_productsTypes` (`product_types_id`),
+  UNIQUE KEY `unique_results` (`result_id`, `product_types_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
 
 ALTER TABLE `photos`
   ADD CONSTRAINT `fk_photos_medias` FOREIGN KEY (`id`) REFERENCES `medias` (`id`);
@@ -234,6 +245,9 @@ ALTER TABLE `sales`
   ADD CONSTRAINT `fk_sales_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   ADD CONSTRAINT `fk_sales_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
 
-ALTER TABLE `breakages`
-  ADD CONSTRAINT `fk_breakages_productsTypes` FOREIGN KEY (`product_types_id`) REFERENCES `product_types` (`id`),
-  ADD CONSTRAINT `fk_breakages_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
+ALTER TABLE `results_entries`
+  ADD CONSTRAINT `fk_results_entries_productsTypes` FOREIGN KEY (`product_types_id`) REFERENCES `product_types` (`id`),
+  ADD CONSTRAINT `fk_results_entries_results` FOREIGN KEY (`result_id`) REFERENCES `results` (`id`);
+
+ALTER TABLE `results`
+  ADD CONSTRAINT `fk_results_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
