@@ -28511,3 +28511,30 @@ Request URL: /boulangerie/js/sly.min.js
 Stack Trace:
 #0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
 #1 {main}
+2013-12-30 23:59:46 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-12-30 23:59:49 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-12-31 00:06:07 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}

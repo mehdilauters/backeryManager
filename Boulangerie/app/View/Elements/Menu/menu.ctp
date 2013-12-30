@@ -26,7 +26,9 @@ foreach($menu as $title => $subMenu)
       <li id="menuAdmin" > Administration
 	<ul>
 	  <li><a href="<?php echo $this->webroot ?>sales/add">Saisie journaliere production</a></li>
+	  <li><a href="<?php echo $this->webroot ?>sales/stats">stats production</a></li>
 	  <li><a href="<?php echo $this->webroot ?>results/add">saisie journaliere compta</a></li>
+	  <li><a href="<?php echo $this->webroot ?>results/">resultats compta</a></li>
 	  <li><a href="<?php echo $this->webroot ?>photos/add">ajouter une photo</a></li>
 	  <li><a href="<?php echo $this->webroot ?>productTypes/add">ajouter un type de produit</a></li>
 	  <li><a href="<?php echo $this->webroot ?>products/add">ajouter un produit</a></li>

@@ -56,6 +56,8 @@ class AppController extends Controller {
     }
   
      $this->set('menu', $this->menu);
+    //TODO debug mode
+    $isAdmin = true;
     $tokens = array('isAdmin'=> $isAdmin ,'members'=>true);
     $this->set('tokens', $tokens);
   }
