@@ -21,6 +21,8 @@ $(document).ready(function(){
       }, 3500);  
     
     
+  $('.spinner').spinner();
+  
     $(".fancybox").fancybox(
         {
             type: "image",

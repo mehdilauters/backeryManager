@@ -23,9 +23,9 @@
 		  }
 		?>
 		    <legend>Totaux</legend>
-		    <label>Especes</label><input type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" />€
+		    <label>Especes</label><input type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner" />€
 		    <br/>
-		    <label>Cheques</label><input type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" />€
+		    <label>Cheques</label><input type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="spinner" />€
 		    <input type="hidden" name="Result[<?php echo $shopId; ?>][resultId]" value="<?php echo $resultId; ?>" />
 	    </fieldset>
 	    <fieldset>
@@ -47,7 +47,7 @@
       ?>
 	<tr>
 	  <td><?php echo $typeName ?></td>
-	  <td><input type="text" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" size="10" />€
+	  <td><input type="text" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" size="10" class="spinner" />€
 	  <input type="hidden" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][resultEntryId]"  value="<?php echo $resultEntryId ?>" />
 	</td>
 	</tr>
