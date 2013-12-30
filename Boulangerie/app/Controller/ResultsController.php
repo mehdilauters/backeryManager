@@ -165,9 +165,16 @@ public function getData($dateStart = '', $dateEnd = '')
 			     $resultData['Result'] = array(
 				'date' => $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),
 				'shop_id'=> $shopId,
-				'cash' => $result['cash'],
-				'check' => $result['check'],
 			      );
+			      if($result['cash'] != '')
+			      {
+				  $resultData['Result']['cash'] = $result['cash'];
+			      }
+
+			      if($result['check'] != '')
+			      {
+				  $resultData['Result']['check'] = $result['check'];
+			      }
 			      if($result['resultId'] != '')
 			      {
 				$resultData['Result']['id'] = $result['resultId'];
@@ -185,22 +192,26 @@ public function getData($dateStart = '', $dateEnd = '')
 			  }
 			  foreach($result['productTypes'] as $typeId => $resultEntry)
 			  {
-			      $this->ResultsEntry->create();
-			      $resultEntryData = array();
-			      $resultEntryData['ResultsEntry'] = array(
-				  'result_id' => $resultId,
-				  'product_types_id' => $typeId,
-				  'result' => $resultEntry['result'],
-				);
-			      if($resultEntry['resultEntryId'] != '')
-			      {
-				$resultEntryData['ResultsEntry']['id'] = $resultEntry['resultEntryId'];
+			    if($resultEntry['result'] != '')
+			    {
+				$this->ResultsEntry->create();
+				$resultEntryData = array();
+				$resultEntryData['ResultsEntry'] = array(
+				    'result_id' => $resultId,
+				    'product_types_id' => $typeId,
+				    'result' => $resultEntry['result'],
+				  );
+				if($resultEntry['resultEntryId'] != '')
+				{
+				  $resultEntryData['ResultsEntry']['id'] = $resultEntry['resultEntryId'];
+				}
+			      if (!$this->ResultsEntry->save($resultEntryData)) {
+				    $errors ++;  
 			      }
-			    if (!$this->ResultsEntry->save($resultEntryData)) {
-				  $errors ++;  
 			    }
 			  }
 			}
+
 
 			if ($errors == 0 ) {
 				$this->Session->setFlash(__('The result has been saved'));
