@@ -38,7 +38,6 @@ echo $this->Html->script(
          'fullcalendar.min',
          'jquery.qtip-1.0.0-rc3.min',
 	  'jquery.fancybox.pack',
-	   'sly.min'
         ),
      array('inline' => 'false')
   );

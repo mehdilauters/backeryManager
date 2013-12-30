@@ -193,7 +193,8 @@ a:visited{
     color: black;
 }
 
-.total{
+.total, .red{
+    font-weight:bold;
     color: red;
 }
 
@@ -373,3 +374,26 @@ a:visited{
 .slideshow li {  
    float: left;  
 }  
+
+table tr.legend th{
+  background-color:gray;
+  color:white;
+}
+
+#resultList table{
+  border-collapse:collapse;
+  border:1px black solid;
+  text-align:center;
+}
+
+#resultList td, #resultList th{
+  border:1px black solid;
+}
+
+#resultList th{
+  min-width:10%;
+}
+
+#resultsAdd input{
+   text-align:center;
+}

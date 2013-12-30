@@ -14,9 +14,27 @@ class ResultsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Result->recursive = 0;
-		$results = $this->Result->find('all');
-		$this->set('results', $results);
+		$dateStart = date('d/m/Y');
+		if(isset($this->request->data['dateStart']))
+		{
+		  $dateStart = $this->request->data['dateStart'];
+		}
+		
+		$dateEnd = $dateStart;
+		
+		if(isset($this->request->data['dateEnd']))
+		{
+		  $dateEnd = $this->request->data['dateEnd'];
+		}
+		$this->Result->contain();
+		$this->Result->contain('Shop','ResultsEntry');
+		$data = $this->getData($dateStart, $dateEnd);
+
+		$shops = $this->Result->Shop->find('list');
+		$productTypes = $this->ProductType->find('list');
+
+
+		$this->set(compact('data', 'dateStart', 'dateEnd', 'shops', 'productTypes', 'total'));
 	}
 
 /**
@@ -33,6 +51,95 @@ class ResultsController extends AppController {
 		$options = array('conditions' => array('Result.' . $this->Result->primaryKey => $id));
 		$this->set('result', $this->Result->find('first', $options));
 	}
+
+public function getData($dateStart = '', $dateEnd = '')
+{
+  if($dateStart == '')
+  {
+    $dateStart = date('d/m/Y');
+  }
+  
+  if($dateEnd == '')
+  {
+    $dateEnd = $dateStart;
+  }
+  
+  if($dateEnd < $dateStart)
+  {
+    throw new NotFoundException(__('Invalid dates'));
+  }
+
+    $this->Result->contain();
+    $this->Result->contain('ResultsEntry');
+
+    App::uses('CakeTime', 'Utility');
+    $dateSelect = CakeTime::daysAsSql($this->Functions->viewDateToDateTime($dateStart)->format('Y-m-d H:i:s'),$this->Functions->viewDateToDateTime($dateEnd)->format('Y-m-d H:i:s'), 'Result.date');
+
+    $results = $this->Result->find('all', array( 'conditions'=>$dateSelect));
+    $data = array(
+		  'total' => array('cash'=>0, 'check'=> 0),
+		  );
+
+    $ids = array();
+    foreach($results as $result)
+    {
+      if(!isset($ids[$result['Result']['shop_id']]))
+      {
+	$ids[$result['Result']['shop_id']] = 0;
+      }
+      else
+      {
+	 $ids[$result['Result']['shop_id']] ++;
+      }
+      $i = $ids[$result['Result']['shop_id']];
+      $data['entries'][$result['Result']['shop_id']]['entries'][$i] = array(
+	  'cash' => $result['Result']['cash'],
+	  'date' => $result['Result']['date'],
+	  'check' => $result['Result']['check'],
+	  'resultId' => $result['Result']['id'],
+	  'productTypes' => array()
+	);
+      
+      if(!isset($data['entries'][$result['Result']['shop_id']]['total']))
+      {
+	$data['entries'][$result['Result']['shop_id']]['total'] = array();
+// 	debug($data['entries'][$result['Result']['shop_id']]);
+	$data['entries'][$result['Result']['shop_id']]['total']['cash'] = 0;
+	$data['entries'][$result['Result']['shop_id']]['total']['check'] = 0;
+      }
+
+	
+	$data['entries'][$result['Result']['shop_id']]['total']['cash'] += $result['Result']['cash'];
+	$data['entries'][$result['Result']['shop_id']]['total']['check'] += $result['Result']['check'];
+
+	 $data['total']['cash'] += $result['Result']['cash'];
+	 $data['total']['check'] += $result['Result']['check'];
+      
+      foreach($result['ResultsEntry'] as $resultEntry)
+      {
+	if(!isset($data['entries'][$result['Result']['shop_id']]['total'][$resultEntry['product_types_id']]))
+	{
+	  //debug($data['entries'][$result['Result']['shop_id']]);
+	  $data['entries'][$result['Result']['shop_id']]['total'][$resultEntry['product_types_id']] = 0;
+	}
+
+	
+	$data['entries'][$result['Result']['shop_id']]['total'][$resultEntry['product_types_id']] += $resultEntry['result'];
+
+	if(!isset($data['total'][$resultEntry['product_types_id']]))
+	{
+	  $data['total'][$resultEntry['product_types_id']] = 0;
+	}
+	$data['total'][$resultEntry['product_types_id']] += $resultEntry['result'];
+
+
+	$data['entries'][$result['Result']['shop_id']]['entries'][$i]['productTypes'][$resultEntry['product_types_id']]['result'] = $resultEntry['result'];
+	$data['entries'][$result['Result']['shop_id']]['entries'][$i]['productTypes'][$resultEntry['product_types_id']]['resultEntryId'] = $resultEntry['id'];
+      }
+      $i++;
+    }
+    return $data;
+}
 
 /**
  * add method
@@ -95,40 +202,16 @@ class ResultsController extends AppController {
 			  }
 			}
 
-
-
-			$this->Result->create();
-			if ($this->Result->save($this->request->data)) {
+			if ($errors == 0 ) {
 				$this->Session->setFlash(__('The result has been saved'));
-				//$this->redirect(array('action' => 'index'));
+				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The result could not be saved. Please, try again.'));
 			}
 		}
 		$shops = $this->Result->Shop->find('list');
 		$productTypes = $this->ProductType->find('list');
-		$this->Result->contain();
-		$this->Result->contain('ResultsEntry');
-
-		App::uses('CakeTime', 'Utility');
-		$dateSelect = CakeTime::daysAsSql($this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),$this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'), 'Result.date');
-
-		$results = $this->Result->find('all', array( 'conditions'=>$dateSelect));
-		$data = array();
-		foreach($results as $result)
-		{
-		  $data[$result['Result']['shop_id']] = array(
-		      'cash' => $result['Result']['cash'],
-		      'check' => $result['Result']['check'],
-		      'resultId' => $result['Result']['id'],
-		      'productTypes' => array()
-		    );
-		  foreach($result['ResultsEntry'] as $resultEntry)
-		  {
-		    $data[$result['Result']['shop_id']]['productTypes'][$resultEntry['product_types_id']]['result'] = $resultEntry['result'];
-		    $data[$result['Result']['shop_id']]['productTypes'][$resultEntry['product_types_id']]['resultEntryId'] = $resultEntry['id'];
-		  }
-		}
+		$data = $this->getData($date);
 		$this->set(compact('shops','productTypes', 'date', 'data'));
 	}
 

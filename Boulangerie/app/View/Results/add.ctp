@@ -1,28 +1,31 @@
 <div class="results form">
 <form id="resultsDateSelect" method="POST" >
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
-  <input type="submit" name="dateSelect" id="dateSelect" value="Select" />
+  <input type="submit" name="dateSelect" id="dateSelect" value="Valider" />
 </form>
 <form id="resultsAdd" method="POST" >
 <input type="hidden" id="date" name="date" value="<?php echo $date ?>" />
+<h2>Le <?php echo $date ?></h2>
 <ul>
 <?php foreach($shops as $shopId => $shopName){ ?>
 <li>
+	<h3><?php echo $shopName; ?></h3>
 	    <fieldset>
 	      <?php
 		  $resultId='';
 		  $cash = '';
 		  $check = '';
-		  if(isset($data[$shopId]))
+		  if(isset($data['entries'][$shopId]['entries'][0]))
 		  {
-		    $resultId=$data[$shopId]['resultId'];
-		    $cash = $data[$shopId]['cash'];
-		    $check = $data[$shopId]['check'];
+		    $resultId=$data['entries'][$shopId]['entries'][0]['resultId'];
+		    $cash = $data['entries'][$shopId]['entries'][0]['cash'];
+		    $check = $data['entries'][$shopId]['entries'][0]['check'];
 		  }
 		?>
-		    <legend><?php echo $shopName; ?></legend>
-		    <label>Especes</label><input type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" />
-		    <label>Cheques</label><input type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" />
+		    <legend>Totaux</legend>
+		    <label>Especes</label><input type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" />€
+		    <br/>
+		    <label>Cheques</label><input type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" />€
 		    <input type="hidden" name="Result[<?php echo $shopId; ?>][resultId]" value="<?php echo $resultId; ?>" />
 	    </fieldset>
 	    <fieldset>
@@ -36,15 +39,15 @@
       <?php
 	  $result = '';
 	  $resultEntryId = '';
-	  if(isset($data[$shopId]['productTypes'][$typeId]))
+	  if(isset($data['entries'][$shopId]['entries'][0]['productTypes'][$typeId]))
 	  {
-	    $result = $data[$shopId]['productTypes'][$typeId]['result'];
-	    $resultEntryId = $data[$shopId]['productTypes'][$typeId]['resultEntryId'];  
+	    $result = $data['entries'][$shopId]['entries'][0]['productTypes'][$typeId]['result'];
+	    $resultEntryId = $data['entries'][$shopId]['entries'][0]['productTypes'][$typeId]['resultEntryId'];  
 	  }
       ?>
 	<tr>
 	  <td><?php echo $typeName ?></td>
-	  <td><input type="text" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" />
+	  <td><input type="text" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" size="10" />€
 	  <input type="hidden" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][resultEntryId]"  value="<?php echo $resultEntryId ?>" />
 	</td>
 	</tr>
@@ -56,16 +59,7 @@
 </li>
 <?php } ?>
 </ul>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('List Results'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Shops'), array('controller' => 'shops', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Shop'), array('controller' => 'shops', 'action' => 'add')); ?> </li>
-	</ul>
+<?php echo $this->Form->end(__('Valider')); ?>
 </div>
 <script>
 

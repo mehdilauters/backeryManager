@@ -1,9 +1,10 @@
 <div class="sales form">
 <form id="salesDateSelect" method="POST" >
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
-  <input type="submit" name="dateSelect" id="dateSelect" value="Select" />
+  <input type="submit" name="dateSelect" id="dateSelect" value="Valider" />
 </form>
 <form id="salesAdd" method="POST" >
+<h2>Le <?php echo $date ?></h2>
 <input type="hidden" name="date" id="date" value="<?php echo $date ?>" />
   <ul id="shopList" >
   <?php 
@@ -11,7 +12,7 @@
   foreach($shops as $shop)
   { ?>
   <li class="shopItem" id="shop_<?php  echo $shop['Shop']['id'] ?>" >
-  <div class="title" ><?php echo $shop['Shop']['name'] ?></div>
+  <div class="title" ><h3><?php echo $shop['Shop']['name'] ?></h3></div>
   <?php echo $this->element('Medias/Medias/Preview', array('media'=>$shop, 'config'=>array('name'=>false, 'description'=>false))); ?>
   <table>
     <tr>
@@ -65,9 +66,9 @@
 <!--       <?php echo $this->element('Medias/Medias/Preview', array('media'=>$product, 'config'=>array('name'=>false, 'description'=>false))); ?>  </td> -->
       <td id="price_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="price" ><?php echo $product['Product']['price'] ?></td>
       <td class="produced" >
-	<input id="saleId_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" type="hidden" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][saleId]" size="3" value="<?php echo $saleId;  ?>"/>
-	<input id="produced_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="watch" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][produced]" size="3" value="<?php echo $produced; ?>"/></td>
-      <td class="sold"><input id="sold_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="watch" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][sold]" size="3" value="<?php echo $sold; ?>" /></td>
+	<input id="saleId_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" type="hidden" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][saleId]" size="10" value="<?php echo $saleId;  ?>"/>
+	<input id="produced_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="watch" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][produced]" size="10" value="<?php echo $produced; ?>"/></td>
+      <td class="sold"><input id="sold_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="watch" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][sold]" size="10" value="<?php echo $sold; ?>" /></td>
       <td id="lost_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="lost" ></td>
       <td id="amount_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="amount" ></td>
     </tr>
@@ -282,9 +283,10 @@ function inputChange(inputObject)
 
 
 
-    $('#shopList td input.watch').each(function(index, item){
-	inputChange($(item));
-      });
+    $('input.watch').change(function(){
+	  inputChange($(this))
+	  }
+	);
 
       $("#dateSelectValue").change(function(){
 	  if( $(this).val() != $('#date').val() )
@@ -296,6 +298,7 @@ function inputChange(inputObject)
 	    $('#salesAdd').show();
 	  }
 	});
+    total();
   });
 
 </script>
