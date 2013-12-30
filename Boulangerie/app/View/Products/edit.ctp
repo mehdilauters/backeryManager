@@ -4,7 +4,7 @@
     <legend><?php echo __('Edit Product'); ?></legend>
   <?php
     echo $this->Form->input('id');
-    echo $this->Form->input('product_type_id');
+    echo $this->Form->input('product_types_id');
     echo $this->Form->input('media_id');
     echo $this->Form->input('name');
     echo $this->Form->input('description');
