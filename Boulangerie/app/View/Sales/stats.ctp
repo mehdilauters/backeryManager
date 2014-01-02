@@ -14,8 +14,8 @@
   <th>product type</th>
   <th>shop</th>
   <th>produced</th>
-  <th>sold</th>
   <th>lost</th>
+  <th>sold</th>
 </tr>
 <?php
    foreach($sales as $sale)
@@ -33,8 +33,8 @@
       <td><?php echo $sale['Product']['product_types_id'] ?></td>
       <td><?php echo $sale['Shop']['name'] ?></td>
       <td><?php echo $sale['Sale']['produced'] ?></td>
-      <td><?php echo $sale['Sale']['sold'] ?></td>
       <td class="<?php echo $class ?>" ><?php echo $sale['Sale']['lost'] ?></td>
+      <td><?php echo $sale['Sale']['sold'] ?></td>
    </tr>
    
    <?php }

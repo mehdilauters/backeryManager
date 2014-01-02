@@ -16,7 +16,7 @@ class Sale extends AppModel {
   public $displayField = 'product_id';
 
   public $virtualFields = array(
-    'lost' => 'Sale.produced - Sale.sold'
+    'sold' => 'Sale.produced - Sale.lost'
   );
   
 /**

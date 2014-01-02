@@ -184,7 +184,7 @@ create table if not exists sales (
   `unity` boolean default TRUE,
   `shop_id` int(10) NOT NULL ,
   `produced` int(10) ,
-  `sold` int(10) ,  
+  `lost` int(10) ,  
   PRIMARY KEY (`id`),
   KEY `fk_sales_products` (`product_id`),
   KEY `fk_sales_shops` (`shop_id`),
@@ -251,3 +251,4 @@ ALTER TABLE `results_entries`
 
 ALTER TABLE `results`
   ADD CONSTRAINT `fk_results_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
+

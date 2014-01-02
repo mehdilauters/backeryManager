@@ -109,10 +109,8 @@ a:visited{
   /* background-image:url("../img/design/fondBackground.png");
   background-repeat:repeat-y; */
   float:left;
-  width:75%;
-  margin:0px;
-  margin-left:1%
-  background-color:#5e380c;
+  width:97%;
+  padding-left:1%;
   /* height:751px; */
   
   overflow:auto;
@@ -132,6 +130,7 @@ a:visited{
 .pannel {
     width:210px;
     height:94px;
+    /*background: #fdda9e; */
     background-image:url("../img/designV2/pannel.png");
     background-size: contain;
     -webkit-background-size: contain;
@@ -195,7 +194,7 @@ a:visited{
 
 .total, .red{
     font-weight:bold;
-    color: red;
+    color: #FF4000;
 }
 
 .slate{
@@ -396,4 +395,35 @@ table tr.legend th{
 
 #resultsAdd input{
    text-align:center;
+}
+
+#salesAdd li{
+     padding:0; margin:0;  
+   list-style: none;  
+}
+
+.save{
+ background-image:url("../img/icons/document-save.png"); 
+  /*  padding: 0 0 0 10px;*/
+  cursor: pointer;
+  width:48px;
+  height:48px;
+  border:0;
+}
+
+.dateSearch{
+ background-image:url("../img/icons/view-calendar-upcoming-days.png"); 
+  /*  padding: 0 0 0 10px;*/
+  cursor: pointer;
+  width:48px;
+  height:48px;
+  border:0;  
+}
+
+.spreadsheet{
+  background-image:url("../img/icons/application-vnd.oasis.opendocument.spreadsheet-template.png"); 
+  cursor: pointer;
+  width:48px;
+  height:48px;
+  border:0;  
 }

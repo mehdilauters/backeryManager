@@ -1,7 +1,7 @@
 <div class="results form">
 <form id="resultsDateSelect" method="POST" >
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
-  <input type="submit" name="dateSelect" id="dateSelect" value="Valider" />
+  <input type="submit" name="dateSelect" id="dateSelect" value="" class="dateSearch" />
 </form>
 <form id="resultsAdd" method="POST" >
 <input type="hidden" id="date" name="date" value="<?php echo $date ?>" />
@@ -59,7 +59,7 @@
 </li>
 <?php } ?>
 </ul>
-<?php echo $this->Form->end(__('Valider')); ?>
+<input type="submit" value="" class="save" />
 </div>
 <script>
 

@@ -50,11 +50,11 @@ public function results()
     $dateEnd = date('d/m/Y');
     if(isset($this->request->data['dateStart']))
     {
-	$dateStart = $this->request->data['dateStart'];
+  $dateStart = $this->request->data['dateStart'];
     }
     if(isset($this->request->data['dateEnd']))
     {
-	$dateEnd = $this->request->data['dateEnd'];
+  $dateEnd = $this->request->data['dateEnd'];
     }
     
     App::uses('CakeTime', 'Utility');
@@ -68,22 +68,22 @@ public function results()
 
     foreach($shops as $shopId => $shop)
     {
-	  $shopData[$shopId] = array();
+    $shopData[$shopId] = array();
           foreach($productTypes as $typeId => $productType)
-	  {
-	    $shopData[$shopId][$typeId] = array();
-	    $this->Sale->contain();
-	    $shopData[$shopId][$typeId]['Sales'] = $this->Sale->find('all', array('conditions'=>array('('.$dateSelectSale.')',
-									  'Sale.product_id in (select P.id from products P where P.product_types_id = '.$typeId.')',
-									  'Sale.shop_id' => $shopId
-									),
-									 //'group' =>'Date(Sale.date)',
-									  'fields' => array(
-										  //'Sale.date as date',
-										  'SUM(Sale.price * Sale.sold) as price')
-									 ));
-	   //$shopData[$shopId][$typeId]['results'] = array();
-	  }
+    {
+      $shopData[$shopId][$typeId] = array();
+      $this->Sale->contain();
+      $shopData[$shopId][$typeId]['Sales'] = $this->Sale->find('all', array('conditions'=>array('('.$dateSelectSale.')',
+                    'Sale.product_id in (select P.id from products P where P.product_types_id = '.$typeId.')',
+                    'Sale.shop_id' => $shopId
+                  ),
+                   //'group' =>'Date(Sale.date)',
+                    'fields' => array(
+                      //'Sale.date as date',
+                      'SUM(Sale.price * Sale.sold) as price')
+                   ));
+     //$shopData[$shopId][$typeId]['results'] = array();
+    }
     }
   $this->set('data', $shopData);
   $this->set(compact('shops','productTypes', 'dateStart', 'dateEnd'));
@@ -103,34 +103,34 @@ public function results()
     {
       foreach($shop as $productId => $product)
       {
-	if($product['produced'] != '' || $product['sold'] != '' )
-	{
-	  $productModel = $this->Product->findById($productId);
-	  $this->Sale->create();
-	  $data = array();
-	  $data['Sale'] = array(
-			'date' => $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),
-			'product_id' => $productId,
-			'price' => $productModel['Product']['price'],
-			'unity' => $productModel['Product']['unity'],
-			'shop_id' => $shopId,
-			'produced' => $product['produced'],
-			'sold' => $product['sold'],
-			);
-	  if($product['saleId'] != '')
-	  {
-	    $data['Sale']['id'] = $product['saleId'];
-	  }
-	  if (!$this->Sale->save($data)) {
-	     $error ++;
-	  }
-	}
+  if($product['produced'] != '' || $product['lost'] != '' )
+  {
+    $productModel = $this->Product->findById($productId);
+    $this->Sale->create();
+    $data = array();
+    $data['Sale'] = array(
+      'date' => $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),
+      'product_id' => $productId,
+      'price' => $productModel['Product']['price'],
+      'unity' => $productModel['Product']['unity'],
+      'shop_id' => $shopId,
+      'produced' => $product['produced'],
+      'lost' => $product['lost'],
+      );
+    if($product['saleId'] != '')
+    {
+      $data['Sale']['id'] = $product['saleId'];
+    }
+    if (!$this->Sale->save($data)) {
+       $error ++;
+    }
+  }
       }
     }
     if($error == 0)
     {
-	$this->Session->setFlash(__('The sale has been saved'));
-        $this->redirect(array('action' => 'add'));
+  $this->Session->setFlash(__('The sale has been saved'));
+        $this->redirect(array('action' => 'stats'));
     }
     else
     {

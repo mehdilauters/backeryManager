@@ -183,6 +183,6 @@ CakeLog::config('error', array(
 
 CakePlugin::load('DebugKit');
   //CakePlugin::load('FullCalendar');
-  
+  CakePlugin::load('PhpExcel');
 include('boulangerie.php');
   

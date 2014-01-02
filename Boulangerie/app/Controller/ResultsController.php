@@ -8,6 +8,7 @@ App::uses('AppController', 'Controller');
 class ResultsController extends AppController {
   var $uses = array('Result', 'ProductType', 'ResultsEntry');
   var $components = array('Functions');
+  var $helpers = array('PhpExcel.PhpExcel');
 /**
  * index method
  *
@@ -33,9 +34,18 @@ class ResultsController extends AppController {
 		$shops = $this->Result->Shop->find('list');
 		$productTypes = $this->ProductType->find('list');
 
-
+		if(isset($this->request->data['excelDownload']))
+		{
+ 		 $this->layout = 'ajax'; 
+ 		 $this->view = 'excel';
+// 		 $this->render('excel');
+		 ob_end_clean();
+		}
 		$this->set(compact('data', 'dateStart', 'dateEnd', 'shops', 'productTypes', 'total'));
+
 	}
+
+
 
 /**
  * view method
@@ -75,7 +85,7 @@ public function getData($dateStart = '', $dateEnd = '')
     App::uses('CakeTime', 'Utility');
     $dateSelect = CakeTime::daysAsSql($this->Functions->viewDateToDateTime($dateStart)->format('Y-m-d H:i:s'),$this->Functions->viewDateToDateTime($dateEnd)->format('Y-m-d H:i:s'), 'Result.date');
 
-    $results = $this->Result->find('all', array( 'conditions'=>$dateSelect));
+    $results = $this->Result->find('all', array( 'conditions'=>$dateSelect, 'order' => 'Result.date'));
     $data = array(
 		  'total' => array('cash'=>0, 'check'=> 0),
 		  );
