@@ -14,6 +14,9 @@ class Result extends AppModel {
  */
 	public $displayField = 'date';
 	public $actsAs = array('Containable');
+  public $virtualFields = array(
+    'total' => 'Result.cash + Result.check'
+    );
 /**
  * Validation rules
  *

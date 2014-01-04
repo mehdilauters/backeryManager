@@ -45,7 +45,18 @@ class ResultsController extends AppController {
 
 	}
 
+	public function stats() {
 
+		$this->Result->contain();
+		$this->Result->contain('ResultsEntry', 'Shop');
+
+		$results = $this->Result->find('all', array( 'order' => 'Result.date'));
+
+		$shops = $this->Result->Shop->find('list');
+		$productTypes = $this->ProductType->find('list');
+		$this->set(compact('results', 'dateStart', 'dateEnd', 'shops', 'productTypes'));
+
+	}
 
 /**
  * view method
