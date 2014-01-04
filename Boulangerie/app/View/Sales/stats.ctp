@@ -1,43 +1,55 @@
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
-<script language="javascript" src="<?php echo $this->webroot ?>js/rainbow.js" type="text/javascript"></script>
+<script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
+<!--<script language="javascript" src="<?php echo $this->webroot ?>js/rainbow.js" type="text/javascript"></script>--!>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
 
 <div id="histogramChart" style="width=500px;height=600px;" ></div>
 
 <table id="statValues">
 <tr>
-  <th>id</th>
-  <th>date</th>
-  <th>product</th>
-  <th>product type</th>
-  <th>shop</th>
-  <th>produced</th>
-  <th>lost</th>
-  <th>sold</th>
+  <th>Date</th>
+  <th>Produit</th>
+  <th>Type de produit</th>
+  <th>Magasin</th>
+  <th>Production</th>
+  <th>Perte</th>
+  <th>Vente</th>
+  <th>Prix (€)</th>
+  <th>Perte (€)</th>
 </tr>
 <?php
+  $i = 0;
    foreach($sales as $sale)
    {
+      $rowClass = 'even';
       $class = 'lostProducts';
       if($sale['Sale']['lost'] <= 0 )
       {
         $class = 'notLostProducts';    
       }
+      
+      if($i % 2 != 0)
+      {
+          $rowClass = 'odd';
+      }
    ?>
-   <tr>
-      <td><?php echo $sale['Sale']['id'] ?></td>
+   <tr id="sale_row_<?php echo $sale['Sale']['id'] ?>" class="<?php echo $rowClass ?>" >
       <td class="date" ><?php echo $this->Time->format('d/m/Y',$sale['Sale']['date']); ?></td>
-      <td><?php echo $sale['Product']['name'] ?></td>
-      <td><?php echo $sale['Product']['product_types_id'] ?></td>
-      <td><?php echo $sale['Shop']['name'] ?></td>
-      <td><?php echo $sale['Sale']['produced'] ?></td>
-      <td class="<?php echo $class ?>" ><?php echo $sale['Sale']['lost'] ?></td>
-      <td><?php echo $sale['Sale']['sold'] ?></td>
+      <td class="productName"><?php echo $sale['Product']['name'] ?></td>
+      <td class="productTypeName"><?php echo $sale['Product']['ProductType']['name'] ?></td>
+      <td class="shopName"><?php echo (strlen($sale['Shop']['name']) > 13) ? substr($sale['Shop']['name'],0,10).'...' : $sale['Shop']['name'] ?></td>
+      <td class="produced" ><?php echo $sale['Sale']['produced'] ?></td>
+      <td class="<?php echo $class ?> lost" ><?php echo $sale['Sale']['lost'] ?></td>
+      <td class="sold"><?php echo $sale['Sale']['sold'] ?></td>
+      <td class="totalPrice"><?php echo round($sale['Sale']['totalPrice'],2) ?></td>
+      <td class="totalLost"><?php echo round($sale['Sale']['lost']*$sale['Sale']['price'],2) ?></td>
    </tr>
    
-   <?php }
+   <?php
+         $i++;
+      }
 
 ?>
 </table>
@@ -69,9 +81,12 @@ else
    function histogram()
   {
     data = [];
-    var tmpData = [];
-    var cumulativeData = {};
-    var lastSum = 0;
+    var produced = [];
+    var sold = [];
+    var lost = [];
+    var soldPrice = [];
+    var lostPrice = [];
+    
     row=0;
     $('#statValues tr').each(function(index, item){
       if(row > 0) //skip header
@@ -84,68 +99,121 @@ else
           if( isValidDate(dte) )
           {
             //key = dte.getFullYear() + '-' + dte.getMonth() + '-' + dte.getDate();
-            if(tmpData[dte] == undefined)
-          {
-              tmpData[dte] = 0;
-            }
-            columnId=7;
-            tmpData[dte] += parseInt($(item).find('td:nth-child('+columnId+')').html());
+            var val = parseInt($(item).find('td.produced').html());
+            if(!isNaN(val))
+            {
+               if(produced[dte] == undefined )
+               {
+                  produced[dte] = 0;
+               }
+               produced[dte] += val;
+             }
+             var val = parseInt($(item).find('td.lost').html());
+            if(!isNaN(val))
+            {
+               if(lost[dte] == undefined )
+               {
+                  lost[dte] = 0;
+               }
+               lost[dte] += val;
+             }
+             var val = parseInt($(item).find('td.sold').html());
+            if(!isNaN(val))
+            {
+               if(sold[dte] == undefined )
+               {
+                  sold[dte] = 0;
+               }
+               sold[dte] += val;
+             }
+             var val = parseInt($(item).find('td.totalLost').html());
+            if(!isNaN(val))
+            {
+               if(lostPrice[dte] == undefined )
+               {
+                  lostPrice[dte] = 0;
+               }
+               lostPrice[dte] += val;
+             }
+            var val = parseInt($(item).find('td.totalPrice').html());
+            if(!isNaN(val))
+            {
+               if(soldPrice[dte] == undefined )
+               {
+                  soldPrice[dte] = 0;
+               }
+               soldPrice[dte] += val;
+             }
           }
         }
       }
       row++;
     });
 
-    /*tmpData.sort(function(a,b){
     
-      /*var c;
-      var d;
-      console.log("a");
-      /*for(c in a) { break; }
-      for(d in b) { break; }
-      console.log(c);
-      return 2-1;//c-d;
-      });
-    */
 
-    array = [];
-    lastSum = 0;
+    
+
     
     // object to array
-    for (var x in tmpData) {
+    array = [];
+    for (var x in produced ) {
       dte = new Date(x);
       if(isValidDate(dte))
       {
         key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
-        //console.log(x);
-        array.push([key,tmpData[x]]);
-        
-        lastSum += tmpData[x];
-        
-        if(cumulativeData[key] == undefined)
-        {
-          cumulativeData[key] = lastSum;
-        }
-        else
-        {
-          cumulativeData[key] += tmpData[x];
-        }
-        
+        array.push([key,produced[x]]);
       }
     }
-    
     data.push(array);
 
-      arrayCum = [];
-    
-    
-    // object to array
-    for (var x in cumulativeData) {
-      arrayCum.push([x,cumulativeData[x]]);
+        array = [];
+    for (var x in sold) {
+      dte = new Date(x);
+      if(isValidDate(dte))
+      {
+        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
+        array.push([key,sold[x]]);
+      }
     }
-  //  data.push(arrayCum);
+    data.push(array);
+
+        array = [];
+    for (var x in lost) {
+      dte = new Date(x);
+      if(isValidDate(dte))
+      {
+        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
+        array.push([key,lost[x]]);
+      }
+    }
+    data.push(array);
     
-    //console.log(data);
+        array = [];
+    for (var x in soldPrice ) {
+      dte = new Date(x);
+      if(isValidDate(dte))
+      {
+        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
+        array.push([key,soldPrice[x]]);
+      }
+    }
+    data.push(array);
+    
+        array = [];
+    for (var x in lostPrice) {
+      dte = new Date(x);
+      if(isValidDate(dte))
+      {
+        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
+        array.push([key,lostPrice[x]]);
+      }
+    }
+    data.push(array);
+    
+  
+    
+    console.log(data);
     if(histogramPlot != undefined)
     {
       histogramPlot.destroy();
@@ -164,13 +232,14 @@ else
       },
       height: 500,
       width: 600,
+      series: [{'label':'Production'},{'label':'Pertes'},{'label':'Ventes'},{'label':'Revenus (€)'},{'label':'Pertes (€)'},],
       axes:{
         xaxis:{
           label:'Date',
           renderer:$.jqplot.DateAxisRenderer,
           numberTicks:5,
           tickOptions: {
-              formatString: '%b %y'
+               formatString: '%d/%m/%y'
           }
         },
         yaxis:{
@@ -178,13 +247,17 @@ else
           pad: 1.05,
         }
       },
+       highlighter: {
+        show: true,
+        sizeAdjust: 7.5
+      },
       cursor:{
               show: true,
               followMouse: true,
               zoom:true,
               height: 200,
               width: 300,
-              showTooltip:true,
+              showTooltip:false,
       }, 
       legend: {
               show: true,
@@ -199,6 +272,19 @@ else
    
   $(document).ready(function(){
       histogram();
+      var tfConfig = { 
+              base_path: '<?php echo $this->webroot ?>js/TableFilter/',
+              rows_counter:true,
+              //rows_counter_text: 'Selected files: ',
+              on_after_refresh_counter: function(o,i){ histogram(); }
+              };
+              tf = new TF('statValues', tfConfig); tf.AddGrid();
+              
+              $('#histogramChart').bind("contextmenu",function(e){
+                            histogramPlot.resetZoom();
+                            return false;
+            
+                    });
   });
 </script>
 

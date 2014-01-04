@@ -17,13 +17,9 @@ a:visited{
   color : orange;  
 }
 
-.lostProducts{
- color : red; 
-}
 
-.notLostProducts{
- color : green;
-}
+
+
 
 #container{
   /*position:absolute;*/
@@ -192,9 +188,12 @@ a:visited{
     color: black;
 }
 
-.total, .red{
+.notLostProducts{
+ color : #00DCFF;
+}
+.total, .red, .lostProducts{
     font-weight:bold;
-    color: #FF4000;
+    color: #FFD63F;
 }
 
 .slate{
@@ -402,6 +401,21 @@ table tr.legend th{
    list-style: none;  
 }
 
+#salesAdd > table {
+    border-collapse: collapse;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+#salesAdd > table  td, #salesAdd > table th {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#salesAdd ul{
+  padding:1%;
+}
+
 .save{
  background-image:url("../img/icons/document-save.png"); 
   /*  padding: 0 0 0 10px;*/
@@ -426,4 +440,28 @@ table tr.legend th{
   width:48px;
   height:48px;
   border:0;  
+}
+
+#statValues tr:hover{
+  background-color:grey;
+}
+#statValues{
+  border-collapse:collapse;
+  text-align:center;
+}
+
+.jqplot-axis, .jqplot-title{
+  color:white;
+}
+
+.fltrow input{
+  width:50%;
+}
+
+.even{
+  background-color : rgba(255, 154, 0, 0.2);
+}
+
+.odd{
+
 }

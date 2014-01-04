@@ -22,8 +22,9 @@ class SalesController extends AppController {
 
   
     public function stats() {
-    $this->Sale->recursive = 0;
-    $this->set('sales', $this->Sale->find('all'));
+    $this->Sale->contain('Product.ProductType', 'Shop');
+    $sales = $this->Sale->find('all', array('order'=>array('Sale.date')));
+    $this->set('sales', $sales);
   }
   
 /**
@@ -148,7 +149,8 @@ public function results()
     $this->set('date', $date);
     $date = $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s');
     $this->Sale->Product->contain();
-    $this->Sale->Product->contain(array('ProductType'=>array(),'Sale'=>array('conditions'=>'Sale.date = \''.$date.'\'')));
+    $this->Sale->Product->contain(array('ProductType'=>array(),'Sale'=>array('conditions'=>'Sale.date = \''.$date.'\''), 'Media.Photo'=>array()));
+
     $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id'));
     //debug($products);
     $shops = $this->Sale->Shop->find('all');

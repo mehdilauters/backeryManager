@@ -37,7 +37,8 @@ echo $this->Html->script(
         'jquery-ui-1.10.1.custom.min',
          'fullcalendar.min',
          'jquery.qtip-1.0.0-rc3.min',
-	  'jquery.fancybox.pack',
+    'jquery.fancybox.pack',
+    'TableFilter/tablefilter.js'
         ),
      array('inline' => 'false')
   );
@@ -67,28 +68,28 @@ echo $this->Html->css(
     </div>
     <div id="contentBox" >
       <div id="contentHeader" >
-	<h2>&nbsp;<?php echo $title_for_layout ?></h2>
+  <h2>&nbsp;<?php echo $title_for_layout ?></h2>
     </div>
     <div class="pannel" id="mainPannel" >
-	<h2>Boulangerie Faury</h2>
-	Christiane &amp; Thierry FAURY
+  <h2>Boulangerie Faury</h2>
+  Christiane &amp; Thierry FAURY
     </div>
 <?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
       <div id="content">
       &nbsp;
-	<?php echo $this->Session->flash(); ?>
+  <?php echo $this->Session->flash(); ?>
 
-	<?php echo $this->fetch('content'); ?>
+  <?php echo $this->fetch('content'); ?>
       </div>
   <div class="clear" ></div>
       <div id="footer">
-	<a href="<?php echo $this->webroot ?>config/setAdmin/1" >Admin</a>
-	<?php echo $this->Html->link(
-	    $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-	    'http://www.cakephp.org/',
-	    array('target' => '_blank', 'escape' => false)
-	  );
-	?>
+  <a href="<?php echo $this->webroot ?>config/setAdmin/1" >Admin</a>
+  <?php echo $this->Html->link(
+      $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
+      'http://www.cakephp.org/',
+      array('target' => '_blank', 'escape' => false)
+    );
+  ?>
       </div>
   </div>
   </div>

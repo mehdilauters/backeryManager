@@ -9,7 +9,6 @@
 <table>
   <tr>
     <th>Produit</th>
-    <th>Prix</th>
     <th>Magasin</th>
     <th>fabriqués</th>
     <th>Perdus</th>
@@ -20,7 +19,8 @@ foreach($products as $product)
   ?>
   <tr>
     <td id="product_<?php echo $product['Product']['id'] ?>" ><?php  echo $product['Product']['name']; ?>
-    <td id="price_<?php echo $product['Product']['id'] ?>" class="price" ><?php echo $product['Product']['price'] ?></td>
+      <?php echo $this->element('Medias/Medias/Preview', array('media'=>$product, 'config'=>array('name'=>false, 'description'=>false))); ?>
+    </td>
     <td>
       <ul>
         <?php foreach($shops as $shop){ ?>
@@ -35,7 +35,7 @@ foreach($products as $product)
         <?php foreach($shops as $shop){ ?>
           <li>
             <?php
-                    $saleId = '';
+                  $saleId = '';
                   $produced = '';
                   foreach($product['Sale'] as $sale)
                   {
