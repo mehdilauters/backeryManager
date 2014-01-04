@@ -123,7 +123,7 @@
       },
       height: 500,
       width: 600,
-      series: [{'label':'Production'},{'label':'Pertes'},{'label':'Ventes'},{'label':'Revenus (€)'},{'label':'Pertes (€)'},],
+      series: [{'label':'Total'},{'label':'Pertes'},{'label':'Ventes'},{'label':'Revenus (€)'},{'label':'Pertes (€)'},],
       axes:{
         xaxis:{
           label:'Date',
