@@ -7,4 +7,6 @@
 
   Configure::write('Medias.Photos.xNormal', 800);  
   Configure::write('Medias.Photos.yNormal', 600);    
+
+  Configure::write('dbBackupPath', '/tmp/');
 ?>

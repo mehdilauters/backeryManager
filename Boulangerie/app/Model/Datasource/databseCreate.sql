@@ -196,8 +196,8 @@ create table if not exists results (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `shop_id` int(10) NOT NULL ,
   `date` datetime NOT NULL,
-  `cash` float(10) ,
-  `check` float(10) ,
+  `cash` float(10) NOT NULL,
+  `check` float(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_results_shops` (`shop_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;

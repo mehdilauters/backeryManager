@@ -22,20 +22,21 @@
   </tr>
     <?php foreach($results as $result): 
      $date = new DateTime($result['Result']['date']);
+     $total = $result['Result']['total'];
     ?>
     <tr>
       <td class="date" ><?php echo $date->format('d/m/Y'); ?></td>
       <td class="shop" ><?php echo (strlen($result['Shop']['name']) > 13) ? substr($result['Shop']['name'],0,10).'...' : $result['Shop']['name']; ?></td>
-      <td class="rowTotal"><?php echo $result['Result']['total'] ?></td>
-      <td class="cash"><?php echo $result['Result']['cash'] ?></td>
-      <td class="check"><?php echo $result['Result']['check'] ?></td>
+      <td class="rowTotal"><?php echo $total ?></td>
+      <td class="cash"><?php if($total != 0){ echo round($result['Result']['cash'] / $total *100, 2); } ?></td>
+      <td class="check"><?php if($total != 0){ echo round($result['Result']['check'] / $total *100, 2); } ?></td>
       <?php foreach($productTypes as $typeId => $typeName): ?>
 	<td>
 	    <?php foreach($result['ResultsEntry'] as $resultEntry)
 	      {
 		if($resultEntry['product_types_id'] == $typeId)
 		{
-		  echo $resultEntry['result'];
+		  if($total != 0){ echo round($resultEntry['result']  / $total *100, 2); }
 		  break;
 		}
 	      }

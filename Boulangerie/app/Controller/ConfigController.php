@@ -114,9 +114,11 @@ class ConfigController extends AppController {
   public function upgradeDbStructure()
   {
     App::uses('ConnectionManager', 'Model'); 
-    $sql = 'ALTER TABLE `sales` ADD `lost` INT( 10 ) AFTER `produced` ;
+    $sql = '';
+    $sql .= 'ALTER TABLE `sales` ADD `lost` INT( 10 ) AFTER `produced` ;
     update `sales` set lost = (produced-sold);
     ALTER TABLE `sales` DROP `sold`; ';
+    $sql .= "ALTER TABLE `results` CHANGE `cash` `cash` FLOAT NOT NULL ; ALTER TABLE `results` CHANGE `check` `check` FLOAT NOT NULL ;";
     $db = ConnectionManager::getDataSource('default');
     $db->rawQuery($sql);
     $this->redirect('/');
@@ -192,7 +194,7 @@ function dbBackup($tables = '*') {
 
     // Set the default file name
     $fileName = $databaseName . '-backup-' . date('Y-m-d_H-i-s') . '.sql';
-  file_put_contents ( '/tmp/'.$fileName , $return );
+  file_put_contents ( Configure::read('dbBackupPath').$fileName , $return );
     $this->redirect(array('action'=>'index'));
     // Serve the file as a download
     //$this->autoRender = false;

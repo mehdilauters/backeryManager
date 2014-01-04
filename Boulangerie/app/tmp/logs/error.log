@@ -30972,3 +30972,241 @@ Request URL: /boulangerie/js/rainbow.js
 Stack Trace:
 #0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
 #1 {main}
+2014-01-04 17:46:23 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:46:24 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:47:48 Error: Fatal Error (4): syntax error, unexpected ';', expecting ')' in [/home/mehdi/Mehdi/Programmes/www/boulangerie/app/Model/Result.php, line 99]
+2014-01-04 17:47:48 Error: [FatalErrorException] syntax error, unexpected ';', expecting ')'
+Request URL: /boulangerie/results/add
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Error/ErrorHandler.php(183): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/mehdi/Meh...', 99)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/mehdi/Meh...', 99, Array)
+#2 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/mehdi/Meh...', 99, Array)
+#3 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2014-01-04 17:48:43 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:48:44 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:48:53 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:48:53 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:49:56 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:49:57 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:50:18 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:50:19 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:55:23 Error: Fatal Error (4): syntax error, unexpected '$db' (T_VARIABLE) in [/home/mehdi/Mehdi/Programmes/www/boulangerie/app/Controller/ConfigController.php, line 122]
+2014-01-04 17:55:23 Error: [FatalErrorException] syntax error, unexpected '$db' (T_VARIABLE)
+Request URL: /boulangerie/config
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Error/ErrorHandler.php(183): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/mehdi/Meh...', 122)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/mehdi/Meh...', 122, Array)
+#2 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/mehdi/Meh...', 122, Array)
+#3 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2014-01-04 17:56:13 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:56:14 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:57:56 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:57:57 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:58:35 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:58:36 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:59:02 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 17:59:03 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 18:00:01 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 18:00:01 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 18:06:37 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 18:06:38 Error: [MissingControllerException] Controller class JsController could not be found.
+Exception Attributes: array (
+  'class' => 'JsController',
+  'plugin' => NULL,
+)
+Request URL: /boulangerie/js/rainbow.js
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/app/webroot/index.php(97): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2014-01-04 18:06:40 Error: Fatal Error (4): syntax error, unexpected '}', expecting ',' or ';' in [/home/mehdi/Mehdi/Programmes/www/boulangerie/app/View/Results/stats.ctp, line 31]
+2014-01-04 18:06:40 Error: [FatalErrorException] syntax error, unexpected '}', expecting ',' or ';'
+Request URL: /boulangerie/results/stats
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Error/ErrorHandler.php(183): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/mehdi/Meh...', 31)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/mehdi/Meh...', 31, Array)
+#2 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/mehdi/Meh...', 31, Array)
+#3 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2014-01-04 18:06:56 Error: Fatal Error (4): syntax error, unexpected '/' in [/home/mehdi/Mehdi/Programmes/www/boulangerie/app/View/Results/stats.ctp, line 39]
+2014-01-04 18:06:56 Error: [FatalErrorException] syntax error, unexpected '/'
+Request URL: /boulangerie/results/stats
+Stack Trace:
+#0 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Error/ErrorHandler.php(183): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/mehdi/Meh...', 39)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/mehdi/Meh...', 39, Array)
+#2 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/mehdi/Meh...', 39, Array)
+#3 /home/mehdi/Mehdi/Programmes/www/boulangerie/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
