@@ -17,7 +17,7 @@
 <div id="resultsHistoPlot" ></div>
 <hr/>
 <ul id="resultList">
-  <?php foreach($data['entries'] as $shopId => $shopData): ?>
+  <?php if(isset($data['entries'])) foreach($data['entries'] as $shopId => $shopData): ?>
     <li class="shop" id="result_shop_<?php echo $shopId ?>" > <h3><?php echo $shops[$shopId] ?></h3>
       <table class="shop" >
   <tr class="legend" >

@@ -56,27 +56,8 @@
    
 <script type="text/javascript">
 
-function parseDate(input) {
-  var parts = input.split('/');
-  // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-  month = parts[1];
-  if( month == 0 )
-{
-  month = 11;
-}
-else
-{
-  month--;
-}
-  return new Date(parts[2], month, parts[0]); // months are 0-based
-}
-
    var histogramPlot;
-     function isValidDate(d) {
-              if ( Object.prototype.toString.call(d) !== "[object Date]" )
-                return false;
-              return !isNaN(d.getTime());
-            }
+
             
    function histogram()
   {
