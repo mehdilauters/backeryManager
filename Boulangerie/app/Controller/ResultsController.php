@@ -236,7 +236,7 @@ public function getData($dateStart = '', $dateEnd = '')
 
 			if ($errors == 0 ) {
 				$this->Session->setFlash(__('The result has been saved'));
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(array('action' => 'add'));
 			} else {
 				$this->Session->setFlash(__('The result could not be saved. Please, try again.'));
 			}

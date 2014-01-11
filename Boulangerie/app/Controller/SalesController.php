@@ -131,7 +131,7 @@ public function results()
     if($error == 0)
     {
   $this->Session->setFlash(__('The sale has been saved'));
-        $this->redirect(array('action' => 'stats'));
+        $this->redirect(array('action' => 'add'));
     }
     else
     {
