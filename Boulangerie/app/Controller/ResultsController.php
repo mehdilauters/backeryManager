@@ -14,35 +14,55 @@ class ResultsController extends AppController {
  *
  * @return void
  */
-	public function index() {
-		$dateStart = date('d/m/Y');
-		if(isset($this->request->data['dateStart']))
+	public function index($dateStart = NULL, $dateEnd = NULL, $fileName = NULL) {
+		if($dateStart == NULL)
 		{
-		  $dateStart = $this->request->data['dateStart'];
+		  $dateStart = date('d/m/Y');
+		  if(isset($this->request->data['dateStart']))
+		  {
+		    $dateStart = $this->request->data['dateStart'];
+		  }
 		}
-		
-		$dateEnd = $dateStart;
-		
-		if(isset($this->request->data['dateEnd']))
-		{
-		  $dateEnd = $this->request->data['dateEnd'];
+
+		if($dateEnd == NULL)
+		{		
+		  $dateEnd = $dateStart;
+		  
+		  if(isset($this->request->data['dateEnd']))
+		  {
+		    $dateEnd = $this->request->data['dateEnd'];
+		  }
 		}
+
+
 		$this->Result->contain();
 		$this->Result->contain('Shop','ResultsEntry');
 		$data = $this->getData($dateStart, $dateEnd);
 
 		$shops = $this->Result->Shop->find('list');
 		$productTypes = $this->ProductType->find('list');
-
-		if(isset($this->request->data['excelDownload']))
+		if(isset($this->request->data['excelDownload']) || $fileName != NULL)
 		{
+		  $this->set('fileName', $fileName);
  		 $this->layout = 'ajax'; 
  		 $this->view = 'excel';
 // 		 $this->render('excel');
-		 ob_end_clean();
+		  //instantiate a new View class from the controller
+		  
 		}
 		$this->set(compact('data', 'dateStart', 'dateEnd', 'shops', 'productTypes', 'total'));
 
+
+	      if($fileName != NULL)
+	      {
+		$view = new View($this);
+		$viewdata = $view->render(null,'html','html');
+
+	      }
+	    else
+	    {
+	      ob_end_clean();
+	    }
 	}
 
 	public function stats() {
@@ -117,6 +137,7 @@ public function getData($dateStart = '', $dateEnd = '')
 	  'cash' => $result['Result']['cash'],
 	  'date' => $result['Result']['date'],
 	  'check' => $result['Result']['check'],
+	  'comment' => $result['Result']['comment'],
 	  'resultId' => $result['Result']['id'],
 	  'productTypes' => array()
 	);
@@ -200,6 +221,7 @@ public function getData($dateStart = '', $dateEnd = '')
 			      {
 				$resultData['Result']['id'] = $result['resultId'];
 			      }
+			  $resultData['Result']['comment'] = $result['comment'];
 			  if (!$this->Result->save($resultData)) {
 				$errors ++;  
 			  }

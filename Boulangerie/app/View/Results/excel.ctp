@@ -87,7 +87,15 @@ foreach($data['entries'] as $shopId => $shopData)
 //     }
 
     // close table and output
-        $this->PhpExcel->output($filename = 'export.xlsx', $writer = 'Excel5');
+      if( isset($fileName))
+      {
+	$this->PhpExcel->save($fileName, $writer = 'Excel5');
+      }
+      else
+      {
+	$filename = 'export_'.str_replace(DS, '-', $dateStart).'_'.str_replace(DS, '-', $dateEnd).'.xls';
+        $this->PhpExcel->output($filename, $writer = 'Excel5');
+      }
 
 ?>
 

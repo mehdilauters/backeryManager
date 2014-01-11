@@ -33,6 +33,7 @@
        }
    ?>
     <td class="<?php echo $class ?>"><?php echo h($sale['Sale']['lost'] ); ?>&nbsp;</td>
+    <td><?php echo h($sale['Sale']['comment']); ?>&nbsp;</td>
     <td class="actions">
       <?php echo $this->Html->link(__('View'), array('action' => 'view', $sale['Sale']['id'])); ?>
       <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $sale['Sale']['id'])); ?>

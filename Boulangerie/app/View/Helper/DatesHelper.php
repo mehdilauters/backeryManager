@@ -140,6 +140,7 @@ function timeToDateHeureFR($time) {
       case '06':
         $jour="samedi";
       break;
+      case '00':
       case '07':
         $jour="dimanche";
       break;

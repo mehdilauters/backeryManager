@@ -116,6 +116,7 @@ public function results()
       'unity' => $productModel['Product']['unity'],
       'shop_id' => $shopId,
       'produced' => $product['produced'],
+      'comment' => $product['comment'],
       'lost' => $product['lost'],
       );
     if($product['saleId'] != '')

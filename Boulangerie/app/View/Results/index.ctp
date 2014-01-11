@@ -28,6 +28,7 @@
     <?php foreach($productTypes as $typeId => $typeName): ?>
       <th><?php echo $typeName; ?></th>
     <?php endforeach ?>
+    <th class="comment" >Commentaire</th>
   </tr>
   <?php foreach($shopData['entries'] as $results): 
      $date = new DateTime($results['date']);
@@ -41,6 +42,7 @@
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult" ><?php if(isset($results['productTypes'][$typeId])) { echo $results['productTypes'][$typeId]['result']; } ?></td>
       <?php endforeach ?>
+      <td class="comment" ><?php echo $results['comment'] ?></td>
     </tr>
   <?php endforeach ?>
     <tr class="total" >

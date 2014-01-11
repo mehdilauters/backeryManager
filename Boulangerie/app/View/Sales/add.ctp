@@ -12,6 +12,7 @@
     <th>Magasin</th>
     <th>fabriqués</th>
     <th>Perdus</th>
+    <th>Commentaires</th>
   </tr>
 <?php
 foreach($products as $product)
@@ -37,12 +38,14 @@ foreach($products as $product)
             <?php
                   $saleId = '';
                   $produced = '';
+		  $comment = '';
                   foreach($product['Sale'] as $sale)
                   {
                     if($sale['shop_id'] == $shop['Shop']['id'])
                     {
                     $saleId = $sale['id'];
                     $produced = $sale['produced'];
+		    $comment = $sale['comment'];
                     }
                   }
             ?>
@@ -67,10 +70,30 @@ foreach($products as $product)
                   }
             ?>
             <input id="lost_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" class="watch spinner" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][lost]" size="10" value="<?php echo $lost; ?>"  />
-          </li>
+ </li>
         <?php } ?>
       </ul>
     </td>
+<td>
+      <ul>
+        <?php foreach($shops as $shop){ ?>
+          <li class="lost" >
+            <?php
+                  $comment = '';
+                  foreach($product['Sale'] as $sale)
+                  {
+                    if($sale['shop_id'] == $shop['Shop']['id'])
+                    {
+                    $comment = $sale['comment'];
+                    }
+                  }
+            ?>
+            <textarea id="produced_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][comment]" ><?php echo $comment; ?></textarea>
+ </li>
+        <?php } ?>
+      </ul>
+    </td>
+
   </tr>
   <?php
 }

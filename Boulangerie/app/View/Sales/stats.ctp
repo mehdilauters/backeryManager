@@ -10,6 +10,7 @@
 <table id="statValues">
 <tr>
   <th>Date</th>
+  <th class="day" >Jour</th>
   <th>Produit</th>
   <th>Type de produit</th>
   <th>Magasin</th>
@@ -18,6 +19,7 @@
   <th>Vente</th>
   <th>Prix (€)</th>
   <th>Perte (€)</th>
+  <th>Commentaires</th>
 </tr>
 <?php
   $i = 0;
@@ -37,6 +39,7 @@
    ?>
    <tr id="sale_row_<?php echo $sale['Sale']['id'] ?>" class="<?php echo $rowClass ?>" >
       <td class="date" ><?php echo $this->Time->format('d/m/Y',$sale['Sale']['date']); ?></td>
+      <td class="day" ><?php echo $this->Dates->getJourFr(date('w',$this->Time->fromString($sale['Sale']['date']) )); ?></td>
       <td class="productName"><?php echo $sale['Product']['name'] ?></td>
       <td class="productTypeName"><?php echo $sale['Product']['ProductType']['name'] ?></td>
       <td class="shopName"><?php echo (strlen($sale['Shop']['name']) > 13) ? substr($sale['Shop']['name'],0,10).'...' : $sale['Shop']['name'] ?></td>
@@ -45,6 +48,7 @@
       <td class="sold"><?php echo $sale['Sale']['sold'] ?></td>
       <td class="totalPrice"><?php echo round($sale['Sale']['totalPrice'],2) ?></td>
       <td class="totalLost"><?php echo round($sale['Sale']['lost']*$sale['Sale']['price'],2) ?></td>
+      <td class="totalLost"><?php echo $sale['Sale']['comment'] ?></td>
    </tr>
    
    <?php

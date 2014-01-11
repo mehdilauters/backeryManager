@@ -47,8 +47,80 @@ class AppController extends Controller {
 			);
   
 
+  public function backupDb()
+  {
+    App::uses('CakeTime', 'Utility');
+    App::uses('Folder', 'Utility');
+    App::uses('File', 'Utility');
+
+    $backupExists = false;
+    $dirPath = Configure::read('dbBackupPath');
+    $dir = new Folder($dirPath);
+    $files = $dir->find('.*backup.*\.sql', true);
+    foreach( $files as $file )
+    {
+	$matches = array();
+	preg_match ( '/.*backup-(\d+)-(\d+)-(\d+)\.sql/', $file , $matches);
+	$date = CakeTime::fromString("$matches[1]/$matches[2]/$matches[3]");
+	$isToday = CakeTime::isToday($date);
+	$backupExists |= $isToday;
+	if(!$isToday)
+	{
+	    $file = new File($dirPath.$file);
+	    $file->delete();
+	}
+    }
+    if(!$backupExists)
+    {
+       $this->requestAction('/config/dbBackup');
+    }
+  }
+
+  public function exportExcel()
+  {
+    App::uses('CakeTime', 'Utility');
+    App::uses('Folder', 'Utility');
+    App::uses('File', 'Utility');
+
+    $backupExists = false;
+    $dirPath = Configure::read('excelExportPath');
+    $dir = new Folder($dirPath);
+    $files = $dir->find('.*backup.*\.xls', true);
+    $d = new DateTime();
+    $d->modify( 'previous month' );
+
+    foreach( $files as $file )
+    {
+	$matches = array();
+	preg_match ( '/.*backup-(\d+)-(\d+)\.xls/', $file , $matches);
+	$date = CakeTime::fromString("$matches[1]/$matches[2]/01");
+
+	$isThisMonth = (date('m/Y', $date) == date('m/Y', $d->getTimestamp()));
+	$backupExists |= $isThisMonth;
+	if(!$isThisMonth)
+	{
+	    $file = new File($dirPath.$file);
+	    $file->delete();
+	}
+    }
+    if(!$backupExists)
+    {
+      $d = new DateTime();
+      $d->modify( 'previous month' );
+      $dateStart = date('01/m/Y',$d->getTimestamp()); // hard-coded '01' for first day
+      $dateEnd  = date('t/m/Y', $d->getTimestamp());
+      $fileName = $dirPath.'backup-'.date('Y-m', $d->getTimestamp()).'.xls';
+       $this->requestAction(array('controller' => 'results', 'action' => 'index'), 
+				  array('pass' => 
+				      array($dateStart, $dateEnd, $fileName)
+					    ));
+    }
+  }
+
   public function beforeRender()
   {
+    $this->backupDb();
+    $this->exportExcel();
     $isAdmin = false;
     if($this->Session->check('isAdmin'))
     {

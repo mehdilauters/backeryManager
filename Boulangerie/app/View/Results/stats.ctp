@@ -12,6 +12,7 @@
 <table id="statValues">
   <tr class="legend" >
     <th class="date" >Date</th>
+    <th class="day" >Jour</th>
     <th class="shop" >Magasin</th>
     <th class="rowTotal" >Total</th>
     <th class="cash" >Especes</th>
@@ -19,6 +20,7 @@
     <?php foreach($productTypes as $typeId => $typeName): ?>
       <th><?php echo $typeName; ?></th>
     <?php endforeach ?>
+    <th class="comment" >Commentaire</th>
   </tr>
     <?php foreach($results as $result): 
      $date = new DateTime($result['Result']['date']);
@@ -26,6 +28,7 @@
     ?>
     <tr>
       <td class="date" ><?php echo $date->format('d/m/Y'); ?></td>
+      <td class="day" ><?php echo $this->Dates->getJourFr($date->format('w')); ?></td>
       <td class="shop" ><?php echo (strlen($result['Shop']['name']) > 13) ? substr($result['Shop']['name'],0,10).'...' : $result['Shop']['name']; ?></td>
       <td class="rowTotal"><?php echo $total ?></td>
       <td class="cash"><?php if($total != 0){ echo round($result['Result']['cash'] / $total *100, 2); } ?></td>
@@ -43,6 +46,7 @@
 	      ?>
 	</td>
       <?php endforeach ?>
+      <td class="comment" ><?php echo $result['Result']['comment'] ?></td>
     </tr>
   <?php endforeach ?>
 </table>
@@ -162,7 +166,6 @@
     return false;
   }
   $(document).ready(function(){
-      histogram();
       var tfConfig = { 
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
               rows_counter:true,
@@ -176,6 +179,7 @@
                             return false;
             
                     });
+    histogram();
   });
 </script>
 </div>

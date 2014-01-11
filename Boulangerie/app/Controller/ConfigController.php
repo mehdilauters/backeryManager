@@ -19,7 +19,7 @@ class ConfigController extends AppController {
       'deleteGcalCache' => 'delete gcalendar Cache',
       'importProducts' => 'Importer les produits d\'un csv',
       'setAdmin/1' => 'set to admin',
-      'upgradeDbStructure' => 'upgrade DBStructure',
+       'upgradeDbStructure' => 'upgrade DBStructure',
       'dbBackup' => 'backup database'
     );
     $this->set('actions', $actions);
@@ -115,10 +115,8 @@ class ConfigController extends AppController {
   {
     App::uses('ConnectionManager', 'Model'); 
     $sql = '';
-    $sql .= 'ALTER TABLE `sales` ADD `lost` INT( 10 ) AFTER `produced` ;
-    update `sales` set lost = (produced-sold);
-    ALTER TABLE `sales` DROP `sold`; ';
-    $sql .= "ALTER TABLE `results` CHANGE `cash` `cash` FLOAT NOT NULL ; ALTER TABLE `results` CHANGE `check` `check` FLOAT NOT NULL ;";
+    $sql .= 'ALTER TABLE `sales` ADD `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null;';
+    $sql .= 'ALTER TABLE `results` ADD `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null;';
     $db = ConnectionManager::getDataSource('default');
     $db->rawQuery($sql);
     $this->redirect('/');
@@ -143,6 +141,7 @@ function dbBackup($tables = '*') {
     // Do a short header
     $return .= '-- Database: `' . $databaseName . '`' . "\n";
     $return .= '-- Generation time: ' . date('D jS M Y H:i:s') . "\n\n\n";
+    $return .= 'SET FOREIGN_KEY_CHECKS = 0;';
 
 
     if ($tables == '*') {
@@ -176,7 +175,7 @@ function dbBackup($tables = '*') {
                 }
                 else {
                     // Convert the encoding
-                    $escapedDataValue = mb_convert_encoding( $dataValue, "UTF-8", "ISO-8859-1" );
+                    $escapedDataValue = $dataValue;
 
                     // Escape any apostrophes using the datasource of the model.
                     $escapedDataValue = $this->{$modelName}->getDataSource()->value($escapedDataValue);
@@ -191,11 +190,11 @@ function dbBackup($tables = '*') {
 
         $return .= "\n\n\n";
     }
+    $return .= 'SET FOREIGN_KEY_CHECKS = 1;';
 
     // Set the default file name
-    $fileName = $databaseName . '-backup-' . date('Y-m-d_H-i-s') . '.sql';
-  file_put_contents ( Configure::read('dbBackupPath').$fileName , $return );
-    $this->redirect(array('action'=>'index'));
+    $fileName = $databaseName . '-backup-' . date('Y-m-d') . '.sql';
+  file_put_contents ( Configure::read('dbBackupPath').$fileName , "\xEF\xBB\xBF".$return );
     // Serve the file as a download
     //$this->autoRender = false;
     // $this->response->type('Content-Type: text/x-sql');

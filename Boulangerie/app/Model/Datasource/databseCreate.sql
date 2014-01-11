@@ -184,7 +184,8 @@ create table if not exists sales (
   `unity` boolean default TRUE,
   `shop_id` int(10) NOT NULL ,
   `produced` int(10) ,
-  `lost` int(10) ,  
+  `lost` int(10) ,
+  `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null ,
   PRIMARY KEY (`id`),
   KEY `fk_sales_products` (`product_id`),
   KEY `fk_sales_shops` (`shop_id`),
@@ -198,6 +199,7 @@ create table if not exists results (
   `date` datetime NOT NULL,
   `cash` float(10) NOT NULL,
   `check` float(10) NOT NULL,
+  `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null
   PRIMARY KEY (`id`),
   KEY `fk_results_shops` (`shop_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
