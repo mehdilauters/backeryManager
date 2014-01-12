@@ -2,15 +2,38 @@
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
-<!--<script language="javascript" src="<?php echo $this->webroot ?>js/rainbow.js" type="text/javascript"></script>--!>
+<!--<script language="javascript" src="<?php echo $this->webroot ?>js/rainbow.js" type="text/javascript"></script> -->
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
 
 <div id="histogramChart" style="width=500px;height=600px;" ></div>
-
+<div>
+  Grouper par
+  <form method="POST" >
+    <label>date</label>
+    <select name="group[time]" >
+      <option value="" ></option>
+      <option value="week" <?php echo (isset($this->request->data['group']['time']) && $this->request->data['group']['time'] == 'week') ? 'selected="selected"' : ''; ?>  >semaine</option>
+      <option value="month" <?php echo (isset($this->request->data['group']['time']) && $this->request->data['group']['time'] == 'month') ? 'selected="selected"' : ''; ?> >mois</option>
+      <option value="year" <?php echo (isset($this->request->data['group']['time']) && $this->request->data['group']['time'] == 'year') ? 'selected="selected"' : ''; ?> >année</option>
+    </select>
+    <label>Produit</label>
+    <select name="group[product]" >
+      <option value="" ></option>
+      <option value="product" <?php echo (isset($this->request->data['group']['product']) && $this->request->data['group']['product'] == 'product') ? 'selected="selected"' : ''; ?> >Produit</option>
+    </select>
+    <label>Magasin</label>
+    <select name="group[shop]">
+      <option value="" ></option>
+      <option value="shop" <?php echo (isset($this->request->data['group']['shop']) && $this->request->data['group']['shop'] == 'shop') ? 'selected="selected"' : ''; ?> >magasin</option>
+    </select>
+    <input type="submit" />
+  </form>
+</div>
 <table id="statValues">
 <tr>
   <th>Date</th>
   <th class="day" >Jour</th>
+  <th class="week" >Semaine</th>
   <th>Produit</th>
   <th>Type de produit</th>
   <th>Magasin</th>
@@ -27,7 +50,7 @@
    {
       $rowClass = 'even';
       $class = 'lostProducts';
-      if($sale['Sale']['lost'] <= 0 )
+      if($sale[0]['lost'] <= 0 )
       {
         $class = 'notLostProducts';    
       }
@@ -37,17 +60,18 @@
           $rowClass = 'odd';
       }
    ?>
-   <tr id="sale_row_<?php echo $sale['Sale']['id'] ?>" class="<?php echo $rowClass ?>" >
+      <tr class="<?php echo $rowClass ?>" >
       <td class="date" ><?php echo $this->Time->format('d/m/Y',$sale['Sale']['date']); ?></td>
       <td class="day" ><?php echo $this->Dates->getJourFr(date('w',$this->Time->fromString($sale['Sale']['date']) )); ?></td>
-      <td class="productName"><?php echo $sale['Product']['name'] ?></td>
-      <td class="productTypeName"><?php echo $sale['Product']['ProductType']['name'] ?></td>
-      <td class="shopName"><?php echo (strlen($sale['Shop']['name']) > 13) ? substr($sale['Shop']['name'],0,10).'...' : $sale['Shop']['name'] ?></td>
-      <td class="produced" ><?php echo $sale['Sale']['produced'] ?></td>
-      <td class="<?php echo $class ?> lost" ><?php echo $sale['Sale']['lost'] ?></td>
-      <td class="sold"><?php echo $sale['Sale']['sold'] ?></td>
-      <td class="totalPrice"><?php echo round($sale['Sale']['totalPrice'],2) ?></td>
-      <td class="totalLost"><?php echo round($sale['Sale']['lost']*$sale['Sale']['price'],2) ?></td>
+      <td class="week" ><?php echo date('W',$this->Time->fromString($sale['Sale']['date']) ); ?></td>
+      <td class="productName"><?php echo $products[$sale['Sale']['product_id']]['Product']['name'] ?></td>
+      <td class="productTypeName"><?php echo $products[$sale['Sale']['product_id']]['ProductType']['name'] ?></td>
+      <td class="shopName"><?php echo $shops[$sale['Sale']['shop_id']] ?></td>
+      <td class="produced" ><?php echo $sale[0]['produced'] ?></td>
+      <td class="<?php echo $class ?> lost" ><?php echo $sale[0]['lost'] ?></td>
+      <td class="sold"><?php echo $sale[0]['sold'] ?></td>
+      <td class="totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
+      <td class="totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
       <td class="totalLost"><?php echo $sale['Sale']['comment'] ?></td>
    </tr>
    

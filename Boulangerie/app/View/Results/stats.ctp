@@ -13,6 +13,7 @@
   <tr class="legend" >
     <th class="date" >Date</th>
     <th class="day" >Jour</th>
+    <th class="week" >Semaine</th>
     <th class="shop" >Magasin</th>
     <th class="rowTotal" >Total</th>
     <th class="cash" >Especes</th>
@@ -29,6 +30,7 @@
     <tr>
       <td class="date" ><?php echo $date->format('d/m/Y'); ?></td>
       <td class="day" ><?php echo $this->Dates->getJourFr($date->format('w')); ?></td>
+      <td class="week" ><?php echo $date->format('W'); ?></td>
       <td class="shop" ><?php echo (strlen($result['Shop']['name']) > 13) ? substr($result['Shop']['name'],0,10).'...' : $result['Shop']['name']; ?></td>
       <td class="rowTotal"><?php echo $total ?></td>
       <td class="cash"><?php if($total != 0){ echo round($result['Result']['cash'] / $total *100, 2); } ?></td>

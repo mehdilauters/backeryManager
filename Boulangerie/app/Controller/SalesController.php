@@ -22,9 +22,74 @@ class SalesController extends AppController {
 
   
     public function stats() {
-    $this->Sale->contain('Product.ProductType', 'Shop');
-    $sales = $this->Sale->find('all', array('order'=>array('Sale.date')));
+    $groupBy = array();
+    if(isset($this->request->data['group']))
+    {
+      switch($this->request->data['group']['time'])
+      {
+	case 'day':
+	  $groupBy[] = 'Sale.date';
+	break;
+	case 'week':
+	  $groupBy[] = 'YEARWEEK(Sale.date, 1)';
+	break;
+	case 'month':
+	  $groupBy[] = 'MONTH(Sale.date)';
+	break;
+	case 'year':
+	  $groupBy[] = 'YEAR(Sale.date)';
+	break;
+	default:
+	  
+	break;
+      }
+
+      switch($this->request->data['group']['product'])
+      {
+	case 'product':
+ 	  $groupBy[] = 'Sale.product_id';
+	break;
+	default:
+// 	  $groupBy[] = 'Sale.product_id';
+	break;
+      }
+      switch($this->request->data['group']['shop'])
+      {
+	case 'shop':
+ 	  $groupBy[] = 'Sale.shop_id';
+	break;
+	default:
+// 	  $groupBy[] = 'Sale.shop_id';
+	break;
+      }
+    }
+      if(count($groupBy) == 0)
+      {
+	$groupBy[] = 'Sale.date, Sale.product_id, Sale.shop_id';
+      }
+    $this->Sale->contain('Product.ProductType');
+    $sales = $this->Sale->find('all', array('order'=>array('Sale.date'),
+					    'group' => $groupBy,
+					    'fields' => array('SUM(Sale.produced) as `produced`', 
+							      'SUM(Sale.lost) as `lost`',
+							      'SUM(Sale.produced - Sale.lost) as `sold`',
+							      'SUM((Sale.produced - Sale.lost) * Sale.price) as `totalPrice`',
+							      'SUM(Sale.lost * Sale.price) as `totalLost`',
+							      'Sale.date',
+							      'Sale.comment',
+							      'Sale.shop_id',
+							      'Sale.product_id',
+// 							      'Product.product_types_id'
+							      )
+					    ));
     $this->set('sales', $sales);
+
+    $this->Sale->Product->contain('ProductType');
+    $products = $this->Sale->Product->find('all');
+    $products = Set::combine($products, '{n}.Product.id', '{n}');
+    $shops = $this->Sale->Shop->find('list');
+
+    $this->set(compact('products', 'shops'));
   }
   
 /**

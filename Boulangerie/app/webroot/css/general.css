@@ -24,8 +24,8 @@ a:visited{
 #container{
   /*position:absolute;*/
   top:0px;
-  margin-left:20%;
-   width:60%;  
+  margin-left:10%;
+   width:80%;  
   /*margin-right:25%;*/
   /*background-image:url("../img/design/background.png");*/
   /* background-color:red; */
@@ -119,8 +119,8 @@ a:visited{
 #mainPannel
 {
     position:absolute;
-  top:220px;
-  margin-left:50%;
+  top:210px;
+  margin-left:70%;
 }
 
 .pannel {
