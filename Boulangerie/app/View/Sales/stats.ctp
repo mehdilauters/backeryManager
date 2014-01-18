@@ -318,7 +318,7 @@
           renderer:$.jqplot.DateAxisRenderer,
           numberTicks:5,
           tickOptions: {
-               formatString: '%d/%m/%y'
+               formatString: '%A, %d/%m/%y'
           }
         },
         yaxis:{
@@ -350,12 +350,19 @@
   }
    
   $(document).ready(function(){
-      histogram();
       var tfConfig = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
               rows_counter:true,
               //rows_counter_text: 'Selected files: ',
-              on_after_refresh_counter: function(o,i){ histogram(); }
+              on_after_refresh_counter: function(o,i){ 
+		  try
+		  {
+		    histogram(); 
+		  }
+		    catch (e) {
+			console.log(e);
+		     }
+		  }
               };
               tf = new TF('statValues', tfConfig); tf.AddGrid();
               
