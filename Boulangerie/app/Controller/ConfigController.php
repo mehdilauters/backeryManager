@@ -115,8 +115,14 @@ class ConfigController extends AppController {
   {
     App::uses('ConnectionManager', 'Model'); 
     $sql = '';
-    $sql .= 'ALTER TABLE `sales` ADD `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null;';
-    $sql .= 'ALTER TABLE `results` ADD `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null;';
+    $sql .= 'SET FOREIGN_KEY_CHECKS = 0;
+ALTER TABLE `results_entries`
+add `shop_id` int(10) NOT NULL ,
+add    `date` datetime NOT NULL,
+add   KEY `fk_results_entries_shops` (`shop_id`),
+add   CONSTRAINT `fk_results_entries_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
+update results_entries RE set RE.date=(select R.date from results R where RE.result_id = R.id), RE.shop_id=(select R.shop_id from results R where RE.result_id = R.id);
+SET FOREIGN_KEY_CHECKS = 1;';
     $db = ConnectionManager::getDataSource('default');
     $db->rawQuery($sql);
     $this->redirect('/');
@@ -141,7 +147,7 @@ function dbBackup($tables = '*') {
     // Do a short header
     $return .= '-- Database: `' . $databaseName . '`' . "\n";
     $return .= '-- Generation time: ' . date('D jS M Y H:i:s') . "\n\n\n";
-    $return .= 'SET FOREIGN_KEY_CHECKS = 0;';
+    $return .= "SET FOREIGN_KEY_CHECKS = 0;\n";
 
 
     if ($tables == '*') {
@@ -190,7 +196,7 @@ function dbBackup($tables = '*') {
 
         $return .= "\n\n\n";
     }
-    $return .= 'SET FOREIGN_KEY_CHECKS = 1;';
+    $return .= "SET FOREIGN_KEY_CHECKS = 1;\n";
 
     // Set the default file name
     $fileName = $databaseName . '-backup-' . date('Y-m-d') . '.sql';

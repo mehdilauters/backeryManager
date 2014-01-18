@@ -208,10 +208,13 @@ create table if not exists results_entries (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `result_id` int(10) NOT NULL,
   `product_types_id` int(10) NOT NULL ,
+  `shop_id` int(10) NOT NULL ,
+  `date` datetime NOT NULL,
   `result` float(10) ,
   PRIMARY KEY (`id`),
   KEY `fk_results_entries_results` (`result_id`),
   KEY `fk_results_entries_productsTypes` (`product_types_id`),
+  KEY `fk_results_entries_shops` (`product_types_id`),
   UNIQUE KEY `unique_results` (`result_id`, `product_types_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
@@ -249,6 +252,7 @@ ALTER TABLE `sales`
 
 ALTER TABLE `results_entries`
   ADD CONSTRAINT `fk_results_entries_productsTypes` FOREIGN KEY (`product_types_id`) REFERENCES `product_types` (`id`),
+  ADD CONSTRAINT `fk_results_entries_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
   ADD CONSTRAINT `fk_results_entries_results` FOREIGN KEY (`result_id`) REFERENCES `results` (`id`);
 
 ALTER TABLE `results`
