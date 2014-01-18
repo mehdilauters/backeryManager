@@ -283,7 +283,7 @@
     
     var rainbow = new Rainbow();
     //rainbow.setSpectrum('#303030', '#B8B8B8');
-    var nbColors = 5;
+    var nbColors = 6;
     rainbow.setNumberRange(1, nbColors);
     var seriesColors =  new Array();
      for(var i = 0; i < nbColors; i++) {
