@@ -3,185 +3,183 @@
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
+<script language="javascript" src="<?php echo $this->webroot ?>js/plotTable.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
 
 <hr/>
-<div id="histogramChart" ></div>
 <hr/>
+<?php
+  $group = array('time' => '', 'shop'=>'', 'productType'=>'');
+  $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'shop'=>true);
+  if(isset($this->request->data['group']))
+  {
+    $group['time'] = $this->request->data['group']['time'];
+    $group['shop'] = $this->request->data['group']['shop'];
+	$group['productType'] = $this->request->data['group']['productType'];
+  }
+  
+  if($group['shop'] != '')
+  {
+    if( $group['time'] == '' )
+    {
+      $fields['date'] = false;
+      $fields['day'] = false;
+      $fields['week'] = false;
+    }
+	 if( $group['productType'] == '' )
+    {
+      $fields['productType'] = false;
+    }
+  }
+  
+  if($group['time'] != '')
+  {
+    if( $group['shop'] == '' )
+    {
+      $fields['shop'] = false;
+    }
+	if( $group['productType'] == '' )
+    {
+      $fields1['productType'] = false;
+    }
+  }
+  
+  $fields1 = $fields;
+  if(!isset($fields1['productType']))
+  {
+    $fields1['productType'] = true;
+  }
+  
 
-<table id="statValues">
-  <tr class="legend" >
-    <th class="date" >Date</th>
-    <th class="day" >Jour</th>
-    <th class="week" >Semaine</th>
-    <th class="shop" >Magasin</th>
-    <th class="rowTotal" >Total</th>
+ ?>
+<div>
+  Grouper par
+  <form method="POST" >
+    <label>date</label>
+    <select name="group[time]" >
+      <option value="" ></option>
+      <option value="day" <?php echo ($group['time'] == 'day') ? 'selected="selected"' : ''; ?>  >jour</option>
+      <option value="week" <?php echo ($group['time'] == 'week') ? 'selected="selected"' : ''; ?>  >semaine</option>
+      <option value="month" <?php echo ($group['time'] == 'month') ? 'selected="selected"' : ''; ?> >mois</option>
+      <option value="year" <?php echo ($group['time'] == 'year') ? 'selected="selected"' : ''; ?> >année</option>
+    </select>
+    <label>Magasin</label>
+    <select name="group[shop]">
+      <option value="" ></option>
+      <option value="shop" <?php echo ($group['shop'] == 'shop') ? 'selected="selected"' : ''; ?> >magasin</option>
+    </select>
+	<label>Type de produit</label>
+	 <select name="group[productType]">
+      <option value="" ></option>
+      <option value="shop" <?php echo ($group['productType'] == 'productType') ? 'selected="selected"' : ''; ?> >Type de produit</option>
+    </select>
+    <input type="submit" />
+  </form>
+</div>
+<div>
+	<div id="resultsChart" ></div>
+	<div class="control"></div>
+</div>
+<table id="resultsStatValues" class="tablePreview" >
+  <tr class="legend plot" >
+    <?php if($fields['date']) { ?><th class="date" >Date</th><?php } ?>
+    <?php if($fields['day']) { ?><th class="day" >Jour</th><?php } ?>
+    <?php if($fields['week']) { ?><th class="week" >Semaine</th><?php } ?>
+    <?php if($fields['shop']) { ?><th class="shop" >Magasin</th><?php } ?>
+    <th class="rowTotal label_curve_total" >Total</th>
     <th class="cash" >Especes</th>
     <th class="check" >Cheques</th>
-    <?php foreach($productTypes as $typeId => $typeName): ?>
-      <th><?php echo $typeName; ?></th>
-    <?php endforeach ?>
     <th class="comment" >Commentaire</th>
   </tr>
-    <?php foreach($results as $result): 
-     $date = new DateTime($result['Result']['date']);
-     $total = $result['Result']['total'];
-    ?>
-    <tr>
-      <td class="date" ><?php echo $date->format('d/m/Y'); ?></td>
-      <td class="day" ><?php echo $this->Dates->getJourFr($date->format('w')); ?></td>
-      <td class="week" ><?php echo $date->format('W'); ?></td>
-      <td class="shop" ><?php echo (strlen($result['Shop']['name']) > 13) ? substr($result['Shop']['name'],0,10).'...' : $result['Shop']['name']; ?></td>
-      <td class="rowTotal"><?php echo $total ?></td>
-      <td class="cash"><?php if($total != 0){ echo round($result['Result']['cash'] / $total *100, 2); } ?></td>
-      <td class="check"><?php if($total != 0){ echo round($result['Result']['check'] / $total *100, 2); } ?></td>
-      <?php foreach($productTypes as $typeId => $typeName): ?>
-	<td>
-	    <?php foreach($result['ResultsEntry'] as $resultEntry)
-	      {
-		if($resultEntry['product_types_id'] == $typeId)
+    <?php 
+	$i = 0;
+     foreach($results as $i=>$result):
+	 
+	 $rowClass = 'even';
+		if($i % 2 != 0)
 		{
-		  if($total != 0){ echo round($resultEntry['result']  / $total *100, 2); }
-		  break;
+		  $rowClass = 'odd';
 		}
-	      }
-	      ?>
-	</td>
-      <?php endforeach ?>
+	 
+     $date = new DateTime($result['Result']['date']);
+     $total = $result[0]['total'];
+    ?>
+    <tr class="<?php echo $rowClass ?> plot" >
+      <?php if($fields['date']) { ?><td class="date" ><?php echo $date->format('d/m/Y'); ?></td><?php } ?>
+      <?php if($fields['day']) { ?><td class="day" ><?php echo $this->Dates->getJourFr($date->format('w')); ?></td><?php } ?>
+      <?php if($fields['week']) { ?><td class="week" ><?php echo $date->format('W'); ?></td><?php } ?>
+      <?php if($fields['shop']) { ?><td class="shop label_curve_Shop<?php echo  $result['Shop']['id']; ?>" ><?php echo  $result['Shop']['name']; ?></td><?php } ?>
+      <td class="rowTotal curve_total curve_Shop<?php echo  $result['Shop']['id']; ?>"><?php echo round($total,2) ?></td>
+      <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
+      <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
+      
       <td class="comment" ><?php echo $result['Result']['comment'] ?></td>
     </tr>
-  <?php endforeach ?>
+  <?php 
+	$i++;
+	endforeach ?>
+</table>
+<div>
+	<div id="resultsEntriesChart" ></div>
+	<div class="control"></div>
+</div>
+<table id="resultsEntriesStatValues" class="tablePreview">
+  <tr class="legend plot" >
+    <?php if($fields1['date']) { ?><th class="date" >Date</th><?php } ?>
+    <?php if($fields1['day']) { ?><th class="day" >Jour</th><?php } ?>
+    <?php if($fields1['week']) { ?><th class="week" >Semaine</th><?php } ?>
+    <?php if($fields1['shop']) { ?><th class="shop" >Magasin</th><?php } ?>
+    <?php if($fields1['productType']) { ?><th class="productType" >Type de Produit</th><?php } ?>
+    <th class="cash label_curve_total" >Somme €</th>
+  </tr>
+    <?php 
+	$i = 0;
+     foreach($resultsEntries as $i=>$resultsEntry):
+	 	 $rowClass = 'even';
+		if($i % 2 != 0)
+		{
+		  $rowClass = 'odd';
+		}
+     $date = new DateTime($resultsEntry['ResultsEntry']['date']);
+     //$total = $result[0]['total'];
+    ?>
+    <tr class="<?php echo $rowClass ?> plot" >
+      <?php if($fields1['date']) { ?><td class="date" ><?php echo $date->format('d/m/Y'); ?></td><?php } ?>
+      <?php if($fields1['day']) { ?><td class="day" ><?php echo $this->Dates->getJourFr($date->format('w')); ?></td><?php } ?>
+      <?php if($fields1['week']) { ?><td class="week" ><?php echo $date->format('W'); ?></td><?php } ?>
+	  <?php if($fields1['shop']) { ?><td class="shop" ><?php echo  $resultsEntry['Shop']['name']; ?></td><?php } ?>
+	  <?php if($fields1['productType']) { ?><td class="productType label_curve_productType<?php echo $resultsEntry['ProductTypes']['id']; ?>"><?php echo $resultsEntry['ProductTypes']['name']; ?></td><?php } ?>
+	  <td class="rowTotal  curve_total curve_productType<?php echo $resultsEntry['ProductTypes']['id']; ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+  
+    </tr>
+  <?php
+	$i++;
+  endforeach ?>
 </table>
 <script>
-  var histogramPlot;
-   function histogram()
-  {
-    data = [];
-    var produced = [];
-    var sold = [];
-    var lost = [];
-    var soldPrice = [];
-    var lostPrice = [];
-    
-    row=0;
-    $('#statValues tr').each(function(index, item){
-      if(row > 0) //skip header
-      {
-        if($(item).css('display') !== 'none')
-        {
-          key = $(item).find('.date').text();
-          dte = parseDate(key);
-          
-          if( isValidDate(dte) )
-          {
-            //key = dte.getFullYear() + '-' + dte.getMonth() + '-' + dte.getDate();
-            var val = parseInt($(item).find('td.rowTotal').html());
-            if(!isNaN(val))
-            {
-               if(produced[dte] == undefined )
-               {
-                  produced[dte] = 0;
-               }
-               produced[dte] += val;
-             }
-          }
-        }
-      }
-      row++;
-    });
-
-    
-
-    
-
-    
-    // object to array
-    array = [];
-    for (var x in produced ) {
-      dte = new Date(x);
-      if(isValidDate(dte))
-      {
-        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
-        array.push([key,produced[x]]);
-      }
-    }
-    data.push(array);
-
-
-    
-  
-    
-    console.log(data);
-    if(histogramPlot != undefined)
-    {
-      histogramPlot.destroy();
-    }
-    //console.log(data);
-    histogramPlot= jQuery.jqplot ('histogramChart', data,
-    {
-      title: 'Histogram',
-      seriesDefaults: {
-        //renderer: $.jqplot.BarRenderer,
-        rendererOptions: {
-          fillToZero: true,
-          barWidth:5,
-        },
-        pointLabels: { show: true }
-      },
-      height: 500,
-      width: 600,
-      series: [{'label':'Total'},{'label':'Pertes'},{'label':'Ventes'},{'label':'Revenus (€)'},{'label':'Pertes (€)'},],
-      axes:{
-        xaxis:{
-          label:'Date',
-          renderer:$.jqplot.DateAxisRenderer,
-          numberTicks:5,
-          tickOptions: {
-               formatString: '%d/%m/%y'
-          }
-        },
-        yaxis:{
-          label:'Count',
-          pad: 1.05,
-        }
-      },
-       highlighter: {
-        show: true,
-        sizeAdjust: 7.5
-      },
-      cursor:{
-              show: true,
-              followMouse: true,
-              zoom:true,
-              height: 200,
-              width: 300,
-              showTooltip:false,
-      }, 
-      legend: {
-              show: true,
-              placement:'e'
-      },
-    }
-    
-    );
-    
-    return false;
-  }
   $(document).ready(function(){
-      var tfConfig = { 
+      var tfConfig1 = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
               rows_counter:true,
-              //rows_counter_text: 'Selected files: ',
-              on_after_refresh_counter: function(o,i){ histogram(); }
+              on_after_refresh_counter: function(o,i){ histogram('resultsStatValues','resultsChart'); }
               };
-              tf = new TF('statValues', tfConfig); tf.AddGrid();
+              tf = new TF('resultsStatValues', tfConfig1); tf.AddGrid();
+			  
               
               $('#histogramChart').bind("contextmenu",function(e){
                             histogramPlot.resetZoom();
                             return false;
             
                     });
-    histogram();
+			var tfConfig2 = {
+              base_path: '<?php echo $this->webroot ?>js/TableFilter/',
+              rows_counter:true,
+              on_after_refresh_counter: function(o,i){ histogram('resultsEntriesStatValues','resultsEntriesChart'); }
+              };
+			tf1 = new TF('resultsEntriesStatValues', tfConfig2); tf1.AddGrid();
+				
+				
+	
   });
 </script>
 </div>

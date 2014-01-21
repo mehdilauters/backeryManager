@@ -181,6 +181,8 @@ CakeLog::config('error', array(
 ));
 
 
+Configure::write('databaseVersion', 1);
+
 CakePlugin::load('DebugKit');
   //CakePlugin::load('FullCalendar');
   CakePlugin::load('PhpExcel');

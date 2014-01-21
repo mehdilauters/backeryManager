@@ -2,10 +2,12 @@
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
+<script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.canvasOverlay.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/rainbow.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
+<script language="javascript" src="<?php echo $this->webroot ?>js/plotTable.js" type="text/javascript"></script>
 
-<div id="histogramChart" style="width=500px;height=600px;" ></div>
+
 <?php
   $group = array('time' => '', 'product'=>'', 'shop'=>'');
   $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'productType'=>true, 'shop'=>true);
@@ -81,19 +83,23 @@
     <input type="submit" />
   </form>
 </div>
+<div>
+	<div id="histogramChart" style="width=500px;height=600px;" ></div>
+	<div class="control" ></div>
+</div>
 <table id="statValues">
-<tr>
+<tr class="plot" >
   <?php if($fields['date']) { ?><th>Date</th><?php } ?>
   <?php if($fields['day']) { ?><th class="day" >Jour</th><?php } ?>
   <?php if($fields['week']) { ?><th class="week" >Semaine</th><?php } ?>
   <?php if($fields['product']) { ?><th>Produit</th><?php } ?>
   <?php if($fields['productType']) { ?><th>Type de produit</th><?php } ?>
   <?php if($fields['shop']) { ?><th>Magasin</th><?php } ?>
-  <th>Production</th>
-  <th>Perte</th>
-  <th>Vente</th>
-  <th>Prix (€)</th>
-  <th>Perte (€)</th>
+  <th class="label_curve_produced" >Production</th>
+  <th class="label_curve_lost" >Perte</th>
+  <th class="label_curve_sold" >Vente</th>
+  <th class="label_curve_totalPrice" >Prix (€)</th>
+  <th class="label_curve_totalLost" >Perte (€)</th>
   <th>Commentaires</th>
 </tr>
 <?php
@@ -112,19 +118,19 @@
           $rowClass = 'odd';
       }
    ?>
-      <tr class="<?php echo $rowClass ?>" >
+      <tr class="<?php echo $rowClass ?> plot" >
       <?php if($fields['date']) { ?><td class="date" ><?php echo $this->Time->format('d/m/Y',$sale['Sale']['date']); ?></td><?php } ?>
       <?php if($fields['day']) { ?><td class="day" ><?php echo $this->Dates->getJourFr(date('w',$this->Time->fromString($sale['Sale']['date']) )); ?></td><?php } ?>
       <?php if($fields['week']) { ?><td class="week" ><?php echo date('W',$this->Time->fromString($sale['Sale']['date']) ); ?></td><?php } ?>
       <?php if($fields['product']) { ?><td class="productName"><?php echo $products[$sale['Sale']['product_id']]['Product']['name'] ?></td><?php } ?>
       <?php if($fields['productType']) { ?><td class="productTypeName"><?php echo $products[$sale['Sale']['product_id']]['ProductType']['name'] ?></td><?php } ?>
       <?php if($fields['shop']) { ?><td class="shopName"><?php echo $shops[$sale['Sale']['shop_id']] ?></td><?php } ?>
-      <td class="produced" ><?php echo $sale[0]['produced'] ?></td>
-      <td class="<?php echo $class ?> lost" ><?php echo $sale[0]['lost'] ?></td>
-      <td class="sold"><?php echo $sale[0]['sold'] ?></td>
-      <td class="totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
-      <td class="totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
-      <td class="totalLost"><?php echo $sale['Sale']['comment'] ?></td>
+      <td class="produced curve_produced" ><?php echo $sale[0]['produced'] ?></td>
+      <td class="<?php echo $class ?> lost curve_lost" ><?php echo $sale[0]['lost'] ?></td>
+      <td class="sold  curve_sold"><?php echo $sale[0]['sold'] ?></td>
+      <td class="totalPrice  curve_totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
+      <td class="totalLost curve_totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
+      <td class="comment"><?php echo $sale['Sale']['comment'] ?></td>
    </tr>
    
    <?php
@@ -136,218 +142,14 @@
    
 <script type="text/javascript">
 
-   var histogramPlot;
+ //  var histogramPlot;
 
    
    function shuffle(o){ //v1.0
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
   };
-            
-   function histogram()
-  {
-    data = [];
-    var produced = [];
-    var sold = [];
-    var lost = [];
-    var soldPrice = [];
-    var lostPrice = [];
-    
-    row=0;
-    $('#statValues tr').each(function(index, item){
-      if(row > 0) //skip header
-      {
-        if($(item).css('display') !== 'none')
-        {
-          key = $(item).find('.date').text();
-          dte = parseDate(key);
-          
-          if( isValidDate(dte) )
-          {
-            //key = dte.getFullYear() + '-' + dte.getMonth() + '-' + dte.getDate();
-            var val = parseInt($(item).find('td.produced').html());
-            if(!isNaN(val))
-            {
-               if(produced[dte] == undefined )
-               {
-                  produced[dte] = 0;
-               }
-               produced[dte] += val;
-             }
-             var val = parseInt($(item).find('td.lost').html());
-            if(!isNaN(val))
-            {
-               if(lost[dte] == undefined )
-               {
-                  lost[dte] = 0;
-               }
-               lost[dte] += val;
-             }
-             var val = parseInt($(item).find('td.sold').html());
-            if(!isNaN(val))
-            {
-               if(sold[dte] == undefined )
-               {
-                  sold[dte] = 0;
-               }
-               sold[dte] += val;
-             }
-             var val = parseInt($(item).find('td.totalLost').html());
-            if(!isNaN(val))
-            {
-               if(lostPrice[dte] == undefined )
-               {
-                  lostPrice[dte] = 0;
-               }
-               lostPrice[dte] += val;
-             }
-            var val = parseInt($(item).find('td.totalPrice').html());
-            if(!isNaN(val))
-            {
-               if(soldPrice[dte] == undefined )
-               {
-                  soldPrice[dte] = 0;
-               }
-               soldPrice[dte] += val;
-             }
-          }
-        }
-      }
-      row++;
-    });
-
-    
-
-    
-
-    
-    // object to array
-    array = [];
-    for (var x in produced ) {
-      dte = new Date(x);
-      if(isValidDate(dte))
-      {
-        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
-        array.push([key,produced[x]]);
-      }
-    }
-    data.push(array);
-
-        array = [];
-    for (var x in sold) {
-      dte = new Date(x);
-      if(isValidDate(dte))
-      {
-        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
-        array.push([key,sold[x]]);
-      }
-    }
-    data.push(array);
-
-        array = [];
-    for (var x in lost) {
-      dte = new Date(x);
-      if(isValidDate(dte))
-      {
-        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
-        array.push([key,lost[x]]);
-      }
-    }
-    data.push(array);
-    
-        array = [];
-    for (var x in soldPrice ) {
-      dte = new Date(x);
-      if(isValidDate(dte))
-      {
-        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
-        array.push([key,soldPrice[x]]);
-      }
-    }
-    data.push(array);
-    
-        array = [];
-    for (var x in lostPrice) {
-      dte = new Date(x);
-      if(isValidDate(dte))
-      {
-        key = dte.getFullYear() + '-' + parseInt(dte.getMonth()+1) + '-' + dte.getDate();
-        array.push([key,lostPrice[x]]);
-      }
-    }
-    data.push(array);
-    
-  
-    
-    //console.log(data);
-    
-    var rainbow = new Rainbow();
-    //rainbow.setSpectrum('#303030', '#B8B8B8');
-    var nbColors = 6;
-    rainbow.setNumberRange(1, nbColors);
-    var seriesColors =  new Array();
-     for(var i = 0; i < nbColors; i++) {
-          seriesColors[i] = "#"+rainbow.colourAt(i);
-     }
-          
-     seriesColors = shuffle(seriesColors);
-    
-    if(histogramPlot != undefined)
-    {
-      histogramPlot.destroy();
-    }
-    //console.log(data);
-    histogramPlot= jQuery.jqplot ('histogramChart', data,
-    {
-      title: 'Histogram',
-      seriesDefaults: {
-        //renderer: $.jqplot.BarRenderer,
-        rendererOptions: {
-          fillToZero: true,
-          barWidth:5,
-        },
-        pointLabels: { show: true }
-      },
-      height: 500,
-      width: 600,
-      series: [{'label':'Production'},{'label':'Ventes'},{'label':'Pertes'},{'label':'Revenus (€)'},{'label':'Pertes (€)'},],
-      seriesColors: seriesColors,
-      axes:{
-        xaxis:{
-          label:'Date',
-          renderer:$.jqplot.DateAxisRenderer,
-          numberTicks:5,
-          tickOptions: {
-               formatString: '%A, %d/%m/%y'
-          }
-        },
-        yaxis:{
-          label:'Count',
-          pad: 1.05,
-        }
-      },
-       highlighter: {
-        show: true,
-        sizeAdjust: 7.5
-      },
-      cursor:{
-              show: true,
-              followMouse: true,
-              zoom:true,
-              height: 200,
-              width: 300,
-              showTooltip:false,
-      },
-      legend: {
-              show: true,
-              placement:'e'
-      },
-    }
-    
-    );
-    
-    return false;
-  }
+ 
    
   $(document).ready(function(){
       var tfConfig = {
@@ -355,14 +157,14 @@
               rows_counter:true,
               //rows_counter_text: 'Selected files: ',
               on_after_refresh_counter: function(o,i){ 
-		  try
-		  {
-		    histogram(); 
-		  }
-		    catch (e) {
-			console.log(e);
-		     }
-		  }
+				  try
+				  {
+					histogram('statValues','histogramChart'); 
+				  }
+				catch (e) {
+				console.log(e);
+				 }
+			  }
               };
               tf = new TF('statValues', tfConfig); tf.AddGrid();
               

@@ -133,4 +133,10 @@ class AppController extends Controller {
     $tokens = array('isAdmin'=> $isAdmin ,'members'=>true);
     $this->set('tokens', $tokens);
   }
+  
+  public function beforeFilter()
+  {
+	parent::beforeFilter();
+	$this->requestAction(array('controller' => 'config', 'action' => 'upgradeDbStructure'));
+  }
 }

@@ -106,10 +106,13 @@ a:visited{
   background-repeat:repeat-y; */
   float:left;
   width:97%;
+  max-width:97%;
+  
   padding-left:1%;
   /* height:751px; */
   
   overflow:auto;
+  overflow-x:hidden;
 }
 
 #menu{
@@ -464,4 +467,10 @@ table tr.legend th{
 
 .odd{
 
+}
+
+.tablePreview{
+	max-height:300px;
+	overflow-x : hidden;
+	display: block;
 }

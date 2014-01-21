@@ -14,6 +14,7 @@ class ResultsEntry extends AppModel {
  * @var string
  */
 	public $displayField = 'result';
+	public $actsAs = array('Containable');
 
 /**
  * Validation rules
@@ -81,6 +82,13 @@ class ResultsEntry extends AppModel {
 		'ProductTypes' => array(
 			'className' => 'ProductTypes',
 			'foreignKey' => 'product_types_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Shop' => array(
+			'className' => 'Shop',
+			'foreignKey' => 'shop_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

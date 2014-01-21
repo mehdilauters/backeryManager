@@ -1,4 +1,5 @@
 SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `database_version`;
 DROP TABLE IF EXISTS `acos`;
 DROP TABLE IF EXISTS `aros`;
 DROP TABLE IF EXISTS `aros_acos`;
@@ -17,6 +18,14 @@ DROP TABLE IF EXISTS `event_types`;
 DROP TABLE IF EXISTS `shops`;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+CREATE TABLE IF NOT EXISTS `database_version` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  version int (5),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+insert into database_version (version) values (0);
 
 
 CREATE TABLE IF NOT EXISTS `acos` (
