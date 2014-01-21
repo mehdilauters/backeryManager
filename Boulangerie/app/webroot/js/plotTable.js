@@ -14,6 +14,22 @@ function curveDisplay(chartId, curveId, status)
 		chart.replot();
 	}
   
+  
+  $(document).ready(function(){
+    $('.chartDiv').each(function(index, item){
+      
+      $(item).bind("contextmenu",function(e){
+                            var chartVarName = $(item).attr('id') + '_chartPlot';
+			    window[chartVarName].resetZoom();
+                            return false;
+            
+                    });
+    });
+  });
+  
+  
+  
+  
    function histogram(tableId, chartId)
   {
     data = {};

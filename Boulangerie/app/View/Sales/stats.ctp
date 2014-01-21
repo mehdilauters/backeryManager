@@ -84,7 +84,7 @@
   </form>
 </div>
 <div>
-	<div id="histogramChart" style="width=500px;height=600px;" ></div>
+	<div id="histogramChart" style="width=500px;height=600px;" class="chartDiv" ></div>
 	<div class="control" ></div>
 </div>
 <table id="statValues">
@@ -168,11 +168,6 @@
               };
               tf = new TF('statValues', tfConfig); tf.AddGrid();
               
-              $('#histogramChart').bind("contextmenu",function(e){
-                            histogramPlot.resetZoom();
-                            return false;
-            
-                    });
   });
 </script>
 

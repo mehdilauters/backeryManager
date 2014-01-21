@@ -77,7 +77,7 @@
   </form>
 </div>
 <div>
-	<div id="resultsChart" ></div>
+	<div id="resultsChart" class="chartDiv" ></div>
 	<div class="control"></div>
 </div>
 <table id="resultsStatValues" class="tablePreview" >
@@ -120,7 +120,7 @@
 	endforeach ?>
 </table>
 <div>
-	<div id="resultsEntriesChart" ></div>
+	<div id="resultsEntriesChart" class="chartDiv" ></div>
 	<div class="control"></div>
 </div>
 <table id="resultsEntriesStatValues" class="tablePreview">
