@@ -17,7 +17,7 @@ class ResultsController extends AppController {
   public function index($dateStart = NULL, $dateEnd = NULL, $fileName = NULL) {
     if($dateStart == NULL)
     {
-      $dateStart = date('d/m/Y');
+      $dateStart = date('01/m/Y');
       if(isset($this->request->data['dateStart']))
       {
         $dateStart = $this->request->data['dateStart'];
@@ -26,7 +26,7 @@ class ResultsController extends AppController {
 
     if($dateEnd == NULL)
     {    
-      $dateEnd = $dateStart;
+      $dateEnd = date('d/m/Y');
       
       if(isset($this->request->data['dateEnd']))
       {
@@ -72,42 +72,62 @@ class ResultsController extends AppController {
     {
       switch($this->request->data['group']['time'])
       {
-    case 'day':
-          $groupBy[] = 'Result.date';
-    break;
-    case 'week':
-    $groupBy[] = 'YEARWEEK(Result.date, 1)';
-    break;
-    case 'month':
-    $groupBy[] = 'MONTH(Result.date)';
-    break;
-    case 'year':
-    $groupBy[] = 'YEAR(Result.date)';
-    break;
-    default:
-    
-    break;
+		case 'weekday':
+			  //$groupBy[] = 'YEARWEEK(Result.date, 1)';
+			  $groupBy[] = 'DAYNAME(Result.date)';
+		break;
+		case 'day':
+			  $groupBy[] = 'Result.date';
+		break;
+		case 'week':
+		$groupBy[] = 'YEARWEEK(Result.date, 1)';
+		break;
+		case 'month':
+		$groupBy[] = 'MONTH(Result.date)';
+		break;
+		case 'year':
+		$groupBy[] = 'YEAR(Result.date)';
+		break;
+		default:
+		
+		break;
       }
 
      
       switch($this->request->data['group']['shop'])
       {
-    case 'shop':
-     $groupBy[] = 'Result.shop_id';
-    break;
-    default:
-  //     $groupBy[] = 'Sale.shop_id';
-    break;
+		case 'shop':
+		 $groupBy[] = 'Result.shop_id';
+		break;
+		default:
+	  //     $groupBy[] = 'Sale.shop_id';
+		break;
       }
     }
     $groupByEntries = str_replace('Result', 'ResultsEntry',$groupBy);
       if(count($groupBy) == 0)
       {
 		$groupBy[] = 'Result.date, Result.shop_id';
+      }
+	  
+	  if(isset($this->request->data['group']['productType']))
+	  {
+		switch($this->request->data['group']['productType'])
+		  {
+			case 'productType':
+			 $groupByEntries[] = 'ResultsEntry.product_types_id';
+			break;
+			default:
+		       //$groupByEntries[] = 'ResultsEntry.product_types_id';
+			break;
+		  }
+	  }
+
+	  if(count($groupByEntries) == 0)
+      {
         $groupByEntries[] = 'ResultsEntry.result_id';
 		$groupByEntries[] = 'ResultsEntry.product_types_id';
       }
-
 
     $this->Result->contain('Shop');
      $results = $this->Result->find('all', array('order'=>array('Result.date'),
@@ -130,9 +150,9 @@ class ResultsController extends AppController {
 								'ResultsEntry.date',
 								'ProductTypes.name',
 								),
-			  'order' => 'ResultsEntry.result_id'
+			  'order' => 'ResultsEntry.date'
               ));
-    // debug($resultsEntries ); 
+     // debug($resultsEntries ); 
 	// $products = Set::combine($products, '{n}.Product.id', '{n}');
     $shops = $this->Result->Shop->find('list');
     $productTypes = $this->ProductType->find('list');
@@ -159,17 +179,17 @@ public function getData($dateStart = '', $dateEnd = '')
 {
   if($dateStart == '')
   {
-    $dateStart = date('d/m/Y');
+    $dateStart = date('01/m/Y');
   }
   
   if($dateEnd == '')
   {
-    $dateEnd = $dateStart;
+    $dateEnd = date('d/m/Y');
   }
   
   if($dateEnd < $dateStart)
   {
-    throw new NotFoundException(__('Invalid dates'));
+    throw new NotFoundException(__('Invalid dates '.$dateStart.'===='.$dateEnd));
   }
 
     $this->Result->contain();

@@ -16,6 +16,7 @@
     $group['time'] = $this->request->data['group']['time'];
     $group['shop'] = $this->request->data['group']['shop'];
 	$group['productType'] = $this->request->data['group']['productType'];
+	//debug($this->request->data);
   }
   
   if($group['shop'] != '')
@@ -45,12 +46,23 @@
   }
   
   $fields1 = $fields;
-  if(!isset($fields1['productType']))
+  $fields1['productType'] = true;
+  if($group['productType'] != '')
   {
-    $fields1['productType'] = true;
+    if( $group['shop'] == '' )
+    {
+      $fields1['shop'] = false;
+    }
+	if( $group['time'] == '' )
+    {
+      $fields1['date'] = false;
+      $fields1['day'] = false;
+      $fields1['week'] = false;
+    }
   }
   
-
+  
+//debug($fields1);
  ?>
 <div>
   Grouper par
@@ -58,6 +70,7 @@
     <label>date</label>
     <select name="group[time]" >
       <option value="" ></option>
+	  <option value="weekday" <?php echo ($group['time'] == 'weekday') ? 'selected="selected"' : ''; ?>  >jour de la semaine</option>
       <option value="day" <?php echo ($group['time'] == 'day') ? 'selected="selected"' : ''; ?>  >jour</option>
       <option value="week" <?php echo ($group['time'] == 'week') ? 'selected="selected"' : ''; ?>  >semaine</option>
       <option value="month" <?php echo ($group['time'] == 'month') ? 'selected="selected"' : ''; ?> >mois</option>
@@ -71,7 +84,7 @@
 	<label>Type de produit</label>
 	 <select name="group[productType]">
       <option value="" ></option>
-      <option value="shop" <?php echo ($group['productType'] == 'productType') ? 'selected="selected"' : ''; ?> >Type de produit</option>
+      <option value="productType" <?php echo ($group['productType'] == 'productType') ? 'selected="selected"' : ''; ?> >Type de produit</option>
     </select>
     <input type="submit" />
   </form>
