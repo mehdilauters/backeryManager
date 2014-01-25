@@ -1,4 +1,27 @@
 <div class="productTypes index">
+<label for="toggleTodayProductsButton" >Afficher uniquement les produits du jour</label>
+<input id="toggleTodayProductsButton" type="checkbox" name="toggleTodayProductsButton" onChange="toggleTodayProducts()" />
+<script>
+
+
+function toggleTodayProducts()
+{
+  if($('#toggleTodayProductsButton').is(':checked') )
+  {
+    $('.productPreview:not(.today)').hide();
+  }
+  else
+  {
+    $('.productPreview:not(.today)').show();
+  }
+  
+}
+
+$(document).ready(function(){  
+    $('#toggleTodayProductsButton').attr('checked', false);
+  //$('.productPreview:not(.today)').hide();
+  });
+</script>
 <ul>
 <?php foreach ($productTypes as $productType): ?>
   <li>
@@ -13,12 +36,12 @@
     <a name="productType_<?php echo $productType['ProductType']['id'] ?>" />
     <?php 
 //debug($productType);
-     echo $this->element('ProductTypes/Preview', array('productType'=>$productType)); ?>
+     echo $this->element('ProductTypes/Preview', array('productType'=>$productType, 'tokens'=>$tokens)); ?>
     <hr/>
     <ul id="productList" >
       <?php foreach ($productType['Products'] as $product): ?>
 	<li >
-	  <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable', $isCalendarAvailable)); ?>	  
+	  <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable', $isCalendarAvailable, 'tokens'=>$tokens)); ?>	  
       </li>
       <?php endforeach; ?>      
     </ul>

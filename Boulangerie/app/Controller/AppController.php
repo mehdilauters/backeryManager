@@ -32,7 +32,26 @@ App::uses('Controller', 'Controller');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-  public $components = array('DebugKit.Toolbar', 'Session');
+
+
+	  var $publicActions = array();
+	  var $memberActions = array();
+
+  public $components = array('DebugKit.Toolbar', 'Session', 'Cookie',
+															'Auth' => array(
+																'authenticate' => array(
+																	'Form' => array(
+																		'fields' => array('username' => 'email'),
+																		'passwordHasher' => array(
+																			'className' => 'Simple',
+																			'hashType' => 'sha256'
+																		)
+																	)
+																),
+																'loginRedirect' => '/',
+																'logoutRedirect' => '/',
+															)
+														);
   public $menu = array('Menu' => 
 			array( 
 				'Nos Magasins' => 
@@ -45,6 +64,8 @@ class AppController extends Controller {
 				    array( 'url' => 'WEBROOT/users/add', 'active' => false ),
 		    )
 			);
+  
+  
   
 
   public function backupDb()
@@ -121,22 +142,70 @@ class AppController extends Controller {
   {
     $this->backupDb();
     $this->exportExcel();
-    $isAdmin = false;
-    if($this->Session->check('isAdmin'))
-    {
-     $isAdmin =   $this->Session->read('isAdmin');
-    }
+
+  
+  
+	if($this->Auth->user())
+	{
+		$this->menu['Menu']['Deconnexion'] = array( 'url' => $this->webroot.'users/logout', 'active' => false );
+	}
+	else
+	{
+		$this->menu['Menu']['Connexion'] = array( 'url' => $this->webroot.'users/login', 'active' => false );
+	}
   
      $this->set('menu', $this->menu);
     //TODO debug mode
-    $isAdmin = true;
-    $tokens = array('isAdmin'=> $isAdmin ,'members'=>true);
+    $tokens = array('isAdmin'=> $this->Auth->user('User.isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
   }
   
+ 
+  
+  
   public function beforeFilter()
   {
+	if($this->Session->check('debugMode') && $this->Session->read('debugMode'))
+	{
+      $this->set('debugMode',true);
+      Configure::write('debug', 2);
+    }
+// 	debug($this->request->params['controller']);
+// 	debug($this->request->params['action']);
 	parent::beforeFilter();
-	$this->requestAction(array('controller' => 'config', 'action' => 'upgradeDbStructure'));
+	
+	$this->Cookie->name='userAutoLogging';
+	
+	$this->Auth->allow($this->publicActions);
+	if(!$this->Auth->loggedIn())
+	{
+	  if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))
+	  {
+		  $this->requestAction(array('controller' => 'users', 'action' => 'autologin'));
+	  }
+	}
+
+	if($this->Auth->loggedIn())
+	{
+		$this->Auth->allow($this->memberActions);
+		if($this->Auth->user('isRoot'))
+		{
+			$this->Auth->allow();
+		}
+	}
+	else
+	{
+	    
+	}
+// 		if(!($this->request->params['controller'] == 'config' && $this->request->params['action'] == 'upgradeDbStructure'))
+// 		{
+// 			$this->requestAction(array('controller' => 'config', 'action' => 'upgradeDbStructure'));
+// 		}
+
+
+	
+	
+	
+	
   }
 }

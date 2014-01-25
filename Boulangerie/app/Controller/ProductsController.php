@@ -6,6 +6,7 @@ App::uses('AppController', 'Controller');
  * @property Product $Product
  */
 class ProductsController extends AppController {
+  var $publicActions = array('index','view');
   var $uses = array('Product');
 /**
  * index method
@@ -15,8 +16,24 @@ class ProductsController extends AppController {
   public function index() {
     $this->set('title_for_layout', 'Produits');
     $this->menu['Menu']['Produits']['active'] = true;
-    $this->Product->recursive = 2;
-    $this->set('products', $this->Product->find('all'));
+    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+
+    $contain = array('ProductType.Media.Photo','Media', 'Events.EventType');
+    if($isCalendarAvailable)
+    {
+      $contain[] = 'Events.Gevent.GeventDate';
+    }
+    $this->Product->contain($contain);
+
+    $conditions = array();
+
+    if(!$this->Auth->user('isRoot'))
+    {
+      $conditions[] = 'Product.customer_display';
+    }
+
+    $this->set('products', $this->Product->find('all', array('conditions' => $conditions)));
+    $this->set('isCalendarAvailable', $isCalendarAvailable);
   }
 
 
@@ -32,12 +49,29 @@ class ProductsController extends AppController {
     if (!$this->Product->exists($id)) {
       throw new NotFoundException(__('Invalid product'));
     }
+
+    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+
+    $conditions = array();
+    $conditions = array('Product.' . $this->Product->primaryKey => $id);
+
+    if(!$this->Auth->user('isRoot'))
+    {
+      $conditions[] = 'Product.customer_display';
+    }
+
     
-    $options = array('conditions' => array('Product.' . $this->Product->primaryKey => $id), 'recursive'=>2);
+    $options = array('conditions' => $conditions);
+    $contain = array('ProductType.Media.Photo','Media', 'Events.EventType');
+    if($isCalendarAvailable)
+    {
+      $contain[] = 'Events.Gevent.GeventDate';
+    }
+    $this->Product->contain($contain);
     $products = $this->Product->find('first', $options);
+    $this->set('title_for_layout', $products['Product']['name']);
   
     $isToday = $this->requestAction(array('controller'=>'events', 'action'=>'isToday'), array( 'pass'=>array('event'=>$products)));
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
     $this->set('isCalendarAvailable', $isCalendarAvailable);
     $this->set('produced', $isToday);
     $this->set('product', $products);
@@ -64,8 +98,7 @@ class ProductsController extends AppController {
       }
     }
     $productTypes = $this->Product->ProductType->find('list');
-    $media = $this->Product->Media->find('list');
-    $media[''] = '';
+    $media = array_merge(array(''=>''), $this->Product->Media->find('list'));
     $this->set(compact('productTypes', 'media'));
   }
 
@@ -96,8 +129,7 @@ class ProductsController extends AppController {
       $this->request->data = $this->Product->find('first', $options);
     }
     $productTypes = $this->Product->ProductType->find('list');
-    $media = $this->Product->Media->find('list');
-    $media[''] = '';
+    $media = array_merge(array(''=>''), $this->Product->Media->find('list'));
     $this->set(compact('productTypes', 'media'));
   }
 

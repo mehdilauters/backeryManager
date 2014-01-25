@@ -4,11 +4,14 @@
   {
   events : [
   <?php
-  foreach ($data['Event'] as $event)
+  if(isset($data['Event']))
   {
-  ?>
-           <?php echo $this->element('Gevents/jsObject', array('gevent'=>$event));  ?>
-  <?php } ?>
+    foreach ($data['Event'] as $event)
+    {
+    ?>
+	    <?php echo $this->element('Gevents/jsObject', array('gevent'=>$event));  ?>
+    <?php } 
+    } ?>
   ],
   //    color: 'blue',   // an option!
   //  textColor: 'black', // an option!

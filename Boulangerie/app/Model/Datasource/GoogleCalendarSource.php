@@ -303,7 +303,7 @@ public function isReady()
           $data['conditions']['start <='] = $day+1*60*60*24*7;
         }
       
-
+      //TODO cache management
       $cacheFolder = CACHE.'gcalendar/';
       $res = $this->requestAction(
         array('controller' => 'config', 'action' => 'deleteGcalCache')

@@ -6,6 +6,8 @@ App::uses('AppController', 'Controller');
  * @property Event $Event
  */
 class EventsController extends AppController {
+	var $publicActions = array('eventsAvailable','isEvent', 'isToday');
+
   var $uses = array('Event', 'Gevent', 'EventType');
 
 
@@ -109,8 +111,7 @@ public function eventsAvailable()
       
     }
     
-    $media = $this->Event->Media->find('list');
-    $media[''] = '';
+    $media = array_merge(array(''=>''), $this->Event->Media->find('list'));
     
     if(isset($this->request->named['idProduct']))
     {
@@ -154,8 +155,7 @@ public function eventsAvailable()
       $options = array('conditions' => array('Event.' . $this->Event->primaryKey => $id));
       $this->request->data = $this->Event->find('first', $options);
     }
-    $media = $this->Event->Media->find('list');
-    $media[''] = '';
+    $media = array_merge(array(''=>''), $this->Event->Media->find('list'));
     
     $products = $this->Event->Product->find('list');
     $products[''] = '';
@@ -191,16 +191,18 @@ public function isToday($event)
   {
     $yes = false;
       $when = new DateTime( $when );
-    
-      foreach($gevent['Gevent']['GeventDate'] as $geventDate)
+      if(isset($gevent['Gevent']['GeventDate']))
       {
-        $startDate = new DateTime($geventDate['start']);
-        $endDate = new DateTime($geventDate['end']);
-       if($startDate <= $when && $when <= $endDate)
-        {
-          $yes = true;
-          break;
-        }
+	foreach($gevent['Gevent']['GeventDate'] as $geventDate)
+	{
+	  $startDate = new DateTime($geventDate['start']);
+	  $endDate = new DateTime($geventDate['end']);
+	if($startDate <= $when && $when <= $endDate)
+	  {
+	    $yes = true;
+	    break;
+	  }
+	}
       }
       return $yes;
   }

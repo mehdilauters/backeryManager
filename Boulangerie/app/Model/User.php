@@ -153,4 +153,17 @@ class User extends AppModel {
     )
   );
 
+   public function beforeSave($options = array()) {
+        if (!$this->id) {
+			$count = $this->find('count');
+			debug($count);
+			if($count == 0)
+			{
+					$this->data[$this->alias]['isRoot'] = true;
+			}
+            //$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
+        }
+        return true;
+    }
+  
 }

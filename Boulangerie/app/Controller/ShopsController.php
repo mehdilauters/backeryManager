@@ -6,6 +6,7 @@ App::uses('AppController', 'Controller');
  * @property Shop $Shop
  */
 class ShopsController extends AppController {
+var $publicActions = array('index','view','isOpened');
 var $uses = array('Shop', 'EventType');
 var $helpers = array('Time');
 /**

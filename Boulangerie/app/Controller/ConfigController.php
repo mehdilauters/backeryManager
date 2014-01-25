@@ -7,11 +7,16 @@ App::uses('AppController', 'Controller');
  */
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion');
+  
+  var $publicActions = array('upgradeDbStructure','deleteGcalCache');
+  var $memberActions = array();
+  
 /**
  * index method
  *
  * @return void
  */
+ 
   public function index() {
     $actions = array(
       'importPhotos' => 'Importer les photos d\'un dossier',
@@ -20,7 +25,8 @@ class ConfigController extends AppController {
       'importProducts' => 'Importer les produits d\'un csv',
       'setAdmin/1' => 'set to admin',
        'upgradeDbStructure/1' => 'upgrade DBStructure',
-      'dbBackup' => 'backup database'
+      'dbBackup' => 'backup database',
+	  'setDebug/1' => 'activer debug'
     );
     $this->set('actions', $actions);
   }
@@ -111,6 +117,21 @@ class ConfigController extends AppController {
   }
   
   
+   public function setDebug($bool)
+  {
+    $this->Session->write('debugMode',$bool);
+    if($bool)
+    {
+      $this->Session->setFlash('Debug enabled', 'flash/warning');
+    }
+    else
+    {
+      $this->Session->setFlash('Debug disabled','flash/warning');
+    }
+    $this->redirect($this->referer());
+  }
+  
+  
   public function upgradeDbStructure($redirect = false)
   {
   try{
@@ -125,17 +146,11 @@ class ConfigController extends AppController {
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= 'SET FOREIGN_KEY_CHECKS = 0;
-	ALTER TABLE `results_entries`
-	add `shop_id` int(10) NOT NULL ,
-	add    `date` datetime NOT NULL,
-	add   KEY `fk_results_entries_shops` (`shop_id`),
-	add   CONSTRAINT `fk_results_entries_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
-	update results_entries RE set RE.date=(select R.date from results R where RE.result_id = R.id), RE.shop_id=(select R.shop_id from results R where RE.result_id = R.id);
-	CREATE TABLE IF NOT EXISTS `database_version` (
-	  `id` int(10) NOT NULL AUTO_INCREMENT,
-	  version int (5),
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+	ALTER TABLE `product_types`
+	add `customer_display` boolean default TRUE;
+	ALTER TABLE `products`
+	add `customer_display` boolean default TRUE;
+	ALTER TABLE `users` ADD `isRoot` BOOLEAN NOT NULL DEFAULT FALSE AFTER `password` ;
 	SET FOREIGN_KEY_CHECKS = 1;';
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);
@@ -229,9 +244,6 @@ function dbBackup($tables = '*') {
    // $this->response->body($return);
 }
 
-	public function beforeFilter()
-  {
-  }
   
 }
   

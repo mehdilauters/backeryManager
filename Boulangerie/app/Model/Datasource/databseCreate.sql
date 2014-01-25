@@ -118,6 +118,7 @@ create table if not exists product_types (
   media_id int(10), 
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   description text CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `customer_display` boolean default TRUE,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_producttypes_media` (`media_id`)
@@ -133,6 +134,7 @@ create table if not exists products (
   description text CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `price` float(3) NOT NULL,
   `unity` boolean default TRUE,
+  `customer_display` boolean default TRUE,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_products_producttypes` (`product_types_id`),

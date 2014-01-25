@@ -77,7 +77,8 @@ echo $this->Html->css(
 <?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
       <div id="content">
       &nbsp;
-  <?php echo $this->Session->flash(); ?>
+  <?php echo $this->Session->flash();
+		echo $this->Session->flash('auth');  ?>
 
   <?php echo $this->fetch('content'); ?>
       </div>

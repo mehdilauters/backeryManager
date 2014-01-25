@@ -1,7 +1,8 @@
 <?php
 echo $this->Html->script(
-    array(   'jquery-1.9.1.min',
-        'jquery-ui-1.10.1.custom.min',
+    array( 
+//   'jquery-1.9.1.min',
+//         'jquery-ui-1.10.1.custom.min',
          'fullcalendar.min',
          'jquery.qtip-1.0.0-rc3.min',
         ),
@@ -53,47 +54,10 @@ $(document).ready(function() {
 });
   </script>
 <div class="products view">
-<h2><?php  echo __('Product'); ?></h2>
-  <dl>
-    <dt><?php echo __('Id'); ?></dt>
-    <dd>
-      <?php echo h($product['Product']['id']); ?>
-      &nbsp;
-    </dd>
-    <dt><?php echo __('Product Types'); ?></dt>
-    <dd>
-      <?php echo $this->Html->link($product['ProductType']['name'], array('controller' => 'product_types', 'action' => 'view', $product['ProductType']['id'])); ?>
-      &nbsp;
-    </dd>
-    <dt><?php echo __('Media'); ?></dt>
-    <dd>
-      <?php echo $this->element('Medias/Medias/Preview', array('media'=>$product)) ?>
-      &nbsp;
-    </dd>
-    <dt><?php echo __('Name'); ?></dt>
-    <dd>
-      <?php echo h($product['Product']['name']); ?>
-      &nbsp;
-    </dd>
-    <dt><?php echo __('Description'); ?></dt>
-    <dd>
-      <?php echo h($product['Product']['description']); ?>
-      &nbsp;
-    </dd>
-    <dt><?php echo __('Created'); ?></dt>
-    <dd>
-      <?php echo h($product['Product']['created']); ?>
-      &nbsp;
-    </dd>
-  </dl>
-<?php if( $isCalendarAvailable ) { ?>
-  <?php if($produced): ?>
-  <span class="productAvailable"> Venez en acheter aujourd'hui!! </span>
-  <?php else: ?>
-  <span class="productNotAvailable"> Nous n'en vendons pas aujourd'hui. Veuillez repasser XXXX </span>
-  <?php endif; ?>
-  <div id="calendar" />
-<?php } ?>
+  <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable', $isCalendarAvailable, 'tokens'=>$tokens)); ?>
+  <div id="calendar" ></div>
+<h2>Dans la catégorie</h2>
+<?php echo $this->element('ProductTypes/Preview', array('productType'=>$product, 'tokens'=>$tokens)); ?>
 </div>
 <div class="actions">
   <h3><?php echo __('Actions'); ?></h3>
@@ -161,10 +125,11 @@ $(document).ready(function() {
   <?php endforeach; ?>
   </table>
 <?php endif; ?>
-
+<?php if($tokens['isAdmin']) : ?>
   <div class="actions">
     <ul>
       <li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add')); ?> </li>
     </ul>
   </div>
+<?php endif; ?>
 </div>

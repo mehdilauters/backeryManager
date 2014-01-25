@@ -181,7 +181,7 @@ CakeLog::config('error', array(
 ));
 
 
-Configure::write('databaseVersion', 1);
+Configure::write('databaseVersion', 2);
 
 CakePlugin::load('DebugKit');
   //CakePlugin::load('FullCalendar');

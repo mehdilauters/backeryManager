@@ -1,7 +1,11 @@
-<div class="productTypePreview" >
-<h3><?php echo h($productType['ProductType']['name']); ?></h3>
+<div class="productTypePreview <?php if($tokens['isAdmin']  && !$productType['ProductType']['customer_display'] ) echo 'customerHidden'; ?>" >
+<h3><a href="<?php echo $this->webroot.'productTypes/view/'.$productType['ProductType']['id'] ?>" ><?php echo h($productType['ProductType']['name']); ?></a></h3>
 <?php echo $this->element('Medias/Medias/Preview', array('media'=>$productType, 'config'=>array('name'=>false, 'description'=>false)));?>
-    <div class="slate description" ><?php echo h($productType['ProductType']['description']); ?></div>
+    <div class="slate description" ><?php echo h($productType['ProductType']['description']); ?>
+      <?php if($tokens['isAdmin']  && !$productType['ProductType']['customer_display'] ) { ?>
+	  <div>Caché aux clients</div>
+      <?php } ?>
+    </div>
     <div class="actions clear">
 <!--       <?php echo $this->Html->link(__('View'), array('action' => 'view', $productType['ProductType']['id'])); ?> -->
       <?php if($tokens['isAdmin']) : ?>

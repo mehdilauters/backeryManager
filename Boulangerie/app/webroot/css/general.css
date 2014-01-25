@@ -474,3 +474,8 @@ table tr.legend th{
 	overflow-x : hidden;
 	display: block;
 }
+
+
+.customerHidden{
+    color: gray;
+}
