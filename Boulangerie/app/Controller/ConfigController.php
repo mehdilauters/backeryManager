@@ -8,7 +8,7 @@ App::uses('AppController', 'Controller');
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion');
   
-  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession');
+  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup');
   var $memberActions = array();
   
 /**

@@ -34,7 +34,7 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller {
 
 
-	  var $publicActions = array();
+	  var $publicActions = array('exportExcel');
 	  var $memberActions = array();
 
   public $components = array('DebugKit.Toolbar', 'Session', 'Cookie',
