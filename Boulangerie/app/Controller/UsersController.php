@@ -173,6 +173,7 @@ class UsersController extends AppController {
 				if($key == $this->Cookie->read('boulangerieFaury.key'))
 				{
 					$this->Auth->login($user);
+					$this->Session->write('User', $user['User']);
 				}
 			}
 		}

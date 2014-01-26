@@ -10,9 +10,6 @@ foreach($actions as $action => $name)
 </ul>
 <h3>TODO</h3>
 <ul>
-	<li>sales/stat, results/stat => recherche par jour (lundi, mardi...) et date (01/01, 02/01...)</li>
-	<li>login</li>
-	<li> Product & ProductType => boolean Afficher (client)</li>
-	<li> connexion (cookie)</li>
+	<li>courbe differentes années a comparer</li>
 	<li></li>
 </ul>

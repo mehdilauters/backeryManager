@@ -8,7 +8,7 @@ App::uses('AppController', 'Controller');
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion');
   
-  var $publicActions = array('upgradeDbStructure','deleteGcalCache');
+  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession');
   var $memberActions = array();
   
 /**
@@ -26,11 +26,18 @@ class ConfigController extends AppController {
       'setAdmin/1' => 'set to admin',
        'upgradeDbStructure/1' => 'upgrade DBStructure',
       'dbBackup' => 'backup database',
-	  'setDebug/1' => 'activer debug'
+      'setDebug/1' => 'activer debug',
+      'deleteSession' => 'deleteSession'
     );
     $this->set('actions', $actions);
   }
   
+  public function deleteSession() {
+      session_destroy();
+      $this->redirect($this->referer());
+  }
+
+
   public function setAdmin($admin)
   {
    $this->Session->write('isAdmin', $admin == 1); 

@@ -3,11 +3,17 @@
   <fieldset>
     <legend><?php echo __('Add Event'); ?></legend>
   <?php
-    echo $this->Form->input('media_id');
+    if(!isset($this->request->named['idProduct']))
+    {
+      echo $this->Form->input('media_id');
+    }
     echo $this->Form->input('product_id');
     if(! isset($geventId))
     {
+      if(!isset($this->request->named['idProduct']))
+      {
        echo $this->Form->input('event_type_id');
+      }
        echo $this->Form->input('title',array('type'=>'text'));
        echo $this->Form->input('description',array('type'=>'text'));
        echo $this->Form->input('start',array('type'=>'text'));

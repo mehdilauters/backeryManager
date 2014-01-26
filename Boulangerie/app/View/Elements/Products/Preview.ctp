@@ -49,6 +49,7 @@ if( $isCalendarAvailable ) {
 	  <?php } ?>
 	    <div class="actions">
           <?php echo $this->Html->link(__('Edit'), array('controller' => 'products', 'action' => 'edit', $data['id'])); ?>
+	  <?php echo $this->Html->link(__('Evenement'), array('controller' => 'events', 'action' => 'add', 'idProduct'=>$data['id'])); ?>
           <?php echo $this->Form->postLink(__('Delete'), array('controller' => 'products', 'action' => 'delete', $data['id']), null, __('Are you sure you want to delete # %s?', $data['id'])); ?>
 	  </div>
         <?php endif ?>

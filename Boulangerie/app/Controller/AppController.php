@@ -155,7 +155,8 @@ class AppController extends Controller {
 	}
   
      $this->set('menu', $this->menu);
-    //TODO debug mode
+    
+//     debug($this->Auth->user('User.isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('User.isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
   }

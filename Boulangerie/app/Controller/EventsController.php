@@ -78,6 +78,13 @@ public function eventsAvailable()
       {
         $this->request->data['Gevent']['title'] = $this->request->data['Event']['title'];
         $this->request->data['Gevent']['description'] = $this->request->data['Event']['description'];
+	if( isset( $this->request->named['idProduct'] ) )
+        {
+// 	    $this->request->data['Gevent']['description'].= "\n".Router::url('/', true).'/products/view/'.$this->request->named['idProduct'];
+	    // TODO howto... take the good one
+	    $this->request->data['Event']['event_type_id'] = 3;
+	}
+	
       
         $datetime= DateTime::createFromFormat("d/m/Y", $this->request->data['Event']['start']);
         if($datetime == false)

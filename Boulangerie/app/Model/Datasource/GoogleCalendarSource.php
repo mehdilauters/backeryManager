@@ -145,8 +145,11 @@ public function isReady()
       $data = $model->data;
       $event= $this->service->newEventEntry();
       $event->title = $this->service->newTitle($data[$model->alias]['title']);
-      $event->where = array($this->service->newWhere("Mountain View, California"));
-      $event->content = $this->service->newContent("Cakephp Event");
+      if(isset($data[$model->alias]['place']))
+      {
+	$event->where = array($this->service->newWhere($data[$model->alias]['place']));
+      }
+      $event->content = $this->service->newContent($data[$model->alias]['description']);
 
 
       // Set the date using RFC 3339 format.

@@ -3,7 +3,7 @@
   <?php echo $this->element('ProductTypes/Preview', array('productType'=>$productType)); ?>
 </div>
 <div class="actions">
-  <?php if($tokens['isAdmin']) : ?>
+  <?php debug($tokens);if($tokens['isAdmin']) : ?>
   <h3><?php echo __('Actions'); ?></h3>
   <ul>
       <li><?php echo $this->Html->link(__('Edit Product Type'), array('action' => 'edit', $productType['ProductType']['id'])); ?> </li>

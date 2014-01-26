@@ -376,6 +376,15 @@ a:visited{
    float: left;  
 }  
 
+.slide-title{  
+  position:relative;
+  top:-70px;
+  margin-left:20%;
+  color:white;
+  max-width:50%;
+  opacity:0.5;
+}  
+
 table tr.legend th{
   background-color:gray;
   color:white;

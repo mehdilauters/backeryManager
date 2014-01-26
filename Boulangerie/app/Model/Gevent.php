@@ -21,6 +21,11 @@ class Gevent extends AppModel {
               'null' => false,
               'length' => 255,
           ),
+          'place' => array(
+              'type' => 'string',
+              'null' => true,
+              'length' => 255,
+          ),
           'id' => array(
               'type' => 'string',
               'null' => false,

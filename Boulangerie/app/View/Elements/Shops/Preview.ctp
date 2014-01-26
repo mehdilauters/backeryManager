@@ -2,20 +2,20 @@
 <div><h3>
   <a href="<?php echo $this->webroot.'shops/view/'.$shop['Shop']['id']; ?>" alt="<?php echo($shop['Shop']['name']); ?>" ><?php echo($shop['Shop']['name']); ?></a></h3>
 </div>
- <?php echo $this->element('Medias/Medias/Preview', array('media'=>$shop, 'config'=>array(
-        'name' => false,
-        'description' => false
-        ))) ?>
-<a href="http://maps.google.com/maps?q=<?php echo urlencode($shop['Shop']['address']); ?>&z=17" >
-<img class="map" src="https://maps.googleapis.com/maps/api/staticmap?center=<?php echo urlencode($shop['Shop']['address']); ?>&zoom=15&size=200x132&sensor=false&maptype=roadmap&markers=color:blue%7C<?php echo urlencode($shop['Shop']['address']); ?>" alt="location"/>
-</a>
+
+<img class="imageShopView" src="<?php echo $this->webroot.'img/photos/normal/'.$shop['Media']['path'] ?>" alt="<?php echo $shop['Media']['name'] ?>" />
 <div class="clear" ></div>
 <div class="slate slateShopDescription" ><p><?php echo($shop['Shop']['description']); ?><p></div>
  <div class="slate slateShop" >
-  <div><?php echo $shop['Shop']['address']; ?></div>
-  <div><?php 
+  <div><?php echo $shop['Shop']['address']; ?>
+<a href="http://maps.google.com/maps?q=<?php echo urlencode($shop['Shop']['address']); ?>&z=17" >
+<img class="map" src="https://maps.googleapis.com/maps/api/staticmap?center=<?php echo urlencode($shop['Shop']['address']); ?>&zoom=15&size=300x300&sensor=false&maptype=roadmap&markers=color:blue%7C<?php echo urlencode($shop['Shop']['address']); ?>" alt="location"/>
+</a>
+    </div>
+  <div class="phone" ><?php 
 
 echo $shop['Shop']['phone']; ?></div>
+<div class="isOpened">
     <?php
     if( $isCalendarAvailable )
     {
@@ -57,6 +57,7 @@ echo $shop['Shop']['phone']; ?></div>
       <?php } 
     }
     ?>
+  </div>
  </div>
 <div class="clear" ></div>
 <?php //debug($shop); ?>
