@@ -349,7 +349,7 @@ public function getData($dateStart = '', $dateEnd = '')
     }
     $shops = $this->Result->Shop->find('list');
     $productTypes = $this->ProductType->find('list');
-    $data = $this->getData($date);
+    $data = $this->getData($date, $date);
     $this->set(compact('shops','productTypes', 'date', 'data'));
   }
 
