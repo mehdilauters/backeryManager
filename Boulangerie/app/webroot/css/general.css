@@ -466,6 +466,10 @@ table tr.legend th{
   color:white;
 }
 
+.jqplot-table-legend{
+	color:black;
+}
+
 .fltrow input{
   width:50%;
 }

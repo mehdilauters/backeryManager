@@ -65,54 +65,69 @@ class ResultsController extends AppController {
       }
   }
 
-  public function stats() {
+  public function stats($_conditions = array(), $group = array()) {
 
     $groupBy = array();
-    if(isset($this->request->data['group']))
+	
+	if(count($group) == 0)
+	{
+		if(isset($this->request->data['group']))
+		{
+			$group = $this->request->data['group'];
+		}
+	}
+	
+    if(count($group) != 0)
     {
-      switch($this->request->data['group']['time'])
-      {
-		case 'weekday':
-			  //$groupBy[] = 'YEARWEEK(Result.date, 1)';
-			  $groupBy[] = 'DAYNAME(Result.date)';
-		break;
-		case 'day':
-			  $groupBy[] = 'Result.date';
-		break;
-		case 'week':
-		$groupBy[] = 'YEARWEEK(Result.date, 1)';
-		break;
-		case 'month':
-		$groupBy[] = 'MONTH(Result.date)';
-		break;
-		case 'year':
-		$groupBy[] = 'YEAR(Result.date)';
-		break;
-		default:
+		if(isset($group['time']))
+		{
+		  switch($group['time'])
+		  {
+			case 'weekday':
+				  //$groupBy[] = 'YEARWEEK(Result.date, 1)';
+				  $groupBy[] = 'DAYNAME(Result.date)';
+			break;
+			case 'day':
+				  $groupBy[] = 'Result.date';
+			break;
+			case 'week':
+			$groupBy[] = 'YEARWEEK(Result.date, 1)';
+			break;
+			case 'month':
+			$groupBy[] = 'MONTH(Result.date)';
+			break;
+			case 'year':
+			$groupBy[] = 'YEAR(Result.date)';
+			break;
+			default:
+			
+			break;
+		  }
+		}
 		
-		break;
-      }
 
-     
-      switch($this->request->data['group']['shop'])
-      {
-		case 'shop':
-		 $groupBy[] = 'Result.shop_id';
-		break;
-		default:
-	  //     $groupBy[] = 'Sale.shop_id';
-		break;
-      }
-    }
+     if(isset($group['shop']))
+		{
+		  switch($group['shop'])
+			  {
+			case 'shop':
+			 $groupBy[] = 'Result.shop_id';
+			break;
+			default:
+		  //     $groupBy[] = 'Sale.shop_id';
+			break;
+		  }
+		}
+	}
     $groupByEntries = str_replace('Result', 'ResultsEntry',$groupBy);
       if(count($groupBy) == 0)
       {
 		$groupBy[] = 'Result.date, Result.shop_id';
       }
 	  
-	  if(isset($this->request->data['group']['productType']))
+	  if(isset($group['productType']))
 	  {
-		switch($this->request->data['group']['productType'])
+		switch($group['productType'])
 		  {
 			case 'productType':
 			 $groupByEntries[] = 'ResultsEntry.product_types_id';
@@ -129,9 +144,34 @@ class ResultsController extends AppController {
 		$groupByEntries[] = 'ResultsEntry.product_types_id';
       }
 
+	  
+	  $conditions = array('Result'=>array(),'ResultsEntry'=>array());
+	  
+	  if(count($_conditions) == 0)
+	{
+		if(isset($this->request->data['conditions']))
+		{
+			$_conditions = $this->request->data['conditions'];
+		}
+	}
+	
+    if(count($_conditions) != 0)
+    {
+		if(isset($_conditions['shop']) && $_conditions['shop'] != '')
+		{
+			$conditions['Result']['Result.shop_id'] =  $_conditions['shop'];
+			$conditions['ResultsEntry']['ResultsEntry.shop_id'] =  $_conditions['shop'];
+		}
+		if(isset($_conditions['productType']) && $_conditions['productType'] != '')
+		{
+			$conditions['ResultsEntry']['ResultsEntry.product_types_id'] =  $_conditions['productType'];
+		}
+	}
+	  
     $this->Result->contain('Shop');
      $results = $this->Result->find('all', array('order'=>array('Result.date'),
               'group' => $groupBy,
+			  'conditions' => $conditions['Result'],
               'fields' => array('SUM(Result.cash) as `cash`',
                     'SUM(Result.check) as `check`',
                     'SUM(Result.check + Result.cash) as `total`',
@@ -145,6 +185,7 @@ class ResultsController extends AppController {
     $this->Result->ResultsEntry->contain('Shop', 'ProductTypes');
      $resultsEntries = $this->Result->ResultsEntry->find('all', array('order'=>array('ResultsEntry.date'),
               'group' => $groupByEntries,
+			  'conditions' => $conditions['ResultsEntry'],
               'fields' => array('SUM(ResultsEntry.result) as `result`',
 								'Shop.name',
 								'ResultsEntry.date',
@@ -156,6 +197,9 @@ class ResultsController extends AppController {
 	// $products = Set::combine($products, '{n}.Product.id', '{n}');
     $shops = $this->Result->Shop->find('list');
     $productTypes = $this->ProductType->find('list');
+	if (!empty($this->request->params['requested'])) {
+            return compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes');
+        }
     $this->set(compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes'));
 
   }

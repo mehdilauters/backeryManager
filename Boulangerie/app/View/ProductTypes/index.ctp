@@ -1,4 +1,13 @@
 <div class="productTypes index">
+
+<?php   
+if($tokens['isAdmin'])
+{
+	echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('interactive'=>false))); 
+}
+	?>
+
+
 <label for="toggleTodayProductsButton" >Afficher uniquement les produits du jour</label>
 <input id="toggleTodayProductsButton" type="checkbox" name="toggleTodayProductsButton" onChange="toggleTodayProducts()" />
 <script>

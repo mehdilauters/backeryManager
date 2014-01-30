@@ -64,6 +64,13 @@ buttonText: {
   </script>
 
 <div class="shops view">
+
+<?php   
+if($tokens['isAdmin'])
+{
+	echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('interactive'=>false))); 
+}
+	?>
 <div class="slate slateShopDescription slateShopDescriptionView" >      
       <?php echo h($shop['Shop']['description']); ?>
     </div>

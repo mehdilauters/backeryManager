@@ -133,6 +133,9 @@ class UsersController extends AppController {
 	
 	
 	public function login() {
+		debug('hoooooooooooooo');
+		debug($this->data);
+		debug($_REQUEST);
 		if ($this->request->is('post')) {
 // 			debug($this->request->data['User']['password']);
 			if ($this->Auth->login()) {
@@ -165,14 +168,13 @@ class UsersController extends AppController {
 	{
 		if($this->Cookie->check('boulangerieFaury'))
 		{
-			$user = $this->User->findById($this->Cookie->read('boulangerieFaury.id'));
+			$user = $this->User->find('first',array('conditions'=>array('User.id' => $this->Cookie->read('boulangerieFaury.id'))));
 			if(isset($user['User']['id']))
 			{
 				$key = AuthComponent::password($user['User']['password'].$user['User']['id']);
 				if($key == $this->Cookie->read('boulangerieFaury.key'))
 				{
-					$this->Auth->login($user);
-					$this->Session->write('User', $user['User']);
+					$this->Auth->login($user['User']);
 				}
 			}
 		}

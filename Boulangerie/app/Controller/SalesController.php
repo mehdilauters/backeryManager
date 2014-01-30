@@ -105,8 +105,11 @@ class SalesController extends AppController {
     }
     $options = array('conditions' => array('Sale.' . $this->Sale->primaryKey => $id));
     $sale = $this->Sale->find('first', $options);
-    debug($sale);
-    $this->set('sale', $sale);
+    //debug($sale);
+	$this->set(array(
+            'sale' => $sale,
+            '_serialize' => array('sale')
+        ));
   }
 
 

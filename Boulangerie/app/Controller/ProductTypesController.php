@@ -22,9 +22,14 @@ class ProductTypesController extends AppController {
 
     if(!$this->Auth->user('isRoot'))
     {
-      $conditions['ProductType'] = 'ProductType.customer_display';
-      $conditions['Products'] = 'Products.customer_display';
+		$conditions['ProductType'] = 'ProductType.customer_display';
+		$conditions['Products'] = 'Products.customer_display';
     }
+	else
+	{
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'productType'=>'productType'))));
+		$this->set('resultsEntries',$res['resultsEntries']);
+	}
     
 
 
@@ -71,6 +76,11 @@ class ProductTypesController extends AppController {
       $conditions['ProductType'][] = 'ProductType.customer_display';
       $conditions['Products'][] = 'Products.customer_display';
     }
+	else
+	{
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array('productType'=>$id), 'group' => array('time'=>'week', 'shop'=>'shop'))));
+		$this->set('resultsEntries',$res['resultsEntries']);
+	}
 
     $contain = array('Media.Photo','Products'=> array('conditions'=>$conditions['Products']), 'Products.Media', 'Products.Events.EventType');
 

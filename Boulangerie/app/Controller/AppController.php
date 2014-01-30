@@ -33,8 +33,7 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
-
-	  var $publicActions = array('exportExcel');
+	  var $publicActions = array('exportExcel', 'backupDb');
 	  var $memberActions = array();
 
   public $components = array('DebugKit.Toolbar', 'Session', 'Cookie',
@@ -50,7 +49,9 @@ class AppController extends Controller {
 																),
 																'loginRedirect' => '/',
 																'logoutRedirect' => '/',
-															)
+																'authorize' => array('Controller'),
+															),
+															'RequestHandler'
 														);
   public $menu = array('Menu' => 
 			array( 
@@ -140,6 +141,7 @@ class AppController extends Controller {
 
   public function beforeRender()
   {
+  debug($this->Auth->user());
     $this->backupDb();
     $this->exportExcel();
 
@@ -156,12 +158,45 @@ class AppController extends Controller {
   
      $this->set('menu', $this->menu);
     
-//     debug($this->Auth->user('User.isRoot'));
-    $tokens = array('isAdmin'=> $this->Auth->user('User.isRoot') ,'members'=>$this->Auth->loggedIn());
+     // debug($this->Auth->user('isRoot'));
+    $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
   }
   
- 
+  
+  public function isAuthorized($user = null) {
+	$ret = false;
+	if(in_array('*',$this->publicActions))
+	{
+		return true;
+	}
+	if(in_array($this->request->params['action'],$this->publicActions))
+	{
+		return true;
+	}
+	
+	if($this->Auth->loggedIn())
+	{
+		if(in_array('*',$this->memberActions))
+		{
+			return true;
+		}
+		if(in_array($this->request->params['action'],$this->memberActions))
+		{
+			return true;
+		}
+		
+		if($this->Auth->user('isRoot'))
+		{
+			return true;
+		}
+	}
+	
+
+
+    // Default deny
+    return false;
+}
   
   
   public function beforeFilter()
@@ -175,9 +210,14 @@ class AppController extends Controller {
 // 	debug($this->request->params['action']);
 	parent::beforeFilter();
 	
-	$this->Cookie->name='userAutoLogging';
+
 	
-	$this->Auth->allow($this->publicActions);
+	$this->Cookie->name='userAutoLogging';
+	if( count($this->publicActions) != 0)
+	{
+		// debug($this->publicActions);
+		$this->Auth->allow($this->publicActions);
+	}
 	if(!$this->Auth->loggedIn())
 	{
 	  if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))
@@ -186,18 +226,7 @@ class AppController extends Controller {
 	  }
 	}
 
-	if($this->Auth->loggedIn())
-	{
-		$this->Auth->allow($this->memberActions);
-		if($this->Auth->user('isRoot'))
-		{
-			$this->Auth->allow();
-		}
-	}
-	else
-	{
-	    
-	}
+
 // 		if(!($this->request->params['controller'] == 'config' && $this->request->params['action'] == 'upgradeDbStructure'))
 // 		{
 // 			$this->requestAction(array('controller' => 'config', 'action' => 'upgradeDbStructure'));

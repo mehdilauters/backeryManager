@@ -2,8 +2,14 @@
 <h2><?php  echo $productType['ProductType']['name']; ?></h2>
   <?php echo $this->element('ProductTypes/Preview', array('productType'=>$productType)); ?>
 </div>
+<?php   
+if($tokens['isAdmin'])
+{
+	echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('interactive'=>false, 'shopComparative'=>true))); 
+}
+	?>
 <div class="actions">
-  <?php debug($tokens);if($tokens['isAdmin']) : ?>
+  <?php if($tokens['isAdmin']) : ?>
   <h3><?php echo __('Actions'); ?></h3>
   <ul>
       <li><?php echo $this->Html->link(__('Edit Product Type'), array('action' => 'edit', $productType['ProductType']['id'])); ?> </li>

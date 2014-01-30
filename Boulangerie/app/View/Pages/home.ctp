@@ -1,3 +1,11 @@
+<?php
+if($tokens['isAdmin'])
+{
+	echo $this->element('Results/stats/results', array('results'=>$results, 'config'=>array('interactive'=>false)));
+}
+
+ ?>
+
 <?php $slideshowInserted = false; ?>
   <ul id="shopPreviewList">
     <?php foreach($shops as $shop) { ?>

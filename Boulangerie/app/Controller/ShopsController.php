@@ -45,6 +45,14 @@ var $helpers = array('Time');
     $this->set('title_for_layout', $shop['Shop']['name']);
     $this->set('isOpened', $this->isOpened($shop));
     $this->set('shop', $shop);
+	
+	
+	
+	if($this->Auth->user('isRoot'))
+	{
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array('shop'=>$id), 'group' => array('time'=>'week', 'shop'=>'shop', 'productType'=>'productType'))));
+		$this->set('resultsEntries',$res['resultsEntries']);
+	}
   }
   
   

@@ -85,6 +85,12 @@ class PagesController extends AppController {
 
     $photos = $this->Photo->find('all');
     $this->set(compact('page', 'subpage', 'title_for_layout', 'photos'));
+	if($this->Auth->user('isRoot'))
+	{
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>'shop'))));
+		$this->set('results',$res['results']);
+	}
+	
     $this->render(implode('/', $path));
   }
 }

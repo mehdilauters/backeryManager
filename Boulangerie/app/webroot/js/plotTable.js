@@ -30,20 +30,23 @@ function curveDisplay(chartId, curveId, status)
   
   
   
-   function histogram(tableId, chartId)
+   function histogram(tableId, chartId, interactive)
   {
     data = {};
 	data['plotData'] = {};
 	data['labels'] = {};
-  
+	if(interactive == undefined)
+	{
+		interactive = false;
+	}
+	
    
 
     row=0;
     $('#'+tableId+' tr.plot').each(function(index, item){
       if(row > 0) //skip header
       {
-		
-        if($(item).css('display') !== 'none')
+        if(!interactive || $(item).css('display') !== 'none')
         {
           key = $(item).find('.date').text();
           dte = parseDate(key);
@@ -78,7 +81,7 @@ function curveDisplay(chartId, curveId, status)
 							{
 								data['plotData'][y][dte] = 0;
 							}
-							data['plotData'][y][dte] += parseInt($(this).html());
+							data['plotData'][y][dte] += parseFloat($(this).html());
 						}
 					} // foreach classes
 				}
