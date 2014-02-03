@@ -16,11 +16,12 @@ class ProductsController extends AppController {
   public function index() {
     $this->set('title_for_layout', 'Produits');
     $this->menu['Menu']['Produits']['active'] = true;
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+    $isCalendarAvailable = false; //$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
 
-    $contain = array('ProductType.Media.Photo','Media', 'Events.EventType');
+    $contain = array('ProductType.Media.Photo','Media');
     if($isCalendarAvailable)
     {
+      $contain[] = 'Events.EventType';
       $contain[] = 'Events.Gevent.GeventDate';
     }
     $this->Product->contain($contain);
@@ -50,7 +51,7 @@ class ProductsController extends AppController {
       throw new NotFoundException(__('Invalid product'));
     }
 
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+    $isCalendarAvailable = false; //$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
 
     $conditions = array();
     $conditions = array('Product.' . $this->Product->primaryKey => $id);
@@ -62,9 +63,10 @@ class ProductsController extends AppController {
 
     
     $options = array('conditions' => $conditions);
-    $contain = array('ProductType.Media.Photo','Media', 'Events.EventType');
+    $contain = array('ProductType.Media.Photo','Media');
     if($isCalendarAvailable)
     {
+      $contain[] = 'Events.EventType';
       $contain[] = 'Events.Gevent.GeventDate';
     }
     $this->Product->contain($contain);

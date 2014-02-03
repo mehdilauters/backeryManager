@@ -33,13 +33,16 @@ class ProductTypesController extends AppController {
     
 
 
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+    $isCalendarAvailable = false;//$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
     $this->set('isCalendarAvailable', $isCalendarAvailable);
 
-    $contain = array('Media.Photo','Products'=> array('conditions'=>$conditions['Products']), 'Products.Media', 'Products.Events.EventType');
+    $contain = array('Media.Photo'
+		,'Products'=> array('conditions'=>$conditions['Products']), 'Products.Media',
+	);
 
     if($isCalendarAvailable)
     {
+		$contain[] = 'Products.Events.EventType';
       $contain[] = 'Products.Events.Gevent.GeventDate';
     }
 
@@ -64,7 +67,7 @@ class ProductTypesController extends AppController {
     
     
 
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+    $isCalendarAvailable = false; //$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
     $this->set('isCalendarAvailable', $isCalendarAvailable);
     
     $conditions = array();
@@ -82,11 +85,12 @@ class ProductTypesController extends AppController {
 		$this->set('resultsEntries',$res['resultsEntries']);
 	}
 
-    $contain = array('Media.Photo','Products'=> array('conditions'=>$conditions['Products']), 'Products.Media', 'Products.Events.EventType');
+    $contain = array('Media.Photo','Products'=> array('conditions'=>$conditions['Products']), 'Products.Media');
 
     if($isCalendarAvailable)
     {
-      $contain[] = 'Products.Events.Gevent.GeventDate';
+		$contain[] = 'Products.Events.EventType';
+		$contain[] = 'Products.Events.Gevent.GeventDate';
     }
 
     $this->ProductType->contain();

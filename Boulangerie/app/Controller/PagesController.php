@@ -43,7 +43,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
-  public $uses = array('Shop', 'Photo');
+  public $uses = array('Shop', 'Photo', 'Product');
 
   
 /**
@@ -83,8 +83,16 @@ class PagesController extends AppController {
     $this->set('isCalendarAvailable', $isCalendarAvailable);
     $this->set('shops', $shops);
 
-    $photos = $this->Photo->find('all');
-    $this->set(compact('page', 'subpage', 'title_for_layout', 'photos'));
+    $conditions = array();
+    $conditions[] = 'Product.media_id';
+    if(!$this->Auth->user('isRoot'))
+    {
+      $conditions[] = 'Product.customer_display';
+    }
+    $this->Product->contain('Media.Photo');
+    $products = $this->Product->find('all', array('conditions'=>$conditions));
+ 
+    $this->set(compact('page', 'subpage', 'title_for_layout', 'products'));
 	if($this->Auth->user('isRoot'))
 	{
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>'shop'))));

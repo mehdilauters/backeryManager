@@ -141,9 +141,9 @@ class AppController extends Controller {
 
   public function beforeRender()
   {
-  debug($this->Auth->user());
+//   debug($this->Auth->user());
     $this->backupDb();
-    $this->exportExcel();
+//     $this->exportExcel();
 
   
   
@@ -201,13 +201,14 @@ class AppController extends Controller {
   
   public function beforeFilter()
   {
+      
 	if($this->Session->check('debugMode') && $this->Session->read('debugMode'))
 	{
       $this->set('debugMode',true);
       Configure::write('debug', 2);
     }
-// 	debug($this->request->params['controller']);
-// 	debug($this->request->params['action']);
+//  	debug($this->request->params['controller']);
+//  	debug($this->request->params['action']);
 	parent::beforeFilter();
 	
 

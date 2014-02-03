@@ -8,8 +8,8 @@ if($tokens['isAdmin'])
 	?>
 
 
-<label for="toggleTodayProductsButton" >Afficher uniquement les produits du jour</label>
-<input id="toggleTodayProductsButton" type="checkbox" name="toggleTodayProductsButton" onChange="toggleTodayProducts()" />
+<!--<label for="toggleTodayProductsButton" >Afficher uniquement les produits du jour</label>
+<input id="toggleTodayProductsButton" type="checkbox" name="toggleTodayProductsButton" onChange="toggleTodayProducts()" />-->
 <script>
 
 
@@ -28,33 +28,31 @@ function toggleTodayProducts()
 
 $(document).ready(function(){  
     $('#toggleTodayProductsButton').attr('checked', false);
+	$(".productTypeContent").click(function() {
+			var divId = $( this ).attr('id');
+			var id= divId.replace('productTypeContent_','');
+			console.log(id);
+			$("#productList_" + id).toggle('slow');
+		});
   //$('.productPreview:not(.today)').hide();
   });
 </script>
-<ul>
-<?php foreach ($productTypes as $productType): ?>
-  <li>
-     <a href="#productType_<?php echo $productType['ProductType']['id']  ?>" ><?php echo $productType['ProductType']['name']  ?></a>
-  </li>
-<?php endforeach; ?>
-</ul>
 <ul id="productTypesList" >
   <?php foreach ($productTypes as $productType): ?>
   <li class="clear">
-    <hr/>
     <a name="productType_<?php echo $productType['ProductType']['id'] ?>" />
     <?php 
 //debug($productType);
      echo $this->element('ProductTypes/Preview', array('productType'=>$productType, 'tokens'=>$tokens)); ?>
-    <hr/>
-    <ul id="productList" >
+<?php if(isset($productType['Products'])) { ?>
+    <ul id="productList_<?php echo $productType['ProductType']['id'] ?>" class="hideJs" >
       <?php foreach ($productType['Products'] as $product): ?>
 	<li >
 	  <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable', $isCalendarAvailable, 'tokens'=>$tokens)); ?>	  
       </li>
       <?php endforeach; ?>      
     </ul>
-   
+   <?php } ?>
   </li>
 <?php endforeach; ?>
 </ul>
