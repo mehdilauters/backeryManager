@@ -27,7 +27,7 @@ Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
     private $m_isReady = false;
     
 
-
+ 
 
 /**
  * Créons notre HttpSocket et gérons any config tweaks.
@@ -328,7 +328,7 @@ public function isReady()
 	  
 	  $query->setStartMin($startDate);
 	  $query->setStartMax($endDate);
-
+			//debug($data);  
 	  if( isset($data['conditions']['id']))
 	  {
 	    //       debug($data['conditions']['id']);          
@@ -346,11 +346,12 @@ public function isReady()
 	  else
 	  {
 	  
-	    
+	  
 	    $query->setParam('singleevents','true');
 	    $query->setProjection('composite');
 	    
-	    try { $eventFeed = $this->service->getCalendarEventFeed($query);
+	    try { 
+			$eventFeed = $this->service->getCalendarEventFeed($query);
 	    }
 	    catch (Zend_Gdata_App_Exception $e) {
 	      $this->log($e->getMessage(), 'debug');
@@ -411,6 +412,7 @@ public function isReady()
         //debug($assocData);
         foreach ($resultSet as $id=>$result)
         {
+		// debug($result);
           if($linkModel->alias == 'Gcalendar')
           {
             if( isset( $result[$model->alias] ))

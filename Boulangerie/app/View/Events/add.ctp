@@ -1,4 +1,5 @@
 <div class="events form">
+<a href="https://www.google.com/calendar/render" target="_blank" >Calendrier</a>
 <?php echo $this->Form->create('Event'); ?>
   <fieldset>
     <legend><?php echo __('Add Event'); ?></legend>

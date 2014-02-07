@@ -124,6 +124,7 @@ a:visited{
 
 #menu{
   float:right;
+  margin-right:1em;
 }
 
 #mainPannel
@@ -325,13 +326,19 @@ li{
   
 }
 
-#menu > li > ul > li:hover{
-  color:#ffcf72;
-  background-color : rgba(255, 154, 0, 0.2);	
+#menu > li > ul > li{
+  padding-top:20px;
+  padding-bottom:20px;
 }
 
-#menu > li > ul > li.active a{
+#menu > li > ul > li:hover{
+  color:#ffcf72;
+  background-color : rgba(255, 154, 0, 0.3);
+}
+
+#menu > li > ul > li.active{
   color:#ffb21d;
+  background-color : rgba(255, 154, 0, 0.2);
 }
 
 .timetable td{
@@ -550,4 +557,8 @@ img{
 
 #shopPreviewList .slateShopDescription{
 	cursor:pointer;
+}
+
+#newsList {
+	text-align:center;
 }

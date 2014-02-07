@@ -32,7 +32,7 @@ App::uses('Controller', 'Controller');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-
+	var $uses=array('User');
 	  var $publicActions = array('exportExcel', 'backupDb');
 	  var $memberActions = array();
 
@@ -55,10 +55,10 @@ class AppController extends Controller {
 														);
   public $menu = array('Menu' => 
 			array( 
-				'Nos Magasins' => 
+				'Magasins' => 
 				  array( 'url' => 'WEBROOT/', 'active' => false ),
 				 'Produits' => 
-				    array( 'url' => 'WEBROOT/productTypes', 'active' => false ),
+				    array( 'url' => 'WEBROOT/typesProduits', 'active' => false ),
 				 'Horaires' => 
 				    array( 'url' => 'WEBROOT/events', 'active' => false ),
 				 'Contact' => 
@@ -202,6 +202,14 @@ class AppController extends Controller {
   public function beforeFilter()
   {
       
+	  // $user = $this->User->find('first',array('conditions'=>array('User.email' => 'mehdilauters@gmail.com')));
+			// if(isset($user['User']['id']))
+			// {
+
+					// $this->Auth->login($user['User']);
+			// }
+	  // session_destroy();
+	  
 	if($this->Session->check('debugMode') && $this->Session->read('debugMode'))
 	{
       $this->set('debugMode',true);

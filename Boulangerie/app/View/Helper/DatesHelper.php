@@ -155,16 +155,32 @@ function timeToDateHeureFR($time) {
 public function isToday($event)
 {
     $isToday = false;
-    if(isset($event['Events']))
+	$data = $event;
+	if(!isset($gevent['Gevent']))
+	{
+		if(isset($event['Events']))
+		{
+			$data = $event['Events'];
+		}
+		
+		if(isset($event['Event']))
+		{
+			$data = $event['Event'];
+		}
+	}
+	
+    if(count($data != 0))
     {
-      foreach($event['Events'] as $event_i)
+      // foreach($data as $event_i)
       {
 	//public function isEvent($gevent, $when = 'now')
-	$isToday = $this->isEvent($event_i);
-	if($isToday)
-	{
-	break; 
-	}
+	// $isToday = $this->isEvent($event_i);
+	$isToday = $this->isEvent($data);
+	
+	// if($isToday)
+	// {
+	// break; 
+	// }
 
       }
   }

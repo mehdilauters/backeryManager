@@ -43,7 +43,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
-  public $uses = array('Shop', 'Photo', 'Product');
+  public $uses = array('Shop', 'Photo', 'Product', 'EventType');
 
   
 /**
@@ -72,7 +72,7 @@ class PagesController extends AppController {
     }
     
     $title_for_layout = 'Nos magasins';
-    $this->menu['Menu']['Nos Magasins']['active'] = true;
+    $this->menu['Menu']['Magasins']['active'] = true;
     $this->Shop->recursive = 3;
     $shops = $this->Shop->find('all');
     foreach ($shops as $id=>$shop)
@@ -99,6 +99,17 @@ class PagesController extends AppController {
 		$this->set('results',$res['results']);
 	}
 	
+	$isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+    $contain = array();
+    if($isCalendarAvailable)
+    {
+	  $contain[] = 'Event.EventType';
+      $contain[] = 'Event.Gevent.GeventDate';
+    }
+    
+	$this->EventType->contain($contain);
+	$eventType = $this->EventType->find('first',array('conditions'=>array('EventType.id'=>2)));
+	$this->set('eventType',$eventType);
     $this->render(implode('/', $path));
   }
 }

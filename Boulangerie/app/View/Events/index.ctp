@@ -57,6 +57,7 @@ $(document).ready(function() {
 
 <div class="events index">
   <h2><?php echo __('Events'); ?></h2>
+  <a href="https://www.google.com/calendar/render" target="_blank" >Calendrier</a>
   <table cellpadding="0" cellspacing="0">
   <tr>
       <th>id</th>

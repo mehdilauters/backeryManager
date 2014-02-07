@@ -6,7 +6,7 @@
 	}
 ?>
 <div class="productTypePreview <?php if($tokens['isAdmin']  && !$productType['ProductType']['customer_display'] ) echo 'customerHidden'; ?>" >
-<h3><a href="<?php echo $this->webroot.'productTypes/view/'.$productType['ProductType']['id'] ?>" ><?php echo h($productType['ProductType']['name']); ?></a></h3>
+<h3><a href="<?php echo $this->webroot.'typesProduits/details/'.$productType['ProductType']['id'] ?>" ><?php echo h($productType['ProductType']['name']); ?></a></h3>
 <div id="productTypeContent_<?php echo ($productType['ProductType']['id']); ?>" class="productTypeContent" >
 <?php echo $this->element('Medias/Medias/Preview', array('media'=>$media, 'config'=>array('name'=>false, 'description'=>false)));?>
     <div class="slate description" ><?php echo h($productType['ProductType']['description']); ?>

@@ -10,7 +10,7 @@
   <?php foreach ($eventTypes as $eventType): ?>
   <tr>
     <td><?php echo h($eventType['EventType']['id']); ?>&nbsp;</td>
-    <td><?php echo h($eventType['EventType']['name']); ?>&nbsp;</td>
+    <td><a href="https://www.google.com/calendar/embed?src=<?php echo $eventType['EventType']['calendar_id']?>" ><?php echo h($eventType['EventType']['name']); ?></a>&nbsp;</td>
     <td><?php echo h($eventType['EventType']['calendar_id']); ?>&nbsp;</td>
     <td class="actions">
       <?php echo $this->Html->link(__('View'), array('action' => 'view', $eventType['EventType']['id'])); ?>

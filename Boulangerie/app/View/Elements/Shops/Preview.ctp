@@ -1,9 +1,9 @@
 <div id="shopPreview_<?php echo $shop['Shop']['id'] ?>" class="shopPreview">
 
 <div class="title slate" ><h3>
-  <a href="<?php echo $this->webroot.'shops/view/'.$shop['Shop']['id']; ?>" alt="<?php echo($shop['Shop']['name']); ?>" ><?php echo($shop['Shop']['name']); ?></a></h3>
+  <a href="<?php echo $this->webroot.'magasins/details/'.$shop['Shop']['id']; ?>" alt="<?php echo($shop['Shop']['name']); ?>" ><?php echo($shop['Shop']['name']); ?></a></h3>
 </div>
-<a href="<?php echo $this->webroot.'shops/view/'.$shop['Shop']['id']; ?>" alt="<?php echo($shop['Shop']['name']); ?>" >
+<a href="<?php echo $this->webroot.'magasins/details/'.$shop['Shop']['id']; ?>" alt="<?php echo($shop['Shop']['name']); ?>" >
   <img class="imageShopView" src="<?php echo $this->webroot.'img/photos/normal/'.$shop['Media']['path'] ?>" alt="<?php echo $shop['Media']['name'] ?>" />
 </a>
 <div class="clear" ></div>

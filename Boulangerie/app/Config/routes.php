@@ -40,8 +40,17 @@
 	
 	Router::mapResources('sales');
 	Router::parseExtensions();
-	
+
+	Router::connect('/magasins/details/*', array('controller' => 'shops', 'action'=>'view')); 	
 	Router::connect('/magasins/:action/*', array('controller' => 'shops')); 
+
+	Router::connect('/typesProduits/details/*', array('controller' => 'productTypes', 'action'=>'view')); 	
+	Router::connect('/typesProduits/:action/*', array('controller' => 'productTypes')); 
+	Router::connect('/typesProduits', array('controller' => 'productTypes')); 
+
+	Router::connect('/produits/details/*', array('controller' => 'products', 'action'=>'view')); 	
+	Router::connect('/produits/:action/*', array('controller' => 'products')); 
+
 	
 /**
  * Load the CakePHP default routes. Only remove this if you do not want to use

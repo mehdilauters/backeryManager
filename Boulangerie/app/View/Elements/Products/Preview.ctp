@@ -20,7 +20,7 @@ if( $isCalendarAvailable ) {
   <?php echo $this->element('Medias/Medias/Preview', array('media'=>$data, 'config'=>array('name'=>false, 'description'=>false))); ?>
   <div class="details slate">
     <div>
-      <a href="<?php echo $this->webroot.'products/view/'.$data['id'] ?>" >
+      <a href="<?php echo $this->webroot.'produits/details/'.$data['id'] ?>" >
 	<?php echo $data['name'] ?>
       </a>
     </div>

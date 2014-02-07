@@ -16,6 +16,7 @@ var $helpers = array('Time');
  */
   public function index() {
     $this->Shop->recursive = 0;
+    $this->menu['Menu']['Magasins']['active'] = true;
     $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
     $this->set('isCalendarAvailable', $isCalendarAvailable);
     $this->set('shops', $this->paginate());
@@ -38,7 +39,7 @@ var $helpers = array('Time');
     $this->Shop->recursive = 3;
     $shop = $this->Shop->find('first', $options);
     
-    $this->menu['Menu']['Nos Magasins']['active'] = true;
+    $this->menu['Menu']['Magasins']['active'] = true;
 
     $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
     $this->set('isCalendarAvailable', $isCalendarAvailable);
