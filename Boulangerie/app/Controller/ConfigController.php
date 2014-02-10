@@ -27,6 +27,7 @@ class ConfigController extends AppController {
        'upgradeDbStructure/1' => 'upgrade DBStructure',
       'dbBackup' => 'backup database',
       'setDebug/1' => 'activer debug',
+	  'dbBackup/*/true' => 'downloadSql',
       'deleteSession' => 'deleteSession'
     );
     $this->set('actions', $actions);
@@ -171,13 +172,14 @@ class ConfigController extends AppController {
 	}
   }
   
+
   /**
  * Dumps the MySQL database that this controller's model is attached to.
  * This action will serve the sql file as a download so that the user can save the backup to their local computer.
  *
  * @param string $tables Comma separated list of tables you want to download, or '*' if you want to download them all.
  */
-function dbBackup($tables = '*') {
+function dbBackup($tables = '*', $download = false) {
 
     $return = '';
 
@@ -241,9 +243,22 @@ function dbBackup($tables = '*') {
     }
     $return .= "SET FOREIGN_KEY_CHECKS = 1;\n";
 
+	// utf8
+	$return = "\xEF\xBB\xBF".$return;
+	
     // Set the default file name
     $fileName = $databaseName . '-backup-' . date('Y-m-d') . '.sql';
-  file_put_contents ( Configure::read('dbBackupPath').$fileName , "\xEF\xBB\xBF".$return );
+	if(!$download)
+	{
+		file_put_contents ( Configure::read('dbBackupPath').$fileName , $return );
+	}
+	else
+	{
+		$this->layout = 'ajax'; 
+		$this->response->type('Content-Type: text/x-sql');
+		$this->response->download($fileName);
+		$this->set('content', $return);
+	}
     // Serve the file as a download
     //$this->autoRender = false;
     // $this->response->type('Content-Type: text/x-sql');
