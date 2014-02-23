@@ -19,6 +19,9 @@
 			<th><?php echo $this->Paginator->sort('status');?></th>
 			<th><?php echo $this->Paginator->sort('start');?></th>
             <th><?php echo $this->Paginator->sort('end');?></th>
+			<th><?php echo $this->Paginator->sort('recursive'); ?></th>
+			<th><?php echo $this->Paginator->sort('recursive_start'); ?></th>
+			<th><?php echo $this->Paginator->sort('recursive_end'); ?></th>
             <th><?php echo $this->Paginator->sort('all_day');?></th>
 			<th class="actions"></th>
 	</tr>
@@ -42,6 +45,9 @@
         <?php } else { ?>
 		<td>N/A</td>
         <?php } ?>
+		<td><?php echo h($event['Event']['recursive']); ?>&nbsp;</td>
+		<td><?php echo h($event['Event']['recursive_start']); ?>&nbsp;</td>
+		<td><?php echo h($event['Event']['recursive_end']); ?>&nbsp;</td>
         <td><?php if($event['Event']['all_day'] == 1) { echo "Yes"; } else { echo "No"; } ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $event['Event']['id'])); ?>

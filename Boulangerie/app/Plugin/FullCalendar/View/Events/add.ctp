@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * View/Events/add.ctp
  * CakePHP Full Calendar Plugin
@@ -9,6 +9,10 @@
  * Licensed under MIT
  * http://www.opensource.org/licenses/mit-license.php
  */
+echo $this->Html->css(
+          'jquery-ui-timepicker-addon'
+  );
+echo $this->Html->script('jquery-ui-timepicker-addon');
 ?>
 <div class="events form">
 <?php echo $this->Form->create('Event');?>
@@ -18,9 +22,12 @@
 		echo $this->Form->input('event_type_id');
 		echo $this->Form->input('title');
 		echo $this->Form->input('details');
-		echo $this->Form->input('start');
-		echo $this->Form->input('end');
-		echo $this->Form->input('all_day', array('checked' => 'checked'));
+		echo $this->Form->input('recursive', array('options'=>array(''=>'','day'=>'jour','week'=>'semaine','month'=>'mois', 'year'=>'année')));
+		echo $this->Form->input('recursive_start', array('type'=>'text', 'class'=>'datepicker'));
+		echo $this->Form->input('recursive_end', array('type'=>'text', 'class'=>'datepicker'));
+		echo $this->Form->input('start', array('type'=>'text', 'class'=>'datetimepicker'));
+		echo $this->Form->input('end', array('type'=>'text', 'class'=>'datetimepicker'));
+		echo $this->Form->input('all_day');
 		echo $this->Form->input('status', array('options' => array(
 					'Scheduled' => 'Scheduled','Confirmed' => 'Confirmed','In Progress' => 'In Progress',
 					'Rescheduled' => 'Rescheduled','Completed' => 'Completed'
@@ -37,3 +44,27 @@
 		<li><li><?php echo $this->Html->link(__('View Calendar', true), array('plugin' => 'full_calendar', 'controller' => 'full_calendar')); ?></li>
 	</ul>
 </div>
+<script type="text/javascript">
+
+function recursiveChange()
+{
+    if( $(this).val() == '' )
+    {
+      $('#EventRecursiveStart').prop('disabled', true);
+      $('#EventRecursiveEnd').prop('disabled', true);
+    }
+    else
+    {
+      $('#EventRecursiveStart').prop('disabled', false);
+      $('#EventRecursiveEnd').prop('disabled', false);
+    }
+}
+
+  $(document).ready(function(){
+
+    $(".datetimepicker").datetimepicker();
+    $("#EventRecursive").change(recursiveChange);
+    recursiveChange();
+  });
+
+</script>

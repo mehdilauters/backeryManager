@@ -17,6 +17,22 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `events`
 --
 
+CREATE TABLE IF NOT EXISTS `recursive_events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_type_id` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `details` text COLLATE utf8_unicode_ci NOT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `all_day` tinyint(1) NOT NULL DEFAULT '1',
+  `recursive` enum('day','week','month', 'year') NOT NULL,
+  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Scheduled',
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `created` date DEFAULT NULL,
+  `modified` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
 CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `event_type_id` int(11) NOT NULL,

@@ -24,6 +24,12 @@
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Start'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>><?php echo $event['Event']['start']; ?></dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('End'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('recursiveStart'); ?></dt>
+		<dd<?php if ($i++ % 2 == 0) echo $class;?>><?php echo $event['Event']['recursive_start']; ?></dd>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('recursive End'); ?></dt>
+		<dd<?php if ($i++ % 2 == 0) echo $class;?>><?php echo $event['Event']['recursive_end']; ?></dd>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Recursive'); ?></dt>
+		<dd<?php if ($i++ % 2 == 0) echo $class;?>><?php echo $event['Event']['recursive']; ?></dd>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>><?php if($event['Event']['all_day'] != 1) { echo $event['Event']['end']; } else { echo "N/A"; } ?></dd>
                 <dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('All Day'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>><?php if($event['Event']['all_day'] == 1) { echo "Yes"; } else { echo "No"; } ?></dd>

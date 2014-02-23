@@ -23,15 +23,101 @@ class Event extends FullCalendarAppModel {
 			'notempty' => array(
 				'rule' => array('notempty'),
 			),
-		)
+			'dateRespect' => array(
+				'rule' => array('dateRespect'),
+				'message' => 'Start must be before end'
+			),
+// 		'datetime' => array(
+// 			'rule' => array('datetime'),
+// 			'message' => 'invalid date',
+// 			'allowEmpty' => false,
+// 			'required' => false,
+// 			//'last' => false, // Stop validation after this rule
+// 			//'on' => 'create', // Limit validation to 'create' or 'update' operations
+// 		      ),
+		),
+		 'end' => array(
+		    'notempty' => array(
+			    'rule' => array('notempty'),
+		    ),
+// 		    'datetime' => array(
+// 			'rule' => array('datetime'),
+// 			'message' => 'invalid date',
+// 			'allowEmpty' => false,
+// 			'required' => false,
+// 			//'last' => false, // Stop validation after this rule
+// 			//'on' => 'create', // Limit validation to 'create' or 'update' operations
+// 		      ),
+		),
+		'recursive_start' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+			),
+			'dateRespect' => array(
+				'rule' => array('dateRespect'),
+				'message' => 'Start must be before end'
+			),
+// 		  'datetime' => array(
+// 			'rule' => array('datetime'),
+// 			'message' => 'invalid date',
+// 			'allowEmpty' => true,
+// 			'required' => false,
+// 			//'last' => false, // Stop validation after this rule
+// 			//'on' => 'create', // Limit validation to 'create' or 'update' operations
+// 		      ),
+		),
+		 'recursive_end' => array(
+		    'notempty' => array(
+			    'rule' => array('notempty'),
+		    ),
+// 		    'datetime' => array(
+// 			'rule' => array('datetime'),
+// 			'message' => 'invalid date',
+// 			'allowEmpty' => true,
+// 			'required' => false,
+// 			//'last' => false, // Stop validation after this rule
+// 			//'on' => 'create', // Limit validation to 'create' or 'update' operations
+// 		      ),
+		),
 	);
 
-	var $belongsTo = array(
+	public $belongsTo = array(
 		'EventType' => array(
 			'className' => 'FullCalendar.EventType',
 			'foreignKey' => 'event_type_id'
 		)
 	);
+
+      public function dateRespect()
+      {
+	$start = $this->data['Event']['start'];
+	$end = $this->data['Event']['end'];
+	return ($start < $end);
+      }
+
+      public function beforeSave($options = array())
+      {
+	if( $this->data['Event']['recursive'] == '' )
+	{
+	  if(isset($this->data['Event']['recursive_start']))
+	  {
+	    $this->data['Event']['recursive_start'] = '';
+	    $this->data['Event']['recursive_start'] = '';
+	  }
+	}
+      }
+
+	
+//       public function beforeFind($queryData){
+// 	echo 'hooooooooooooooooooo';
+//         debug($queryData);
+//         return false;//$queryData;
+// 	}
+// 	
+// 	public function afterFind($results, $primary = false)
+// 	{
+// 		debug($results);
+// 	}
 
 }
 ?>

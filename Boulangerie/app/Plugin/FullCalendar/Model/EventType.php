@@ -21,7 +21,7 @@ class EventType extends FullCalendarAppModel {
 		),
 	);
 
-	var $hasMany = array(
+	public $hasMany = array(
 		'Event' => array(
 			'className' => 'FullCalendar.Event',
 			'foreignKey' => 'event_type_id',

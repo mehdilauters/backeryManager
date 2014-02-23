@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * View/Events/edit.ctp
  * CakePHP Full Calendar Plugin
@@ -21,6 +21,9 @@
 		echo $this->Form->input('details');
 		echo $this->Form->input('start');
 		echo $this->Form->input('end');
+		echo $this->Form->input('recursive', array('options'=>array(''=>'','day'=>'jour','week'=>'semaine','month'=>'mois', 'year'=>'année')));
+		echo $this->Form->input('recursive_start');
+		echo $this->Form->input('recursive_end');
 		echo $this->Form->input('all_day');
 		echo $this->Form->input('status', array('options' => array(
 					'Scheduled' => 'Scheduled','Confirmed' => 'Confirmed','In Progress' => 'In Progress',
