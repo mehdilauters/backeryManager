@@ -45,8 +45,6 @@ if($tokens['isAdmin'])
 </p>
   <hr/>
   <?php
-if($isCalendarAvailable)
-{
   if($isOpened)
   {?>
     <span class="shopOpened">La boulangerie est ouverte</span>
@@ -55,7 +53,6 @@ if($isCalendarAvailable)
   {?>
     <span class="shopClosed">La boulangerie est fermée</span>
   <?php } 
-}
 ?>
   <hr/>
 

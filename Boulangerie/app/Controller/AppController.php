@@ -142,7 +142,7 @@ class AppController extends Controller {
   public function beforeRender()
   {
 //   debug($this->Auth->user());
-    $this->backupDb();
+//    $this->backupDb();
 //     $this->exportExcel();
 
   

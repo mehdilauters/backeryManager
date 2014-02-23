@@ -73,7 +73,7 @@ class ProductsController extends AppController {
     $products = $this->Product->find('first', $options);
     $this->set('title_for_layout', $products['Product']['name']);
   
-    $isToday = $this->requestAction(array('controller'=>'events', 'action'=>'isToday'), array( 'pass'=>array('event'=>$products)));
+    $isToday = false; //$this->requestAction(array('controller'=>'events', 'action'=>'isToday'), array( 'pass'=>array('event'=>$products)));
     $this->set('isCalendarAvailable', $isCalendarAvailable);
     $this->set('produced', $isToday);
     $this->set('product', $products);
@@ -122,7 +122,7 @@ class ProductsController extends AppController {
       }
       if ($this->Product->save($this->request->data)) {
         $this->Session->setFlash(__('The product has been saved'));
-        $this->redirect(array('controller'=>'productTypes', 'action' => 'index'));
+        $this->redirect(array('controller'=>'products', 'action' => 'index'));
       } else {
         $this->Session->setFlash(__('The product could not be saved. Please, try again.'));
       }

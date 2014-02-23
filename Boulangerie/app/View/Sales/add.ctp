@@ -19,14 +19,16 @@ foreach($products as $product)
 {
   ?>
   <tr>
-    <td id="product_<?php echo $product['Product']['id'] ?>" ><?php  echo $product['Product']['name']; ?>
+    <td id="product_<?php echo $product['Product']['id'] ?>" ><a href="<?php  echo $this->webroot.'produits/details/'.$product['Product']['id']; ?>" ><?php  echo $product['Product']['name']; ?></a>
       <?php echo $this->element('Medias/Medias/Preview', array('media'=>$product, 'config'=>array('name'=>false, 'description'=>false))); ?>
     </td>
     <td>
       <ul>
         <?php foreach($shops as $shop){ ?>
           <li>
-            <?php echo (strlen($shop ['Shop']['name']) > 13) ? substr($shop ['Shop']['name'],0,10).'...' : $shop ['Shop']['name'] ?>
+			<a href="<?php  echo $this->webroot.'magasins/details/'.$shop['Shop']['id']; ?>" >
+				<?php echo (strlen($shop ['Shop']['name']) > 13) ? substr($shop ['Shop']['name'],0,10).'...' : $shop ['Shop']['name'] ?>
+			</a>
           </li>
         <?php } ?>
       </ul>

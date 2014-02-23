@@ -22,46 +22,42 @@ if($tokens['isAdmin'])
  ?>
  
 <?php //debug($eventType); 
-if( $isCalendarAvailable ) {
-	if(count($eventType['Event']) != 0)
-	{
-	  ?>
-	  <ul id="newsList" >
-	  <?php
-	  foreach($eventType['Event'] as $event)
+if(count($eventType['Event']) != 0)
+{
+  ?>
+  <ul id="newsList" >
+  <?php
+  foreach($eventType['Event'] as $event)
+  {
+  ?>
+  <li>
+  <?php
+	  // debug($event);
+	  $isToday = $this->Dates->isToday($event);
+	  if($isToday)
 	  {
-	  ?>
-	  <li>
-	  <?php
+		  ?>
+		  <h3><?php echo $event['Gevent']['title'] ?></h3>
+		  <p><?php echo $event['Gevent']['description'] ?></p>
+		  <?php
 		  // debug($event);
-		  $isToday = $this->Dates->isToday($event);
-		  if($isToday)
-		  {
-			  ?>
-			  <h3><?php echo $event['Gevent']['title'] ?></h3>
-			  <p><?php echo $event['Gevent']['description'] ?></p>
-			  <?php
-			  // debug($event);
-		  }
-			  ?>
-	  </li>
-	  <?php
 	  }
-	  ?>
+		  ?>
+  </li>
+  <?php
+  }
+  ?>
 </ul>
 <?php
-	}
-  
-  
-  
 }
+
 
 ?>
 <?php $slideshowInserted = false; ?>
   <ul id="shopPreviewList">
     <?php foreach($shops as $shop) { ?>
     <li class="shop">
-     <?php   echo $this->element('Shops/Preview', array('shop'=>$shop, 'isCalendarAvailable' => $isCalendarAvailable)); ?>
+     <?php   echo $this->element('Shops/Preview', array('shop'=>$shop)); ?>
 	 <br/>
 	 <center>
 		 <div id="timeTable_<?php  echo $shop['Shop']['id'] ?>" class="hideJs" >

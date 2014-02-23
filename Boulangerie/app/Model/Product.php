@@ -16,6 +16,10 @@ class Product extends AppModel {
  */
   public $displayField = 'name';
   public $actsAs = array('Containable');
+  public $virtualFields = array(
+      'produced_today' => 'SELECT sum( produced )  FROM `sales` WHERE product_id = Product.id and date = CURDATE()'
+  );
+
 /**
  * Validation rules
  *
@@ -150,19 +154,6 @@ class Product extends AppModel {
  * @var array
  */
   public $hasMany = array(
-    'Events' => array(
-      'className' => 'Event',
-      'foreignKey' => 'product_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
     'Sale' => array(
       'className' => 'Sale',
       'foreignKey' => 'product_id',

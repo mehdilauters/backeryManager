@@ -99,7 +99,7 @@ class Shop extends AppModel {
       'order' => ''
     ),
     'EventType' => array(
-      'className' => 'EventType',
+      'className' => 'FullCalendar.EventType',
       'foreignKey' => 'event_type_id',
       'conditions' => '',
       'fields' => '',

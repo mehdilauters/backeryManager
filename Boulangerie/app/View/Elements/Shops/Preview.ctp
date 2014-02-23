@@ -21,8 +21,6 @@
 echo $shop['Shop']['phone']; ?></div>
 <div class="isOpened">
     <?php
-    if( $isCalendarAvailable )
-    {
       $nextOpened = 0;
       $nextClose = 0;
       $days = $this->Dates->getTimeTable($shop['EventType']);
@@ -59,7 +57,6 @@ echo $shop['Shop']['phone']; ?></div>
       {?>
 	<span class="shopClosed">La boulangerie est fermée jusqu'à <?php echo date('G:i d/m/Y',$nextOpened) ?></span>
       <?php } 
-    }
     ?>
   </div>
  </div>

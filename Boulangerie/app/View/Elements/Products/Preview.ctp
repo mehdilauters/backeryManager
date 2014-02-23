@@ -27,13 +27,11 @@ if( $isCalendarAvailable ) {
     <div>
 	<?php echo $data['price']; ?>€ <?php if(!$data['unity']) echo 'Kg' ?>
 	<?php 
-	    if( $isCalendarAvailable ) {
-	    if( $isToday ) {  ?>
-	  <div class="productAvailable" >Disponible aujourd'hui</div>
+	    if( $data['produced_today'] != 0 ) {  ?>
+	  <div class="productAvailable" >Disponible aujourd'hui ( <?php echo $data['produced_today']; ?> )</div>
 	<?php } else { ?>
 	  <div class="productNotAvailable" >Non disponible aujourd'hui</div>
 	<?php } 
-	    }
 	?>
 	<?php
 // 	    foreach($data['Events'] as $event) : 
@@ -46,6 +44,9 @@ if( $isCalendarAvailable ) {
         <?php if($tokens['isAdmin']) : ?>
 	  <?php if(!$data['customer_display'] ) { ?>
 	  <div>Caché aux clients</div>
+	  <?php } ?>
+	  <?php if(!$data['production_display'] ) { ?>
+	  <div>Caché a la production</div>
 	  <?php } ?>
 	    <div class="actions">
           <?php echo $this->Html->link(__('Edit'), array('controller' => 'products', 'action' => 'edit', $data['id'])); ?>

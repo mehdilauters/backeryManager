@@ -156,76 +156,47 @@ public function isToday($event)
 {
     $isToday = false;
 	$data = $event;
-	if(!isset($gevent['Gevent']))
+	if(!isset($event['Event']))
 	{
 		if(isset($event['Events']))
 		{
 			$data = $event['Events'];
 		}
-		
-		if(isset($event['Event']))
-		{
-			$data = $event['Event'];
-		}
 	}
 	
     if(count($data != 0))
     {
-      // foreach($data as $event_i)
-      {
-	//public function isEvent($gevent, $when = 'now')
-	// $isToday = $this->isEvent($event_i);
-	$isToday = $this->isEvent($data);
-	
-	// if($isToday)
-	// {
-	// break; 
-	// }
-
-      }
+		$startDate = new DateTime($data['start']);
+		$endDate = new DateTime($data['end']);
+		$when = new DateTime( 'now' );
+		
+		if($startDate <= $when && $when <= $endDate)
+		{
+		  $yes = true;
+		}
   }
   return $isToday;
 }
 
-   public function isEvent($gevent, $when = 'now')
-  {
-    $yes = false;
-      $when = new DateTime( $when );
-    
-      foreach($gevent['Gevent']['GeventDate'] as $geventDate)
-      {
-        $startDate = new DateTime($geventDate['start']);
-        $endDate = new DateTime($geventDate['end']);
-       if($startDate <= $when && $when <= $endDate)
-        {
-          $yes = true;
-          break;
-        }
-      }
-      return $yes;
-  }
 
   public function getTimeTable($events)
   {
     $days = array();
     $i = 0;
     foreach ($events['Event'] as $event)
-      {
-	foreach ($event['Gevent']['GeventDate'] as $date)
 	{
-	  if( date('G',strtotime($date['end'])) < 14 )
-	  {
-	    $key = 'morning';
-	  }
-	  else
-	  {
-	    $key = 'afternoon';
-	  }
-	  $day = mktime(0, 0, 0, date("m",strtotime($date['start'] ))  , date("d",strtotime($date['start'] )), date("Y",strtotime($date['start'] )));
-	  $days[$day][$key] = $date;
-	}
-      }
-    ksort($days);
+		if( date('G',strtotime($event['end'])) < 14 )
+		{
+			$key = 'morning';
+		}
+		else
+		{
+			$key = 'afternoon';
+		}
+		$day = mktime(0, 0, 0, date("m",strtotime($event['start'] ))  , date("d",strtotime($event['start'] )), date("Y",strtotime($event['start'] )));
+		$days[$day][$key] = $event;
+		}
+		ksort($days);
 
     return $days;
   }

@@ -220,7 +220,7 @@ public function results()
     $this->Sale->Product->contain();
     $this->Sale->Product->contain(array('ProductType'=>array(),'Sale'=>array('conditions'=>'Sale.date = \''.$date.'\''), 'Media.Photo'=>array()));
 
-    $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id'));
+    $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id', 'conditions'=>array('Product.production_display')));
     //debug($products);
     $shops = $this->Sale->Shop->find('all');
 

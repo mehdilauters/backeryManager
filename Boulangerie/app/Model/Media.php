@@ -129,19 +129,6 @@ class Media extends AppModel {
  * @var array
  */
   public $hasMany = array(
-    'Event' => array(
-      'className' => 'Event',
-      'foreignKey' => 'media_id',
-      'dependent' => false,
-      'conditions' => '',
-      'fields' => '',
-      'order' => '',
-      'limit' => '',
-      'offset' => '',
-      'exclusive' => '',
-      'finderQuery' => '',
-      'counterQuery' => ''
-    ),
     'Product' => array(
       'className' => 'Product',
       'foreignKey' => 'media_id',

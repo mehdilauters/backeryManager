@@ -43,7 +43,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
-  public $uses = array('Shop', 'Photo', 'Product', 'EventType');
+  public $uses = array('Shop', 'Photo', 'Product', 'FullCalendar.EventType');
 
   
 /**
@@ -73,14 +73,26 @@ class PagesController extends AppController {
     
     $title_for_layout = 'Nos magasins';
     $this->menu['Menu']['Magasins']['active'] = true;
-    $this->Shop->recursive = 3;
+//     $this->Shop->recursive = 3;
     $shops = $this->Shop->find('all');
     foreach ($shops as $id=>$shop)
     {
-      $shops[$id]['Shop']['isOpened'] = $this->requestAction(array('controller'=>'shops', 'action'=>'isOpened'), array( 'pass'=>array($shop)));
+      $shops[$id]['EventType']['Event'] = $this->requestAction(array(	'plugin'=>'full_calendar',
+							'controller'=>'events',
+							'action'=>'feed'
+						),
+						array( 
+							'pass'=>array(
+										'idType'=>$shops[$id]['EventType']['id'],
+										'start' => time(),
+										'end'=>(time() + 60*24*7)
+										)
+								)
+								,array('return')
+										    );
+      $shops[$id]['Shop']['isOpened'] = $this->requestAction(array('controller'=>'shops', 'action'=>'isOpened'), array( 'pass'=>array($shops[$id])));
     }
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
-    $this->set('isCalendarAvailable', $isCalendarAvailable);
+
     $this->set('shops', $shops);
 
     $conditions = array();
@@ -99,15 +111,7 @@ class PagesController extends AppController {
 		$this->set('results',$res['results']);
 	}
 	
-	$isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
-    $contain = array();
-    if($isCalendarAvailable)
-    {
-	  $contain[] = 'Event.EventType';
-      $contain[] = 'Event.Gevent.GeventDate';
-    }
     
-	$this->EventType->contain($contain);
 	$eventType = $this->EventType->find('first',array('conditions'=>array('EventType.id'=>2)));
 	$this->set('eventType',$eventType);
     $this->render(implode('/', $path));

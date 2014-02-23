@@ -8,7 +8,7 @@ App::uses('AppController', 'Controller');
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion');
   
-  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug');
+  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug', 'oauth2callback');
   var $memberActions = array();
   
 /**
@@ -154,11 +154,33 @@ class ConfigController extends AppController {
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= 'SET FOREIGN_KEY_CHECKS = 0;
-	ALTER TABLE `product_types`
-	add `customer_display` boolean default TRUE;
-	ALTER TABLE `products`
-	add `customer_display` boolean default TRUE;
-	ALTER TABLE `users` ADD `isRoot` BOOLEAN NOT NULL DEFAULT FALSE AFTER `password` ;
+				update shops set event_type_id = NULL;
+				drop table if exists events;
+				drop table if exists event_types;
+				CREATE TABLE IF NOT EXISTS `event_types` (
+				  `id` int(10) NOT NULL AUTO_INCREMENT,
+				  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+				  PRIMARY KEY (`id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+				CREATE TABLE IF NOT EXISTS `events` (
+				  `id` int(11) NOT NULL AUTO_INCREMENT,
+				  `event_type_id` int(11) NOT NULL,
+				  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+				  `details` text COLLATE utf8_unicode_ci NOT NULL,
+				  `start` datetime NOT NULL,
+				  `end` datetime NOT NULL,
+				  `all_day` tinyint(1) NOT NULL DEFAULT \'1\',
+				  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT \'Scheduled\{,
+				  `active` tinyint(1) NOT NULL DEFAULT \'1\',
+				  `created` date DEFAULT NULL,
+				  `modified` date DEFAULT NULL,
+				  PRIMARY KEY (`id`),
+				  KEY `fk_events_event_type` (`event_type_id`)
+				) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+				ALTER TABLE `events`
+   ADD CONSTRAINT `fk_events_event_types` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
 	SET FOREIGN_KEY_CHECKS = 1;';
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);
@@ -266,6 +288,26 @@ function dbBackup($tables = '*', $download = false) {
    // $this->response->body($return);
 }
 
+
+	// public function oauth2callback()
+	// {
+		// if (isset($_GET['code'])) {
+			// App::uses('ConnectionManager', 'Model'); 
+			// debug($_GET['code']);
+			// $client = ConnectionManager::getDataSource('calendar')->authenticate($_GET['code']);
+			// /*$client->authenticate($_GET['code']);
+			// if($client->getAccessToken())
+			// {
+			// }
+			// else
+			// {
+				// debug ('FAIIIIIIIL');
+			// }*/
+		  // /*$client->authenticate();
+		  // $_SESSION['token'] = $client->getAccessToken();
+		  // header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);*/
+		// }
+	// }
   
 }
   

@@ -17,8 +17,6 @@ var $helpers = array('Time');
   public function index() {
     $this->Shop->recursive = 0;
     $this->menu['Menu']['Magasins']['active'] = true;
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
-    $this->set('isCalendarAvailable', $isCalendarAvailable);
     $this->set('shops', $this->paginate());
   }
 
@@ -36,14 +34,28 @@ var $helpers = array('Time');
     
     
     $options = array('conditions' => array('Shop.' . $this->Shop->primaryKey => $id));
-    $this->Shop->recursive = 3;
+    $this->Shop->contain();
+    $this->Shop->contain('Media.Photo', 'EventType');
     $shop = $this->Shop->find('first', $options);
     
     $this->menu['Menu']['Magasins']['active'] = true;
 
-    $isCalendarAvailable = $this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
-    $this->set('isCalendarAvailable', $isCalendarAvailable);
+
     $this->set('title_for_layout', $shop['Shop']['name']);
+	// function feed($idType = null, $start = null, $end = null) {
+	$shop['EventType']['Event'] = $this->requestAction(array(	'plugin'=>'full_calendar',
+						  'controller'=>'events',
+						  'action'=>'feed'
+					  ),
+					  array( 
+						  'pass'=>array(
+									  'idType'=>$shop['EventType']['id'],
+									  'start' => time(),
+									  'end'=>(time() + 60*24*7)
+									  )
+							  )
+							  ,array('return')
+									      );
     $this->set('isOpened', $this->isOpened($shop));
     $this->set('shop', $shop);
 	
@@ -62,16 +74,14 @@ var $helpers = array('Time');
     $open = false;
     foreach ($data['EventType']['Event'] as $event)
     {
-      foreach ($event['Gevent']['GeventDate'] as $date) {
-        $now = new DateTime('now');
-        $dateStart = new DateTime($date['start']);
-        $dateEnd = new DateTime($date['end']);
-        if($dateStart <= $now && $now <= $dateEnd)
-        {
-          $open = true;
-          break;
-        }
-      }
+		$now = new DateTime('now');
+		$dateStart = new DateTime($event['start']);
+		$dateEnd = new DateTime($event['end']);
+		if($dateStart <= $now && $now <= $dateEnd)
+		{
+		  $open = true;
+		  break;
+		}
       if($open)
       {
         break;

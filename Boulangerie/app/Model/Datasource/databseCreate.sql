@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS `videos`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `product_types`;
 DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `recursive_events`;
 DROP TABLE IF EXISTS `events`;
 DROP TABLE IF EXISTS `event_types`;
 DROP TABLE IF EXISTS `shops`;
@@ -135,6 +136,7 @@ create table if not exists products (
   `price` float(3) NOT NULL,
   `unity` boolean default TRUE,
   `customer_display` boolean default TRUE,
+  `production_display` boolean default TRUE,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_products_producttypes` (`product_types_id`),
@@ -163,27 +165,42 @@ create table if not exists shops (
 CREATE TABLE IF NOT EXISTS `event_types` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `calendar_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-insert `event_types` values (0, 'schedule', 'notdefined');
-insert `event_types` values (0, 'news', 'notdefined');
-insert `event_types` values (0, 'fabrication', 'notdefined');
-insert `event_types` values (0, 'maintenance', 'notdefined');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-create table if not exists events (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `event_type_id` int(10) NOT NULL ,
-  `gevent_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL,
-  media_id int(10), 
-  product_id int(10),
+
+CREATE TABLE IF NOT EXISTS `events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_type_id` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `details` text COLLATE utf8_unicode_ci NOT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `recursive_start` datetime,
+  `recursive_end` datetime ,
+  `recursive` enum('day','week','month', 'year'),
+  `all_day` tinyint(1) NOT NULL DEFAULT '1',
+  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Scheduled',
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `created` date DEFAULT NULL,
+  `modified` date DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_events_media` (`media_id`),
-  KEY `fk_events_eventTypes` (`event_type_id`),
-  KEY `fk_events_product` (`product_id`)
+  KEY `fk_events_event_type` (`event_type_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+
+-- create table if not exists events (
+--  `id` int(10) NOT NULL AUTO_INCREMENT,
+--  `event_type_id` int(10) NOT NULL ,
+--  `gevent_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL,
+--  media_id int(10), 
+--  product_id int(10),
+--  PRIMARY KEY (`id`),
+--  KEY `fk_events_media` (`media_id`),
+--  KEY `fk_events_eventTypes` (`event_type_id`),
+--  KEY `fk_events_product` (`product_id`)
+-- ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 
 
@@ -210,7 +227,7 @@ create table if not exists results (
   `date` datetime NOT NULL,
   `cash` float(10) NOT NULL,
   `check` float(10) NOT NULL,
-  `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null
+  `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null,
   PRIMARY KEY (`id`),
   KEY `fk_results_shops` (`shop_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
@@ -225,7 +242,7 @@ create table if not exists results_entries (
   PRIMARY KEY (`id`),
   KEY `fk_results_entries_results` (`result_id`),
   KEY `fk_results_entries_productsTypes` (`product_types_id`),
-  KEY `fk_results_entries_shops` (`product_types_id`),
+  KEY `fk_results_entries_shops` (`shop_id`),
   UNIQUE KEY `unique_results` (`result_id`, `product_types_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
@@ -246,16 +263,15 @@ ALTER TABLE `products`
   ADD CONSTRAINT `fk_product_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
   
 ALTER TABLE `shops`
-  ADD CONSTRAINT `fk_shops_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
-
-ALTER TABLE `shops`
+  ADD CONSTRAINT `fk_shops_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),
   ADD CONSTRAINT `fk_shops_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);  
 
-ALTER TABLE `events`
-  ADD CONSTRAINT `fk_events_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
+-- ALTER TABLE `events`
+--   ADD CONSTRAINT `fk_events_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),
+--   ADD CONSTRAINT `fk_events_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
 
 ALTER TABLE `events`
-  ADD CONSTRAINT `fk_events_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
+   ADD CONSTRAINT `fk_events_event_types` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
 
 ALTER TABLE `sales`
   ADD CONSTRAINT `fk_sales_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),

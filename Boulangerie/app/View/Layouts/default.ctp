@@ -48,7 +48,7 @@ echo $this->Html->css(
            array('inline' => false)
   );
 ?>
-<!-- <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script> -->
+<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
 <?php
     echo $this->Html->script('jquery.ui.datepicker-fr.js');
     echo $this->Html->css('fancy/jquery.fancybox');
