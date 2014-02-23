@@ -27,12 +27,13 @@ if( $isCalendarAvailable ) {
     <div>
 	<?php echo $data['price']; ?>€ <?php if(!$data['unity']) echo 'Kg' ?>
 	<?php 
-	    if( $data['produced_today'] != 0 ) {  ?>
-	  <div class="productAvailable" >Disponible aujourd'hui ( <?php echo $data['produced_today']; ?> )</div>
-	<?php } else { ?>
-	  <div class="productNotAvailable" >Non disponible aujourd'hui</div>
-	<?php } 
-	?>
+	    if($data['depends_on_production'])
+	      if( $data['produced_today'] != 0 ) {  ?>
+	    <div class="productAvailable" >Disponible aujourd'hui ( <?php echo $data['produced_today']; ?> )</div>
+	  <?php } else { ?>
+	    <div class="productNotAvailable" >Non disponible aujourd'hui</div>
+	  <?php } 
+	  ?>
 	<?php
 // 	    foreach($data['Events'] as $event) : 
 // 		foreach($event['Gevent']['GeventDate'] as $eventDate) : 
@@ -44,9 +45,14 @@ if( $isCalendarAvailable ) {
         <?php if($tokens['isAdmin']) : ?>
 	  <?php if(!$data['customer_display'] ) { ?>
 	  <div>Caché aux clients</div>
-	  <?php } ?>
-	  <?php if(!$data['production_display'] ) { ?>
+	  <?php }
+	  if(!$data['production_display'] ) { ?>
 	  <div>Caché a la production</div>
+	  <?php }
+	   if($data['depends_on_production'] ) { ?>
+	    <div>Disponible selon production</div>
+	  <?php } else { ?>
+	    <div>Disponible en permanance</div>
 	  <?php } ?>
 	    <div class="actions">
           <?php echo $this->Html->link(__('Edit'), array('controller' => 'products', 'action' => 'edit', $data['id'])); ?>

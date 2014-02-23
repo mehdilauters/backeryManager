@@ -112,7 +112,7 @@ class ProductType extends AppModel {
  * @var array
   */
   public $hasMany = array(
-    'Products' => array(
+    'Product' => array(
       'className' => 'Product',
       'foreignKey' => 'product_types_id',
       'dependent' => false,

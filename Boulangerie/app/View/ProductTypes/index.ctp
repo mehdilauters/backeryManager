@@ -44,9 +44,9 @@ $(document).ready(function(){
     <?php 
 //debug($productType);
      echo $this->element('ProductTypes/Preview', array('productType'=>$productType, 'tokens'=>$tokens)); ?>
-<?php if(isset($productType['Products'])) { ?>
+<?php if(isset($productType['Product'])) { ?>
     <ul id="productList_<?php echo $productType['ProductType']['id'] ?>" class="hideJs" >
-      <?php foreach ($productType['Products'] as $product): ?>
+      <?php foreach ($productType['Product'] as $product): ?>
 	<li >
 	  <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable', $isCalendarAvailable, 'tokens'=>$tokens)); ?>	  
       </li>

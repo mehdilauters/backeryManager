@@ -14,16 +14,15 @@ class ProductTypesController extends AppController {
  */
   public function index() {
     $this->set('title_for_layout', 'Produits');
-    $this->menu['Menu']['Produits']['active'] = true;
     
     $conditions = array();
     $conditions['ProductType'] = '';
-    $conditions['Products'] = '';
+    $conditions['Product'] = '';
 
     if(!$this->Auth->user('isRoot'))
     {
 		$conditions['ProductType'] = 'ProductType.customer_display';
-		$conditions['Products'] = 'Products.customer_display';
+		$conditions['Product'] = 'Product.customer_display';
     }
 	else
 	{
@@ -37,14 +36,9 @@ class ProductTypesController extends AppController {
     $this->set('isCalendarAvailable', $isCalendarAvailable);
 
     $contain = array('Media.Photo'
-		,'Products'=> array('conditions'=>$conditions['Products']), 'Products.Media',
+		,'Product'=> array('conditions'=>$conditions['Product']), 'Product.Media',
 	);
 
-    if($isCalendarAvailable)
-    {
-		$contain[] = 'Products.Events.EventType';
-      $contain[] = 'Products.Events.Gevent.GeventDate';
-    }
 
     $this->ProductType->contain();
     $this->ProductType->contain($contain);
@@ -72,12 +66,12 @@ class ProductTypesController extends AppController {
     
     $conditions = array();
     $conditions['ProductType'] = array('ProductType.' . $this->ProductType->primaryKey => $id);
-    $conditions['Products'] = array();
+    $conditions['Product'] = array();
 
     if(!$this->Auth->user('isRoot'))
     {
       $conditions['ProductType'][] = 'ProductType.customer_display';
-      $conditions['Products'][] = 'Products.customer_display';
+      $conditions['Product'][] = 'Product.customer_display';
     }
 	else
 	{
@@ -85,13 +79,8 @@ class ProductTypesController extends AppController {
 		$this->set('resultsEntries',$res['resultsEntries']);
 	}
 
-    $contain = array('Media.Photo','Products'=> array('conditions'=>$conditions['Products']), 'Products.Media');
+    $contain = array('Media.Photo','Product'=> array('conditions'=>$conditions['Product']), 'Product.Media');
 
-    if($isCalendarAvailable)
-    {
-		$contain[] = 'Products.Events.EventType';
-		$contain[] = 'Products.Events.Gevent.GeventDate';
-    }
 
     $this->ProductType->contain();
     $this->ProductType->contain($contain);
@@ -169,4 +158,12 @@ class ProductTypesController extends AppController {
     $this->Session->setFlash(__('Product type was not deleted'));
     $this->redirect(array('action' => 'index'));
   }
+
+
+      public function beforeRender()
+	{
+	  $this->menu['Menu']['Categories']['active'] = true;
+	  parent::beforeRender();
+	}
+
 }

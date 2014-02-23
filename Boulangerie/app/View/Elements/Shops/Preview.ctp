@@ -58,6 +58,7 @@ echo $shop['Shop']['phone']; ?></div>
 	<span class="shopClosed">La boulangerie est fermée jusqu'à <?php echo date('G:i d/m/Y',$nextOpened) ?></span>
       <?php } 
     ?>
+    <a href="#" onClick="return false;">Horaires</a>
   </div>
  </div>
 </div>

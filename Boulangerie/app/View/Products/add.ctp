@@ -9,8 +9,10 @@
     echo $this->Form->input('description');
     echo $this->Form->input('price');
     echo $this->Form->input('unity');
-	echo $this->Form->input('customer_display');
-	echo $this->Form->input('production_display');
+    echo $this->Form->input('customer_display');
+    echo $this->Form->input('production_display');
+    echo $this->Form->input('depends_on_production');
+
   ?>
   </fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

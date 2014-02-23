@@ -33,7 +33,7 @@ foreach($menu as $title => $subMenu)
 	  <li><a href="<?php echo $this->webroot ?>photos/add">ajouter une photo</a></li>
 	  <li><a href="<?php echo $this->webroot ?>productTypes/add">ajouter un type de produit</a></li>
 	  <li><a href="<?php echo $this->webroot ?>products/add">ajouter un produit</a></li>
-	  <li><a href="<?php echo $this->webroot ?>events/add">ajouter un evenement d'administration</a></li>
+	  <li><a href="<?php echo $this->webroot ?>full_calendar/events/add">ajouter un evenement</a></li>
 	</ul>
       </li>
     <?php endif ?>

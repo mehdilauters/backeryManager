@@ -137,6 +137,7 @@ create table if not exists products (
   `unity` boolean default TRUE,
   `customer_display` boolean default TRUE,
   `production_display` boolean default TRUE,
+  `depends_on_production` boolean default TRUE,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_products_producttypes` (`product_types_id`),

@@ -25,11 +25,11 @@ if($tokens['isAdmin'])
 </div>
 <div class="related">
   <h3><?php echo __('Produits'); ?></h3>
-  <?php if (!empty($productType['Products'])): ?>
+  <?php if (!empty($productType['Product'])): ?>
   <ul id="productList">
   <?php
     $i = 0;
-    foreach ($productType['Products'] as $product): ?>
+    foreach ($productType['Product'] as $product): ?>
     <li>
       <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable'=> $isCalendarAvailable, 'tokens'=>$tokens)); ?>
     </li>

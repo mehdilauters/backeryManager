@@ -57,12 +57,12 @@ class AppController extends Controller {
 			array( 
 				'Magasins' => 
 				  array( 'url' => 'WEBROOT/', 'active' => false ),
-				 'Produits' => 
+				 'Categories' => 
 				    array( 'url' => 'WEBROOT/typesProduits', 'active' => false ),
-				 'Horaires' => 
-				    array( 'url' => 'WEBROOT/events', 'active' => false ),
-				 'Contact' => 
-				    array( 'url' => 'WEBROOT/users/add', 'active' => false ),
+				 'Produits' => 
+				    array( 'url' => 'WEBROOT/produits', 'active' => false ),
+// 				 'Contact' => 
+// 				    array( 'url' => 'WEBROOT/users/add', 'active' => false ),
 		    )
 			);
   

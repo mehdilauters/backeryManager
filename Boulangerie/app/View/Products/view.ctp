@@ -22,7 +22,7 @@ $(document).ready(function() {
 });
   </script>
 <div class="products view">
-  <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable', $isCalendarAvailable, 'tokens'=>$tokens)); ?>
+  <?php echo $this->element('Products/Preview', array('product'=>$product, 'tokens'=>$tokens)); ?>
   <div id="calendar" ></div>
 <h3>Dans la catégorie</h3>
 <?php echo $this->element('ProductTypes/Preview', array('productType'=>$product, 'tokens'=>$tokens)); ?>

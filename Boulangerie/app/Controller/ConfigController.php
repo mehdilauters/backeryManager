@@ -27,7 +27,7 @@ class ConfigController extends AppController {
        'upgradeDbStructure/1' => 'upgrade DBStructure',
       'dbBackup' => 'backup database',
       'setDebug/1' => 'activer debug',
-	  'dbBackup/*/true' => 'downloadSql',
+      'dbBackup/*/true' => 'downloadSql',
       'deleteSession' => 'deleteSession'
     );
     $this->set('actions', $actions);
@@ -142,7 +142,7 @@ class ConfigController extends AppController {
   
   public function upgradeDbStructure($redirect = false)
   {
-  try{
+    try{
 	$version = $this->DatabaseVersion->find('first');
 	}
 	catch (Exception $e)
@@ -171,8 +171,11 @@ class ConfigController extends AppController {
 				  `details` text COLLATE utf8_unicode_ci NOT NULL,
 				  `start` datetime NOT NULL,
 				  `end` datetime NOT NULL,
+				  `recursive_start` datetime,
+				  `recursive_end` datetime ,
+				  `recursive` enum(\'day\',\'week\',\'month\', \'year\'),
 				  `all_day` tinyint(1) NOT NULL DEFAULT \'1\',
-				  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT \'Scheduled\{,
+				  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT \'Scheduled\',
 				  `active` tinyint(1) NOT NULL DEFAULT \'1\',
 				  `created` date DEFAULT NULL,
 				  `modified` date DEFAULT NULL,
@@ -181,6 +184,8 @@ class ConfigController extends AppController {
 				) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 				ALTER TABLE `events`
    ADD CONSTRAINT `fk_events_event_types` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
+
+    alter table products add `depends_on_production` boolean default TRUE;
 	SET FOREIGN_KEY_CHECKS = 1;';
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);
@@ -192,6 +197,10 @@ class ConfigController extends AppController {
 			$this->redirect('/');
 		}
 	}
+    {
+      debug('already up to date');
+    }
+    $this->render('index');
   }
   
 

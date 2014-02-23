@@ -16,7 +16,6 @@ var $helpers = array('Time');
  */
   public function index() {
     $this->Shop->recursive = 0;
-    $this->menu['Menu']['Magasins']['active'] = true;
     $this->set('shops', $this->paginate());
   }
 
@@ -37,8 +36,6 @@ var $helpers = array('Time');
     $this->Shop->contain();
     $this->Shop->contain('Media.Photo', 'EventType');
     $shop = $this->Shop->find('first', $options);
-    
-    $this->menu['Menu']['Magasins']['active'] = true;
 
 
     $this->set('title_for_layout', $shop['Shop']['name']);
@@ -158,4 +155,12 @@ var $helpers = array('Time');
     $this->Session->setFlash(__('Shop was not deleted'));
     $this->redirect(array('action' => 'index'));
   }
+
+
+  public function beforeRender()
+  {
+    $this->menu['Menu']['Magasins']['active'] = true;
+    parent::beforeRender();
+  }
+
 }

@@ -15,7 +15,6 @@ class ProductsController extends AppController {
  */
   public function index() {
     $this->set('title_for_layout', 'Produits');
-    $this->menu['Menu']['Produits']['active'] = true;
     $isCalendarAvailable = false; //$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
 
     $contain = array('ProductType.Media.Photo','Media');
@@ -155,5 +154,11 @@ class ProductsController extends AppController {
     }
     $this->Session->setFlash(__('Product was not deleted'));
     $this->redirect(array('action' => 'index'));
+  }
+
+  public function beforeRender()
+  {
+    $this->menu['Menu']['Produits']['active'] = true;
+    parent::beforeRender();
   }
 }
