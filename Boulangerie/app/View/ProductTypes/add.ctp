@@ -5,6 +5,8 @@
 	<?php
 		echo $this->Form->input('media_id');
 		echo $this->Form->input('name');
+		echo $this->Form->input('tva');
+		echo $this->Form->input('customer_display');
 		echo $this->Form->input('description');
 	?>
 	</fieldset>

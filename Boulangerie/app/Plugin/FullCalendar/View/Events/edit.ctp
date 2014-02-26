@@ -19,11 +19,11 @@
 		echo $this->Form->input('event_type_id');
 		echo $this->Form->input('title');
 		echo $this->Form->input('details');
-		echo $this->Form->input('start');
-		echo $this->Form->input('end');
 		echo $this->Form->input('recursive', array('options'=>array(''=>'','day'=>'jour','week'=>'semaine','month'=>'mois', 'year'=>'année')));
-		echo $this->Form->input('recursive_start');
-		echo $this->Form->input('recursive_end');
+				echo $this->Form->input('recursive_start', array('type'=>'text', 'class'=>'datepicker'));
+		echo $this->Form->input('recursive_end', array('type'=>'text', 'class'=>'datepicker'));
+		echo $this->Form->input('start', array('type'=>'text', 'class'=>'datetimepicker'));
+		echo $this->Form->input('end', array('type'=>'text', 'class'=>'datetimepicker'));
 		echo $this->Form->input('all_day');
 		echo $this->Form->input('status', array('options' => array(
 					'Scheduled' => 'Scheduled','Confirmed' => 'Confirmed','In Progress' => 'In Progress',

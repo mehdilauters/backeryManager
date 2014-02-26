@@ -2,7 +2,6 @@
 $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
 	if(isset($config))
 	{
-	
 		$config = array_merge($defaultConfig, $config);
 	}
 	else
@@ -13,8 +12,12 @@ $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
 	
 	
  $group = array('time' => '', 'shop'=>'', 'productType'=>'');
- $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'shop'=>true, 'productType'=>true);
+ $fields = array('date'=>true, 'shop'=>true, 'productType'=>true);
 
+if(isset($this->request->data['group']))
+{
+    $group = $this->request->data['group'];
+}
  
  
  if($group['shop'] != '')
@@ -22,8 +25,6 @@ $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
     if( $group['time'] == '' )
     {
       $fields['date'] = false;
-      $fields['day'] = false;
-      $fields['week'] = false;
     }
 	 if( $group['productType'] == '' )
     {
@@ -51,8 +52,6 @@ $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
 		if( $group['time'] == '' )
 		{
 		  $fields['date'] = false;
-		  $fields['day'] = false;
-		  $fields['week'] = false;
 		}
 	}
   }
@@ -66,12 +65,12 @@ $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
 		<table id="resultsEntriesStatValues" class="tablePreview">
 		  <tr class="legend plot" >
-			<?php if($fields['date']) { ?><th class="date" >Date</th><?php } ?>
-			<?php if($fields['day']) { ?><th class="day" >Jour</th><?php } ?>
-			<?php if($fields['week']) { ?><th class="week" >Semaine</th><?php } ?>
-			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th><?php } ?>
+			<?php if($fields['date']) { ?><th>Date</th><?php } ?>
+			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th> <?php } ?>
 			<?php if($fields['productType']) { ?><th class="productType" >Type de Produit</th><?php } ?>
 			<th class="cash label_curve_total" >Somme €</th>
+			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th><?php } ?>
+			<?php if($fields['shop']) { ?> <th style="display:none" >Courbes</th> <?php } ?>
 		  </tr>
 			<?php 
 			$i = 0;
@@ -83,7 +82,7 @@ $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
 				}
 			 $date = new DateTime($resultsEntry['ResultsEntry']['date']);
 			 
-			 $curveShopComparative = '';
+			 $curveShopComparative = 'curve_productType'.$resultsEntry['ProductTypes']['id'];
 			if($config['shopComparative'])
 			{
 				$curveShopComparative = 'curve_productType'.$resultsEntry['ProductTypes']['id'].'_shop'.$resultsEntry['Shop']['id'];
@@ -92,12 +91,64 @@ $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
 			 //$total = $result[0]['total'];
 			?>
 			<tr class="<?php echo $rowClass ?> plot" >
-			  <?php if($fields['date']) { ?><td class="date" ><?php echo $date->format('d/m/Y'); ?></td><?php } ?>
-			  <?php if($fields['day']) { ?><td class="day" ><?php echo $this->Dates->getJourFr($date->format('w')); ?></td><?php } ?>
-			  <?php if($fields['week']) { ?><td class="week" ><?php echo $date->format('W'); ?></td><?php } ?>
-			  <?php if($fields['shop']) { ?><td class="shop label_<?php echo $curveShopComparative ?>" ><?php echo  $resultsEntry['Shop']['name']; ?></td><?php } ?>
+			  <?php if($fields['date']) { ?>
+			  <td>
+				<?php
+					switch($group['time'])
+						{	
+							case 'weekday':
+								$dateDisplay = $this->Dates->getJourFr($date->format('w'));
+							break;
+							case 'day':
+								$dateDisplay = $this->Dates->getJourFr($date->format('w')).' '.$date->format('d/m/Y').' w:'.$date->format('W');
+							break;
+							case 'week':
+								$dateDisplay = $date->format('W');
+							break;
+							case 'month':
+								$dateDisplay = $date->format('m/Y');
+							break;
+							case 'year':
+								$dateDisplay = $date->format('Y');
+							break;
+							default:
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+						}
+						echo  $dateDisplay;
+				?>
+			  </td>
+			  <?php } ?>
+			  <?php if($fields['shop']) { ?><td class="shop" ><?php echo  $resultsEntry['Shop']['name']; ?></td><?php } ?>
 			  <?php if($fields['productType']) { ?><td class="productType label_curve_productType<?php echo $resultsEntry['ProductTypes']['id']; ?>"><?php echo $resultsEntry['ProductTypes']['name']; ?></td><?php } ?>
-			  <td class="rowTotal  curve_total curve_productType<?php echo $resultsEntry['ProductTypes']['id'].' '.$curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			  <td class="rowTotal  curve_total <?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			   <?php if($fields['date']) { ?><td class="date" style="display:none" ><?php 
+						switch($group['time'])
+						{	
+							case 'weekday':
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+							case 'day':
+								$dateDisplay = $date->format('d/m/Y');
+							break;
+							case 'week':
+								$weekNumber = $date->format('W');
+								$dateDisplay = date( 'd/m/Y', strtotime('last monday', strtotime('tomorrow', $date->getTimestamp())));
+							break;
+							case 'month':
+								$dateDisplay = $date->format('01/m/Y');
+							break;
+							case 'year':
+								$dateDisplay = $date->format('01/01/Y');
+							break;
+							default:
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+						}
+						echo  $dateDisplay;
+			  ?></td>
+			  <?php } ?>
+			  <?php if($fields['shop']) { ?><td class="shopProduct label_<?php echo $curveShopComparative ?>" style="display:none" ><?php echo  $resultsEntry['ProductTypes']['name'].' '.$resultsEntry['Shop']['name']; ?></td><?php } ?>
 		  
 			</tr>
 		  <?php
@@ -113,10 +164,19 @@ $defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
 		?>
 			var tfConfig2 = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
+			  extensions: {
+					name:['ColsVisibility'],
+					src:['<?php echo $this->webroot ?>/js/TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js'],
+					description:['Columns visibility manager'],
+					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0); o.HideCol(3);}]
+					},
               rows_counter:true,
               on_after_refresh_counter: function(o,i){ histogram('resultsEntriesStatValues','resultsEntriesChart', true); }
               };
-			tf1 = new TF('resultsEntriesStatValues', tfConfig2); tf1.AddGrid();
+			  
+			  setFilterGrid("resultsEntriesStatValues",tfConfig2);  
+			  
+			//tf1 = new TF('resultsEntriesStatValues', tfConfig2); tf1.AddGrid();
 				<?php }else{ ?>
 		histogram('resultsEntriesStatValues','resultsEntriesChart');
 	<?php } ?>

@@ -562,3 +562,9 @@ img{
 #newsList {
 	text-align:center;
 }
+
+
+.jqplot-highlighter-tooltip, .jqplot-canvasOverlay-toolti{
+	background : none;
+	background-color: white;
+}

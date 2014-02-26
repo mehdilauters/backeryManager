@@ -18,6 +18,9 @@ DROP TABLE IF EXISTS `events`;
 DROP TABLE IF EXISTS `event_types`;
 DROP TABLE IF EXISTS `shops`;
 
+DROP TABLE IF EXISTS `ordered_items`;
+DROP TABLE IF EXISTS `orders`;
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 
@@ -120,6 +123,7 @@ create table if not exists product_types (
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   description text CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `customer_display` boolean default TRUE,
+  `tva` float(3) not null ,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_producttypes_media` (`media_id`)
@@ -247,6 +251,46 @@ create table if not exists results_entries (
   UNIQUE KEY `unique_results` (`result_id`, `product_types_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
+
+
+
+create table if not exists orders (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `shop_id` int(10) NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `user_id` int(10) NOT NULL,
+  `status` enum('reserved', 'available', 'waiting', 'paid'),
+  `delivery_date` datetime,
+  `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
+  PRIMARY KEY (`id`),
+  KEY `fk_orders_shops` (`shop_id`),
+  KEY `fk_orders_users` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+
+create table if not exists ordered_items (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) NOT NULL,
+  `product_id` int(10) NOT NULL ,
+  `created` datetime NOT NULL,
+  `tva` float(3),
+  `price` float(3),
+  `unity` boolean default TRUE,
+  `quantity` float(5) ,
+  `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
+  PRIMARY KEY (`id`),
+  KEY `fk_ordered_items_orders` (`order_id`),
+  KEY `fk_ordered_items_products` (`product_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+
+ALTER TABLE `orders`
+  ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
+  ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `shops` (`id`);
+
+ALTER TABLE `ordered_items`
+  ADD CONSTRAINT `fk_ordered_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  ADD CONSTRAINT `fk_ordered_items_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 ALTER TABLE `photos`
   ADD CONSTRAINT `fk_photos_medias` FOREIGN KEY (`id`) REFERENCES `medias` (`id`);

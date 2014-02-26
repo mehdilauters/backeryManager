@@ -9,10 +9,7 @@
  * Licensed under MIT
  * http://www.opensource.org/licenses/mit-license.php
  */
-echo $this->Html->css(
-          'jquery-ui-timepicker-addon'
-  );
-echo $this->Html->script('jquery-ui-timepicker-addon');
+
 ?>
 <div class="events form">
 <?php echo $this->Form->create('Event');?>
@@ -62,8 +59,6 @@ function recursiveChange()
 }
 
   $(document).ready(function(){
-
-    $(".datetimepicker").datetimepicker();
     $("#EventRecursive").change(recursiveChange);
     recursiveChange();
   });

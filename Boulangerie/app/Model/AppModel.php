@@ -33,6 +33,7 @@ App::uses('Model', 'Model');
 class AppModel extends Model {
   
 var $controllerInvalidatesFields = array();
+public $actsAs = array('Containable');
   
   function beforeSave($options = array())
   {

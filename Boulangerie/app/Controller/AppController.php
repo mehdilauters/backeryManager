@@ -32,7 +32,8 @@ App::uses('Controller', 'Controller');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	var $uses=array('User');
+	var $uses=array('User', 'EventType');
+	public $helpers = array('Text','Rss', 'Html', 'MyHtml');
 	  var $publicActions = array('exportExcel', 'backupDb');
 	  var $memberActions = array();
 
@@ -51,7 +52,8 @@ class AppController extends Controller {
 																'logoutRedirect' => '/',
 																'authorize' => array('Controller'),
 															),
-															'RequestHandler'
+															'RequestHandler',
+															'Functions'
 														);
   public $menu = array('Menu' => 
 			array( 
@@ -161,6 +163,8 @@ class AppController extends Controller {
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
+	$news = $this->requestAction(array('controller'=>'news', 'action'=>'getNews'));
+    $this->set('news',$news);
   }
   
   

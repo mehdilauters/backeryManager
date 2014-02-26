@@ -34,7 +34,7 @@ class SalesController extends AppController {
 	  $groupBy[] = 'YEARWEEK(Sale.date, 1)';
 	break;
 	case 'month':
-	  $groupBy[] = 'MONTH(Sale.date)';
+	  $groupBy[] = 'DATE_FORMAT(Sale.date,"%Y-%m")';
 	break;
 	case 'year':
 	  $groupBy[] = 'YEAR(Sale.date)';

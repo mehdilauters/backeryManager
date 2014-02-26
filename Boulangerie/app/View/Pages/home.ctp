@@ -72,10 +72,20 @@ if(!$slideshowInserted)
   ?>
    <li>
       <center>
+	  	  <?php 
+		if($daysProduct)
+		{
+			$text = 'Produits du Jour';
+		}
+		else
+		{
+			$text = 'Nos Produits';
+		}
+	  ?>
+	  <h3><?php echo $text ?></h3>
       <div class="slideshow" >
 	<ul class="slides" id="homeSlideshow">
 	  <?php foreach($products as $product) {?>
-
 	    <li class="slide"><a href="<?php echo $this->webroot.'products/view/'.$product['Product']['id'] ?>" ><img src="<?php echo $this->webroot.'img/photos/normal/'.$product['Media']['path'] ?>" alt="<?php echo $product['Product']['name'] ?>" width="400" height="300" /></a>
 	    <div class="slide-title slate"><a href="<?php echo $this->webroot.'products/view/'.$product['Product']['id'] ?>" ><?php echo $product['Product']['name'] ?></a></div>
 	    </li>

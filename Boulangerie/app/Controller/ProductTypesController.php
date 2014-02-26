@@ -59,10 +59,7 @@ class ProductTypesController extends AppController {
       throw new NotFoundException(__('Invalid product type'));
     }
     
-    
-
-    $isCalendarAvailable = false; //$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
-    $this->set('isCalendarAvailable', $isCalendarAvailable);
+ 
     
     $conditions = array();
     $conditions['ProductType'] = array('ProductType.' . $this->ProductType->primaryKey => $id);
@@ -87,9 +84,9 @@ class ProductTypesController extends AppController {
 
     $productTypes = $this->ProductType->find('first', array('conditions'=>$conditions['ProductType']));
 
+	$this->set('title_for_layout', $productTypes['ProductType']['name'] );
 
     $this->set('productType', $productTypes);
-    $this->set('isCalendarAvailable', $isCalendarAvailable);
   }
 
 /**

@@ -153,39 +153,48 @@ class ConfigController extends AppController {
 	{
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
-		$sql .= 'SET FOREIGN_KEY_CHECKS = 0;
-				update shops set event_type_id = NULL;
-				drop table if exists events;
-				drop table if exists event_types;
-				CREATE TABLE IF NOT EXISTS `event_types` (
-				  `id` int(10) NOT NULL AUTO_INCREMENT,
-				  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-				  PRIMARY KEY (`id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		$sql .= '
+
+create table if not exists orders (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `shop_id` int(10) NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `user_id` int(10) NOT NULL,
+  `status` enum(\'reserved\', \'available\', \'waiting\', \'paid\'),
+  `delivery_date` datetime,
+  `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
+  PRIMARY KEY (`id`),
+  KEY `fk_orders_shops` (`shop_id`),
+  KEY `fk_orders_users` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 
-				CREATE TABLE IF NOT EXISTS `events` (
-				  `id` int(11) NOT NULL AUTO_INCREMENT,
-				  `event_type_id` int(11) NOT NULL,
-				  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-				  `details` text COLLATE utf8_unicode_ci NOT NULL,
-				  `start` datetime NOT NULL,
-				  `end` datetime NOT NULL,
-				  `recursive_start` datetime,
-				  `recursive_end` datetime ,
-				  `recursive` enum(\'day\',\'week\',\'month\', \'year\'),
-				  `all_day` tinyint(1) NOT NULL DEFAULT \'1\',
-				  `status` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT \'Scheduled\',
-				  `active` tinyint(1) NOT NULL DEFAULT \'1\',
-				  `created` date DEFAULT NULL,
-				  `modified` date DEFAULT NULL,
-				  PRIMARY KEY (`id`),
-				  KEY `fk_events_event_type` (`event_type_id`)
-				) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-				ALTER TABLE `events`
-   ADD CONSTRAINT `fk_events_event_types` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
 
-    alter table products add `depends_on_production` boolean default TRUE;
+create table if not exists ordered_items (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) NOT NULL,
+  `product_id` int(10) NOT NULL ,
+  `created` datetime NOT NULL,
+  `tva` float(3),
+  `price` float(3),
+  `unity` boolean default TRUE,
+  `quantity` float(5) ,
+  `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
+  PRIMARY KEY (`id`),
+  KEY `fk_ordered_items_orders` (`order_id`),
+  KEY `fk_ordered_items_products` (`product_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+
+ALTER TABLE `orders`
+  ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
+  ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `shops` (`id`);
+
+ALTER TABLE `ordered_items`
+  ADD CONSTRAINT `fk_ordered_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  ADD CONSTRAINT `fk_ordered_items_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+		
+    alter table product_types add `tva` float(10) not null;
 	SET FOREIGN_KEY_CHECKS = 1;';
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);

@@ -80,9 +80,9 @@
 </div>
 <table id="statValues">
 <tr class="plot" >
-  <?php if($fields['date']) { ?><th>Date</th><?php } ?>
-  <?php if($fields['day']) { ?><th class="day" >Jour</th><?php } ?>
-  <?php if($fields['week']) { ?><th class="week" >Semaine</th><?php } ?>
+  <?php if($fields['date']) { ?><th style="display:none" >Date</th>
+  <th>Date</th>
+  <?php }	?>
   <?php if($fields['product']) { ?><th>Produit</th><?php } ?>
   <?php if($fields['productType']) { ?><th>Type de produit</th><?php } ?>
   <?php if($fields['shop']) { ?><th>Magasin</th><?php } ?>
@@ -108,11 +108,63 @@
       {
           $rowClass = 'odd';
       }
+	  $date = new DateTime($sale['Sale']['date']);
    ?>
       <tr class="<?php echo $rowClass ?> plot" >
-      <?php if($fields['date']) { ?><td class="date" ><?php echo $this->Time->format('d/m/Y',$sale['Sale']['date']); ?></td><?php } ?>
-      <?php if($fields['day']) { ?><td class="day" ><?php echo $this->Dates->getJourFr(date('w',$this->Time->fromString($sale['Sale']['date']) )); ?></td><?php } ?>
-      <?php if($fields['week']) { ?><td class="week" ><?php echo date('W',$this->Time->fromString($sale['Sale']['date']) ); ?></td><?php } ?>
+      <?php if($fields['date']) { ?><td class="date" style="display:none" >
+		<?php 
+						switch($group['time'])
+						{	
+							case 'weekday':
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+							case 'day':
+								$dateDisplay = $date->format('d/m/Y');
+							break;
+							case 'week':
+								$weekNumber = $date->format('W');
+								$dateDisplay = date( 'd/m/Y', strtotime('last monday', strtotime('tomorrow', $date->getTimestamp())));
+							break;
+							case 'month':
+								$dateDisplay = $date->format('01/m/Y');
+							break;
+							case 'year':
+								$dateDisplay = $date->format('01/01/Y');
+							break;
+							default:
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+						}
+						echo  $dateDisplay;
+			?>
+	  </td>
+	  <td>
+		<?php
+			switch($group['time'])
+			{	
+				case 'weekday':
+					$dateDisplay = $this->Dates->getJourFr($date->format('w'));
+				break;
+				case 'day':
+					$dateDisplay = $this->Dates->getJourFr($date->format('w')).' '.$date->format('d/m/Y').' w:'.$date->format('W');
+				break;
+				case 'week':
+					$dateDisplay = $date->format('W');
+				break;
+				case 'month':
+					$dateDisplay = $date->format('m/Y');
+				break;
+				case 'year':
+					$dateDisplay = $date->format('Y');
+				break;
+				default:
+					$dateDisplay = $date->format('d/m/Y'); 
+				break;
+			}
+			echo  $dateDisplay;
+		?>
+	  </td>
+	  <?php } ?>
       <?php if($fields['product']) { ?><td class="productName"><?php echo $products[$sale['Sale']['product_id']]['Product']['name'] ?></td><?php } ?>
       <?php if($fields['productType']) { ?><td class="productTypeName"><?php echo $products[$sale['Sale']['product_id']]['ProductType']['name'] ?></td><?php } ?>
       <?php if($fields['shop']) { ?><td class="shopName"><?php echo $shops[$sale['Sale']['shop_id']] ?></td><?php } ?>
@@ -146,7 +198,12 @@
       var tfConfig = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
               rows_counter:true,
-              //rows_counter_text: 'Selected files: ',
+              extensions: {
+					name:['ColsVisibility'],
+					src:['<?php echo $this->webroot ?>/js/TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js'],
+					description:['Columns visibility manager'],
+					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0);}]
+					},
               on_after_refresh_counter: function(o,i){ 
 				  try
 				  {
@@ -158,7 +215,6 @@
 			  }
               };
               tf = new TF('statValues', tfConfig); tf.AddGrid();
-              
   });
 </script>
 

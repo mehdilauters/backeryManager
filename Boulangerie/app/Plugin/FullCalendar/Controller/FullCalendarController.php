@@ -17,5 +17,6 @@ class FullCalendarController extends FullCalendarAppController {
 	function index() {
 	}
 
+
 }
 ?>

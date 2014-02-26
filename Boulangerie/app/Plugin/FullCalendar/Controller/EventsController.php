@@ -58,7 +58,7 @@ class EventsController extends FullCalendarAppController {
 			{
 			  $startDate = $this->viewDateToDateTime($this->data['Event']['recursive_start'] . ' 00:00');
 			  $endDate = $this->viewDateToDateTime($this->data['Event']['recursive_end'] . ' 23:59');
-			  if(!$startDate && ! $endDate)
+			  if($startDate != false &&  $endDate !=false )
 			  {
 			    $event['Event']['recursive_start'] = $startDate->format('Y-m-d H:i:s');
 			    $event['Event']['recursive_end'] = $endDate->format('Y-m-d H:i:s'); 
@@ -67,12 +67,14 @@ class EventsController extends FullCalendarAppController {
 
 			  $startDate = $this->viewDateToDateTime($this->data['Event']['start']);
 			  $endDate = $this->viewDateToDateTime($this->data['Event']['end']);
-			  if(!$startDate && ! $endDate)
+			  if($startDate != false &&  $endDate !=false )
 			  {
  			    $event['Event']['start'] = $startDate->format('Y-m-d H:i:s');
  			    $event['Event']['end'] = $endDate->format('Y-m-d H:i:s');
 			  }
-			  
+			  debug($startDate);
+			  debug($endDate);
+			  debug($event);
 			if ($this->Event->save($event)) {
 				$this->Session->setFlash(__('The event has been saved', true));
 				$this->redirect(array('action' => 'index'));
@@ -97,7 +99,7 @@ class EventsController extends FullCalendarAppController {
 			{
 			  $startDate = $this->viewDateToDateTime($this->data['Event']['recursive_start'] . ' 00:00');
 			  $endDate = $this->viewDateToDateTime($this->data['Event']['recursive_end'] . ' 23:59');
-			  if(!$startDate && ! $endDate)
+			  if($startDate != false &&  $endDate !=false )
 			  {
 			    $event['Event']['recursive_start'] = $startDate->format('Y-m-d H:i:s');
 			    $event['Event']['recursive_end'] = $endDate->format('Y-m-d H:i:s');
@@ -107,7 +109,7 @@ class EventsController extends FullCalendarAppController {
 
 			  $startDate = $this->viewDateToDateTime($this->data['Event']['start']);
 			  $endDate = $this->viewDateToDateTime($this->data['Event']['end']);
-			  if(!$startDate && ! $endDate)
+			  if($startDate != false &&  $endDate !=false )
 			  {
 			    $event['Event']['start'] = $startDate->format('Y-m-d H:i:s');
 			    $event['Event']['end'] = $endDate->format('Y-m-d H:i:s');
@@ -164,7 +166,7 @@ class EventsController extends FullCalendarAppController {
 		
 		
 		$conditions = array('conditions' => array(
-				'UNIX_TIMESTAMP(start) >=' => $start,
+				'UNIX_TIMESTAMP(end) >=' => $start,
 				'UNIX_TIMESTAMP(start) <=' => $end,
 				'recursive is null'
 				));

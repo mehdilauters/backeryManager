@@ -39,7 +39,7 @@ $(document).ready(function(){
          })  
       }, 3500);  
     
-    
+    $(".datetimepicker").datetimepicker();
   $('.spinner').spinner();
   
     $(".fancybox").fancybox(

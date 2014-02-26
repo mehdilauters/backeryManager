@@ -17,5 +17,14 @@ class FullCalendarAppController extends AppController {
 	var $helpers = array('Html', 'Form', 'Session');
 	var $publicActions = array('feed');
 
+  public function beforeFilter()
+  {
+  }
+
+  public function beforeRender()
+  {
+  }
+
+
 }
 ?>

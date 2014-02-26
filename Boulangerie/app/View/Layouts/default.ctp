@@ -28,9 +28,11 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
   </title>
   <?php
     echo $this->Html->meta('icon');
+	echo $this->html->meta('rss', array('controller' => 'produits', 'action' => 'index.rss'), array('title' => "Produits du jour"));
+	echo $this->html->meta('rss', array('controller' => 'news', 'action' => 'index.rss'), array('title' => "news"));
 
     //echo $this->Html->css('cake.generic');
-    echo $this->Html->css('general');
+    
 
 echo $this->Html->script(
     array(   'jquery-1.9.1.min',
@@ -42,6 +44,12 @@ echo $this->Html->script(
         ),
      array('inline' => 'false')
   );
+  
+  echo $this->Html->css(
+          'jquery-ui-timepicker-addon'
+  );
+echo $this->Html->script('jquery-ui-timepicker-addon');
+  
 echo $this->Html->css(
           'fullcalendar',
            null,
@@ -67,6 +75,7 @@ echo $this->Html->css(
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/plotTable.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
+<?php  echo $this->Html->css('general'); ?>
 </head>
 <body>
   <div id="container">
@@ -77,15 +86,32 @@ echo $this->Html->css(
   <h2>&nbsp;<?php echo $title_for_layout ?></h2>
     </div>
     <div class="pannel" id="mainPannel" >
-  <h2>Boulangerie Faury</h2>
+  <h2><a href="<?php echo $this->webroot ?>" >Boulangerie Faury</a></h2>
   Christiane &amp; Thierry FAURY
     </div>
 <?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
       <div id="content">
       &nbsp;
   <?php echo $this->Session->flash();
-		echo $this->Session->flash('auth');  ?>
-
+	echo $this->Session->flash('auth');
+    ?>
+    <div>
+      <h3>Les news</h3>
+      <ul id="newsList">
+      <?php
+      foreach($news as $new)
+      {
+	?>
+	<li>
+	<?php
+	echo $this->element('News/Preview', array('news'=>$new));
+	?>
+	</li>
+	<?php
+      }
+    ?>
+    </ul>
+  </div>
   <?php echo $this->fetch('content'); ?>
       </div>
   <div class="clear" ></div>

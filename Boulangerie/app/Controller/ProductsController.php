@@ -14,15 +14,11 @@ class ProductsController extends AppController {
  * @return void
  */
   public function index() {
+  
+
     $this->set('title_for_layout', 'Produits');
-    $isCalendarAvailable = false; //$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
 
     $contain = array('ProductType.Media.Photo','Media');
-    if($isCalendarAvailable)
-    {
-      $contain[] = 'Events.EventType';
-      $contain[] = 'Events.Gevent.GeventDate';
-    }
     $this->Product->contain($contain);
 
     $conditions = array();
@@ -31,9 +27,15 @@ class ProductsController extends AppController {
     {
       $conditions[] = 'Product.customer_display';
     }
-
-    $this->set('products', $this->Product->find('all', array('conditions' => $conditions)));
-    $this->set('isCalendarAvailable', $isCalendarAvailable);
+	$products = $this->Product->find('all', array('conditions' => $conditions));
+	
+	if ($this->RequestHandler->isRss() ) {
+        return $this->set(compact('products'));
+    }
+	
+	
+    $this->set('products', $products);
+ 
   }
 
 

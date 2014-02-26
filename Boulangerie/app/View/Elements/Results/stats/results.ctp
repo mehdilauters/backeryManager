@@ -11,7 +11,7 @@
 	}
 	
 	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
-	$fields = array('date'=>true, 'day'=>true, 'week'=> true, 'shop'=>true);
+	$fields = array('date'=>true, 'shop'=>true);
 	
 	if(isset($this->request->data['group']))
   {
@@ -26,8 +26,6 @@
     if( $group['time'] == '' )
     {
       $fields['date'] = false;
-      $fields['day'] = false;
-      $fields['week'] = false;
     }
 	 if( $group['productType'] == '' )
     {
@@ -51,13 +49,13 @@
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
 		<table id="resultsStatValues" class="tablePreview" >
 		  <tr class="legend plot" >
-			<?php if($fields['date']) { ?><th class="date" >Date</th><?php } ?>
-			<?php if($fields['day']) { ?><th class="day" >Jour</th><?php } ?>
-			<?php if($fields['week']) { ?><th class="week" >Semaine</th><?php } ?>
+			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th>
+				<th>date</th>
+			<?php } ?>
 			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th><?php } ?>
 			<th class="rowTotal label_curve_total" >Total</th>
-			<th class="cash" >Especes</th>
-			<th class="check" >Cheques</th>
+			<th class="cash" >Especes %</th>
+			<th class="check" >Cheques %</th>
 			<th class="comment" >Commentaire</th>
 		  </tr>
 			<?php 
@@ -74,9 +72,61 @@
 			 $total = $result[0]['total'];
 			?>
 			<tr class="<?php echo $rowClass ?> plot" >
-			  <?php if($fields['date']) { ?><td class="date" ><?php echo $date->format('d/m/Y'); ?></td><?php } ?>
-			  <?php if($fields['day']) { ?><td class="day" ><?php echo $this->Dates->getJourFr($date->format('w')); ?></td><?php } ?>
-			  <?php if($fields['week']) { ?><td class="week" ><?php echo $date->format('W'); ?></td><?php } ?>
+			  <?php if($fields['date']) { ?>
+				<td class="date" style="display:none" >
+					<?php 
+						switch($group['time'])
+						{	
+							case 'weekday':
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+							case 'day':
+								$dateDisplay = $date->format('d/m/Y');
+							break;
+							case 'week':
+								$weekNumber = $date->format('W');
+								$dateDisplay = date( 'd/m/Y', strtotime('last monday', strtotime('tomorrow', $date->getTimestamp())));
+							break;
+							case 'month':
+								$dateDisplay = $date->format('01/m/Y');
+							break;
+							case 'year':
+								$dateDisplay = $date->format('01/01/Y');
+							break;
+							default:
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+						}
+						echo  $dateDisplay;
+					?>
+				</td>
+				<td class="humanDate" >
+					<?php 
+						switch($group['time'])
+						{	
+							case 'weekday':
+								$dateDisplay = $this->Dates->getJourFr($date->format('w'));
+							break;
+							case 'day':
+								$dateDisplay = $this->Dates->getJourFr($date->format('w')).' '.$date->format('d/m/Y').' w:'.$date->format('W');
+							break;
+							case 'week':
+								$dateDisplay = $date->format('W');
+							break;
+							case 'month':
+								$dateDisplay = $date->format('m/Y');
+							break;
+							case 'year':
+								$dateDisplay = $date->format('Y');
+							break;
+							default:
+								$dateDisplay = $date->format('d/m/Y'); 
+							break;
+						}
+						echo  $dateDisplay;
+					?>
+				</td>
+			<?php } ?>
 			  <?php if($fields['shop']) { ?><td class="shop label_curve_Shop<?php echo  $result['Shop']['id']; ?>" ><?php echo  $result['Shop']['name']; ?></td><?php } ?>
 			  <td class="rowTotal curve_total curve_Shop<?php echo  $result['Shop']['id']; ?>"><?php echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
@@ -99,6 +149,12 @@
       var tfConfig1 = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
               rows_counter:true,
+			  extensions: {
+					name:['ColsVisibility'],
+					src:['<?php echo $this->webroot ?>/js/TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js'],
+					description:['Columns visibility manager'],
+					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0);}]
+					},
               on_after_refresh_counter: function(o,i){ histogram('resultsStatValues','resultsChart', true); }
               };
               tf = new TF('resultsStatValues', tfConfig1); tf.AddGrid();

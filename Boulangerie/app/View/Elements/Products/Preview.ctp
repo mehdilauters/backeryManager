@@ -7,20 +7,17 @@ if(isset($product['Product']))
 }
 
 $class = '';
-if( $isCalendarAvailable ) {
-  $isToday = $this->Dates->isToday($product);
-  if($isToday)
+  if( $data['produced_today'] != 0  )
   {
     $class = 'today';
   }
-}
 
 ?>
 <div class="productPreview <?php if($tokens['isAdmin'] && !$data['customer_display']) echo 'customerHidden'; echo $class; ?>">
-  <?php echo $this->element('Medias/Medias/Preview', array('media'=>$data, 'config'=>array('name'=>false, 'description'=>false))); ?>
+  <?php echo $this->element('Medias/Medias/Preview', array('media'=>$product, 'config'=>array('name'=>false, 'description'=>false))); ?>
   <div class="details slate">
     <div>
-      <a href="<?php echo $this->webroot.'produits/details/'.$data['id'] ?>" >
+      <a href="<?php echo $this->webroot.'produits/details/'.$data['id'].$this->MyHtml->getLinkTitle($data['name']) ?>" >
 	<?php echo $data['name'] ?>
       </a>
     </div>
@@ -29,7 +26,7 @@ if( $isCalendarAvailable ) {
 	<?php 
 	    if($data['depends_on_production'])
 	      if( $data['produced_today'] != 0 ) {  ?>
-	    <div class="productAvailable" >Disponible aujourd'hui ( <?php echo $data['produced_today']; ?> )</div>
+	    <div class="productAvailable" >Disponible aujourd'hui</div>
 	  <?php } else { ?>
 	    <div class="productNotAvailable" >Non disponible aujourd'hui</div>
 	  <?php } 
@@ -56,7 +53,6 @@ if( $isCalendarAvailable ) {
 	  <?php } ?>
 	    <div class="actions">
           <?php echo $this->Html->link(__('Edit'), array('controller' => 'products', 'action' => 'edit', $data['id'])); ?>
-	  <?php echo $this->Html->link(__('Evenement'), array('controller' => 'events', 'action' => 'add', 'idProduct'=>$data['id'])); ?>
           <?php echo $this->Form->postLink(__('Delete'), array('controller' => 'products', 'action' => 'delete', $data['id']), null, __('Are you sure you want to delete # %s?', $data['id'])); ?>
 	  </div>
         <?php endif ?>

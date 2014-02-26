@@ -95,8 +95,7 @@ class PagesController extends AppController {
 
     $this->set('shops', $shops);
 
-    $conditions = array();
-    $conditions[] = 'Product.media_id';
+    $conditions = array('Product.media_id');
     if(!$this->Auth->user('isRoot'))
     {
       $conditions[] = 'Product.customer_display';
@@ -104,7 +103,24 @@ class PagesController extends AppController {
     $this->Product->contain('Media.Photo');
     $products = $this->Product->find('all', array('conditions'=>$conditions));
  
-    $this->set(compact('page', 'subpage', 'title_for_layout', 'products'));
+	$displayProducts = array();
+	$daysProduct = false;
+	foreach($products as $product)
+	{
+		if($product['Product']['produced_today'] != 0)
+		{
+			$daysProduct = true;
+			$displayProducts[] = $product;
+		}
+	}
+ 
+	if(!$daysProduct)
+	{
+		$displayProducts = $products;
+	}
+	
+	$this->set('products', $displayProducts);
+    $this->set(compact('page', 'subpage', 'title_for_layout', 'daysProduct'));
 	if($this->Auth->user('isRoot'))
 	{
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>'shop'))));

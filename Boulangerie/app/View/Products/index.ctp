@@ -27,18 +27,14 @@
 
 endforeach; ?>
 </div>
+<?php if($tokens['isAdmin']) : ?>
 <div class="actions">
   <h3><?php echo __('Actions'); ?></h3>
   <ul>
-    <?php if($tokens['isAdmin']) : ?>
       <li><?php echo $this->Html->link(__('New Product'), array('action' => 'add')); ?></li>
       <li><?php echo $this->Html->link(__('New Product Types'), array('controller' => 'product_types', 'action' => 'add')); ?> </li>
       <li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
       <li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add', 'idProduct'=>$product['Product']['id'])); ?> </li>
-    <?php endif ?>
-    <li><?php echo $this->Html->link(__('List Shops'), array('controller' => 'shops', 'action' => 'index')); ?> </li>
-    <li><?php echo $this->Html->link(__('List Product Types'), array('controller' => 'product_types', 'action' => 'index')); ?> </li>
-    <li><?php echo $this->Html->link(__('List Media'), array('controller' => 'media', 'action' => 'index')); ?> </li>
-    <li><?php echo $this->Html->link(__('List Events'), array('controller' => 'events', 'action' => 'index')); ?> </li>
   </ul>
 </div>
+<?php endif ?>

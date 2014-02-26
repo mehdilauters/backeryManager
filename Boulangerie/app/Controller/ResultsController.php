@@ -94,7 +94,7 @@ class ResultsController extends AppController {
 			$groupBy[] = 'YEARWEEK(Result.date, 1)';
 			break;
 			case 'month':
-			$groupBy[] = 'MONTH(Result.date)';
+			$groupBy[] = 'DATE_FORMAT(Result.date,"%Y-%m")';
 			break;
 			case 'year':
 			$groupBy[] = 'YEAR(Result.date)';

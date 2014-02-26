@@ -49,10 +49,12 @@ class Event extends FullCalendarAppModel {
 // 			//'on' => 'create', // Limit validation to 'create' or 'update' operations
 // 		      ),
 		),
-		'recursive_start' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+		'recursive' => array(
+			'inList' => array(
+				'rule' => array('inList', array('','day', 'week', 'month', 'day')),
 			),
+		),
+		'recursive_start' => array(
 			'dateRespect' => array(
 				'rule' => array('dateRespect'),
 				'message' => 'Start must be before end'
@@ -67,9 +69,6 @@ class Event extends FullCalendarAppModel {
 // 		      ),
 		),
 		 'recursive_end' => array(
-		    'notempty' => array(
-			    'rule' => array('notempty'),
-		    ),
 // 		    'datetime' => array(
 // 			'rule' => array('datetime'),
 // 			'message' => 'invalid date',

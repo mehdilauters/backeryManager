@@ -31,7 +31,7 @@ if($tokens['isAdmin'])
     $i = 0;
     foreach ($productType['Product'] as $product): ?>
     <li>
-      <?php echo $this->element('Products/Preview', array('product'=>$product, 'isCalendarAvailable'=> $isCalendarAvailable, 'tokens'=>$tokens)); ?>
+      <?php echo $this->element('Products/Preview', array('product'=>$product, 'tokens'=>$tokens)); ?>
     </li>
   <?php endforeach; ?>
   </ul>
