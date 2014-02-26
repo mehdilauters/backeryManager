@@ -21,6 +21,9 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <!DOCTYPE html>
 <html>
 <head>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php echo $this->Html->charset(); ?>
   <title>
     Boulangerie Faury | 
@@ -34,22 +37,22 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     //echo $this->Html->css('cake.generic');
     
 
-echo $this->Html->script(
-    array(   'jquery-1.9.1.min',
-        'jquery-ui-1.10.1.custom.min',
-         'fullcalendar.min',
-         'jquery.qtip-1.0.0-rc3.min',
-    'jquery.fancybox.pack',
-    'TableFilter/tablefilter.js'
-        ),
+	echo $this->Html->script(
+    array('bootstrap.min',
+		'jquery-1.9.1.min',
+		'jquery-ui-1.10.1.custom.min',
+        'fullcalendar.min',
+        'jquery.qtip-1.0.0-rc3.min',
+    	'jquery.fancybox.pack',
+   		'TableFilter/tablefilter.js'
+     ),
      array('inline' => 'false')
   );
-  
-  echo $this->Html->css(
-          'jquery-ui-timepicker-addon'
-  );
+
+echo $this->Html->css('bootstrap.min');
+  echo $this->Html->css('jquery-ui-timepicker-addon');
 echo $this->Html->script('jquery-ui-timepicker-addon');
-  
+
 echo $this->Html->css(
           'fullcalendar',
            null,
@@ -77,53 +80,65 @@ echo $this->Html->css(
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
 <?php  echo $this->Html->css('general'); ?>
 </head>
+
+
+
+
+
 <body>
-  <div id="container">
-    <div id="header">
-    </div>
-    <div id="contentBox" >
-      <div id="contentHeader" >
-  <h2>&nbsp;<?php echo $title_for_layout ?></h2>
-    </div>
-    <div class="pannel" id="mainPannel" >
-  <h2><a href="<?php echo $this->webroot ?>" >Boulangerie Faury</a></h2>
-  Christiane &amp; Thierry FAURY
-    </div>
-<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
-      <div id="content">
-      &nbsp;
-  <?php echo $this->Session->flash();
-	echo $this->Session->flash('auth');
-    ?>
-    <div>
-      <h3>Les news</h3>
-      <ul id="newsList">
-      <?php
-      foreach($news as $new)
-      {
-	?>
-	<li>
-	<?php
-	echo $this->element('News/Preview', array('news'=>$new));
-	?>
-	</li>
-	<?php
-      }
-    ?>
-    </ul>
-  </div>
-  <?php echo $this->fetch('content'); ?>
-      </div>
-  <div class="clear" ></div>
-      <div id="footer">
-  <?php echo $this->Html->link(
+  <div class="container">
+  	
+  	<header>
+	  	<div class="row">
+			  <div class="col-md-8">
+			  
+			  </div>
+			  <div class="col-md-4">
+					<div id="logo">
+						<h1>
+							<a href="<?php echo $this->webroot ?>">Boulangerie Faury</a>
+						</h1>
+						Christiane &amp; Thierry FAURY
+					</div>
+				</div>
+	  	</div>
+  	</header>
+  	
+  	<!--  contents -->
+  	
+  	<div class="row">
+		<div class="col-md-9"> <!--  colonne de gauche  -->
+			<h2><?php echo $title_for_layout ?></h2>
+			
+			<?php 
+				echo $this->Session->flash();
+				echo $this->Session->flash('auth');
+    			?>
+    			
+    			<h3>Les news</h3>
+			    <ul id="newsList">
+			    	<?php foreach($news as $new): ?>
+				<li><?php echo $this->element('News/Preview', array('news'=>$new)); ?> </li>
+				<?php endforeach;?>
+		    </ul>
+		    
+		    <?php echo $this->fetch('content'); ?>
+		</div>
+		<div class="col-md-3">  <!--  colonne de droite  -->
+		  	<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
+		</div>
+  	</div>
+ 
+    
+    
+  	<footer>
+  	<?php echo $this->Html->link(
       $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
       'http://www.cakephp.org/',
       array('target' => '_blank', 'escape' => false)
     );
   ?>
-      </div>
-  </div>
+  	</footer>
   </div>
   <?php echo $this->element('sql_dump'); ?>
 </body>
