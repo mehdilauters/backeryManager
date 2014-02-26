@@ -163,7 +163,7 @@ class AppController extends Controller {
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
-	$news = $this->requestAction(array('controller'=>'news', 'action'=>'getNews'));
+	$news = $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews'));
     $this->set('news',$news);
   }
   
@@ -235,7 +235,7 @@ class AppController extends Controller {
 	{
 	  if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))
 	  {
-		  $this->requestAction(array('controller' => 'users', 'action' => 'autologin'));
+		  $this->requestAction(array('plugin'=> '', 'controller' => 'users', 'action' => 'autologin'));
 	  }
 	}
 

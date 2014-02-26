@@ -27,9 +27,14 @@ class OrdersController extends AppController {
 		if (!$this->Order->exists($id)) {
 			throw new NotFoundException(__('Invalid order'));
 		}
+		
+		
 		$this->Order->contain('OrderedItem.Product', 'Shop', 'User');
 		$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
-		$this->set('order', $this->Order->find('first', $options));
+		
+		$order = $this->Order->find('first', $options);
+		$this->set('title_for_layout', 'Commande #'.$order['Order']['id']);
+		$this->set('order', $order);
 	}
 
 /**
@@ -41,7 +46,13 @@ class OrdersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Order->create();
 			$this->request->data['Order']['status'] = 'reserved';
-			$this->request->data['Order']['delivery_date'] = $this->Functions->viewDateToDateTime($this->request->data['Order']['delivery_date'])->format('Y-m-d H:i:s');
+			
+			$delivery = $this->Functions->viewDateToDateTime($this->request->data['Order']['delivery_date']);
+			if($delivery != false )
+			{
+				$this->request->data['Order']['delivery_date'] = $delivery->format('Y-m-d H:i:s');	
+			}
+			
 			
 			if ($this->Order->save($this->request->data)) {
 				$this->Session->setFlash(__('The order has been saved'));

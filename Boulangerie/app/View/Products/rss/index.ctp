@@ -3,7 +3,7 @@ $this->set('channelData', array(
     'title' => __("Les produits du jour"),
     'link' => $this->Html->url('/', true),
     'description' => __("Les produits du jour"),
-    'language' => 'en-us'));
+    'language' => 'fr-fr'));
 	
 	
 	foreach ($products as $product) {
@@ -12,7 +12,7 @@ $this->set('channelData', array(
 	{
 		$postLink = array(
 					'controller' => 'produits',
-					'action' => 'details', $product['Product']['id']
+					'action' => 'details', $product['Product']['id'].$this->MyHtml->getLinkTitle($product['Product']['name'])
 					);
 
 		$bodyText = $this->element('Products/Preview', array('product'=>$product));

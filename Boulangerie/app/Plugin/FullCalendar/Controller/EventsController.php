@@ -72,9 +72,7 @@ class EventsController extends FullCalendarAppController {
  			    $event['Event']['start'] = $startDate->format('Y-m-d H:i:s');
  			    $event['Event']['end'] = $endDate->format('Y-m-d H:i:s');
 			  }
-			  debug($startDate);
-			  debug($endDate);
-			  debug($event);
+
 			if ($this->Event->save($event)) {
 				$this->Session->setFlash(__('The event has been saved', true));
 				$this->redirect(array('action' => 'index'));

@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
  * @property EventType $EventType
  */
 class ConfigController extends AppController {
-  var $uses = array('Photo', 'Product', 'DatabaseVersion');
+  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry');
   
   var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug', 'oauth2callback');
   var $memberActions = array();
@@ -31,6 +31,134 @@ class ConfigController extends AppController {
       'deleteSession' => 'deleteSession'
     );
     $this->set('actions', $actions);
+	
+	
+	$sinCoef = 1;
+	
+	$sin = 'abs('.$sinCoef.' * sin(Sale.id) )';
+
+	$sale = $this->Sale->find('first', array(
+		'fields' => array(
+				'max( Sale.produced ) as maxProduced',
+				'min( Sale.produced ) as minProduced',
+				'max( Sale.lost ) as maxLost',
+				'min( Sale.lost ) as minLost',
+			),
+	));
+	$minProduced = $sale[0]['minProduced'];
+	$maxProduced = $sale[0]['maxProduced'];
+	
+	$minLost = $sale[0]['minLost'];
+	$maxLost = $sale[0]['maxLost'];
+	
+	if($minLost < 0)
+	{
+		$minLost = 0;
+	}
+	
+	if($minProduced < 0)
+	{
+		$minProduced = 0;
+	}
+	
+	$rangeLost = $maxLost - $minLost;
+	$rangeProduced = $maxProduced - $minProduced;
+	
+	$percentLost = $maxLost / $maxProduced;
+	$newMaxProduced = 1000;
+	$newMaxLost = $newMaxProduced * $percentLost;
+	
+	
+$producedMapping  	= '(produced  - '.$minProduced.') / '.$rangeProduced.' * '.$newMaxProduced.' * '.$sin;
+$lostMapping  		= '(lost - '.$minLost.') / '.$rangeLost.' *'.$newMaxLost.' * '.$sin;
+
+
+	
+	$sql = '';
+	$sql .= 'update sales Sale set 
+		produced = '.$producedMapping.',
+		lost = '.$lostMapping.";\n";
+
+
+/////////////////////////////////////////////
+$result = $this->Result->find('first', array(
+		'fields' => array(
+				'max( Result.cash ) as maxCash',
+				'min( Result.cash ) as minCash',
+				'max( Result.check ) as maxCheck',
+				'min( Result.check ) as minCheck',
+			),
+	));
+
+$sin = 'abs('.$sinCoef.' * sin(Result.id) )';
+
+	$minCash = $result[0]['minCash'];
+	$maxCash = $result[0]['maxCash'];
+	
+	$minCheck = $result[0]['minCheck'];
+	$maxCheck = $result[0]['maxCheck'];
+	
+	if($minCheck < 0)
+	{
+		$minCheck = 0;
+	}
+	
+	if($minCash < 0)
+	{
+		$minCash = 0;
+	}
+	
+	$rangeCheck = $maxCheck - $minCheck;
+	$rangeCash = $maxCash - $minCash;
+	
+	$percentCheck = $maxCheck / $maxCash;
+	$newMaxCash = 1000;
+	$newMaxCheck = $newMaxCash * $percentCheck;
+	
+	
+$cashMapping  	= '(cash  - '.$minCash.') / '.$rangeCash.' * '.$newMaxCash.' * '.$sin;
+$checkMapping  		= '(`check` - '.$minCheck.') / '.$rangeCheck.' *'.$newMaxCheck.' * '.$sin;
+
+	$sql .= 'update results Result set 
+		cash = '.$cashMapping.',
+		`check` = '.$checkMapping.";\n";
+
+//////////////////////////////////////////////:
+$result_entry = $this->ResultsEntry->find('first', array(
+		'fields' => array(
+				'max( ResultsEntry.result ) as maxResult',
+				'min( ResultsEntry.result ) as minResult',
+			),
+	));
+
+$sin = 'abs('.$sinCoef.' * sin(ResultsEntry.id) )';
+
+	$minResult = $result_entry[0]['minResult'];
+	$maxResult = $result_entry[0]['maxResult'];
+	
+
+	
+	if($minResult < 0)
+	{
+		$minResult = 0;
+	}
+	
+	$rangeResult = $maxResult - $minResult;
+	
+	$newMaxResult = 1000;
+	
+	
+$resultMapping  	= '(result  - '.$minResult.') / '.$rangeResult.' * '.$newMaxResult.' * '.$sin;
+
+
+	$sql .= 'update results_entries ResultsEntry set 
+		result = '.$resultMapping.";\n";
+
+
+
+	
+	debug($sql);
+	
   }
   
   public function deleteSession() {

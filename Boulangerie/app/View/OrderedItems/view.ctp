@@ -53,11 +53,6 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Ordered Item'), array('action' => 'edit', $orderedItem['OrderedItem']['id'])); ?> </li>
 		<li><?php echo $this->Form->postLink(__('Delete Ordered Item'), array('action' => 'delete', $orderedItem['OrderedItem']['id']), null, __('Are you sure you want to delete # %s?', $orderedItem['OrderedItem']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Ordered Items'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Ordered Item'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Orders'), array('controller' => 'orders', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Order'), array('controller' => 'orders', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Product'), array('controller' => 'products', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

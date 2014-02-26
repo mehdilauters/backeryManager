@@ -31,20 +31,21 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
   </title>
   <?php
     echo $this->Html->meta('icon');
-	echo $this->html->meta('rss', array('controller' => 'produits', 'action' => 'index.rss'), array('title' => "Produits du jour"));
-	echo $this->html->meta('rss', array('controller' => 'news', 'action' => 'index.rss'), array('title' => "news"));
+	echo $this->html->meta('rss', '/produits.rss', array('title' => "Produits du jour"));
+	echo $this->html->meta('rss', '/news.rss', array('title' => "news"));
 
     //echo $this->Html->css('cake.generic');
     
 
 	echo $this->Html->script(
-    array('bootstrap.min',
+    array(
 		'jquery-1.9.1.min',
 		'jquery-ui-1.10.1.custom.min',
         'fullcalendar.min',
         'jquery.qtip-1.0.0-rc3.min',
     	'jquery.fancybox.pack',
-   		'TableFilter/tablefilter.js'
+   		'TableFilter/tablefilter.js',
+'bootstrap.min',
      ),
      array('inline' => 'false')
   );
@@ -78,7 +79,7 @@ echo $this->Html->css(
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/plotTable.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
-<?php  echo $this->Html->css('general'); ?>
+<?php   echo $this->Html->css('general'); ?>
 </head>
 
 

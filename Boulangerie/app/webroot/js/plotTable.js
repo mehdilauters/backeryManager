@@ -81,7 +81,14 @@ function curveDisplay(chartId, curveId, status)
 							{
 								data['plotData'][y][dte] = 0;
 							}
-							data['plotData'][y][dte] += parseFloat($(this).html());
+							tmpData = parseFloat($(this).html());
+							if(isNaN(tmpData))
+							{
+							  tmpData = 0;
+							  console.log(y + " " + dte + "==> " +parseFloat($(this).html()));
+							  console.log($(this).html());
+							}
+							data['plotData'][y][dte] += tmpData;
 						}
 					} // foreach classes
 				}
@@ -137,7 +144,7 @@ function curveDisplay(chartId, curveId, status)
     {
       window[chartVarName].destroy();
     }
-    //console.log(dataShop);
+//     console.log(plotData);
     window[chartVarName] = jQuery.jqplot (chartId, plotData,
     {
       title: 'Histogram',

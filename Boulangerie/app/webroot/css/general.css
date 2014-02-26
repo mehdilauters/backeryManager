@@ -26,7 +26,7 @@ a:visited{
 .container{
 	background-image:url("../img/designV2/wood.jpg");
   background-repeat:y-repeat;
-  background-color:;
+/*   background-color:; */
 }
 
 header{
@@ -94,7 +94,24 @@ li{
   padding-top:20px;
   padding-bottom:20px;
 }
+.pannel, .pannel a {
+    color:#5e380c;
+	text-align:center;
+}
 
+.pannel {
+    width:210px;
+    height:94px;
+    /*background: #fdda9e; */
+    background-image:url("../img/designV2/pannel.png");
+    background-size: contain;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-repeat:no-repeat; 
+    padding-top:50px;
+    font-size: 0.8em;
+}
 #menu > li > ul > li:hover{
   color:#ffcf72;
   background-color : rgba(255, 154, 0, 0.3);
@@ -489,4 +506,18 @@ img{
 .jqplot-highlighter-tooltip, .jqplot-canvasOverlay-toolti{
 	background : none;
 	background-color: white;
+}
+
+#footer .credits{
+	list-style:none;
+}
+
+ .listTable  td, .listTable  th{
+	border:1px solid black;
+}
+
+.listTable{
+  border-collapse:collapse;
+  border:1px black solid;
+  text-align:center;
 }

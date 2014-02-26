@@ -46,7 +46,6 @@ class OrderedItemsController extends AppController {
 			$this->request->data['OrderedItem']['tva'] = $product['ProductType']['tva'];
 			$this->request->data['OrderedItem']['price'] = $product['Product']['price'];
 			$this->request->data['OrderedItem']['unity'] = $product['Product']['unity'];
-			debug($this->request->data);
 			if ($this->OrderedItem->save($this->request->data)) {
 				$this->Session->setFlash(__('The ordered item has been saved'));
 				$this->redirect(array('controller'=>'orders','action' => 'view', $orderId));
@@ -55,9 +54,10 @@ class OrderedItemsController extends AppController {
 			}
 		}
 		$this->set('orderId', $orderId);
-		$orders = $this->OrderedItem->Order->find('list');
+		$this->set('title_for_layout', 'Commande #'.$orderId);
+		$order = $this->OrderedItem->Order->findById($orderId);
 		$products = $this->OrderedItem->Product->find('list');
-		$this->set(compact('orders', 'products'));
+		$this->set(compact('order', 'products'));
 	}
 
 /**

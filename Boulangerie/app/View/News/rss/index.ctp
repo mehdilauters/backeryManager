@@ -3,7 +3,7 @@ $this->set('channelData', array(
     'title' => __("Les news"),
     'link' => $this->Html->url('/', true),
     'description' => __("Les news"),
-    'language' => 'en-us'));
+    'language' => 'fr-fr'));
 	
 	
 	 foreach ($news as $new) {

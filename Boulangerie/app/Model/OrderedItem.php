@@ -9,7 +9,7 @@ App::uses('AppModel', 'Model');
 class OrderedItem extends AppModel {
 
 public $virtualFields = array(
-      'total' => 'OrderedItem.price + (OrderedItem.price * OrderedItem.tva) / 100'
+      'without_taxes' => 'OrderedItem.price - (OrderedItem.price * OrderedItem.tva) / 100',
   );
 
 /**

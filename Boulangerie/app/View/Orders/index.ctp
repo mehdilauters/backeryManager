@@ -13,7 +13,7 @@
 	</tr>
 	<?php foreach ($orders as $order): ?>
 	<tr>
-		<td><?php echo h($order['Order']['id']); ?>&nbsp;</td>
+		<td>#<?php echo h($order['Order']['id']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($order['Shop']['name'], array('controller' => 'shops', 'action' => 'view', $order['Shop']['id'])); ?>
 		</td>
@@ -22,7 +22,21 @@
 			<?php echo $this->Html->link($order['User']['name'], array('controller' => 'users', 'action' => 'view', $order['User']['id'])); ?>
 		</td>
 		<td><?php echo h($order['Order']['status']); ?>&nbsp;</td>
-		<td><?php echo h($order['Order']['delivery_date']); ?>&nbsp;</td>
+		<td><?php 
+		$date = new DateTime ($order['Order']['delivery_date']);
+			if($date != false)
+			{
+				if($date->format('H:i') == '00:00')
+				{
+					echo h($date->format('d/m/Y'));
+				}
+				else
+				{
+					echo h($date->format('d/m/Y H:i'));
+				}
+			}
+		
+		?>&nbsp;</td>
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $order['Order']['id'])); ?>
