@@ -75,6 +75,12 @@ class ResultsController extends AppController {
 		{
 			$group = $this->request->data['group'];
 		}
+		else
+		{
+		  $group['time'] = 'month';
+		  $group['shop'] = 'shop';
+		  $group['productType'] = 'productType';
+		}
 	}
 	
     if(count($group) != 0)

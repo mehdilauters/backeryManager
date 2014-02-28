@@ -27,7 +27,7 @@ class ProductsController extends AppController {
     {
       $conditions[] = 'Product.customer_display';
     }
-	$products = $this->Product->find('all', array('conditions' => $conditions));
+	$products = $this->Product->find('all', array('conditions' => $conditions, 'order' => 'Product.product_types_id'));
 	
 	if ($this->RequestHandler->isRss() ) {
         return $this->set(compact('products'));
@@ -78,6 +78,23 @@ class ProductsController extends AppController {
     $this->set('isCalendarAvailable', $isCalendarAvailable);
     $this->set('produced', $isToday);
     $this->set('product', $products);
+
+
+
+
+
+	if($this->Auth->user('isRoot'))
+	{
+		$res = $this->requestAction(array('controller'=>'sales', 'action'=>'stats'), array( 'pass'=>array('conditions'=>array('Sale.product_id'=>$products['Product']['id']), 'group' => array('time'=>'week', 'shop'=>'shop', 'product'=>'product'))));
+		$this->set(compact('products','shops'));
+		$this->set('sales',$res['sales']);
+		$this->set('products',$res['products']);
+		$this->set('shops',$res['shops']);
+	}
+
+
+
+
   }
 
 /**

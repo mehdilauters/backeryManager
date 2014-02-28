@@ -13,5 +13,5 @@
     Configure::write('dbBackupPath', '/tmp/');
     Configure::write('excelExportPath', '/tmp/');
 	
-	Configure::write('databaseVersion', 5);
+	Configure::write('databaseVersion', 6);
 ?>

@@ -58,12 +58,6 @@ if(count($eventType['Event']) != 0)
     <?php foreach($shops as $shop) { ?>
     <li class="shop">
      <?php   echo $this->element('Shops/Preview', array('shop'=>$shop)); ?>
-	 <br/>
-	 <center>
-		 <div id="timeTable_<?php  echo $shop['Shop']['id'] ?>" class="hideJs" >
-			<?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
-		 </div>
-	 </center>
     </li>
     <?php
 if(!$slideshowInserted)

@@ -64,7 +64,6 @@ echo $this->Html->css(
 <?php
     echo $this->Html->script('jquery.ui.datepicker-fr.js');
     echo $this->Html->css('fancy/jquery.fancybox');
-
     // TODO change to real stylesheet
     echo $this->Html->css('humanity/jquery-ui-1.10.3.custom.min.css');
 
@@ -81,11 +80,6 @@ echo $this->Html->css(
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
 <?php   echo $this->Html->css('general'); ?>
 </head>
-
-
-
-
-
 <body>
   <div class="container">
   	
@@ -113,7 +107,8 @@ echo $this->Html->css(
 			
 			<?php 
 				echo $this->Session->flash();
-				echo $this->Session->flash('auth');
+				echo $this->Session->flash('auth',  'flash/ok');
+				if(count($news) != 0) :
     			?>
     			
     			<h3>Les news</h3>
@@ -122,7 +117,7 @@ echo $this->Html->css(
 				<li><?php echo $this->element('News/Preview', array('news'=>$new)); ?> </li>
 				<?php endforeach;?>
 		    </ul>
-		    
+		    <?php endif; ?>
 		    <?php echo $this->fetch('content'); ?>
 		</div>
 		<div class="col-md-3">  <!--  colonne de droite  -->

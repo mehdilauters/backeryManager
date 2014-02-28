@@ -123,7 +123,9 @@ li{
 }
 
 
-
+li .shop{
+	margin-top:15%;
+}
 
 
 
@@ -183,12 +185,9 @@ li{
   background-image:url("../img/designV2/slate.jpg");
   -moz-border-radius: 15px;
   border-radius: 15px;
-  padding-left: 2%;
-  padding-right: 2%;
-  padding-top: 2%;
-  padding-bottom: 2%;
+  padding: 5%;
   vertical-align:middle;
-  max-width: 80%;
+  /*max-width: 80%;*/
 }
 
 .slate a{
@@ -214,16 +213,18 @@ li{
   position:relative;
   margin-top: 20px;
   margin-bottom: -100px;
-  max-width:20%;
-  transform: rotate(-10deg);
+  max-width:30%;
+  padding-top:1%;
+  padding-bottom:1%;
+  transform: rotate(-20deg);
   text-align:center;
 }
 
 
 .shopPreview .photoPreview{
-  width:200px;
+  /* width:200px;
   float:left;
-  margin-left:5%;
+  margin-left:5%; */
 }
 
 .shopPreview .map{
@@ -292,30 +293,17 @@ li{
     text-align: right;
 }
 
-.productPreview .photoPreview
+.productPreview .slate, .productTypePreview .slate
 {
-  float:left;
+ margin-top:5%; 
 }
-.productPreview .details{
-    float:right;
-    width:50%;
-    min-height:132px;
-    margin:2%;
-}
+
 
 .productTypePreview{
     margin-bottom: 1%;
 }
 
-.productTypePreview .photoPreview{
-  float:right;
-}
 
-.productTypePreview .description{
-   float: left;
-   width:50%;
-   min-height:132px;
-}
 
 #productTypesList li{
  list-style:none;   
@@ -520,4 +508,26 @@ img{
   border-collapse:collapse;
   border:1px black solid;
   text-align:center;
+}
+
+.cake-error a {
+	color:#428BCA;
+}
+
+input, select, textarea{
+	color:black;
+}
+
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th 
+{
+	background-color : rgba(255, 154, 0, 0.2);
+}
+
+legend {
+	color:gray;
+}
+
+.ui-datepicker-calendar th {
+ color:black; 
 }

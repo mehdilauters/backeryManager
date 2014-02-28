@@ -63,7 +63,7 @@ if(isset($this->request->data['group']))
 		<div class="control"></div>
 	</div>
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
-		<table id="resultsEntriesStatValues" class="tablePreview">
+		<table id="resultsEntriesStatValues" class="table-striped tablePreview">
 		  <tr class="legend plot" >
 			<?php if($fields['date']) { ?><th>Date</th><?php } ?>
 			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th> <?php } ?>
@@ -75,11 +75,6 @@ if(isset($this->request->data['group']))
 			<?php 
 			$i = 0;
 			 foreach($resultsEntries as $i=>$resultsEntry):
-				 $rowClass = 'even';
-				if($i % 2 != 0)
-				{
-				  $rowClass = 'odd';
-				}
 			 $date = new DateTime($resultsEntry['ResultsEntry']['date']);
 			 
 			 $curveShopComparative = 'curve_productType'.$resultsEntry['ProductTypes']['id'];
@@ -90,7 +85,7 @@ if(isset($this->request->data['group']))
 			 
 			 //$total = $result[0]['total'];
 			?>
-			<tr class="<?php echo $rowClass ?> plot" >
+			<tr class=" plot" >
 			  <?php if($fields['date']) { ?>
 			  <td>
 				<?php

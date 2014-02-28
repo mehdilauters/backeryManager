@@ -283,6 +283,10 @@ $resultMapping  	= '(result  - '.$minResult.') / '.$rangeResult.' * '.$newMaxRes
 		$sql = '';
 		$sql .= '
 
+
+DROP TABLE IF EXISTS `orders`;
+DROP TABLE IF EXISTS `ordered_items`;
+
 create table if not exists orders (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `shop_id` int(10) NOT NULL,
@@ -295,7 +299,6 @@ create table if not exists orders (
   KEY `fk_orders_shops` (`shop_id`),
   KEY `fk_orders_users` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
 
 
 create table if not exists ordered_items (
@@ -316,14 +319,15 @@ create table if not exists ordered_items (
 
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
-  ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `shops` (`id`);
+  ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `ordered_items`
   ADD CONSTRAINT `fk_ordered_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   ADD CONSTRAINT `fk_ordered_items_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
-		
-    alter table product_types add `tva` float(10) not null;
-	SET FOREIGN_KEY_CHECKS = 1;';
+
+
+
+';
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);
 		

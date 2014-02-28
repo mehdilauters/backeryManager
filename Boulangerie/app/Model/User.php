@@ -86,14 +86,6 @@ class User extends AppModel {
       ),
     ),
     'name' => array(
-      'alphanumeric' => array(
-        'rule' => array('alphanumeric'),
-        'message' => 'User::name must be alphanumeric',
-        //'allowEmpty' => false,
-        //'required' => false,
-        //'last' => false, // Stop validation after this rule
-        //'on' => 'create', // Limit validation to 'create' or 'update' operations
-      ),
       'notempty' => array(
         'rule' => array('notempty'),
         'message' => 'User::name must be notempty',

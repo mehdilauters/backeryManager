@@ -4,7 +4,7 @@
   <a href="<?php echo $this->webroot.'magasins/details/'.$shop['Shop']['id'].$this->MyHtml->getLinkTitle($shop['Shop']['name']); ?>" alt="<?php echo($shop['Shop']['name']); ?>" ><?php echo($shop['Shop']['name']); ?></a></h3>
 </div>
 <a href="<?php echo $this->webroot.'magasins/details/'.$shop['Shop']['id'].$this->MyHtml->getLinkTitle($shop['Shop']['name']); ?>" alt="<?php echo($shop['Shop']['name']); ?>" >
-  <img class="imageShopView" src="<?php echo $this->webroot.'img/photos/normal/'.$shop['Media']['path'] ?>" alt="<?php echo $shop['Media']['name'] ?>" />
+  <img class="imageShopView" src="<?php echo $this->webroot.'photos/download/'.$shop['Media']['id'].'/0'.$this->MyHtml->getLinkTitle($shop['Media']['name']); ?>" alt="<?php echo $shop['Media']['name'] ?>" />
 </a>
 <div class="clear" ></div>
 <div class="slate slateShopDescription" id="shopDescription_<?php echo $shop['Shop']['id'] ?>" >
@@ -19,9 +19,11 @@
   <div class="phone" ><?php 
 
 echo $shop['Shop']['phone']; ?></div>
+
+
 <div class="isOpened">
     <?php
-      $nextOpened = 0;
+	 $nextOpened = 0;
       $nextClose = 0;
       $days = $this->Dates->getTimeTable($shop['EventType']);
       foreach($days as $dayId => $timeTable)
@@ -55,10 +57,10 @@ echo $shop['Shop']['phone']; ?></div>
       <?php }
       else
       {?>
-	<span class="shopClosed">La boulangerie est fermée jusqu'à <?php echo date('G:i d/m/Y',$nextOpened) ?></span>
+	<span class="shopClosed">La boulangerie est fermée <?php if($nextOpened != 0){ ?> jusqu'au <?php echo date('d/m/Y',$nextOpened).' à '.date('G:i',$nextOpened); }?></span>
       <?php } 
     ?>
-    <a href="#" onClick="return false;">Horaires</a>
+    <?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
   </div>
  </div>
 </div>

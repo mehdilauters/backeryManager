@@ -6,7 +6,7 @@
 		echo $this->Form->input('id');
 		echo $this->Form->input('media_id');
 		echo $this->Form->input('email');
-		echo $this->Form->input('password');
+		echo $this->Form->input('password', array('value'=>''));
 		echo $this->Form->input('name');
 	?>
 	</fieldset>

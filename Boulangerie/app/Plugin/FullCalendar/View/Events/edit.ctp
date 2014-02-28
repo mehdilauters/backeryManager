@@ -20,10 +20,57 @@
 		echo $this->Form->input('title');
 		echo $this->Form->input('details');
 		echo $this->Form->input('recursive', array('options'=>array(''=>'','day'=>'jour','week'=>'semaine','month'=>'mois', 'year'=>'année')));
-				echo $this->Form->input('recursive_start', array('type'=>'text', 'class'=>'datepicker'));
-		echo $this->Form->input('recursive_end', array('type'=>'text', 'class'=>'datepicker'));
-		echo $this->Form->input('start', array('type'=>'text', 'class'=>'datetimepicker'));
-		echo $this->Form->input('end', array('type'=>'text', 'class'=>'datetimepicker'));
+		
+		$date = new DateTime($this->request->data['Event']['recursive_start']);
+		if($date->format('H:i') == '00:00')
+		{
+			$date = $date->format('d/m/Y');
+		}
+		else
+		{
+			$date = $date->format('d/m/Y H:i');
+		}
+		
+		echo $this->Form->input('recursive_start', array('type'=>'text', 'class'=>'datepicker', 'value'=>$date ));
+
+		$date = new DateTime($this->request->data['Event']['recursive_end']);
+		if($date->format('H:i') == '00:00')
+		{
+			$date = $date->format('d/m/Y');
+		}
+		else
+		{
+			$date = $date->format('d/m/Y H:i');
+		}
+
+		echo $this->Form->input('recursive_end', array('type'=>'text', 'class'=>'datepicker', 'value'=>$date));
+
+
+
+
+		$date = new DateTime($this->request->data['Event']['start']);
+		if($date->format('H:i') == '00:00')
+		{
+			$date = $date->format('d/m/Y');
+		}
+		else
+		{
+			$date = $date->format('d/m/Y H:i');
+		}
+		echo $this->Form->input('start', array('type'=>'text', 'class'=>'datetimepicker', 'value'=>$date));
+
+
+
+		$date = new DateTime($this->request->data['Event']['end']);
+		if($date->format('H:i') == '00:00')
+		{
+			$date = $date->format('d/m/Y');
+		}
+		else
+		{
+			$date = $date->format('d/m/Y H:i');
+		}
+		echo $this->Form->input('end', array('type'=>'text', 'class'=>'datetimepicker', 'value'=>$date));
 		echo $this->Form->input('all_day');
 		echo $this->Form->input('status', array('options' => array(
 					'Scheduled' => 'Scheduled','Confirmed' => 'Confirmed','In Progress' => 'In Progress',

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 App::uses('AppController', 'Controller');
 /**
  * ProductTypes Controller
@@ -13,7 +13,7 @@ class ProductTypesController extends AppController {
  * @return void
  */
   public function index() {
-    $this->set('title_for_layout', 'Produits');
+    $this->set('title_for_layout', 'Catégories de Produits');
     
     $conditions = array();
     $conditions['ProductType'] = '';

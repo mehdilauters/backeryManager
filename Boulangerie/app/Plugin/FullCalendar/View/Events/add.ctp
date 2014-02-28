@@ -15,8 +15,18 @@
 <?php echo $this->Form->create('Event');?>
 	<fieldset>
  		<legend><?php __('Add Event'); ?></legend>
+		<?php if(isset($eventType['EventType']))
+		{		?>
+			<h3><?php echo $eventType['EventType']['name'];?></h3>
+		<?php 
+		}
+		else
+		{
+			echo $this->Form->input('event_type_id');
+		}
+		
+		?>
 	<?php
-		echo $this->Form->input('event_type_id');
 		echo $this->Form->input('title');
 		echo $this->Form->input('details');
 		echo $this->Form->input('recursive', array('options'=>array(''=>'','day'=>'jour','week'=>'semaine','month'=>'mois', 'year'=>'année')));

@@ -9,7 +9,20 @@
  * Licensed under MIT
  * http://www.opensource.org/licenses/mit-license.php
  */
+ ?>
+ 
+ <script>
+ var eventTypeId = <?php echo $eventType['EventType']['id'] ?>;
+ </script>
+ 
+ <?php
+ echo $this->Html->script(array( '/full_calendar/js/jquery-ui-1.8.9.custom.min', '/full_calendar/js/fullcalendar.min', '/full_calendar/js/jquery.qtip-1.0.0-rc3.min', '/full_calendar/js/ready'), array('inline' => 'false'));
+ echo $this->Html->css('/full_calendar/css/fullcalendar', null, array('inline' => false));
+ 
 ?>
+<div class="Calendar index">
+	<div id="calendar"></div>
+</div>
 <div class="eventTypes view">
 <h2><?php echo __('Event Type');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
@@ -28,6 +41,8 @@
 <div class="actions">
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Event Type', true), array('plugin' => 'full_calendar', 'action' => 'edit', $eventType['EventType']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Ajouter Evenement', true), array('plugin' => 'full_calendar', 'controller'=>'events', 'action' => 'add', $eventType['EventType']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('gerer Evenements', true), array('plugin' => 'full_calendar', 'controller'=>'events', 'action' => 'index', $eventType['EventType']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('Delete Event Type', true), array('plugin' => 'full_calendar', 'action' => 'delete', $eventType['EventType']['id']), null, sprintf(__('Are you sure you want to delete %s?', true), $eventType['EventType']['name'])); ?> </li>
 		<li><?php echo $this->Html->link(__('Manage Event Types', true), array('plugin' => 'full_calendar', 'action' => 'index')); ?> </li>
 		<li><li><?php echo $this->Html->link(__('View Calendar', true), array('plugin' => 'full_calendar', 'controller' => 'full_calendar')); ?></li>

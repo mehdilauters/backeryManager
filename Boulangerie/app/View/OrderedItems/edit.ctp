@@ -9,7 +9,7 @@
 		echo $this->Form->input('tva');
 		echo $this->Form->input('price');
 		echo $this->Form->input('unity');
-		echo $this->Form->input('quantity');
+		echo $this->Form->input('quantity', array('class'=>'spinner'));
 		echo $this->Form->input('comment');
 	?>
 	</fieldset>

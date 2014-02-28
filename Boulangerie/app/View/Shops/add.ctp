@@ -4,7 +4,6 @@
     <legend><?php echo __('Add Shop'); ?></legend>
   <?php
     echo $this->Form->input('media_id');
-    echo $this->Form->input('event_type_id');
     echo $this->Form->input('name');
     echo $this->Form->input('phone');
     echo $this->Form->input('description');

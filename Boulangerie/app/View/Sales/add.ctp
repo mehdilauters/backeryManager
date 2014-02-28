@@ -6,7 +6,7 @@
 <form id="salesAdd" method="POST" >
 <h2>Le <?php echo $date ?></h2>
 <input type="hidden" name="date" id="date" value="<?php echo $date ?>" />
-<table>
+<table class="table-striped">
   <tr>
     <th>Produit</th>
     <th>Magasin</th>

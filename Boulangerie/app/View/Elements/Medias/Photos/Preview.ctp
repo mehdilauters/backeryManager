@@ -12,13 +12,13 @@
  }
  //debug($photo);
 ?>
-<div class="photoPreview">
+<div class="thumbnail">
  <?php if(isset($config) && $config['name']) : ?>
     <span><?php echo $data['Photo']['name'] ?></span>
   <?php endif ?>
   <div>
-     <a class="fancybox" rel="album" href="<?php echo $this->webroot.'img/photos/normal/'.$data['Photo']['path'] ?>" title="<?php echo $data['Photo']['name'] ?>" >
-       <img src="<?php echo $this->webroot.'img/photos/preview/'.$data['Photo']['path'] ?>" alt="<?php echo $data['Photo']['name'] ?>" />
+     <a class="fancybox" rel="album" href="<?php echo $this->webroot.'photos/download/'.$data['Photo']['id'].'/0'.$this->MyHtml->getLinkTitle($data['Photo']['name']) ?>" title="<?php echo $data['Photo']['name'] ?>" >
+       <img src="<?php echo $this->webroot.'photos/download/'.$data['Photo']['id'].'/1'.$this->MyHtml->getLinkTitle($data['Photo']['name']) ?>" alt="<?php echo $data['Photo']['name'] ?>" />
      </a>
       <?php if(isset($config) && $config['description']) : ?>
      <p>

@@ -18,11 +18,14 @@ class EventsController extends FullCalendarAppController {
             'limit' => 15
         );
 
-        function index() {
+        function index($eventTypeId = null) {
 		$this->Event->recursive = 1;
-// 		$this->Event->bindModel(
-// 			array ('belongsTo' => array ('EventType'))
-// 		);
+
+		if($eventTypeId != null)
+		{
+			$this->paginate['conditions']['Event.event_type_id'] = $eventTypeId;
+		}
+
 		$this->set('events', $this->paginate());
 	}
 
@@ -40,17 +43,21 @@ class EventsController extends FullCalendarAppController {
 
 	private function viewDateToDateTime($dateString)
 	  {
-	    //->format('Y-m-d H:i')
-	    $dateTime = DateTime::createFromFormat ( 'd/m/Y H:i' , $dateString );
+	    $dateTime = false; //new DateTime($dateString);
 	    if($dateTime == false)
 	    {
-		$dateTime = DateTime::createFromFormat ( 'd/m/Y H:i' , $dateString.' 00:00' );
+	      //->format('Y-m-d H:i')
+	      $dateTime = DateTime::createFromFormat ( 'd/m/Y H:i' , $dateString );
+	      if($dateTime == false)
+	      {
+		  $dateTime = DateTime::createFromFormat ( 'd/m/Y H:i' , $dateString.' 00:00' );
+	      }
 	    }
 	    return  $dateTime;
 	  }
 
 
-	function add() {
+	function add($eventTypeId = null) {
 		if (!empty($this->data)) {
 			$this->Event->create();
 			$event = $this->data;
@@ -73,8 +80,14 @@ class EventsController extends FullCalendarAppController {
  			    $event['Event']['end'] = $endDate->format('Y-m-d H:i:s');
 			  }
 
+			  $event['Event']['event_type_id'] = $eventTypeId;
+			  
 			if ($this->Event->save($event)) {
 				$this->Session->setFlash(__('The event has been saved', true));
+				if($eventTypeId != null)
+				{
+				  $this->redirect(array('controller'=>'eventTypes', 'action' => 'view', $eventTypeId));
+				}
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The event could not be saved. Please, try again.', true));
@@ -83,6 +96,11 @@ class EventsController extends FullCalendarAppController {
 // 		$this->Event->bindModel(
 // 			array ('belongsTo' => array ('EventType'))
 // 		);
+	if($eventTypeId != null)
+	{
+		$this->set('eventType', $this->Event->EventType->findById($eventTypeId));
+	}
+	
 		$this->set('eventTypes', $this->Event->EventType->find('list'));
 	}
 
@@ -95,8 +113,8 @@ class EventsController extends FullCalendarAppController {
 			$event = $this->data;
 			if($this->data['Event']['recursive'] != '')
 			{
-			  $startDate = $this->viewDateToDateTime($this->data['Event']['recursive_start'] . ' 00:00');
-			  $endDate = $this->viewDateToDateTime($this->data['Event']['recursive_end'] . ' 23:59');
+			  $startDate = $this->viewDateToDateTime($this->data['Event']['recursive_start']);
+			  $endDate = $this->viewDateToDateTime($this->data['Event']['recursive_end']);
 			  if($startDate != false &&  $endDate !=false )
 			  {
 			    $event['Event']['recursive_start'] = $startDate->format('Y-m-d H:i:s');
@@ -170,8 +188,9 @@ class EventsController extends FullCalendarAppController {
 				));
 		if($idType != null)
 		{
-			$conditions['Event.event_type_id'] = $idType;
+			$conditions['conditions']['Event.event_type_id'] = $idType;
 		}
+		
 		$events = $this->Event->find('all', $conditions);
 		foreach($events as $event) {
 			if($event['Event']['all_day'] == 1) {

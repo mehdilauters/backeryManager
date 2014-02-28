@@ -57,7 +57,9 @@ class Event extends FullCalendarAppModel {
 		'recursive_start' => array(
 			'dateRespect' => array(
 				'rule' => array('dateRespect'),
-				'message' => 'Start must be before end'
+				'message' => 'Start must be before end',
+				'required' => false,
+				'allowEmpty' => true,
 			),
 // 		  'datetime' => array(
 // 			'rule' => array('datetime'),

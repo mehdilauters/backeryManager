@@ -21,12 +21,34 @@ class SalesController extends AppController {
   }
 
   
-    public function stats() {
+    public function stats($conditions = array(), $group = array()) {
+
+
     $groupBy = array();
-    if(isset($this->request->data['group']))
+
+
+	if(count($group) == 0)
+	{
+		if(isset($this->request->data['group']))
+		{
+			$group = $this->request->data['group'];
+		}
+		else
+		{
+		    $group['time'] = 'month';
+		    $group['shop'] = 'shop';
+		    $group['product'] = 'product';
+		}
+	}
+
+
+    if($group)
     {
-      switch($this->request->data['group']['time'])
+      switch($group['time'])
       {
+	case 'weekday':
+	  $groupBy[] = 'DAYNAME(Sale.date)';
+	break;
 	case 'day':
 	  $groupBy[] = 'Sale.date';
 	break;
@@ -40,11 +62,11 @@ class SalesController extends AppController {
 	  $groupBy[] = 'YEAR(Sale.date)';
 	break;
 	default:
-	  
+
 	break;
       }
 
-      switch($this->request->data['group']['product'])
+      switch($group['product'])
       {
 	case 'product':
  	  $groupBy[] = 'Sale.product_id';
@@ -53,7 +75,7 @@ class SalesController extends AppController {
 // 	  $groupBy[] = 'Sale.product_id';
 	break;
       }
-      switch($this->request->data['group']['shop'])
+      switch($group['shop'])
       {
 	case 'shop':
  	  $groupBy[] = 'Sale.shop_id';
@@ -70,6 +92,7 @@ class SalesController extends AppController {
     $this->Sale->contain('Product.ProductType');
     $sales = $this->Sale->find('all', array('order'=>array('Sale.date'),
 					    'group' => $groupBy,
+					    'conditions' => $conditions,
 					    'fields' => array('SUM(Sale.produced) as `produced`', 
 							      'SUM(Sale.lost) as `lost`',
 							      'SUM(Sale.produced - Sale.lost) as `sold`',
@@ -82,13 +105,17 @@ class SalesController extends AppController {
 // 							      'Product.product_types_id'
 							      )
 					    ));
-    $this->set('sales', $sales);
+    
 
     $this->Sale->Product->contain('ProductType');
     $products = $this->Sale->Product->find('all');
     $products = Set::combine($products, '{n}.Product.id', '{n}');
     $shops = $this->Sale->Shop->find('list');
 
+    if (!empty($this->request->params['requested'])) {
+            return compact('sales','products', 'shops');
+        }
+    $this->set('sales', $sales);
     $this->set(compact('products', 'shops'));
   }
   

@@ -11,8 +11,13 @@
 
 // JavaScript Document
 $(document).ready(function() {
-
-
+	
+	var _eventTypeId = '';
+	if (!(typeof eventTypeId  === 'undefined'))
+	{
+		_eventTypeId = eventTypeId;
+	}
+	console.log(_eventTypeId);
 
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
@@ -27,7 +32,7 @@ $(document).ready(function() {
 		weekMode: 'variable',
 		aspectRatio: 2,
 		editable: true,
-		events: "/boulangerie/full_calendar/events/feed",
+		events: "/boulangerie/full_calendar/events/feed/"+_eventTypeId,
 		eventRender: function(event, element) {
         	element.qtip({
 				content: event.details,

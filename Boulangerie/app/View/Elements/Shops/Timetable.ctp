@@ -1,7 +1,8 @@
-<div class="slate">
+<div class="">
 <?php
 $days = $this->Dates->getTimeTable($eventType);
 //debug($days);
+if(count($days) != 0):
 ?>
 <center>
 <table class="timetable" >
@@ -26,4 +27,5 @@ foreach ($days as $dayId => $day)
 ?>
 </table>
 </center>
+<?php endif; ?>
 </div>

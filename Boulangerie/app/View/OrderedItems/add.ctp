@@ -7,7 +7,7 @@
 		<legend><?php echo __('Add Ordered Item'); ?></legend>
 	<?php
 		echo $this->Form->input('product_id');
-		echo $this->Form->input('quantity');
+		echo $this->Form->input('quantity', array('class'=>'spinner'));
 		echo $this->Form->input('comment');
 	?>
 	</fieldset>

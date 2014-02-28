@@ -8,7 +8,7 @@
 	{
 	  $productTypeId = $product['Product']['product_types_id'];
 	  ?>
-	    <li>
+	    <li class="row">
 	      <?php echo $this->Html->link($product['ProductType']['name'], array('controller' => 'product_types', 'action' => 'view', $product['ProductType']['id'])); ?>
 <?php
 	}
@@ -17,7 +17,7 @@
 	  $productTypeId = $product['Product']['product_types_id'];
 	  ?>
 	    </li>
-	    <li>
+	    <li class="row">
 	      <?php echo $this->Html->link($product['ProductType']['name'], array('controller' => 'product_types', 'action' => 'view', $product['ProductType']['id'])); ?>
 <?php	}
 

@@ -1,13 +1,13 @@
 <div class="productTypes view">
-<h2><?php  echo $productType['ProductType']['name']; ?></h2>
-  <?php echo $this->element('ProductTypes/Preview', array('productType'=>$productType)); ?>
-</div>
 <?php   
 if($tokens['isAdmin'])
 {
 	echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('interactive'=>false, 'shopComparative'=>true))); 
 }
 	?>
+<h2><?php  echo $productType['ProductType']['name']; ?></h2>
+  <?php echo $this->element('ProductTypes/Preview', array('productType'=>$productType)); ?>
+</div>
 <div class="actions">
   <?php if($tokens['isAdmin']) : ?>
   <h3><?php echo __('Actions'); ?></h3>

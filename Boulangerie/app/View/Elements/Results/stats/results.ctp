@@ -47,7 +47,7 @@
 		<div class="control"></div>
 	</div>
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
-		<table id="resultsStatValues" class="tablePreview" >
+		<table id="resultsStatValues" class="tablePreview table-striped" >
 		  <tr class="legend plot" >
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th>
 				<th>date</th>
@@ -62,16 +62,10 @@
 			$i = 0;
 			 foreach($results as $i=>$result):
 			 
-			 $rowClass = 'even';
-				if($i % 2 != 0)
-				{
-				  $rowClass = 'odd';
-				}
-			 
 			 $date = new DateTime($result['Result']['date']);
 			 $total = $result[0]['total'];
 			?>
-			<tr class="<?php echo $rowClass ?> plot" >
+			<tr class="plot" >
 			  <?php if($fields['date']) { ?>
 				<td class="date" style="display:none" >
 					<?php 

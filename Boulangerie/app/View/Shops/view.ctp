@@ -1,4 +1,3 @@
-  <?php   echo $this->element('Gevents/jsCalendar', array('data'=>$shop['EventType'])); ?>
   <script>
   
   function toggleMap()
@@ -64,6 +63,7 @@ if($tokens['isAdmin'])
 <div class="actions">
   <ul>
   <?php if($tokens['isAdmin']) : ?>
+	<li><?php echo $this->Html->link(__('Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>
     <li><?php echo $this->Html->link(__('Edit Shop'), array('action' => 'edit', $shop['Shop']['id'])); ?> </li>
     <li><?php echo $this->Form->postLink(__('Delete Shop'), array('action' => 'delete', $shop['Shop']['id']), null, __('Are you sure you want to delete # %s?', $shop['Shop']['id'])); ?> </li>
     <li><?php echo $this->Html->link(__('New Shop'), array('action' => 'add')); ?> </li>

@@ -28,7 +28,12 @@ class NewsController extends AppController {
 	*/
 	  public $uses = array('FullCalendar.EventType');
 
-
+ public function add()
+ {
+	$news = $this->EventType->findByName("news");
+	$this->redirect('/full_calendar/events/add/'.$news['EventType']['id']);
+ }
+	  
   public function getNews()
   {
       $eventType = $this->EventType->findByName('news');

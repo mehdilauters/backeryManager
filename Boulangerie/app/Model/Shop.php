@@ -103,7 +103,8 @@ class Shop extends AppModel {
       'foreignKey' => 'event_type_id',
       'conditions' => '',
       'fields' => '',
-      'order' => ''
+      'order' => '',
+	  'dependent'=> true,
     )
   );
 

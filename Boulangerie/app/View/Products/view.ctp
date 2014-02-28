@@ -1,24 +1,18 @@
 <?php
-echo $this->Html->script(
-    array( 
-//   'jquery-1.9.1.min',
-//         'jquery-ui-1.10.1.custom.min',
-         'fullcalendar.min',
-         'jquery.qtip-1.0.0-rc3.min',
-        ),
-     array('inline' => 'false')
-  );
-echo $this->Html->css(
-          'fullcalendar',
-           null,
-           array('inline' => false)
-  );
+if($tokens['isAdmin'])
+{
+	echo $this->element('Sales/stats', array('sales'=>$sales, 'config'=>array('interactive'=>false))); 
+}
 ?>
 
 <div class="products view">
-  <?php echo $this->element('Products/Preview', array('product'=>$product, 'tokens'=>$tokens)); ?>
-<h3>Dans la catégorie</h3>
-<?php echo $this->element('ProductTypes/Preview', array('productType'=>$product, 'tokens'=>$tokens)); ?>
+	<div class="row" >
+		<?php echo $this->element('Products/Preview', array('product'=>$product, 'tokens'=>$tokens)); ?>
+	 </div>
+	 <div class="row">
+		<h3>Dans la catégorie</h3>
+		<?php echo $this->element('ProductTypes/Preview', array('productType'=>$product, 'tokens'=>$tokens)); ?>
+	</div>
 </div>
 <?php if($tokens['isAdmin']) : ?>
 <div class="actions">

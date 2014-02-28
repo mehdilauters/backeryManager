@@ -33,28 +33,27 @@ class PhotosController extends AppController {
     $this->set('photo', $this->Photo->find('first', $options));
   }
 
-/*  function download($idPhoto,$miniature='true')
+  function download($idPhoto, $preview = true)
 	{
 		$this->viewClass = 'Media';
-		if($miniature=='true')
-			$path='miniatures/';
+		if($preview)
+			$path='preview/';
 		else
-			$path='normales/';
+			$path='normal/';
 		
-		$photo=$this->Photo->findByIdPhoto($idPhoto);
-		
+		$photo=$this->Photo->findById($idPhoto);
 		$path_parts = pathinfo($photo['Photo']['path']);
  		$params = array(
               'id' => $photo['Photo']['path'],
-              'name' => $photo['Media']['titre'],
+              'name' => $photo['Photo']['titre'],
               'download' => true,
               'extension' => $path_parts['extension'],
-              'path' => APP.'webroot/upload/photos/'.$path
+              'path' => APP.'webroot/img/photos/'.$path
        );
        $this->set($params);
 		
 	}
-*/
+
   
   public function upload()
   {

@@ -39,7 +39,7 @@ $(document).ready(function(){
 </script>
 <ul id="productTypesList" >
   <?php foreach ($productTypes as $productType): ?>
-  <li class="clear">
+  <li class="">
     <a name="productType_<?php echo $productType['ProductType']['id'] ?>" />
     <?php 
 //debug($productType);

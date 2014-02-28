@@ -37,22 +37,24 @@ var $helpers = array('Time');
     $this->Shop->contain('Media.Photo', 'EventType');
     $shop = $this->Shop->find('first', $options);
 
-
     $this->set('title_for_layout', $shop['Shop']['name']);
 	// function feed($idType = null, $start = null, $end = null) {
-	$shop['EventType']['Event'] = $this->requestAction(array(	'plugin'=>'full_calendar',
-						  'controller'=>'events',
-						  'action'=>'feed'
-					  ),
-					  array( 
-						  'pass'=>array(
-									  'idType'=>$shop['EventType']['id'],
-									  'start' => time(),
-									  'end'=>(time() + 60*24*7)
-									  )
-							  )
-							  ,array('return')
-									      );
+	// $shop['EventType']['Event'] = $this->requestAction(array(	'plugin'=>'full_calendar',
+						  // 'controller'=>'events',
+						  // 'action'=>'feed'
+					  // ),
+					  // array( 
+						  // 'pass'=>array(
+									  // 'idType'=>2,//$shop['EventType']['id'],
+									  // 'start' => time(),
+									  // 'end'=>(time() + 60*24*7)
+									  // )
+							  // )
+							  // ,array('return')
+									      // );
+										  
+										  
+	$shop['EventType']['Event'] = $this->requestAction('/full_calendar/events/feed/2/'.time().'/'.(time() + 60*24*7));
     $this->set('isOpened', $this->isOpened($shop));
     $this->set('shop', $shop);
 	
@@ -96,14 +98,27 @@ var $helpers = array('Time');
     if ($this->request->is('post')) {
       $this->Shop->create();
       if ($this->Shop->save($this->request->data)) {
-        $this->Session->setFlash(__('The shop has been saved'));
-        $this->redirect(array('action' => 'index'));
+		$this->EventType->create();
+		$eventType = array( 'EventType' =>array( 'name' => $this->request->data['Shop']['name']));
+		$this->EventType->save($eventType);
+		$this->request->data['Shop']['event_type_id'] = $this->EventType->id;
+		
+		if ($this->Shop->save($this->request->data)) {
+			        $this->Session->setFlash(__('The shop has been saved'));
+					$this->redirect(array('action' => 'index'));
+		}
+		else
+		{
+			$this->Session->setFlash(__('The shop has been saved but eventType not created'));
+			$this->redirect(array('plugin'=>'full_calendar', 'controller'=>'eventTypes', 'action' => 'add'));
+		}
+		
       } else {
         $this->Session->setFlash(__('The shop could not be saved. Please, try again.'));
       }
     }
     $media = $this->Shop->Media->find('list');
-    $eventTypes = $this->Shop->EventType->find('list');
+    $eventTypes = array_merge(array(''),$this->Shop->EventType->find('list'));
     $this->set(compact('media','eventTypes'));
   }
 
