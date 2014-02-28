@@ -221,7 +221,7 @@ class EventsController extends FullCalendarAppController {
 			);
 		if($idType != null)
 		{
-			$conditions['Event.event_type_id'] = $idType;
+			$recursiveConditions['conditions']['Event.event_type_id'] = $idType;
 		}
 		$recursiveEvents = $this->Event->find('all', $recursiveConditions);
 		$dateStart = new DateTime();

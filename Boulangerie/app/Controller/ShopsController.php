@@ -54,7 +54,7 @@ var $helpers = array('Time');
 									      // );
 										  
 										  
-	$shop['EventType']['Event'] = $this->requestAction('/full_calendar/events/feed/2/'.time().'/'.(time() + 60*24*7));
+	$shop['EventType']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shop['EventType']['id'].'/'.time().'/'.(time() + 60*24*7));
     $this->set('isOpened', $this->isOpened($shop));
     $this->set('shop', $shop);
 	
