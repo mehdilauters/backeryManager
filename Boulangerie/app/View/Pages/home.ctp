@@ -3,12 +3,7 @@
 
 		
 $(document).ready(function() {
-		$('.slateShopDescription').click(function() {
-			var divId = $( this ).attr('id');
-			var id= divId.replace('shopDescription_','');
-			console.log(id);
-			$("#timeTable_" + id).toggle('slow');
-		});    
+
 });
 
 

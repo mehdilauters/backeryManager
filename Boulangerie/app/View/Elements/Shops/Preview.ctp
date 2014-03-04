@@ -63,7 +63,7 @@ echo $shop['Shop']['phone']; ?></div>
     <?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
     <?php if($tokens['isAdmin']) : ?>
       <ul>
-	<li><?php echo $this->Html->link(__('Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>
+	<li><?php echo $this->Html->link(__('changer Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>
       </ul>
   <?php endif ?>
   </div>

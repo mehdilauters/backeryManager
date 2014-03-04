@@ -26,7 +26,6 @@ a:visited{
 .container{
 	background-image:url("../img/designV2/wood.jpg");
   background-repeat:y-repeat;
-/*   background-color:; */
 }
 
 header{
@@ -482,9 +481,6 @@ img{
 	background-color : rgba(255, 154, 0, 0.2);	
 }
 
-#shopPreviewList .slateShopDescription{
-	cursor:pointer;
-}
 
 #newsList {
 	text-align:center;
