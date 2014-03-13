@@ -1,9 +1,20 @@
 <?php
-$fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'productType'=>true, 'shop'=>true);
+$defaultConfig = array('interactive'=>true);
+	if(isset($config))
+	{
+	
+		$config = array_merge($defaultConfig, $config);
+	}
+	else
+	{
+		$config = $defaultConfig;
+	}
+
+$fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'productType'=>true, 'shop'=>true, 'comment'=>false );
   $group = array('time' => '', 'product'=>'', 'shop'=>'');
   if(isset($this->request->data['group']))
   {
-    $group['time'] = $this->request->data['group'];
+    $group = $this->request->data['group'];
   }
 
   if($group['product'] != '')
@@ -11,8 +22,6 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
     if( $group['time'] == '' )
     {
       $fields['date'] = false;
-      $fields['day'] = false;
-      $fields['week'] = false;
     }
     if( $group['shop'] == '' )
     {
@@ -25,8 +34,6 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
     if( $group['time'] == '' )
     {
       $fields['date'] = false;
-      $fields['day'] = false;
-      $fields['week'] = false;
     }
     if( $group['product'] == '' )
     {
@@ -47,10 +54,17 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
       $fields['shop'] = false;
     }
   }
+  
+  if($group['time'] == 'day')
+  {
+	$fields['comment'] = true;
+}
+  
+  debug($fields);
+  
  ?>
 
 
-?>
 <div>
 	<div id="histogramChart" style="width=500px;height=600px;" class="chartDiv" ></div>
 	<div class="control" ></div>
@@ -68,7 +82,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
   <th class="label_curve_sold" >Vente</th>
   <th class="label_curve_totalPrice" >Prix (€)</th>
   <th class="label_curve_totalLost" >Perte (€)</th>
-  <th>Commentaires</th>
+  <?php if($fields['comment']) { ?><th>Commentaires</th><?php } ?>
 </tr>
 <?php
   $i = 0;
@@ -146,7 +160,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
       <td class="sold  curve_sold"><?php echo $sale[0]['sold'] ?></td>
       <td class="totalPrice  curve_totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
       <td class="totalLost curve_totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
-      <td class="comment"><?php echo $sale['Sale']['comment'] ?></td>
+      <?php if($fields['comment']) { ?><td class="comment"><?php echo $sale['Sale']['comment'] ?></td><?php } ?>
    </tr>
    
    <?php

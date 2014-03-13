@@ -1,5 +1,8 @@
 <?php 
-$group = $this->request->data['group'];
+if(isset($this->request->data['group']))
+{
+	$group = $this->request->data['group'];
+}
 
 ?>
 <div>

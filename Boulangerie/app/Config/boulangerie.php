@@ -14,4 +14,8 @@
     Configure::write('excelExportPath', '/tmp/');
 	
 	Configure::write('databaseVersion', 6);
+	
+	Configure::write('dbBackupUrl', 'boulangerie-faury.fr/dev/config/dbBackup/');
+	//Configure::write('dbBackupUrl', 'localhost/backery/Boulangerie/config/dbBackup/');
+	
 ?>

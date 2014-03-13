@@ -1,14 +1,17 @@
 <?php
 App::uses('AppController', 'Controller');
+
+
 /**
- * EventTypes Controller
- *
- * @property EventType $EventType
- */
+*
+*	Config controller
+*
+*/
+
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry');
   
-  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug', 'oauth2callback');
+  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug', 'demoBaseSql' );
   var $memberActions = array();
   
 /**
@@ -25,15 +28,23 @@ class ConfigController extends AppController {
       'importProducts' => 'Importer les produits d\'un csv',
       'setAdmin/1' => 'set to admin',
        'upgradeDbStructure/1' => 'upgrade DBStructure',
-      'dbBackup' => 'backup database',
+      'dbBackup/false' => 'backup database',
       'setDebug/1' => 'activer debug',
-      'dbBackup/*/true' => 'downloadSql',
+      'dbBackup/false/true' => 'downloadSql',
+	  'dbBackup/true/true' => 'download Demo Sql',
       'deleteSession' => 'deleteSession'
     );
     $this->set('actions', $actions);
 	
 	
-	$sinCoef = 1;
+
+	
+  }
+  
+  
+  public function demoBaseSql()
+  {
+		$sinCoef = 1;
 	
 	$sin = 'abs('.$sinCoef.' * sin(Sale.id) )';
 
@@ -67,30 +78,30 @@ class ConfigController extends AppController {
 	$percentLost = $maxLost / $maxProduced;
 	$newMaxProduced = 1000;
 	$newMaxLost = $newMaxProduced * $percentLost;
-	
-	
-$producedMapping  	= '(produced  - '.$minProduced.') / '.$rangeProduced.' * '.$newMaxProduced.' * '.$sin;
-$lostMapping  		= '(lost - '.$minLost.') / '.$rangeLost.' *'.$newMaxLost.' * '.$sin;
+		
+		
+	$producedMapping  	= '(produced  - '.$minProduced.') / '.$rangeProduced.' * '.$newMaxProduced.' * '.$sin;
+	$lostMapping  		= '(lost - '.$minLost.') / '.$rangeLost.' *'.$newMaxLost.' * '.$sin;
 
 
-	
-	$sql = '';
-	$sql .= 'update sales Sale set 
-		produced = '.$producedMapping.',
-		lost = '.$lostMapping.";\n";
+		
+		$sql = '';
+		$sql .= 'update sales Sale set 
+			produced = '.$producedMapping.',
+			lost = '.$lostMapping.";\n";
 
 
-/////////////////////////////////////////////
-$result = $this->Result->find('first', array(
-		'fields' => array(
-				'max( Result.cash ) as maxCash',
-				'min( Result.cash ) as minCash',
-				'max( Result.check ) as maxCheck',
-				'min( Result.check ) as minCheck',
-			),
-	));
+	/////////////////////////////////////////////
+	$result = $this->Result->find('first', array(
+			'fields' => array(
+					'max( Result.cash ) as maxCash',
+					'min( Result.cash ) as minCash',
+					'max( Result.check ) as maxCheck',
+					'min( Result.check ) as minCheck',
+				),
+		));
 
-$sin = 'abs('.$sinCoef.' * sin(Result.id) )';
+	$sin = 'abs('.$sinCoef.' * sin(Result.id) )';
 
 	$minCash = $result[0]['minCash'];
 	$maxCash = $result[0]['maxCash'];
@@ -116,50 +127,50 @@ $sin = 'abs('.$sinCoef.' * sin(Result.id) )';
 	$newMaxCheck = $newMaxCash * $percentCheck;
 	
 	
-$cashMapping  	= '(cash  - '.$minCash.') / '.$rangeCash.' * '.$newMaxCash.' * '.$sin;
-$checkMapping  		= '(`check` - '.$minCheck.') / '.$rangeCheck.' *'.$newMaxCheck.' * '.$sin;
+	$cashMapping  	= '(cash  - '.$minCash.') / '.$rangeCash.' * '.$newMaxCash.' * '.$sin;
+	$checkMapping  		= '(`check` - '.$minCheck.') / '.$rangeCheck.' *'.$newMaxCheck.' * '.$sin;
 
-	$sql .= 'update results Result set 
-		cash = '.$cashMapping.',
-		`check` = '.$checkMapping.";\n";
+		$sql .= 'update results Result set 
+			cash = '.$cashMapping.',
+			`check` = '.$checkMapping.";\n";
 
-//////////////////////////////////////////////:
-$result_entry = $this->ResultsEntry->find('first', array(
-		'fields' => array(
-				'max( ResultsEntry.result ) as maxResult',
-				'min( ResultsEntry.result ) as minResult',
-			),
-	));
+	//////////////////////////////////////////////:
+	$result_entry = $this->ResultsEntry->find('first', array(
+			'fields' => array(
+					'max( ResultsEntry.result ) as maxResult',
+					'min( ResultsEntry.result ) as minResult',
+				),
+		));
 
-$sin = 'abs('.$sinCoef.' * sin(ResultsEntry.id) )';
+	$sin = 'abs('.$sinCoef.' * sin(ResultsEntry.id) )';
 
-	$minResult = $result_entry[0]['minResult'];
-	$maxResult = $result_entry[0]['maxResult'];
-	
+		$minResult = $result_entry[0]['minResult'];
+		$maxResult = $result_entry[0]['maxResult'];
+		
 
-	
-	if($minResult < 0)
-	{
-		$minResult = 0;
+		
+		if($minResult < 0)
+		{
+			$minResult = 0;
+		}
+		
+		$rangeResult = $maxResult - $minResult;
+		
+		$newMaxResult = 1000;
+		
+		
+	$resultMapping  	= '(result  - '.$minResult.') / '.$rangeResult.' * '.$newMaxResult.' * '.$sin;
+
+
+		$sql .= 'update results_entries ResultsEntry set 
+			result = '.$resultMapping.";\n";
+
+		// add demo user
+		$sql .= 'insert into users (email, password) values (\'demo@demo.fr\', \''.AuthComponent::password('demo')."\');\n";
+
+		
+		return $sql;
 	}
-	
-	$rangeResult = $maxResult - $minResult;
-	
-	$newMaxResult = 1000;
-	
-	
-$resultMapping  	= '(result  - '.$minResult.') / '.$rangeResult.' * '.$newMaxResult.' * '.$sin;
-
-
-	$sql .= 'update results_entries ResultsEntry set 
-		result = '.$resultMapping.";\n";
-
-
-
-	
-	debug($sql);
-	
-  }
   
   public function deleteSession() {
       session_destroy();
@@ -284,46 +295,23 @@ $resultMapping  	= '(result  - '.$minResult.') / '.$rangeResult.' * '.$newMaxRes
 		$sql .= '
 
 
-DROP TABLE IF EXISTS `orders`;
-DROP TABLE IF EXISTS `ordered_items`;
+DROP TABLE IF EXISTS `companies`;
 
-create table if not exists orders (
+create table if not exists companies (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `shop_id` int(10) NOT NULL,
-  `created` datetime DEFAULT NULL,
-  `user_id` int(10) NOT NULL,
-  `status` enum(\'reserved\', \'available\', \'waiting\', \'paid\'),
-  `delivery_date` datetime,
-  `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
+  `rib` int(10) NOT NULL,
+  `address` text CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
+  `phone` int not null ,
+  `capital` int not null ,
+  `siret` int not null ,
   PRIMARY KEY (`id`),
-  KEY `fk_orders_shops` (`shop_id`),
-  KEY `fk_orders_users` (`user_id`)
+  KEY `fk_companies_media` (`rib`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 
-create table if not exists ordered_items (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `order_id` int(10) NOT NULL,
-  `product_id` int(10) NOT NULL ,
-  `created` datetime NOT NULL,
-  `tva` float(3),
-  `price` float(3),
-  `unity` boolean default TRUE,
-  `quantity` float(5) ,
-  `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
-  PRIMARY KEY (`id`),
-  KEY `fk_ordered_items_orders` (`order_id`),
-  KEY `fk_ordered_items_products` (`product_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
-
-ALTER TABLE `orders`
-  ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
-  ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `ordered_items`
-  ADD CONSTRAINT `fk_ordered_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `fk_ordered_items_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+ALTER TABLE `companies`
+  ADD CONSTRAINT `fk_companies_media` FOREIGN KEY (`rib`) REFERENCES `medias` (`id`);
 
 
 
@@ -351,8 +339,8 @@ ALTER TABLE `ordered_items`
  *
  * @param string $tables Comma separated list of tables you want to download, or '*' if you want to download them all.
  */
-function dbBackup($tables = '*', $download = false) {
-
+function dbBackup($demo = true, $download = false, $tables = '*') {
+	header('Content-Type: text/html; charset=utf-8');
     $return = '';
 
     $modelName = $this->modelClass;
@@ -413,10 +401,14 @@ function dbBackup($tables = '*', $download = false) {
 
         $return .= "\n\n\n";
     }
+	if($demo)
+	{
+		$return .= $this->demoBaseSql() . "\n" ;
+	}
     $return .= "SET FOREIGN_KEY_CHECKS = 1;\n";
 
 	// utf8
-	$return = "\xEF\xBB\xBF".$return;
+	//$return = "\xEF\xBB\xBF".$return;
 	
     // Set the default file name
     $fileName = $databaseName . '-backup-' . date('Y-m-d') . '.sql';
@@ -439,25 +431,6 @@ function dbBackup($tables = '*', $download = false) {
 }
 
 
-	// public function oauth2callback()
-	// {
-		// if (isset($_GET['code'])) {
-			// App::uses('ConnectionManager', 'Model'); 
-			// debug($_GET['code']);
-			// $client = ConnectionManager::getDataSource('calendar')->authenticate($_GET['code']);
-			// /*$client->authenticate($_GET['code']);
-			// if($client->getAccessToken())
-			// {
-			// }
-			// else
-			// {
-				// debug ('FAIIIIIIIL');
-			// }*/
-		  // /*$client->authenticate();
-		  // $_SESSION['token'] = $client->getAccessToken();
-		  // header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);*/
-		// }
-	// }
   
 }
   

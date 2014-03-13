@@ -7,6 +7,7 @@
 		echo $this->Form->input('email');
 		echo $this->Form->input('password', array('value'=>''));
 		echo $this->Form->input('name');
+		echo $this->Form->input('rib_on_orders');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

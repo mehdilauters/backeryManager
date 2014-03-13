@@ -6,6 +6,7 @@
 			<th><?php echo $this->Paginator->sort('media_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('email'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('rib_on_orders'); ?></th>
 			<th><?php echo $this->Paginator->sort('isRoot'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -18,6 +19,7 @@
 		</td>
 		<td><?php echo h($user['User']['email']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['name']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['rib_on_orders']); ?>&nbsp;</td>
 		<td><?php 
 				if($user['User']['isRoot'])
 				{

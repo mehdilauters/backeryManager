@@ -35,9 +35,10 @@ class SalesController extends AppController {
 		}
 		else
 		{
-		    $group['time'] = 'month';
+		    $group['time'] = 'week';
 		    $group['shop'] = 'shop';
 		    $group['product'] = 'product';
+			$this->request->data['group'] = $group;
 		}
 	}
 

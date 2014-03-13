@@ -21,6 +21,9 @@ DROP TABLE IF EXISTS `shops`;
 DROP TABLE IF EXISTS `ordered_items`;
 DROP TABLE IF EXISTS `orders`;
 
+
+DROP TABLE IF EXISTS `companies`;
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 
@@ -111,6 +114,7 @@ create table if not exists users (
   email varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
   password varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
+  `rib_on_orders` boolean default TRUE,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_users_media` (`media_id`)
@@ -283,6 +287,22 @@ create table if not exists ordered_items (
   KEY `fk_ordered_items_products` (`product_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
+create table if not exists companies (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `rib` int(10) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `address` text CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
+  `phone` int not null ,
+  `capital` int not null ,
+  `siret` int not null ,
+  PRIMARY KEY (`id`),
+  KEY `fk_companies_media` (`rib`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+
+ALTER TABLE `companies`
+  ADD CONSTRAINT `fk_companies_media` FOREIGN KEY (`rib`) REFERENCES `medias` (`id`);
 
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),

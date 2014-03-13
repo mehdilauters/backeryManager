@@ -21,6 +21,11 @@
 			<?php echo h($user['User']['name']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Rib on order'); ?></dt>
+		<dd>
+			<?php echo h($user['User']['rib_on_orders']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($user['User']['created']); ?>

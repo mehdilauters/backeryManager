@@ -7,7 +7,7 @@ class MyHtmlHelper extends HtmlHelper{
 	{
 		if(!is_array($url))
 		{
-			return parent::link($title,'/'.$url.$this->getLinkTitle($urlTitle), $options , $confirmMessage);
+			return parent::link($title,'/'.$url.$this->getLinkTitle($title), $options , $confirmMessage);
 		}
 		else
 			return parent::link($title, $url, $options , $confirmMessage );

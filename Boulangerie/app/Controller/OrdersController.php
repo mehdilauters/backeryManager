@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
  * @property Order $Order
  */
 class OrdersController extends AppController {
-
+	var $uses = array('Order', 'Company');
 /**
  * index method
  *
@@ -33,8 +33,30 @@ class OrdersController extends AppController {
 		$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
 		
 		$order = $this->Order->find('first', $options);
+		
+		$company = $this->Company->find('first');
+		if(count($company) == 0)
+		{
+			debug('company does not exists');
+		}
+		$total = array(
+		'HT' => 0,
+		'TTC' => 0,
+		'tva_percent' => 0,
+		'tva_total' => 0
+		);
+		foreach($order['OrderedItem'] as &$item)
+		{
+			$item['total_HT'] =  $item['without_taxes'] * $item['quantity'];
+			$total['HT'] += $item['total_HT'];
+			$total['TTC'] += $item['quantity'] * $item['price'];
+			$total['tva_total'] += $total['TTC'] - $total['HT'];
+		}
 		$this->set('title_for_layout', 'Commande #'.$order['Order']['id']);
+		$this->set('company', $company);
 		$this->set('order', $order);
+		$this->set('total', $total);
+		//$this->request->is('pdf');
 	}
 
 /**

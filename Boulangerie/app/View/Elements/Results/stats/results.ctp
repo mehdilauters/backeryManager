@@ -11,7 +11,7 @@
 	}
 	
 	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
-	$fields = array('date'=>true, 'shop'=>true);
+	$fields = array('date'=>true, 'shop'=>true, 'comment'=> false);
 	
 	if(isset($this->request->data['group']))
   {
@@ -40,6 +40,12 @@
       $fields['shop'] = false;
     }
   }
+  
+  if($group['time'] == 'day')
+  {
+	$fields['comment'] = true;
+  }
+  
 ?>
 <div>
 	<div>
@@ -56,7 +62,7 @@
 			<th class="rowTotal label_curve_total" >Total</th>
 			<th class="cash" >Especes %</th>
 			<th class="check" >Cheques %</th>
-			<th class="comment" >Commentaire</th>
+			<?php if($fields['comment']) { ?><th class="comment" >Commentaire</th><?php } ?>
 		  </tr>
 			<?php 
 			$i = 0;
@@ -126,7 +132,7 @@
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
 			  
-			  <td class="comment" ><?php echo $result['Result']['comment'] ?></td>
+			  <?php if($fields['comment']) { ?><td class="comment" ><?php echo $result['Result']['comment'] ?></td><?php } ?>
 			</tr>
 		  <?php 
 			$i++;

@@ -1,25 +1,21 @@
-<div>
-<dl>
-		<dt><?php echo __('Magasin'); ?></dt>
-		<dd>
-			<?php echo $this->Html->link($order['Shop']['name'], array('controller' => 'shops', 'action' => 'view', $order['Shop']['id'])); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Created'); ?></dt>
-		<dd>
-			<?php 
-			$date = new DateTime ($order['Order']['created']);
-			echo h($date->format('d/m/Y H:i')); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Status'); ?></dt>
-		<dd>
-			<?php echo h($order['Order']['status']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Date de production'); ?></dt>
-		<dd>
-			<?php 
+<div class="Order preview" >
+	<table class="table" cellpadding = "0" cellspacing = "0">
+		<tr>
+			<th><?php echo __('Magasin'); ?></th>
+			<th><?php echo __('Client'); ?></th>
+			<th><?php echo __('Création'); ?></th>
+			<th><?php echo __('Statut'); ?></th>
+			<th><?php echo __('Date de production'); ?></th>
+			<th><?php echo __('Commentaire'); ?></th>
+		</tr>
+		<tr>
+			<td><?php echo $this->MyHtml->link($order['Shop']['name'], array('controller' => 'shops', 'action' => 'view', 'full_base' => true, $order['Shop']['id'])); ?></td>
+			<td><?php echo $this->MyHtml->link($order['User']['name'], array('controller' => 'users', 'action' => 'view', 'full_base' => true, $order['User']['id'])); ?></td>
+			<td><?php 
+				$date = new DateTime ($order['Order']['created']);
+				echo h($date->format('d/m/Y H:i')); ?></td>
+			<td><?php echo h($order['Order']['status']); ?></td>
+			<td><?php 
 			$date = new DateTime ($order['Order']['delivery_date']);
 			if($date != false)
 			{
@@ -33,19 +29,8 @@
 				}
 			}
 			
-		 ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('User'); ?></dt>
-		<dd>
-			<?php echo $this->Html->link($order['User']['name'], array('controller' => 'users', 'action' => 'view', $order['User']['id'])); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Comment'); ?></dt>
-		<dd>
-			<?php echo h($order['Order']['comment']); ?>
-			&nbsp;
-		</dd>
-	</dl>
-
+		 ?></td>
+			<td><?php echo h($order['Order']['comment']); ?></td>
+		</tr>
+	</table>
 </div>

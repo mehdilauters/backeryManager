@@ -15,6 +15,7 @@ class ResultsController extends AppController {
  * @return void
  */
   public function index($dateStart = NULL, $dateEnd = NULL, $fileName = NULL) {
+    
     if($dateStart == NULL)
     {
       $dateStart = date('01/m/Y');
@@ -231,10 +232,18 @@ public function getData($dateStart = '', $dateEnd = '')
   {
     $dateStart = date('01/m/Y');
   }
+  else
+  {
+    $dateStart = $this->Functions->viewDateToDateTime($dateStart);
+  }
   
   if($dateEnd == '')
   {
     $dateEnd = date('d/m/Y');
+  }
+  else
+  {
+    $dateEnd = $this->Functions->viewDateToDateTime($dateEnd);
   }
   
   if($dateEnd < $dateStart)
@@ -246,7 +255,7 @@ public function getData($dateStart = '', $dateEnd = '')
     $this->Result->contain('ResultsEntry');
 
     App::uses('CakeTime', 'Utility');
-    $dateSelect = CakeTime::daysAsSql($this->Functions->viewDateToDateTime($dateStart)->format('Y-m-d H:i:s'),$this->Functions->viewDateToDateTime($dateEnd)->format('Y-m-d H:i:s'), 'Result.date');
+    $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Result.date');
 
     $results = $this->Result->find('all', array( 'conditions'=>$dateSelect, 'order' => 'Result.date'));
     $data = array(

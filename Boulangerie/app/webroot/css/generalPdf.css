@@ -1,0 +1,50 @@
+
+.pdf{
+    color: red;
+    width:100%;
+}
+.header{
+  
+}
+
+.header td{
+    width:30%;
+}
+
+table.header, .related table, .Order.preview table{
+ width:100%; 
+}
+
+.Company.preview{
+/*    position:relative;
+       top:20px;
+   left:-40px;*/
+}
+
+.User.preview{
+ 
+/*    position:relative; 
+   top:20px;
+   right:-40px;*/
+}
+
+a {
+	text-decoration:none;
+	color:gray;
+}
+
+
+.related table th{
+  
+}
+
+table.table td, table.table th{
+    border:1px black solid;
+    text-align:center;
+    min-width:20%;
+}
+
+img.rib{
+	max-width:80%;
+	max-height:25%;
+}
