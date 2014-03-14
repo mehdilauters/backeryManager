@@ -39,6 +39,7 @@
 		?>&nbsp;</td>
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
+			<?php echo $this->Html->link(__('Imprimer'), array('action' => 'view', $order['Order']['id'].'.pdf')); ?>
 			<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $order['Order']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $order['Order']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $order['Order']['id']), null, __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>

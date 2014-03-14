@@ -26,6 +26,33 @@ class SalesController extends AppController {
 
     $groupBy = array();
 
+      $dateStart = date('01/m/Y');
+      if(isset($this->request->data['dateStart']))
+      {
+        $dateStart = $this->request->data['dateStart'];
+      }
+
+      $dateEnd = date('d/m/Y');
+      
+      if(isset($this->request->data['dateEnd']))
+      {
+        $dateEnd = $this->request->data['dateEnd'];
+      }
+
+
+      $dateStart = $this->Functions->viewDateToDateTime($dateStart);
+      $dateEnd = $this->Functions->viewDateToDateTime($dateEnd);
+
+  if($dateEnd < $dateStart)
+  {
+    throw new NotFoundException(__('Invalid dates '.$dateStart.'===='.$dateEnd));
+  }
+
+
+      App::uses('CakeTime', 'Utility');
+      $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Sale.date');
+
+      $conditions[] = $dateSelect;
 
 	if(count($group) == 0)
 	{
@@ -117,7 +144,10 @@ class SalesController extends AppController {
             return compact('sales','products', 'shops');
         }
     $this->set('sales', $sales);
-    $this->set(compact('products', 'shops'));
+
+$dateStart = $dateStart->format('d/m/Y');
+$dateEnd = $dateEnd->format('d/m/Y');
+    $this->set(compact('products', 'shops','dateStart','dateEnd'));
   }
   
 /**

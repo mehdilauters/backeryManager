@@ -60,7 +60,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 	$fields['comment'] = true;
 }
   
-  debug($fields);
+  //debug($fields);
   
  ?>
 

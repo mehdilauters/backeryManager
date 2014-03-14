@@ -4,7 +4,7 @@
 		<legend><?php echo __('Edit Company'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('rib');
+		echo $this->Form->input('rib',array('options'=>$media));
 		echo $this->Form->input('address');
 		echo $this->Form->input('phone');
 		echo $this->Form->input('capital');

@@ -81,4 +81,21 @@ class Company extends AppModel {
 			'order' => ''
 		)
 	);
+
+
+  public function afterFind($results, $primary = false)
+    {
+      foreach($results as $id => $shop)
+      {
+	if(isset($results[$id]['Company']['phone']))
+	{
+	  if( strlen($results[$id]['Company']['phone']) == 9)
+	  {
+	    
+	    $results[$id]['Company']['phone'] = '0'.$results[$id]['Company']['phone'];
+	  }
+	}
+      }
+      return $results;
+    }
 }

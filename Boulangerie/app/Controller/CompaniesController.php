@@ -38,6 +38,13 @@ class CompaniesController extends AppController {
  * @return void
  */
 	public function add() {
+	    $company = $this->Company->find('first');
+	    if(count($company) != 0 )
+	    {
+		  $this->Session->setFlash(__('The company already exists'));
+		  $this->redirect(array('action' => 'edit', $company['Company']['id']));	      
+	    }
+	     
 		if ($this->request->is('post')) {
 			$this->Company->create();
 			if ($this->Company->save($this->request->data)) {
