@@ -8,6 +8,7 @@
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('status'); ?></th>
 			<th><?php echo $this->Paginator->sort('delivery_date'); ?></th>
+			<th><?php echo $this->Paginator->sort('discount'); ?></th>
 			<th><?php echo $this->Paginator->sort('comment'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
@@ -37,6 +38,7 @@
 			}
 		
 		?>&nbsp;</td>
+		<td><?php echo h($order['Order']['discount']); ?>&nbsp;</td>
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Imprimer'), array('action' => 'view', $order['Order']['id'].'.pdf')); ?>

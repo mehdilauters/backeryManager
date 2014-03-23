@@ -32,7 +32,7 @@ $(document).ready(function() {
 		weekMode: 'variable',
 		aspectRatio: 2,
 		editable: true,
-		events: "/boulangerie/full_calendar/events/feed/"+_eventTypeId,
+		events: webroot + "full_calendar/events/feed/"+_eventTypeId,
 		eventRender: function(event, element) {
         	element.qtip({
 				content: event.details,
@@ -70,7 +70,7 @@ $(document).ready(function() {
 			} else {
 				var allday = 0;
 			}
-			var url = "/boulangerie/full_calendar/events/update?id="+event.id+"&start="+startyear+"-"+startmonth+"-"+startday+" "+starthour+":"+startminute+":00&end="+endyear+"-"+endmonth+"-"+endday+" "+endhour+":"+endminute+":00&allday="+allday;
+			var url = webroot + "full_calendar/events/update?id="+event.id+"&start="+startyear+"-"+startmonth+"-"+startday+" "+starthour+":"+startminute+":00&end="+endyear+"-"+endmonth+"-"+endday+" "+endhour+":"+endminute+":00&allday="+allday;
 			$.post(url, function(data){});
 		},
 		eventResizeStart: function(event) {
@@ -89,7 +89,7 @@ $(document).ready(function() {
 			var endmonth = enddate.getMonth()+1;
 			var endhour = enddate.getHours();
 			var endminute = enddate.getMinutes();
-			var url = "/boulangerie/full_calendar/events/update?id="+event.id+"&start="+startyear+"-"+startmonth+"-"+startday+" "+starthour+":"+startminute+":00&end="+endyear+"-"+endmonth+"-"+endday+" "+endhour+":"+endminute+":00";
+			var url = webroot + "full_calendar/events/update?id="+event.id+"&start="+startyear+"-"+startmonth+"-"+startday+" "+starthour+":"+startminute+":00&end="+endyear+"-"+endmonth+"-"+endday+" "+endhour+":"+endminute+":00";
 			$.post(url, function(data){});
 		}
     })

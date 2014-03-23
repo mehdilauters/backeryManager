@@ -68,14 +68,14 @@ class Media extends AppModel {
         //'on' => 'create', // Limit validation to 'create' or 'update' operations
       ),
     'description' => array(
-      'notempty' => array(
-        'rule' => array('notempty'),
-        'message' => 'Media::description must be notempty',
-        //'allowEmpty' => false,
-        //'required' => false,
-        //'last' => false, // Stop validation after this rule
-        //'on' => 'create', // Limit validation to 'create' or 'update' operations
-      ),
+//       'notempty' => array(
+//         'rule' => array('notempty'),
+//         'message' => 'Media::description must be notempty',
+//         //'allowEmpty' => false,
+//         //'required' => false,
+//         //'last' => false, // Stop validation after this rule
+//         //'on' => 'create', // Limit validation to 'create' or 'update' operations
+//       ),
     ),
     'path' => array(
       'notempty' => array(

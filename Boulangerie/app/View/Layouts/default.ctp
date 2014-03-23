@@ -70,8 +70,10 @@ echo $this->Html->css(
     echo $this->fetch('meta');
     echo $this->fetch('css');
     echo $this->fetch('script');
-    echo $this->Html->script('main');
+	
+	
   ?>
+  <script>var webroot = "<?php echo $this->Html->url('/'); ?>";</script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
@@ -107,6 +109,9 @@ echo $this->Html->css(
 			
 			<?php 
 				echo $this->Session->flash();
+				//echo $this->Session->flash('flash/ok');
+				//echo $this->Session->flash('flash/warning');
+				//echo $this->Session->flash('flash/fail');
 				echo $this->Session->flash('auth',  'flash/ok');
 				if(count($news) != 0) :
     			?>
@@ -136,6 +141,9 @@ echo $this->Html->css(
   ?>
   	</footer>
   </div>
-  <?php echo $this->element('sql_dump'); ?>
+  <?php echo $this->element('sql_dump'); 
+  echo $this->Html->script('main');
+  ?>
+	
 </body>
 </html>

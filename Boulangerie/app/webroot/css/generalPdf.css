@@ -11,9 +11,14 @@
     width:30%;
 }
 
-table.header, .related table, .Order.preview table{
+table.header, .related table{
  width:100%; 
 }
+
+table.table{
+ min-width:50%; 
+}
+
 
 .Company.preview{
 /*    position:relative;

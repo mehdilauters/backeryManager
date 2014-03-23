@@ -54,8 +54,17 @@ $(document).ready(function(){
 	    },
         }
           );
-    
-    
+    $("#failFlash, #flashWarning").dialog({
+	modal: true,
+	/*	buttons: [
+					{
+						text: "OK",
+						click: function() {
+						$( this ).dialog( "close" );
+							}
+					}
+				]*/
+			});
     
     
     

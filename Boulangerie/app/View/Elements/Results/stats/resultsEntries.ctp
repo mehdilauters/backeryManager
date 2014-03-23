@@ -1,5 +1,6 @@
 ﻿<?php
-$defaultConfig = array('interactive'=>true, 'shopComparative'=>false);
+
+$defaultConfig = array('id'=>0,'interactive'=>true, 'shopComparative'=>false);
 	if(isset($config))
 	{
 		$config = array_merge($defaultConfig, $config);
@@ -59,11 +60,11 @@ if(isset($this->request->data['group']))
 
 <div>
 	<div>
-		<div id="resultsEntriesChart" class="chartDiv" ></div>
+		<div id="resultsEntriesChart_<?php echo $config['id'] ?>" class="chartDiv" ></div>
 		<div class="control"></div>
 	</div>
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
-		<table id="resultsEntriesStatValues" class="table-striped tablePreview">
+		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>" class="table-striped tablePreview">
 		  <tr class="legend plot" >
 			<?php if($fields['date']) { ?><th>Date</th><?php } ?>
 			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th> <?php } ?>
@@ -166,14 +167,14 @@ if(isset($this->request->data['group']))
 					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0); o.HideCol(3);}]
 					},
               rows_counter:true,
-              on_after_refresh_counter: function(o,i){ histogram('resultsEntriesStatValues','resultsEntriesChart', true); }
+              on_after_refresh_counter: function(o,i){ histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>', true); }
               };
 			  
 			  setFilterGrid("resultsEntriesStatValues",tfConfig2);  
 			  
 			//tf1 = new TF('resultsEntriesStatValues', tfConfig2); tf1.AddGrid();
 				<?php }else{ ?>
-		histogram('resultsEntriesStatValues','resultsEntriesChart');
+		histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>');
 	<?php } ?>
 				
 	

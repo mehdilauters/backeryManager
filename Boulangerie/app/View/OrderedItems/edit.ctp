@@ -5,6 +5,9 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('order_id');
+		$date = new DateTime($this->request->data['OrderedItem']['created']);
+		$date = $date->format('d/m/Y');
+		echo $this->Form->input('created', array('type'=>'text', 'class'=>'datepicker', 'label' => 'Date', 'value'=>$date ));
 		echo $this->Form->input('product_id');
 		echo $this->Form->input('tva');
 		echo $this->Form->input('price');

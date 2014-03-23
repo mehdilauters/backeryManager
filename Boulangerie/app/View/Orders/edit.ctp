@@ -8,6 +8,7 @@
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('status',array('options'=>array('reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée')));
 		echo $this->Form->input('delivery_date', array('type'=>'text', 'class'=>'datetimepicker' ));
+		echo $this->Form->input('discount');
 		echo $this->Form->input('comment');
 	?>
 	</fieldset>

@@ -73,6 +73,7 @@ public $actsAs = array('Containable');
     $res = parent::save($data, $validate, $fieldList);
     if(!$res)
     {
+	  $this->log('['.$this->alias."] save error \n===== Validation errors =====\n".Debugger::exportVar($this->validationErrors)."\n===== Data =====".Debugger::exportVar($this->data), 'debug');
       if ( Configure::read('debug') != 0)
       {
         debug('['.$this->alias.'] Save didn\'t work');

@@ -143,7 +143,8 @@ class AppController extends Controller {
 
   public function beforeRender()
   {
-//   debug($this->Auth->user());
+   //debug($this->Auth->user());
+    
 //    $this->backupDb();
 //     $this->exportExcel();
 
@@ -163,7 +164,7 @@ class AppController extends Controller {
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
-	$news = $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews'));
+	$news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews'));
     $this->set('news',$news);
   }
   
@@ -222,8 +223,6 @@ class AppController extends Controller {
 //  	debug($this->request->params['controller']);
 //  	debug($this->request->params['action']);
 	parent::beforeFilter();
-	
-
 	
 	$this->Cookie->name='userAutoLogging';
 	if( count($this->publicActions) != 0)

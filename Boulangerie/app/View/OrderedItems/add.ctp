@@ -7,6 +7,9 @@
 		<legend><?php echo __('Add Ordered Item'); ?></legend>
 	<?php
 		echo $this->Form->input('product_id');
+		$date = new DateTime();
+		$date = $date->format('d/m/Y');
+		echo $this->Form->input('created', array('type'=>'text', 'class'=>'datepicker', 'label' => 'Date', 'value'=>$date ));
 		echo $this->Form->input('quantity', array('class'=>'spinner'));
 		echo $this->Form->input('comment');
 	?>

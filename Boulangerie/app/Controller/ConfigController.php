@@ -180,6 +180,7 @@ class ConfigController extends AppController {
 
   public function setAdmin($admin)
   {
+	$this->log('config: setAdmin from ip '.$this->request->clientIp(), 'debug');
    $this->Session->write('isAdmin', $admin == 1); 
    $this->redirect(array('action' => 'index'));
   }
@@ -212,26 +213,6 @@ class ConfigController extends AppController {
     }
   }
 
-  public function deleteGcalCache($all = false)
-  {
-      App::uses('Folder', 'Utility');  
-      App::uses('File', 'Utility');
-
-      $cacheFolder = CACHE.'gcalendar/';
-
-      $dir = new Folder($cacheFolder);
-      $files = $dir->find('.*\.gcal\.tmp');
-      foreach ($files as $file) {
-  $filePath = $dir->pwd() . DS . $file;
-  $matches = array();
-  preg_match ( '/(\d+)_.*\.gcal\.tmp/' , $file, $matches);
-  if( time() > $matches[1] + 7*24*60*60 || $all )
-  {
-    $fileObj = new File($filePath);
-    $fileObj->delete();
-  }
-      }
-  }
 
   public function importPhotos()
   {
@@ -290,32 +271,21 @@ class ConfigController extends AppController {
 	}
 	if($version['DatabaseVersion']['version'] < Configure::read('databaseVersion'))
 	{
+		$this->log('upgrade db from version '.$version['DatabaseVersion']['version'].' to '.Configure::read('databaseVersion'), 'debug');
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= '
 
 
-DROP TABLE IF EXISTS `companies`;
+truncate table ordered_items;
+truncate table orders;
 
-create table if not exists companies (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `rib` int(10) NOT NULL,
-  `address` text CHARACTER SET utf8 COLLATE utf8_bin not null ,
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
-  `phone` int not null ,
-  `capital` int not null ,
-  `siret` int not null ,
-  PRIMARY KEY (`id`),
-  KEY `fk_companies_media` (`rib`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
-
-ALTER TABLE `companies`
-  ADD CONSTRAINT `fk_companies_media` FOREIGN KEY (`rib`) REFERENCES `medias` (`id`);
+alter table users add `discount` float(3) default 0 ;
+alter table orders add `discount` float(3) default 0;
 
 
 
-';
+';	
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);
 		
@@ -418,6 +388,7 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
 	}
 	else
 	{
+		$this->log('downloading database ( demo = '.$demo.' ) from ip '.$this->request->clientIp(), 'debug');
 		$this->layout = 'ajax'; 
 		$this->response->type('Content-Type: text/x-sql');
 		$this->response->download($fileName);

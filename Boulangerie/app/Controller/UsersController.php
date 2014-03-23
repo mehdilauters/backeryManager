@@ -44,13 +44,13 @@ class UsersController extends AppController {
 			$this->User->create();
 			$this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+				$this->Session->setFlash(__('The user has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
 			}
 		}
-		$media = array_merge(array(''=>''), $this->User->Media->find('list'));
+		$media = array(''=>'')  + $this->User->Media->find('list');
 		$this->set(compact('media'));
 	}
 
@@ -76,16 +76,16 @@ class UsersController extends AppController {
 			}
 
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+				$this->Session->setFlash(__('The user has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
 			}
 		} else {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 			$this->request->data = $this->User->find('first', $options);
 		}
-		$media = array_merge(array(''=>''), $this->User->Media->find('list'));
+		$media = array(''=>'')  + $this->User->Media->find('list');
 		$this->set(compact('media'));
 	}
 
@@ -100,17 +100,18 @@ class UsersController extends AppController {
 			{
 				$user = $this->User->findById($id);
 				$user['User']['isRoot'] = $isRoot;
+				$this->log('user '.$user['name'].' isRoot set from '.(!$isRoot).' to '.$isRoot.' by '.$this->Auth->user('name'), 'debug');
 				if ($this->User->save($user)) {
-					$this->Session->setFlash(__('The user has been saved'));
+					$this->Session->setFlash(__('The user has been saved'),'flash/ok');
 					$this->redirect(array('action' => 'index'));
 				} else {
-					$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+					$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
 					$this->redirect(array('action' => 'index'));
 				}
 			}
 			else
 			{
-				$this->Session->setFlash(__('This is the last Root user.'));
+				$this->Session->setFlash(__('This is the last Root user.'),'flash/error');
 				$this->redirect(array('action' => 'index'));
 			}
 		} else {
@@ -133,10 +134,10 @@ class UsersController extends AppController {
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->User->delete()) {
-			$this->Session->setFlash(__('User deleted'));
+			$this->Session->setFlash(__('User deleted'),'flash/ok');
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('User was not deleted'));
+		$this->Session->setFlash(__('User was not deleted'),'flash/fail');
 		$this->redirect(array('action' => 'index'));
 	}
 	
@@ -149,15 +150,16 @@ class UsersController extends AppController {
 										'id' => $this->Auth->user('id'),
 										'key' => AuthComponent::password(AuthComponent::password($this->data['User']['password']).$this->Auth->user('id'))
 									);
-				$this->Cookie->write('boulangerieFaury', $cookieValue, true, '2 weeks');
-			
+				$this->Cookie->write('boulangerieFaury', $cookieValue, true, '10 weeks');
+				$this->log($this->request->data['User']['email'].' logged, redirect to '.$this->Auth->redirectUrl(), 'debug');
 				return $this->redirect($this->Auth->redirectUrl());
 				// Avant 2.3, utilisez
 				// `return $this->redirect($this->Auth->redirect());`
 			} else {
+				$this->log('cannot log '.$this->request->data['User']['email'], 'debug');
 				$this->Session->setFlash(
 					__('Username ou password est incorrect'),
-					'default',
+					'flash/fail',
 					array(),
 					'auth'
 				);
@@ -182,7 +184,17 @@ class UsersController extends AppController {
 				{
 					$this->Auth->login($user['User']);
 				}
+				else
+				{
+				  $this->log('invalid autologin cookie key for user '.$this->Cookie->read('boulangerieFaury.id'), 'debug');
+				  $this->Cookie->destroy();
+				}
 			}
+		      else
+		      {
+			$this->log('invalid autologin cookie: cannot find user id', 'debug');
+			$this->Cookie->destroy();
+		      }
 		}
 	}
 

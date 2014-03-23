@@ -85,7 +85,7 @@ class PagesController extends AppController {
 							'pass'=>array(
 										'idType'=>$shops[$id]['EventType']['id'],
 										'start' => time(),
-										'end'=>(time() + 60*24*7)
+										'end'=>(time() + 60*60*24*7)
 										)
 								)
 								,array('return')

@@ -26,6 +26,21 @@
 			<?php echo h($user['User']['rib_on_orders']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('discount'); ?></dt>
+		<dd>
+			<?php echo h($user['User']['discount']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('address'); ?></dt>
+		<dd>
+			<?php echo h($user['User']['address']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('phone'); ?></dt>
+		<dd>
+			<?php echo h($user['User']['phone']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($user['User']['created']); ?>

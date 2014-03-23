@@ -116,6 +116,9 @@ create table if not exists users (
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   `rib_on_orders` boolean default TRUE,
   `created` datetime DEFAULT NULL,
+  address text CHARACTER SET utf8 COLLATE utf8_bin ,
+  phone int ,
+  `discount` float(3) default 0 ,
   PRIMARY KEY (`id`),
   KEY `fk_users_media` (`media_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
@@ -266,6 +269,7 @@ create table if not exists orders (
   `status` enum('reserved', 'available', 'waiting', 'paid'),
   `delivery_date` datetime,
   `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
+  `discount` float(3) default 0 ,
   PRIMARY KEY (`id`),
   KEY `fk_orders_shops` (`shop_id`),
   KEY `fk_orders_users` (`user_id`)

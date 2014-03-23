@@ -21,19 +21,62 @@ class SalesController extends AppController {
   }
 
   
+
+	public function dashboard() {
+		$this->set('title_for_layout', 'Tableau de bord');
+		$now = new DateTime();
+		
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>'shop'))));
+		$this->set('results',$res['results']);
+		
+		
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'productType'=>'productType'))));
+		$this->set('resultsEntries',$res['resultsEntries']);
+	/*	
+		// select current days historic (ie Monday) lost/produced...
+		$res = $this->requestAction(array('controller'=>'sales', 'action'=>'stats'), array( 'pass'=>array('conditions'=>
+																										array(
+																											'DAYNAME(Sale.date) = DAYNAME(\''.$now->format('Y-m-d H:i:s').'\')'
+																											),
+																											'group' => array('time'=>'week', 'shop'=>'shop', 'product'=>''))));
+		$this->set(compact('products','shops'));
+		$this->set('sales',$res['sales']);
+		$this->set('products',$res['products']);
+		$this->set('shops',$res['shops']);
+	*/	
+		// select current days historic (ie Monday) productTypes...
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array( 'ResultsEntry' => array(
+																																	'DAYNAME(ResultsEntry.date) = DAYNAME(\''.$now->format('Y-m-d H:i:s').'\')'
+																																)), 'group' => array('time'=>'day', 'productType'=>'productType'))));
+		$this->set('dayStats',$res['resultsEntries']);
+		
+		
+		
+		// select current days historic (ie 21/03) productsTypes...
+		$res = $this->requestAction(array('controller'=>'sales', 'action'=>'stats'), array( 'pass'=>array('conditions'=>
+																										array(
+																											'DATE_FORMAT(Sale.date,"%m-%d") = DATE_FORMAT(\''.$now->format('Y-m-d H:i:s').'\', "%m-%d")'
+																											),
+																											'group' => array('time'=>'day', 'shop'=>'shop', 'product'=>''))));
+		$this->set(compact('products','shops'));
+		$this->set('sales',$res['sales']);
+		$this->set('products',$res['products']);
+		$this->set('shops',$res['shops']);
+	}
+
+
     public function stats($conditions = array(), $group = array()) {
 
 
     $groupBy = array();
-
+	if (empty($this->request->params['requested'])) {
       $dateStart = date('01/m/Y');
       if(isset($this->request->data['dateStart']))
       {
         $dateStart = $this->request->data['dateStart'];
       }
 
-      $dateEnd = date('d/m/Y');
-      
+      $dateEnd = date('d/m/Y');     
       if(isset($this->request->data['dateEnd']))
       {
         $dateEnd = $this->request->data['dateEnd'];
@@ -53,7 +96,7 @@ class SalesController extends AppController {
       $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Sale.date');
 
       $conditions[] = $dateSelect;
-
+	}
 	if(count($group) == 0)
 	{
 		if(isset($this->request->data['group']))
@@ -257,12 +300,12 @@ public function results()
     }
     if($error == 0)
     {
-  $this->Session->setFlash(__('The sale has been saved'));
+  $this->Session->setFlash(__('The sale has been saved'),'flash/ok');
         $this->redirect(array('action' => 'add'));
     }
     else
     {
-      $this->Session->setFlash(__('The sale could not be saved. Please, try again.'));
+      $this->Session->setFlash(__('The sale could not be saved. Please, try again.'),'flash/fail');
     }
   }
     if(!isset($this->request->data['date']))
@@ -298,10 +341,10 @@ public function results()
     }
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->Sale->save($this->request->data)) {
-        $this->Session->setFlash(__('The sale has been saved'));
+        $this->Session->setFlash(__('The sale has been saved'),'flash/ok');
         $this->redirect(array('action' => 'index'));
       } else {
-        $this->Session->setFlash(__('The sale could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The sale could not be saved. Please, try again.'),'flash/flash');
       }
     } else {
       $options = array('conditions' => array('Sale.' . $this->Sale->primaryKey => $id));
@@ -312,6 +355,31 @@ public function results()
     $this->set(compact('products', 'shops'));
   }
 
+  
+  public function graph()
+  {
+  /*
+  	$includes = include APP.'Vendor/zetacomponents/Base/src/base_autoload.php';
+	foreach($includes as $class => $file)
+	{
+		$path = str_replace('Base/', 'Base/src/', $file);
+		require APP.'Vendor/zetacomponents/'.$path;
+	}
+  
+	$includes = include APP.'Vendor/zetacomponents/Graph/src/graph_autoload.php';
+	foreach($includes as $class => $file)
+	{
+		$path = str_replace('Graph/', 'Graph/src/', $file);
+		require APP.'Vendor/zetacomponents/'.$path;
+	}
+*/
+	$this->layout = 'ajax'; 
+	$graph = new ezcGraphBarChart();
+/*	require APP.'Vendor/zetacomponents/Graph/src/charts/bar.php';
+	require APP.'Vendor/zetacomponents/Graph/src/charts/line.php';
+	$graph = new ezcGraphBarChart();*/
+  }
+  
 /**
  * delete method
  *
@@ -327,10 +395,10 @@ public function results()
     }
     $this->request->onlyAllow('post', 'delete');
     if ($this->Sale->delete()) {
-      $this->Session->setFlash(__('Sale deleted'));
+      $this->Session->setFlash(__('Sale deleted'),'flash/ok');
       $this->redirect(array('action' => 'index'));
     }
-    $this->Session->setFlash(__('Sale was not deleted'));
+    $this->Session->setFlash(__('Sale was not deleted'),'flash/fail');
     $this->redirect(array('action' => 'index'));
   }
 }

@@ -52,7 +52,7 @@ class ProductsController extends AppController {
       throw new NotFoundException(__('Invalid product'));
     }
 
-    $isCalendarAvailable = false; //$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
+    
 
     $conditions = array();
     $conditions = array('Product.' . $this->Product->primaryKey => $id);
@@ -65,18 +65,11 @@ class ProductsController extends AppController {
     
     $options = array('conditions' => $conditions);
     $contain = array('ProductType.Media.Photo','Media');
-    if($isCalendarAvailable)
-    {
-      $contain[] = 'Events.EventType';
-      $contain[] = 'Events.Gevent.GeventDate';
-    }
+
     $this->Product->contain($contain);
     $products = $this->Product->find('first', $options);
     $this->set('title_for_layout', $products['Product']['name']);
   
-    $isToday = false; //$this->requestAction(array('controller'=>'events', 'action'=>'isToday'), array( 'pass'=>array('event'=>$products)));
-    $this->set('isCalendarAvailable', $isCalendarAvailable);
-    $this->set('produced', $isToday);
     $this->set('product', $products);
 
 
@@ -111,14 +104,14 @@ class ProductsController extends AppController {
 	unset($this->request->data['Product']['media_id']);
       }
       if ($this->Product->save($this->request->data)) {
-        $this->Session->setFlash(__('The product has been saved'));
+        $this->Session->setFlash(__('The product has been saved'),'flash/ok');
          $this->redirect(array('action' => 'add'));
       } else {
-        $this->Session->setFlash(__('The product could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The product could not be saved. Please, try again.'),'flash/flash');
       }
     }
     $productTypes = $this->Product->ProductType->find('list');
-    $media = array_merge(array(''=>''), $this->Product->Media->find('list'));
+    $media = array(''=>'') + $this->Product->Media->find('list');
     $this->set(compact('productTypes', 'media'));
   }
 
@@ -139,17 +132,17 @@ class ProductsController extends AppController {
 	unset($this->request->data['Product']['media_id']);
       }
       if ($this->Product->save($this->request->data)) {
-        $this->Session->setFlash(__('The product has been saved'));
+        $this->Session->setFlash(__('The product has been saved'),'flash/ok');
         $this->redirect(array('controller'=>'products', 'action' => 'index'));
       } else {
-        $this->Session->setFlash(__('The product could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The product could not be saved. Please, try again.'),'flash/fail');
       }
     } else {
       $options = array('conditions' => array('Product.' . $this->Product->primaryKey => $id));
       $this->request->data = $this->Product->find('first', $options);
     }
     $productTypes = $this->Product->ProductType->find('list');
-    $media = array_merge(array(''=>''), $this->Product->Media->find('list'));
+    $media = array(''=>'') + $this->Product->Media->find('list');
     $this->set(compact('productTypes', 'media'));
   }
 
@@ -168,10 +161,10 @@ class ProductsController extends AppController {
     }
     $this->request->onlyAllow('post', 'delete');
     if ($this->Product->delete()) {
-      $this->Session->setFlash(__('Product deleted'));
+      $this->Session->setFlash(__('Product deleted'),'flash/ok');
       $this->redirect(array('action' => 'index'));
     }
-    $this->Session->setFlash(__('Product was not deleted'));
+    $this->Session->setFlash(__('Product was not deleted'),'flash/fail');
     $this->redirect(array('action' => 'index'));
   }
 

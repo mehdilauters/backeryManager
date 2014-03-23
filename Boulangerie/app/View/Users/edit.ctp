@@ -6,9 +6,12 @@
 		echo $this->Form->input('id');
 		echo $this->Form->input('media_id');
 		echo $this->Form->input('email');
-		echo $this->Form->input('password', array('value'=>''));
+		echo $this->Form->input('password', array('value'=>'', 'required'=>false));
 		echo $this->Form->input('name');
+		echo $this->Form->input('address');
+		echo $this->Form->input('phone');
 		echo $this->Form->input('rib_on_orders');
+		echo $this->Form->input('discount');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

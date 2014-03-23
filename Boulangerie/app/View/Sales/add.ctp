@@ -3,7 +3,7 @@
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
   <input type="submit" name="dateSelect" id="dateSelect" class="dateSearch" value="" />
 </form>
-<form id="salesAdd" method="POST" >
+<form id="salesAdd" method="POST" onSubmit="return checkInputs(true);" >
 <h2>Le <?php echo $date ?></h2>
 <input type="hidden" name="date" id="date" value="<?php echo $date ?>" />
 <table class="table-striped">
@@ -25,7 +25,7 @@ foreach($products as $product)
     <td>
       <ul>
         <?php foreach($shops as $shop){ ?>
-          <li>
+          <li class="shop_<?php echo $shop ['Shop']['id'] ?> product_<?php echo $product['Product']['id']?>" >
 			<a href="<?php  echo $this->webroot.'magasins/details/'.$shop['Shop']['id']; ?>" >
 				<?php echo (strlen($shop ['Shop']['name']) > 13) ? substr($shop ['Shop']['name'],0,10).'...' : $shop ['Shop']['name'] ?>
 			</a>
@@ -36,7 +36,7 @@ foreach($products as $product)
     <td>
       <ul>
         <?php foreach($shops as $shop){ ?>
-          <li>
+          <li class="produced shop_<?php echo $shop ['Shop']['id'] ?> product_<?php echo $product['Product']['id']?>" >
             <?php
                   $saleId = '';
                   $produced = '';
@@ -60,7 +60,7 @@ foreach($products as $product)
     <td>
       <ul>
         <?php foreach($shops as $shop){ ?>
-          <li class="lost" >
+          <li class="lost shop_<?php echo $shop ['Shop']['id'] ?> product_<?php echo $product['Product']['id']?>" >
             <?php
                   $lost = '';
                   foreach($product['Sale'] as $sale)
@@ -109,7 +109,6 @@ foreach($products as $product)
 <div class="actions">
   <h3><?php echo __('Actions'); ?></h3>
   <ul>
-
     <li><?php echo $this->Html->link(__('List Sales'), array('action' => 'index')); ?></li>
     <li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
     <li><?php echo $this->Html->link(__('New Product'), array('controller' => 'products', 'action' => 'add')); ?> </li>
@@ -118,155 +117,68 @@ foreach($products as $product)
   </ul>
 </div>
 <script type="text/javascript">
-  function total()
-  {
-    var totalProduced = 0;
-    var totalSold = 0;
-    var totalLost = 0;
-    var totalAmount = 0;
 
-    $('#shopList li').each(function(index, item){
-  shopPattern=/\w+_(\d+)/
-  res = shopPattern.exec($(item).attr('id'));
-  shopId = res[1];
-  totalShop(shopId);
-  totalProduced += parseFloat($(item).find('#totalProduced_' + shopId ).text());
-  totalSold += parseFloat($(item).find('#totalSold_' + shopId ).text());
-  totalLost += parseFloat($(item).find('#totalLost_' + shopId ).text());
-  totalAmount += parseFloat($(item).find('#totalAmount_' + shopId ).text());
-    });
-    $('#totalProduced' ).text(totalProduced);
-    $('#totalSold' ).text(totalSold);
-    $('#totalLost' ).text(totalLost);
-    $('#totalAmount' ).text(totalAmount);
-  }
-
-  function totalShop(shopId)
-  {
-    var totalShopProduced = 0;
-    var totalShopSold = 0;
-    var totalShopLost = 0;
-    var totalShopAmount = 0;
-
-    $('#shop_' + shopId + ' tr.subtotal').each(function(index, item){
-  var subtotalProduced = 0;
-  var subtotalSold = 0;
-  var subtotalLost = 0;
-  var subtotalAmount = 0;
-    productPattern=/\w+_(\d+)_(\d+)/
-    res = productPattern.exec($(item).attr('id'));
-    productTypeId = res[2];
-    $('#shop_' + shopId + ' tr.product.productType_' + productTypeId).each(function(index, item){
-        var produced = $(item).find('.produced input').val();
-        if( produced == '' )
-        {
-    produced = 0;
-        }
-        else
-        {
-    produced = parseFloat(produced);
-        }
-
-        var sold = $(item).find('.sold input').val();
-        if( sold == '' )
-        {
-    sold = 0;
-        }
-        else
-        {
-    //console.log(sold);
-    sold = parseFloat(sold);
-        }
-        
-        var lost = $(item).find('.lost').text();
-        if( lost == '' )
-        {
-    lost = 0;
-        }
-        else
-        {
-    lost = parseFloat(lost);
-        }
-        var amount = $(item).find('.amount').text();
-        if( amount == '' )
-        {
-    amount = 0;
-        }
-        else
-        {
-    amount = parseFloat(amount);
-        }
-        subtotalProduced += produced;
-        subtotalSold += sold;
-        subtotalLost += lost;
-        subtotalAmount += amount;
-      });
-    totalShopProduced += subtotalProduced;
-    totalShopSold += subtotalSold;
-    totalShopLost += subtotalLost;
-    totalShopAmount += subtotalAmount;
-    $('#totalProduced_' + shopId + '_' + productTypeId ).text(subtotalProduced);
-    $('#totalSold_' + shopId + '_' + productTypeId ).text(subtotalSold);
-    $('#totalLost_' + shopId + '_' + productTypeId ).text(subtotalLost);
-    $('#totalAmount_' + shopId + '_' + productTypeId ).text(subtotalAmount.toFixed(2));
-      });
-    $('#totalProduced_' + shopId ).text(totalShopProduced);
-    $('#totalSold_' + shopId ).text(totalShopSold);
-    $('#totalLost_' + shopId ).text(totalShopLost);
-    $('#totalAmount_' + shopId ).text(totalShopAmount.toFixed(2));
-
-  }
-
-function inputChange(inputObject)
+function processRow(id)
 {
-  var producedPrefix = 'produced_';
-  var soldPrefix = 'sold_';
-  var lostPrefix = 'lost_';
-  var amountPrefix = 'amount_';
-  var pricePrefix = 'price_';
-  var productPrefix = 'product_';
-  var rowPrefix = 'row_';
-  //console.log(inputObject);
-  var id = inputObject.attr('id').replace(producedPrefix, '').replace(soldPrefix, '');
-  var producedId = producedPrefix + id;
-  var soldId = soldPrefix + id;
-  var lostId = lostPrefix + id;
-  var priceId = pricePrefix + id;
-  var amountId = amountPrefix + id;
-  var rowId = rowPrefix + id;
-  
-  var nbProduced = $("#"+producedId).val();
-  var nbSold = $("#" + soldId).val();
-  if(nbProduced == '' || nbSold == '')
+  reg = /(\d+)_(\d+)/;
+  var ids = reg.exec(id);
+  var shopId = ids[1];
+  var productId = ids[2];
+  var nbProduced = parseInt($("#produced_"+shopId+"_"+productId).val());
+  var nbLost = parseInt($("#lost_"+shopId+"_"+productId).val());
+  if(isNaN(nbProduced) || isNaN(nbLost))
   {
-    $("#" + rowId).addClass('notSet');
-    return;
+    $(".product_" + productId + ".shop_" + shopId).find('input').addClass('notSet');
+    return true;
   }
-  var lost = nbProduced - nbSold;
-
-  if(lost < 0 )
+  if(nbLost > nbProduced )
   {
-    console.log("Wrong values");
-    $("#" + rowId).removeClass('notSet');
-    $("#" + rowId).addClass('invalid');
+    $(".product_" + productId + ".shop_" + shopId).find('input').removeClass('notSet');
+    $(".product_" + productId + ".shop_" + shopId).find('input').addClass('invalid');
+    return false;
   }
   else
   {
-    $("#" + rowId).removeClass('invalid');
-    $("#" + rowId).removeClass('notSet');
-    $("#" + rowId).addClass('valid');
+    $(".product_" + productId + ".shop_" + shopId).find('input').removeClass('invalid');
+    $(".product_" + productId + ".shop_" + shopId).find('input').removeClass('notSet');
+    $(".product_" + productId + ".shop_" + shopId).find('input').addClass('valid');
+    return true;
   }
+  return false;
+}
 
-  var amount = $("#"+soldId).val() * $("#" + priceId).html()
-  
-  $("#" + lostId).text(lost);
-  $("#" + amountId).text(amount.toFixed(2));
 
-  shopPattern=/\w+_(\d+)_(\d+)/
-  res = shopPattern.exec(inputObject.attr('id'));
-  var shopId = res[1];
-  var productId = res[2];
-  total();
+function inputChange(inputObject)
+{
+  processRow(inputObject.attr('id')); 
+}
+
+function checkInputs(interactive)
+{
+  var text = "avez vous vraiment vendu plus de produits que fabriqués?\n";
+  var ok = true;
+  $("li.produced input[type=text]").each(function (index, value) {
+	var id = $(this).attr('id');
+    var res = processRow(id);
+    if(!res)
+    {
+		reg = /(\d+)_(\d+)/;
+		var ids = reg.exec(id);
+		var shopId = ids[1];
+		var productId = ids[2];
+		var productName = $("td#product_"+productId).text();
+		text += "- " + productName + "\n";
+    }
+    ok = ok && res;
+  });
+  if(typeof interactive !== 'undefined' && interactive)
+  {
+	  if(!ok)
+	  {
+		ok = confirm("Certaines valeurs ne sont peut-être pas valides\n" + text+"\n Ok => enregistrer quand même");
+	  }
+  }
+  return ok;
 }
 
   $(document).ready(function(){
@@ -288,7 +200,8 @@ function inputChange(inputObject)
       $('#salesAdd').show();
     }
   });
-    total();
+
+    checkInputs(false);
   });
 
 </script>

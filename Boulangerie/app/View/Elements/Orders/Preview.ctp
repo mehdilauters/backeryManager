@@ -6,6 +6,7 @@
 			<th><?php echo __('Création'); ?></th>
 			<th><?php echo __('Statut'); ?></th>
 			<th><?php echo __('Date de production'); ?></th>
+			<th><?php echo __('discount'); ?></th>
 			<th><?php echo __('Commentaire'); ?></th>
 		</tr>
 		<tr>
@@ -30,6 +31,7 @@
 			}
 			
 		 ?></td>
+			<td><?php echo h($order['Order']['discount']); ?></td>
 			<td><?php echo h($order['Order']['comment']); ?></td>
 		</tr>
 	</table>

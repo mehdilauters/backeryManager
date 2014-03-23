@@ -46,11 +46,18 @@ class OrderedItemsController extends AppController {
 			$this->request->data['OrderedItem']['tva'] = $product['ProductType']['tva'];
 			$this->request->data['OrderedItem']['price'] = $product['Product']['price'];
 			$this->request->data['OrderedItem']['unity'] = $product['Product']['unity'];
+			$date = $this->Functions->viewDateToDateTime($this->request->data['OrderedItem']['created']);
+			if($date != false )
+			{
+				$this->request->data['OrderedItem']['created'] = $date->format('Y-m-d H:i:s');	
+			}
+
+
 			if ($this->OrderedItem->save($this->request->data)) {
-				$this->Session->setFlash(__('The ordered item has been saved'));
+				$this->Session->setFlash(__('The ordered item has been saved'),'flash/ok');
 				$this->redirect(array('controller'=>'orders','action' => 'view', $orderId));
 			} else {
-				$this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'),'flash/fail');
 			}
 		}
 		$this->set('orderId', $orderId);
@@ -72,8 +79,13 @@ class OrderedItemsController extends AppController {
 			throw new NotFoundException(__('Invalid ordered item'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			$date = $this->Functions->viewDateToDateTime($this->request->data['OrderedItem']['created']);
+			if($date != false )
+			{
+				$this->request->data['OrderedItem']['created'] = $date->format('Y-m-d H:i:s');	
+			}
 			if ($this->OrderedItem->save($this->request->data)) {
-				$this->Session->setFlash(__('The ordered item has been saved'));
+				$this->Session->setFlash(__('The ordered item has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'));
@@ -102,10 +114,10 @@ class OrderedItemsController extends AppController {
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->OrderedItem->delete()) {
-			$this->Session->setFlash(__('Ordered item deleted'));
+			$this->Session->setFlash(__('Ordered item deleted'),'flash/ok');
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Ordered item was not deleted'));
+		$this->Session->setFlash(__('Ordered item was not deleted'),'flash/ok');
 		$this->redirect(array('action' => 'index'));
 	}
 }

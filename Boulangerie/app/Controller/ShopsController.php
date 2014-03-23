@@ -53,8 +53,7 @@ var $helpers = array('Time');
 							  // ,array('return')
 									      // );
 										  
-										  
-	$shop['EventType']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shop['EventType']['id'].'/'.time().'/'.(time() + 60*24*7));
+	$shop['EventType']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shop['EventType']['id'].'/'.time().'/'.(time() + 60*60*24*7));
     $this->set('isOpened', $this->isOpened($shop));
     $this->set('shop', $shop);
 	
@@ -104,20 +103,20 @@ var $helpers = array('Time');
 		$this->request->data['Shop']['event_type_id'] = $this->EventType->id;
 		
 		if ($this->Shop->save($this->request->data)) {
-			        $this->Session->setFlash(__('The shop has been saved'));
+			        $this->Session->setFlash(__('The shop has been saved'),'flash/ok');
 					$this->redirect(array('action' => 'index'));
 		}
 		else
 		{
-			$this->Session->setFlash(__('The shop has been saved but eventType not created'));
+			$this->Session->setFlash(__('The shop has been saved but eventType not created'),'flash/warning');
 			$this->redirect(array('plugin'=>'full_calendar', 'controller'=>'eventTypes', 'action' => 'add'));
 		}
 		
       } else {
-        $this->Session->setFlash(__('The shop could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The shop could not be saved. Please, try again.'),'flash/error');
       }
     }
-    $media = $this->Shop->Media->find('list');
+    $media = array(''=>'')  + $this->Shop->Media->find('list');
     $eventTypes = array_merge(array(''),$this->Shop->EventType->find('list'));
     $this->set(compact('media','eventTypes'));
   }
@@ -135,16 +134,16 @@ var $helpers = array('Time');
     }
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->Shop->save($this->request->data)) {
-        $this->Session->setFlash(__('The shop has been saved'));
+        $this->Session->setFlash(__('The shop has been saved'),'flash/ok');
         $this->redirect(array('action' => 'index'));
       } else {
-        $this->Session->setFlash(__('The shop could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The shop could not be saved. Please, try again.'),'flash/fail');
       }
     } else {
       $options = array('conditions' => array('Shop.' . $this->Shop->primaryKey => $id));
       $this->request->data = $this->Shop->find('first', $options);
     }
-    $media = $this->Shop->Media->find('list');
+    $media = array(''=>'') + $this->Shop->Media->find('list');
     $eventTypes = $this->Shop->EventType->find('list');
     $this->set(compact('media','eventTypes'));
   }
@@ -164,10 +163,10 @@ var $helpers = array('Time');
     }
     $this->request->onlyAllow('post', 'delete');
     if ($this->Shop->delete()) {
-      $this->Session->setFlash(__('Shop deleted'));
+      $this->Session->setFlash(__('Shop deleted'),'flash/ok');
       $this->redirect(array('action' => 'index'));
     }
-    $this->Session->setFlash(__('Shop was not deleted'));
+    $this->Session->setFlash(__('Shop was not deleted'),'flash/fail');
     $this->redirect(array('action' => 'index'));
   }
 

@@ -85,7 +85,7 @@ class Order extends AppModel {
 		'OrderedItem' => array(
 			'className' => 'OrderedItem',
 			'foreignKey' => 'order_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',

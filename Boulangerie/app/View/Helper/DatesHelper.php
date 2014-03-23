@@ -71,9 +71,9 @@ function timeToDateHeureFR($time) {
   }
 
   function timeToDateCompleteFR($time){
-  $mois=$this->getMoisFr(date('m'), time());
+  $mois=$this->getMoisFr(date('m', time()));
     
-  $jour=$this->getJourFr(date('D'), time());
+  $jour=$this->getJourFr(date('w', time()));
     
     return $jour .' '.date('d', $time).' '.$mois;
   }

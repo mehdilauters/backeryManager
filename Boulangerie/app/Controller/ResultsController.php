@@ -173,6 +173,11 @@ class ResultsController extends AppController {
 		{
 			$conditions['ResultsEntry']['ResultsEntry.product_types_id'] =  $_conditions['productType'];
 		}
+		
+		if(isset($_conditions['ResultsEntry']))
+		{
+			$conditions['ResultsEntry'] += $_conditions['ResultsEntry'];
+		}
 	}
 	  
     $this->Result->contain('Shop');
@@ -400,10 +405,10 @@ public function getData($dateStart = '', $dateEnd = '')
 
 
       if ($errors == 0 ) {
-        $this->Session->setFlash(__('The result has been saved'));
+        $this->Session->setFlash(__('The result has been saved'),'flash/ok');
         $this->redirect(array('action' => 'add'));
       } else {
-        $this->Session->setFlash(__('The result could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The result could not be saved. Please, try again.'),'flash/fail');
       }
     }
     $shops = $this->Result->Shop->find('list');
@@ -425,10 +430,10 @@ public function getData($dateStart = '', $dateEnd = '')
     }
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->Result->save($this->request->data)) {
-        $this->Session->setFlash(__('The result has been saved'));
+        $this->Session->setFlash(__('The result has been saved'),'flash/ok');
         $this->redirect(array('action' => 'index'));
       } else {
-        $this->Session->setFlash(__('The result could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The result could not be saved. Please, try again.'),'flash/fail');
       }
     } else {
       $options = array('conditions' => array('Result.' . $this->Result->primaryKey => $id));
@@ -453,10 +458,10 @@ public function getData($dateStart = '', $dateEnd = '')
     }
     $this->request->onlyAllow('post', 'delete');
     if ($this->Result->delete()) {
-      $this->Session->setFlash(__('Result deleted'));
+      $this->Session->setFlash(__('Result deleted'),'flash/ok');
       $this->redirect(array('action' => 'index'));
     }
-    $this->Session->setFlash(__('Result was not deleted'));
+    $this->Session->setFlash(__('Result was not deleted'),'flash/fail');
     $this->redirect(array('action' => 'index'));
   }
 }

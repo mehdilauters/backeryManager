@@ -59,6 +59,7 @@ class EventsController extends FullCalendarAppController {
 
 	function add($eventTypeId = null) {
 		if (!empty($this->data)) {
+			debug($this->data);
 			$this->Event->create();
 			$event = $this->data;
 			if($this->data['Event']['recursive'] != '')
@@ -80,7 +81,10 @@ class EventsController extends FullCalendarAppController {
  			    $event['Event']['end'] = $endDate->format('Y-m-d H:i:s');
 			  }
 
-			  $event['Event']['event_type_id'] = $eventTypeId;
+			  if($eventTypeId != null)
+			  {
+				$event['Event']['event_type_id'] = $eventTypeId;
+				}
 			  
 			if ($this->Event->save($event)) {
 				$this->Session->setFlash(__('The event has been saved', true));

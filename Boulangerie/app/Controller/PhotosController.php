@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class PhotosController extends AppController {
 
+  var $publicActions = array('download');
   var $uses = array('Photo', 'Media');
 /**
  * index method
@@ -45,13 +46,25 @@ class PhotosController extends AppController {
 		$path_parts = pathinfo($photo['Photo']['path']);
  		$params = array(
               'id' => $photo['Photo']['path'],
-              'name' => $photo['Photo']['titre'],
+              'name' => $photo['Media']['title'],
               'download' => true,
               'extension' => $path_parts['extension'],
               'path' => APP.'webroot/img/photos/'.$path
        );
        $this->set($params);
-		
+    $modified = filemtime(APP.'webroot/img/photos/'.$path);
+    $this->response->modified($modified);
+    if ($this->response->checkNotModified($this->request))
+    {
+      $this->autoRender = false;
+      $this->response->send();
+    }
+    else
+    {
+      $params['cache'] = '+1 month';
+      $params['modified'] = '@' . $modified; // Must be a string to work. See MediaView->render()
+      $this->set($params);
+    }
 	}
 
   
@@ -63,15 +76,19 @@ class PhotosController extends AppController {
       if( $this->request->data['Photo']['upload']['size'] == 0 )
       {
         $this->Photo->invalidateField('upload','Please check the size of your image');
+	$this->log("size too big", 'debug');
         return false;
       }
       if( !$this->Photo->checkType($this->request->data['Photo']['upload']['type']) )
       {
         $this->Photo->invalidateField('upload','Veuillez fournir une image .png, .jpg');
+
+	$this->log("image type not valid", 'debug');
         return false;
       }
       if(!is_uploaded_file($this->request->data['Photo']['upload']['tmp_name']))
       {
+	$this->log("error is_uploaded_file", 'debug');
         $this->Photo->invalidateField('upload','Erreur lors de l\'upload');
         return false;
       }
@@ -158,11 +175,11 @@ class PhotosController extends AppController {
 
 	$this->Photo->create();
 	if ( $this->Photo->save($this->request->data)) {
-	  $this->Session->setFlash(__('The photo has been saved'));
+	  $this->Session->setFlash(__('The photo has been saved'),'flash/ok');
 	  $this->redirect(array('action' => 'index'));
 	} else {
 	  $this->Photo->deleteFile();
-	  $this->Session->setFlash(__('The photo could not be saved. Please, try again.'));
+	  $this->Session->setFlash(__('The photo could not be saved. Please, try again.'),'flash/fail');
 	}
       }
       else
@@ -231,10 +248,10 @@ class PhotosController extends AppController {
     }
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->Photo->save($this->request->data)) {
-        $this->Session->setFlash(__('The photo has been saved'));
+        $this->Session->setFlash(__('The photo has been saved'),'flash/ok');
         $this->redirect(array('action' => 'index'));
       } else {
-        $this->Session->setFlash(__('The photo could not be saved. Please, try again.'));
+        $this->Session->setFlash(__('The photo could not be saved. Please, try again.'),'flash/fail');
       }
     } else {
       $options = array('conditions' => array('Photo.' . $this->Photo->primaryKey => $id));
@@ -259,10 +276,10 @@ class PhotosController extends AppController {
     }
     $this->request->onlyAllow('post', 'delete');
     if ($this->Photo->delete()) {
-      $this->Session->setFlash(__('Photo deleted'));
+      $this->Session->setFlash(__('Photo deleted'),'flash/ok');
       $this->redirect(array('action' => 'index'));
     }
-    $this->Session->setFlash(__('Photo was not deleted'));
+    $this->Session->setFlash(__('Photo was not deleted'),'flash/fail');
     $this->redirect(array('action' => 'index'));
   }
 }

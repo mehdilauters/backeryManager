@@ -33,25 +33,37 @@ class OrdersController extends AppController {
 		$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
 		
 		$order = $this->Order->find('first', $options);
-		
 		$company = $this->Company->find('first');
 		if(count($company) == 0)
 		{
 			debug('company does not exists');
 		}
-		$total = array(
+		$total = array('tva' => array(), 'total');
+		$tmp = array(
 		'HT' => 0,
 		'TTC' => 0,
-		'tva_percent' => 0,
 		'tva_total' => 0
 		);
+		$total['total'] = $tmp;
 		foreach($order['OrderedItem'] as &$item)
 		{
+		      if(!isset($total['tva'][$item['tva']]))
+		      {
+			$total['tva'][$item['tva']] = $tmp;
+		      }
 			$item['total_HT'] =  $item['without_taxes'] * $item['quantity'];
-			$total['HT'] += $item['total_HT'];
-			$total['TTC'] += $item['quantity'] * $item['price'];
-			$total['tva_total'] += $total['TTC'] - $total['HT'];
+			$total['tva'][$item['tva']]['HT'] += $item['total_HT'];
+			$total['tva'][$item['tva']]['TTC'] += $item['quantity'] * $item['price'];
+			$total['tva'][$item['tva']]['tva_total'] += $total['tva'][$item['tva']]['TTC'] - $total['tva'][$item['tva']]['HT'];
 		}
+
+		foreach($total['tva'] as $data)
+		{
+		   $total['total']['HT'] += $data['HT'];
+		   $total['total']['TTC'] += $data['TTC'];
+		   $total['total']['tva_total'] += $data['tva_total'];
+		}
+
 		$this->set('title_for_layout', 'Commande #'.$order['Order']['id']);
 		$this->set('company', $company);
 		$this->set('order', $order);
@@ -74,13 +86,14 @@ class OrdersController extends AppController {
 			{
 				$this->request->data['Order']['delivery_date'] = $delivery->format('Y-m-d H:i:s');	
 			}
-			
+			$user = $this->Order->User->findById($this->request->data['Order']['user_id']);
+			$this->request->data['Order']['discount'] = $user['User']['discount'];
 			
 			if ($this->Order->save($this->request->data)) {
-				$this->Session->setFlash(__('The order has been saved'));
+				$this->Session->setFlash(__('The order has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The order could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The order could not be saved. Please, try again.'),'flash/fail');
 			}
 		}
 		$shops = $this->Order->Shop->find('list');
@@ -100,12 +113,16 @@ class OrdersController extends AppController {
 			throw new NotFoundException(__('Invalid order'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			$this->request->data['Order']['delivery_date'] = $this->Functions->viewDateToDateTime($this->request->data['Order']['delivery_date'])->format('Y-m-d H:i:s');
+			$delivery = $this->Functions->viewDateToDateTime($this->request->data['Order']['delivery_date']);
+			if($delivery != false )
+			{
+				$this->request->data['Order']['delivery_date'] = $delivery->format('Y-m-d H:i:s');	
+			}
 			if ($this->Order->save($this->request->data)) {
-				$this->Session->setFlash(__('The order has been saved'));
+				$this->Session->setFlash(__('The order has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The order could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The order could not be saved. Please, try again.'), 'flash/fail');
 			}
 		} else {
 			$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
@@ -131,10 +148,10 @@ class OrdersController extends AppController {
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Order->delete()) {
-			$this->Session->setFlash(__('Order deleted'));
+			$this->Session->setFlash(__('Order deleted'),'flash/ok');
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Order was not deleted'));
+		$this->Session->setFlash(__('Order was not deleted'),'flash/fail');
 		$this->redirect(array('action' => 'index'));
 	}
 }
