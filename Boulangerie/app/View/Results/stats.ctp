@@ -58,7 +58,7 @@
 	  <?php endforeach; ?>
     </select>
 	</fieldset>
-    <input type="submit" />
+    <input type="submit" class="search" value="" />
   </form>
 </div>
 <?php   //echo $this->element('Results/stats', array('results'=>$results, 'resultsEntries'=>$resultsEntries, 'shops'=>$shops, 'productTypes'=>$productTypes)); ?>

@@ -110,6 +110,7 @@ class Shop extends AppModel {
 
   public function afterFind($results, $primary = false)
   {
+    $results = parent::afterFind($results, $primary);
     foreach($results as $id => $shop)
     {
       if(isset($results[$id]['Shop']['phone']))

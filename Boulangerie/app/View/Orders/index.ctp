@@ -41,10 +41,10 @@
 		<td><?php echo h($order['Order']['discount']); ?>&nbsp;</td>
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('Imprimer'), array('action' => 'view', $order['Order']['id'].'.pdf')); ?>
-			<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $order['Order']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $order['Order']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $order['Order']['id']), null, __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/folder-open.png', array('alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voirr')); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editerr')); ?>
+			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

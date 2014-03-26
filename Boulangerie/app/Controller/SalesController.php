@@ -105,7 +105,7 @@ class SalesController extends AppController {
 		}
 		else
 		{
-		    $group['time'] = 'week';
+		    $group['time'] = 'day';
 		    $group['shop'] = 'shop';
 		    $group['product'] = 'product';
 			$this->request->data['group'] = $group;

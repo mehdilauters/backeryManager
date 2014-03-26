@@ -51,10 +51,15 @@ class OrdersController extends AppController {
 		      {
 			$total['tva'][$item['tva']] = $tmp;
 		      }
-			$item['total_HT'] =  $item['without_taxes'] * $item['quantity'];
+		      $item['discount_HT'] = $item['without_taxes'] - (($order['Order']['discount'] * $item['without_taxes']) / 100 );
+		      $item['discount_TTC'] = $item['price'] - (($order['Order']['discount'] * $item['price']) / 100 );
+		      $item['total_HT'] =  $item['quantity'] * $item['discount_HT'];
+		      $item['total_TTC'] =  $item['quantity'] * $item['discount_TTC'];
+
+
 			$total['tva'][$item['tva']]['HT'] += $item['total_HT'];
-			$total['tva'][$item['tva']]['TTC'] += $item['quantity'] * $item['price'];
-			$total['tva'][$item['tva']]['tva_total'] += $total['tva'][$item['tva']]['TTC'] - $total['tva'][$item['tva']]['HT'];
+			$total['tva'][$item['tva']]['TTC'] += $item['total_TTC'];
+			$total['tva'][$item['tva']]['tva_total'] += ($item['total_TTC'] - $item['total_HT']);
 		}
 
 		foreach($total['tva'] as $data)

@@ -400,7 +400,18 @@ table tr.legend th{
   padding:1%;
 }
 
+.search{
+     background-color:transparent;
+ background-image:url("../img/icons/system-search_1.png"); 
+  /*  padding: 0 0 0 10px;*/
+  cursor: pointer;
+  width:48px;
+  height:48px;
+  border:0;
+}
+
 .save{
+    background-color:transparent;
  background-image:url("../img/icons/document-save.png"); 
   /*  padding: 0 0 0 10px;*/
   cursor: pointer;
@@ -410,6 +421,7 @@ table tr.legend th{
 }
 
 .dateSearch{
+    background-color:transparent;
  background-image:url("../img/icons/view-calendar-upcoming-days.png"); 
   /*  padding: 0 0 0 10px;*/
   cursor: pointer;
@@ -419,6 +431,7 @@ table tr.legend th{
 }
 
 .spreadsheet{
+  background-color:transparent;
   background-image:url("../img/icons/application-vnd.oasis.opendocument.spreadsheet-template.png"); 
   cursor: pointer;
   width:48px;
@@ -465,7 +478,7 @@ table tr.legend th{
     color: gray;
 }
 
-img{
+img.rounded{
   border-radius: 15px;
 }
 

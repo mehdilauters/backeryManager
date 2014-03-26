@@ -34,7 +34,7 @@ if(isset($this->request->data['group']))
       <label>Début</label><input type="text" name="dateStart" id="dateStart" value="<?php echo $dateStart ?>" class="datepicker" />
       <label>Fin</label><input type="text" name="dateEnd" id="dateEnd" value="<?php echo $dateEnd ?>" class="datepicker" />
     </fieldset>
-    <input type="submit" />
+    <input type="submit" class="search" value="" />
   </form>
 </div>
 <?php
