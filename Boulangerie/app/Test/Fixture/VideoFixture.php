@@ -28,6 +28,33 @@ class VideoFixture extends CakeTestFixture {
 		array(
 			'id' => 1
 		),
+		array(
+			'id' => 2
+		),
+		array(
+			'id' => 3
+		),
+		array(
+			'id' => 4
+		),
+		array(
+			'id' => 5
+		),
+		array(
+			'id' => 6
+		),
+		array(
+			'id' => 7
+		),
+		array(
+			'id' => 8
+		),
+		array(
+			'id' => 9
+		),
+		array(
+			'id' => 10
+		),
 	);
 
 }

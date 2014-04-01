@@ -9,7 +9,7 @@ App::uses('AppController', 'Controller');
 */
 
 class ConfigController extends AppController {
-  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry');
+  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem');
   
   var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug', 'demoBaseSql' );
   var $memberActions = array();
@@ -164,6 +164,41 @@ class ConfigController extends AppController {
 
 		$sql .= 'update results_entries ResultsEntry set 
 			result = '.$resultMapping.";\n";
+			
+			
+			//////////////////////////////////////////////:
+	$ordered_item = $this->OrderedItem->find('first', array(
+			'fields' => array(
+					'max( OrderedItem.quantity ) as maxItem',
+					'min( OrderedItem.quantity ) as minItem',
+				),
+		));
+
+	$sin = 'abs('.$sinCoef.' * sin(OrderedItem.id) )';
+
+		$minItem = $ordered_item[0]['minItem'];
+		$maxItem = $ordered_item[0]['maxItem'];
+		
+
+		
+		if($minItem < 0)
+		{
+			$minItem = 0;
+		}
+		
+		$rangeItem = $maxItem - $minItem;
+		
+		$newMaxItem = 1000;
+		
+		
+	$quantityMapping  	= 'round( abs( (quantity  - '.$minItem.') / '.$rangeItem.' * '.$newMaxItem.' * '.$sin.' ) )';
+
+
+		$sql .= 'update ordered_items OrderedItem set 
+			quantity = '.$quantityMapping.";\n";
+			
+	
+	
 
 		// add demo user
 		$sql .= 'insert into users (email, password) values (\'demo@demo.fr\', \''.AuthComponent::password('demo')."\');\n";

@@ -18,7 +18,7 @@
 		<td>
 			<?php echo $this->Html->link($company['Media']['name'], array('controller' => 'media', 'action' => 'view', $company['Media']['id'])); ?>
 		</td>
-		<td><?php echo h($company['Company']['address']); ?>&nbsp;</td>
+		<td><?php echo $company['Company']['address']; ?>&nbsp;</td>
 		<td><?php echo h($company['Company']['phone']); ?>&nbsp;</td>
 		<td><?php echo h($company['Company']['capital']); ?>&nbsp;</td>
 		<td><?php echo h($company['Company']['siret']); ?>&nbsp;</td>

@@ -44,6 +44,7 @@ public $actsAs = array('Containable');
         'odd_spaces'=>true,
         'encode'=>false,
     ));
+    $this->data[$this->name] = str_replace("\\n", "<br/>", $this->data[$this->name]);
     return true;
   }
   

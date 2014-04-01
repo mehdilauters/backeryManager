@@ -29,7 +29,13 @@ class CompaniesController extends AppController {
 			throw new NotFoundException(__('Invalid company'));
 		}
 		$options = array('conditions' => array('Company.' . $this->Company->primaryKey => $id));
-		$this->set('company', $this->Company->find('first', $options));
+		$result = $this->Company->find('first', $options);
+		$this->set('company', $result);
+		
+		
+        if (isset($this->params['requested'])) {
+            return $result;
+        }
 	}
 
 /**
@@ -42,14 +48,14 @@ class CompaniesController extends AppController {
 	    if(count($company) != 0 )
 	    {
 		  $this->Session->setFlash(__('The company already exists'),'flash/fail');
-		  $this->redirect(array('action' => 'edit', $company['Company']['id']));	      
+		  return $this->redirect(array('action' => 'edit', $company['Company']['id']));	      
 	    }
 	     
 		if ($this->request->is('post')) {
 			$this->Company->create();
 			if ($this->Company->save($this->request->data)) {
 				$this->Session->setFlash(__('The company has been saved'),'flash/ok');
-				$this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The company could not be saved. Please, try again.'),'flash/fail');
 			}
@@ -72,7 +78,7 @@ class CompaniesController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Company->save($this->request->data)) {
 				$this->Session->setFlash(__('The company has been saved'),'flash/ok');
-				$this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The company could not be saved. Please, try again.'),'flash/fail');
 			}
@@ -97,12 +103,13 @@ class CompaniesController extends AppController {
 		if (!$this->Company->exists()) {
 			throw new NotFoundException(__('Invalid company'));
 		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Company->delete()) {
-			$this->Session->setFlash(__('Company deleted'),'flash/ok');
-			$this->redirect(array('action' => 'index'));
+		if ($this->request->is('post') || $this->request->is('delete')) {
+			if ($this->Company->delete()) {
+				$this->Session->setFlash(__('Company deleted'),'flash/ok');
+				return $this->redirect(array('action' => 'index'));
+			}
 		}
 		$this->Session->setFlash(__('Company was not deleted'),'flash/fail');
-		$this->redirect(array('action' => 'index'));
+		return $this->redirect(array('action' => 'index'));
 	}
 }

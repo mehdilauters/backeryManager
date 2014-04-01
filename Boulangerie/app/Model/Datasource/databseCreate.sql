@@ -299,7 +299,7 @@ create table if not exists companies (
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
   `phone` int not null ,
   `capital` int not null ,
-  `siret` int not null ,
+  `siret` bigint(20) not null ,
   PRIMARY KEY (`id`),
   KEY `fk_companies_media` (`rib`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;

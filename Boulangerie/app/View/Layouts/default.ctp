@@ -138,6 +138,7 @@ echo $this->Html->css(
       'http://www.cakephp.org/',
       array('target' => '_blank', 'escape' => false)
     );
+    echo file_get_contents(APP.'uploadDate.txt');
   ?>
   	</footer>
   </div>
