@@ -24,6 +24,6 @@
 <body>
 	<?php echo $this->fetch('content');?>
 
-	<p>This email was sent using the <a href="http://cakephp.org">CakePHP Framework</a></p>
+	<div id="footer" ><a href="<?php echo $this->Html->url('/', true); ?>" ><?php echo $this->Html->url('/', true); ?></a></div>
 </body>
 </html>

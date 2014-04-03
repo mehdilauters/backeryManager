@@ -1,11 +1,11 @@
 <?php
 App::uses('PhotosController', 'Controller');
-
+include 'AppControllerTest.php';
 /**
  * PhotosController Test Case
  *
  */
-class PhotosControllerTest extends ControllerTestCase {
+class PhotosControllerTest extends AppControllerTest {
 
 /**
  * Fixtures
@@ -13,54 +13,13 @@ class PhotosControllerTest extends ControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.photo',
 		'app.media',
+		'app.photo',
 		'app.user',
+		'app.company',
 		'app.event',
 		'app.product',
-		'app.product_types',
 		'app.product_type',
-		'app.products'
+		'app.order',
 	);
-
-/**
- * testIndex method
- *
- * @return void
- */
-	public function testIndex() {
-	}
-
-/**
- * testView method
- *
- * @return void
- */
-	public function testView() {
-	}
-
-/**
- * testAdd method
- *
- * @return void
- */
-	public function testAdd() {
-	}
-
-/**
- * testEdit method
- *
- * @return void
- */
-	public function testEdit() {
-	}
-
-/**
- * testDelete method
- *
- * @return void
- */
-	public function testDelete() {
-	}
-
 }

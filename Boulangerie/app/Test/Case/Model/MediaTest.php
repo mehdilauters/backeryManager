@@ -17,7 +17,7 @@ class MediaTest extends CakeTestCase {
 		'app.user',
 		'app.event',
 		'app.product',
-		'app.products_type'
+		'app.product_type'
 	);
 
 /**
@@ -28,6 +28,12 @@ class MediaTest extends CakeTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->Media = ClassRegistry::init('Media');
+	}
+	
+	public function testOk()
+	{
+		$res = $this->Media->find('list');
+		debug($res);
 	}
 
 /**

@@ -8,6 +8,7 @@ App::uses('AppController', 'Controller');
 class ProductsController extends AppController {
   var $publicActions = array('index','view');
   var $uses = array('Product');
+  
 /**
  * index method
  *
@@ -96,16 +97,17 @@ class ProductsController extends AppController {
  * @return void
  */
   public function add() {
+	debug('nazdar iam not connected');
     if ($this->request->is('post')) {
       $this->Product->create();
       debug($this->request->data);
       if($this->request->data['Product']['media_id'] == '')
       {
-	unset($this->request->data['Product']['media_id']);
+		unset($this->request->data['Product']['media_id']);
       }
       if ($this->Product->save($this->request->data)) {
         $this->Session->setFlash(__('The product has been saved'),'flash/ok');
-         $this->redirect(array('action' => 'add'));
+         return $this->redirect(array('action' => 'add'));
       } else {
         $this->Session->setFlash(__('The product could not be saved. Please, try again.'),'flash/flash');
       }
@@ -133,7 +135,7 @@ class ProductsController extends AppController {
       }
       if ($this->Product->save($this->request->data)) {
         $this->Session->setFlash(__('The product has been saved'),'flash/ok');
-        $this->redirect(array('controller'=>'products', 'action' => 'index'));
+        return $this->redirect(array('controller'=>'products', 'action' => 'index'));
       } else {
         $this->Session->setFlash(__('The product could not be saved. Please, try again.'),'flash/fail');
       }
@@ -162,10 +164,10 @@ class ProductsController extends AppController {
     $this->request->onlyAllow('post', 'delete');
     if ($this->Product->delete()) {
       $this->Session->setFlash(__('Product deleted'),'flash/ok');
-      $this->redirect(array('action' => 'index'));
+      return $this->redirect(array('action' => 'index'));
     }
     $this->Session->setFlash(__('Product was not deleted'),'flash/fail');
-    $this->redirect(array('action' => 'index'));
+    return $this->redirect(array('action' => 'index'));
   }
 
   public function beforeRender()

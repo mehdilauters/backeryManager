@@ -15,7 +15,22 @@
 	
 	Configure::write('databaseVersion', 6);
 	
-	Configure::write('dbBackupUrl', 'boulangerie-faury.fr/dev/config/dbBackup/');
+	Configure::write('dbBackupUrl', 'boulangerie-faury.fr/boulangerie/config/dbBackup/');
 	//Configure::write('dbBackupUrl', 'localhost/backery/Boulangerie/config/dbBackup/');
+	
+	Configure::write('email', array('from' => 
+											array(
+												'email'=>'boulangeriefaury@orange.fr',
+												'name'=>'Boulangerie Faury'
+												),
+									'debug' => array(
+														'status' => false,
+														'email' => 'mehdilauters@orange.fr'
+													),
+									
+									)
+									
+					);
+	
 	
 ?>

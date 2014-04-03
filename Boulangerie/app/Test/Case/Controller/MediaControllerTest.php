@@ -1,11 +1,11 @@
 <?php
 App::uses('MediaController', 'Controller');
-
+include 'AppControllerTest.php';
 /**
  * MediaController Test Case
  *
  */
-class MediaControllerTest extends ControllerTestCase {
+class MediaControllerTest extends AppControllerTest {
 
 /**
  * Fixtures
@@ -16,9 +16,13 @@ class MediaControllerTest extends ControllerTestCase {
 		'app.media',
 		'app.user',
 		'app.event',
+		'app.event_type',
+		'app.sale',
 		'app.product',
-		'app.product_types',
-		'app.products_type'
+		'app.product_type',
+		'app.photo',
+		'app.order',
+		'app.company'
 	);
 
 }

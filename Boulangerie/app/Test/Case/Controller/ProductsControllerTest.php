@@ -1,11 +1,12 @@
 <?php
 App::uses('ProductsController', 'Controller');
+include 'AppControllerTest.php';
 
 /**
  * ProductsController Test Case
  *
  */
-class ProductsControllerTest extends ControllerTestCase {
+class ProductsControllerTest extends AppControllerTest {
 
 /**
  * Fixtures
@@ -14,52 +15,34 @@ class ProductsControllerTest extends ControllerTestCase {
  */
 	public $fixtures = array(
 		'app.product',
-		'app.product_types',
 		'app.media',
+		'app.photo',
+		'app.shop',
+		'app.order',
 		'app.user',
 		'app.event',
+		'app.sale',
 		'app.product_type',
-		'app.products'
 	);
-
-/**
- * testIndex method
- *
- * @return void
- */
-	public function testIndex() {
-	}
-
-/**
- * testView method
- *
- * @return void
- */
-	public function testView() {
-	}
-
-/**
- * testAdd method
- *
- * @return void
- */
-	public function testAdd() {
-	}
-
-/**
- * testEdit method
- *
- * @return void
- */
-	public function testEdit() {
-	}
-
-/**
- * testDelete method
- *
- * @return void
- */
-	public function testDelete() {
+	
+	
+		public function setUp() {
+		parent::setUp();
+		$photo = $this->Product->Media->Photo->find('first');
+		$this->testRecord = array(
+								array(
+									'Product' => array(
+										'name' => 'testInsert1',
+										'media_id' => $photo['Photo']['id']
+									)
+								),
+								array(
+									'Product' => array(
+										'name' => 'testInsert2',
+										'media_id' => $photo['Photo']['id']
+									)
+								),
+							);
 	}
 
 }

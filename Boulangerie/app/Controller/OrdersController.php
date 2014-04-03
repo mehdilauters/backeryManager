@@ -76,6 +76,28 @@ class OrdersController extends AppController {
 		//$this->request->is('pdf');
 	}
 
+	public function email($id = null) {
+	
+		$this->Order->contain('OrderedItem.Product', 'Shop', 'User');
+		$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
+		$order = $this->Order->find('first', $options);
+	
+		$this->view($id);
+		$this->layout = 'pdf/default';
+		$pdf = $this->render('view');
+		$this->output = '';
+		debug($pdf);
+		$mail = array('user'=>$order,
+						'view' => 'default',
+						'data' => array(),
+						'subject' => '',
+						'message' => 'Hello World',
+						'attachment' => array('facture.pdf' => array( 'data' => $pdf ))
+					);
+		$this->sendMail($mail);
+		$this->view = 'view';
+	}
+	
 /**
  * add method
  *

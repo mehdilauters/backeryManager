@@ -38,8 +38,8 @@ class UserFixture extends CakeTestFixture {
 		array(
 			'id' => 1,
 			'media_id' => 1,
-			'email' => 'Lorem ipsum dolor sit amet',
-			'password' => 'Lorem ipsum dolor sit amet',
+			'email' => 'mehdilauters@gmail.com',
+			'password' => '48be5c03b006a57a6cfc8b1bc056e7bae2f91477',
 			'isRoot' => 1,
 			'name' => 'Lorem ipsum dolor sit amet',
 			'created' => '2014-04-01 10:19:08',

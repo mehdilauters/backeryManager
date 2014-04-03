@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem');
   
-  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug', 'demoBaseSql' );
+  var $publicActions = array('upgradeDbStructure','deleteGcalCache','deleteSession','dbBackup', 'setDebug', 'demoBaseSql', 'emailTest' );
   var $memberActions = array();
   
 /**
@@ -32,7 +32,8 @@ class ConfigController extends AppController {
       'setDebug/1' => 'activer debug',
       'dbBackup/false/true' => 'downloadSql',
 	  'dbBackup/true/true' => 'download Demo Sql',
-      'deleteSession' => 'deleteSession'
+      'deleteSession' => 'deleteSession',
+	  'emailTest' => 'Test email'
     );
     $this->set('actions', $actions);
 	
@@ -41,6 +42,15 @@ class ConfigController extends AppController {
 	
   }
   
+  
+  public function emailTest()
+  {
+	$mail = array(
+				'email' => 'mehdilauters@gmail.com',
+				'subject' => 'TestMail '.date('d/m/Y')
+				);
+	$this->sendMail($mail);
+  }
   
   public function demoBaseSql()
   {
@@ -312,11 +322,8 @@ class ConfigController extends AppController {
 		$sql .= '
 
 
-truncate table ordered_items;
-truncate table orders;
-
-alter table users add `discount` float(3) default 0 ;
-alter table orders add `discount` float(3) default 0;
+alter table orders 	
+	change status status varchar(10) CHARACTER SET utf8 COLLATE utf8_bin not null;
 
 
 

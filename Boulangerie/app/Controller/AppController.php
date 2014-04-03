@@ -21,6 +21,7 @@
  */
 
 App::uses('Controller', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 
 /**
  * Application Controller
@@ -141,6 +142,70 @@ class AppController extends Controller {
     }
   }
 
+  
+  public function sendMail($config)
+  {
+	$configDefault = array('user'=>NULL,
+							'email' => NULL,
+							'view' => 'default',
+							'data' => array(),
+							'subject' => '',
+							'message' => 'Hello World',
+							'attachment' => NULL
+					);
+					
+	$config = array_merge($configDefault, $config);
+
+
+    debug($config);
+	
+	$emailAddr = '';
+	if($config['user'] == NULL)
+	{
+		if($config['email'] == NULL)
+		{
+			$this->log("Email not sent: no email or user specified", 'error');
+			$this->Session->setFlash(__('Email not sent: no email or user specified'),'flash/fail');
+		}
+		else
+		{
+			$emailAddr = $config['email'];
+		}
+	}
+	else
+	{
+		$emailAddr = $config['user']['User']['email'];
+	}
+	
+	
+	if( Configure::read('email.debug.status') )
+	{
+		$emailAddr = Configure::read('email.debug.email');
+	}
+	
+    $email = new CakeEmail('default');
+	if($config['attachment'] != NULL )
+	{
+		$email->attachments($config['attachment']);
+	}
+	
+    $email->from(array(Configure::read('email.from.email') => Configure::read('email.from.name')))
+        ->to($emailAddr)
+        ->template($config['view'], 'default')
+        ->viewVars($config['data'])
+        ->subject($config['subject'])
+        ->send($config['message']);
+
+	$this->log('Email to '.$emailAddr.' : '.$config['subject'], 'email');
+	$this->Session->setFlash('Email to '.$emailAddr.' : '.$config['subject'],'flash/ok');
+		
+
+    if ( Configure::read('debug') != 0)
+    {
+      //$this->Session->setFlash('Debug: email envoyé', 'flash/ok');
+    }
+  }
+  
   public function beforeRender()
   {
    //debug($this->Auth->user());
@@ -245,8 +310,6 @@ class AppController extends Controller {
 // 		}
 
 
-	
-	
 	
 	
   }
