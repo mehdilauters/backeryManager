@@ -92,7 +92,7 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
 
 
 	<div>
-		<p>Arrêté à la somme de <b><?php echo round($total['total']['HT'],2); ?>€</b></p>
+		<p>Arrêtée à la somme de <b><?php echo round($total['total']['HT'],2); ?>€</b></p>
 	</div>
 	<?php if($order['User']['rib_on_orders']): ?>
 	<h3>Rib</h3>

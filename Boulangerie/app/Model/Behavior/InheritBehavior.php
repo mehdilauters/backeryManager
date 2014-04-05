@@ -249,7 +249,7 @@ class InheritBehavior extends ModelBehavior{
      * (non-PHPdoc)
      * @see ModelBehavior::afterFind()
      */
-    public function afterFind(Model $model, $results, $primary){
+    public function afterFind(Model $model, $results, $primary =false ){
         extract($this->settings[$model->alias]);
         
         if($method!=self::STI_METHOD){
@@ -289,7 +289,7 @@ class InheritBehavior extends ModelBehavior{
      * (non-PHPdoc)
      * @see ModelBehavior::beforeSave()
      */
-    public function beforeSave(Model $model){
+    public function beforeSave(Model $model, $options = array()){
         extract($this->settings[$model->alias]);
         
         if($method==self::STI_METHOD)
@@ -303,7 +303,7 @@ class InheritBehavior extends ModelBehavior{
      * (non-PHPdoc)
      * @see ModelBehavior::afterSave()
      */
-    public function afterSave(Model $model, $created){ 
+    public function afterSave(Model $model, $created, $options = array()){ 
         extract($this->settings[$model->alias]);
         
         if($method==self::STI_METHOD)

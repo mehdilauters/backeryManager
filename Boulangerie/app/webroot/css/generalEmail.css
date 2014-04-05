@@ -1,0 +1,18 @@
+.order.email table.header {
+ width:100%;   
+}
+
+.header td{
+    width:30%;
+}
+
+table.table{
+ min-width:50%; 
+}
+
+
+table.table td, table.table th{
+    border:1px black solid;
+    text-align:center;
+    min-width:20%;
+}

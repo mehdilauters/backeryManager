@@ -69,33 +69,37 @@ class OrdersController extends AppController {
 		   $total['total']['tva_total'] += $data['tva_total'];
 		}
 
+		if (!empty($this->request->params['requested'])) {
+			return compact('company','order', 'total');
+		    }
+
 		$this->set('title_for_layout', 'Commande #'.$order['Order']['id']);
 		$this->set('company', $company);
 		$this->set('order', $order);
 		$this->set('total', $total);
-		//$this->request->is('pdf');
+		
+
 	}
 
 	public function email($id = null) {
 	
-		$this->Order->contain('OrderedItem.Product', 'Shop', 'User');
-		$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
-		$order = $this->Order->find('first', $options);
-	
+		
 		$this->view($id);
 		$this->layout = 'pdf/default';
-		$pdf = $this->render('view');
+		$pdf = $this->render('pdf/view');
 		$this->output = '';
-		debug($pdf);
-		$mail = array('user'=>$order,
-						'view' => 'default',
-						'data' => array(),
-						'subject' => '',
-						'message' => 'Hello World',
+
+		$res = $this->requestAction(array('action'=>'view',$id));
+
+		$mail = array('user'=>$res['order'],
+						'view' => 'order',
+						'data' => $res,
+						'subject' => 'Facture #'.$id,
+						'message' => '',
 						'attachment' => array('facture.pdf' => array( 'data' => $pdf ))
 					);
 		$this->sendMail($mail);
-		$this->view = 'view';
+		$this->redirect('/orders/view/'.$id);
 	}
 	
 /**

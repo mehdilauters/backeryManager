@@ -19,18 +19,18 @@
 	//Configure::write('dbBackupUrl', 'localhost/backery/Boulangerie/config/dbBackup/');
 	
 	Configure::write('email', array('from' => 
-											array(
-												'email'=>'boulangeriefaury@orange.fr',
-												'name'=>'Boulangerie Faury'
-												),
-									'debug' => array(
-														'status' => false,
-														'email' => 'mehdilauters@orange.fr'
-													),
-									
-									)
-									
-					);
+					array(
+						'email'=>'boulangeriefaury@orange.fr',
+						'name'=>'Boulangerie Faury'
+						),
+			'debug' => array(
+								'status' => true,
+								'email' => 'mehdilauters@gmail.com'
+							),
+			
+			)
+			
+  );
 	
 	
 ?>

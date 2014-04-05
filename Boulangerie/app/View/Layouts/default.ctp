@@ -80,7 +80,7 @@ echo $this->Html->css(
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/plotTable.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
-<?php   // echo $this->Html->css('general'); ?>
+<?php    echo $this->Html->css('general'); ?>
 </head>
 <body>
   <div class="container">
@@ -142,7 +142,7 @@ echo $this->Html->css(
   ?>
   	</footer>
   </div>
-  <?php echo $this->element('sql_dump'); 
+  <?php //echo $this->element('sql_dump'); 
   echo $this->Html->script('main');
   ?>
 	

@@ -181,8 +181,18 @@ CakeLog::config('error', array(
 ));
 
 
-CakePlugin::load('DebugKit');
+ CakePlugin::load('DebugKit');
+
+
+
   CakePlugin::load('FullCalendar');
   CakePlugin::load('PhpExcel');
 include('boulangerie.php');
-  
+
+
+/*
+// zetacomponent graph
+function __autoload($className) {
+    require APP.'Vendor/zetacomponents/Base/src/base.php';
+	ezcBase::autoload( $className );
+}*/

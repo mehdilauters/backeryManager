@@ -38,8 +38,10 @@ class AppController extends Controller {
 	  var $publicActions = array('exportExcel', 'backupDb');
 	  var $memberActions = array();
 
-  public $components = array('DebugKit.Toolbar', 'Session', 'Cookie',
-															'Auth' => array(
+  public $components = array(
+ 			  'DebugKit.Toolbar',
+			   'Session', 'Cookie',
+'Auth' => array(
 																'authenticate' => array(
 																	'Form' => array(
 																		'fields' => array('username' => 'email'),
@@ -54,8 +56,8 @@ class AppController extends Controller {
 																'authorize' => array('Controller'),
 															),
 															'RequestHandler',
-															'Functions'
-														);
+'Functions'
+);
   public $menu = array('Menu' => 
 			array( 
 				'Magasins' => 
@@ -177,9 +179,10 @@ class AppController extends Controller {
 		$emailAddr = $config['user']['User']['email'];
 	}
 	
-	
+	$normalAddr = '';
 	if( Configure::read('email.debug.status') )
 	{
+		$normalAddr = ' (debug dest : '.$emailAddr.')';
 		$emailAddr = Configure::read('email.debug.email');
 	}
 	
@@ -197,7 +200,7 @@ class AppController extends Controller {
         ->send($config['message']);
 
 	$this->log('Email to '.$emailAddr.' : '.$config['subject'], 'email');
-	$this->Session->setFlash('Email to '.$emailAddr.' : '.$config['subject'],'flash/ok');
+	$this->Session->setFlash('Email to '.$emailAddr.$normalAddr.' : '.$config['subject'],'flash/ok');
 		
 
     if ( Configure::read('debug') != 0)

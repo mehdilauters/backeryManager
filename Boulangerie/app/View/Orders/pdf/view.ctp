@@ -38,7 +38,7 @@
 
 
 	  <div>
-		  <p>Arrêté à la somme de <b><?php echo round($total['total']['TTC'],2); ?>€</b></p>
+		  <p>Arrêtée à la somme de <b><?php echo round($total['total']['TTC'],2); ?>€</b></p>
 	  </div>
 	  <?php if($order['User']['rib_on_orders']): ?>
 	  <h3>Rib</h3>
@@ -75,8 +75,8 @@
 			<td><?php echo $orderedItem['tva']; ?>%</td>
 			<td><?php echo $orderedItem['price']; ?></td>
 			<td><?php echo round($orderedItem['without_taxes'],2); ?></td>
-			<?php if ($order['Order']['discount'] != 0 ) { ?> <td><?php echo round($orderedItem['discount_HT'],2); ?></td><?php } ?>
-			<td><?php echo $orderedItem['quantity']; ?></td>
+			<?php if ($order['Order']['discount'] != 0 ) { ?> <td><?php echo round($orderedItem['discount_HT'],2); ?></td><?php  }  ?>
+			<td><?php  echo $orderedItem['quantity']; ?></td>
 			
 			<td><?php echo round(
 				$orderedItem['discount_HT'] * $orderedItem['quantity']

@@ -42,9 +42,9 @@
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/folder-open.png', array('alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voirr')); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/folder-open.png', array('alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
 			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('alt' => __('Email'))), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('alt' => __('Email'))), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
 			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
 		</td>
 	</tr>
