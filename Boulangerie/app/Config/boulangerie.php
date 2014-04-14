@@ -25,12 +25,14 @@
 						),
 			'debug' => array(
 								'status' => true,
-								'email' => 'mehdilauters@gmail.com'
+								'email' => array('boulangeriefaury@orange.fr','mehdilauters@gmail.com')
 							),
 			
 			)
 			
   );
 	
+
+Configure::write('Order.pageBreakItemsMax', 20);
 	
 ?>

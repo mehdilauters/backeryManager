@@ -20,7 +20,7 @@ then
 	fi
 fi
 echo "Mise a jour de ${RCD}"
-
+echo `date` > app/uploadDate.txt
 
 #--exclude-glob dev/ \
        #--exclude-glob blog/ \
@@ -53,4 +53,8 @@ mirror --reverse \
 	--exclude-glob database.php \
 	--exclude-glob core.php \
 	--exclude-glob *~ \
+	--exclude-glob app/webroot/img/photos/ \
+	--exclude-glob app/Vendor/ \
+	--exclude-glob app/Plugin/ \
+	--exclude-glob app/tmp/cache/
        "
