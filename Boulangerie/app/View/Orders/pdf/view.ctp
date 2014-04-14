@@ -13,12 +13,13 @@
   <center><h2><?php echo __('Facture'); ?> de <?php 
   $date = new DateTime($order['Order']['delivery_date']);
   echo $this->Dates->getMoisFr($date->format('m')).' '.$date->format('Y') ?></h2></center>
+<center>
 	  <?php if($order['Order']['discount'] != 0 ): ?>
 		  <p>Remise de <?php echo $order['Order']['discount'] ?>%</p>
 	  <?php endif; ?>
 
   <h3><?php echo __('Totaux'); ?></h3>
-  <table cellpadding = "0" cellspacing = "0" class="table" >
+  <table cellpadding = "0" cellspacing = "0" class="table" id="tvaTotal" >
     <tr>
       <th>TVA %</th>
       <th>HT</th>
@@ -44,8 +45,16 @@
 	  <h3>Rib</h3>
 	  <img class="rib" src="<?php echo APP.'webroot/img/photos/normal/'.$company['Media']['path']; ?>" />
 	  <?php endif; ?>
+</center>
 </div>
-<div class="related" style="page-break-before:always" >
+<?php 
+  $class = '';
+  if(count($order['OrderedItem']) > Configure::read('Order.pageBreakItemsMax') )
+  {
+    $class = 'page-break-before:always';
+  }
+?>
+<div class="related" style="<?php echo $class ?>" >
 	<h3>Détail</h3>
 	<?php if (!empty($order['OrderedItem'])): ?>
 	<table cellpadding = "0" cellspacing = "0" class="table" >
@@ -74,13 +83,13 @@
 			echo $date->format('d/m/Y'); ?></td>
 			<td><?php echo $orderedItem['tva']; ?>%</td>
 			<td><?php echo $orderedItem['price']; ?></td>
-			<td><?php echo round($orderedItem['without_taxes'],2); ?></td>
+			<td><?php echo round($orderedItem['without_taxes'],3); ?></td>
 			<?php if ($order['Order']['discount'] != 0 ) { ?> <td><?php echo round($orderedItem['discount_HT'],2); ?></td><?php  }  ?>
 			<td><?php  echo $orderedItem['quantity']; ?></td>
 			
 			<td><?php echo round(
 				$orderedItem['discount_HT'] * $orderedItem['quantity']
-				,2); ?></td>
+				,3); ?></td>
 		</tr>
 	<?php $i++; endforeach; ?>
 	</table>

@@ -52,8 +52,8 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
 			echo $date->format('d/m/Y'); ?></td>
 			<td><?php echo $orderedItem['tva']; ?>%</td>
 			<td><?php echo $orderedItem['price']; ?></td>
-			<td><?php echo round($orderedItem['without_taxes'],2); ?></td>
-			<td><?php echo round($orderedItem['discount_HT'],2); ?></td>
+			<td><?php echo round($orderedItem['without_taxes'],3); ?></td>
+			<td><?php echo round($orderedItem['discount_HT'],3); ?></td>
 			<td><?php echo $orderedItem['quantity']; ?></td>
 			
 			<td><?php echo round(
