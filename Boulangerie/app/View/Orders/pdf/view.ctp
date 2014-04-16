@@ -46,6 +46,9 @@
 	  <img class="rib" src="<?php echo APP.'webroot/img/photos/normal/'.$company['Media']['path']; ?>" />
 	  <?php endif; ?>
 </center>
+	<p id="legalMentions">
+		<?php echo $company['Company']['order_legals_mentions']; ?>
+	</p>
 </div>
 <?php 
   $class = '';

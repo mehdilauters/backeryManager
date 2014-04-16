@@ -321,10 +321,7 @@ class ConfigController extends AppController {
 		$sql = '';
 		$sql .= '
 
-
-alter table orders 	
-	change status status varchar(10) CHARACTER SET utf8 COLLATE utf8_bin not null;
-
+alter table companies add `order_legals_mentions` text CHARACTER SET utf8 COLLATE utf8_bin;
 
 
 ';	

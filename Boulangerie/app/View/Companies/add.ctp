@@ -11,6 +11,7 @@
 		echo $this->Form->input('siret');
 		echo $this->Form->input('name');
 		echo $this->Form->input('email');
+		echo $this->Form->input('order_legals_mentions', array('class'=>'textEditor'));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

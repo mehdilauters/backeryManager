@@ -18,7 +18,7 @@
 		</dd>
 		<dt><?php echo __('Description'); ?></dt>
 		<dd>
-			<?php echo h($photo['Photo']['description']); ?>
+			<?php echo $photo['Photo']['description']; ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Path'); ?></dt>

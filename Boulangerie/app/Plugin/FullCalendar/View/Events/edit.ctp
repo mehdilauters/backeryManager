@@ -18,7 +18,7 @@
 		echo $this->Form->input('id');
 		echo $this->Form->input('event_type_id');
 		echo $this->Form->input('title');
-		echo $this->Form->input('details');
+		echo $this->Form->input('details', array('class'=>'textEditor'));
 		echo $this->Form->input('recursive', array('options'=>array(''=>'','day'=>'jour','week'=>'semaine','month'=>'mois', 'year'=>'année')));
 		
 		$date = new DateTime($this->request->data['Event']['recursive_start']);

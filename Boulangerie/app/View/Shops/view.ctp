@@ -40,7 +40,7 @@ if($tokens['isAdmin'])
 </div>
 </center>
 <p>
-      <?php echo h($shop['Shop']['description']); ?>
+      <?php echo $shop['Shop']['description']; ?>
 </p>
   <hr/>
   <?php

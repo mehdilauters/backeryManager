@@ -41,6 +41,12 @@
 			<?php echo h($company['Company']['email']); ?>
 			&nbsp;
 		</dd>
+		</dd>
+		<dt><?php echo __('Mentions legales factures'); ?></dt>
+		<dd>
+			<?php echo $company['Company']['order_legals_mentions']; ?>
+			&nbsp;
+		</dd>
 	</dl>
 </div>
 <div class="actions">

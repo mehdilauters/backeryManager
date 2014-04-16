@@ -28,7 +28,7 @@
 		?>
 	<?php
 		echo $this->Form->input('title');
-		echo $this->Form->input('details');
+		echo $this->Form->input('details', array('class'=>'textEditor'));
 		echo $this->Form->input('recursive', array('options'=>array(''=>'','day'=>'jour','week'=>'semaine','month'=>'mois', 'year'=>'année')));
 		echo $this->Form->input('recursive_start', array('type'=>'text', 'class'=>'datepicker'));
 		echo $this->Form->input('recursive_end', array('type'=>'text', 'class'=>'datepicker'));

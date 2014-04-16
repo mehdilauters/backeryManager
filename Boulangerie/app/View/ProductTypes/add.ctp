@@ -7,7 +7,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('tva');
 		echo $this->Form->input('customer_display');
-		echo $this->Form->input('description');
+		echo $this->Form->input('description', array('class'=>'textEditor'));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

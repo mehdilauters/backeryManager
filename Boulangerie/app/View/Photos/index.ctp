@@ -19,7 +19,7 @@
 		</td>
 		<td><?php echo h($photo['Photo']['user_id']); ?>&nbsp;</td>
 		<td><?php echo h($photo['Photo']['name']); ?>&nbsp;</td>
-		<td><?php echo h($photo['Photo']['description']); ?>&nbsp;</td>
+		<td><?php echo $photo['Photo']['description']; ?>&nbsp;</td>
 		<td><?php echo h($photo['Photo']['path']); ?>&nbsp;</td>
 		<td><?php echo h($photo['Photo']['created']); ?>&nbsp;</td>
 		<td class="actions">

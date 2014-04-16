@@ -9,7 +9,7 @@
     echo $this->Form->input('name');
     echo $this->Form->input('customer_display');
     echo $this->Form->input('production_display');
-    echo $this->Form->input('description');
+    echo $this->Form->input('description', array('class'=>'textEditor'));
     echo $this->Form->input('price');
     echo $this->Form->input('unity');
     echo $this->Form->input('depends_on_production');

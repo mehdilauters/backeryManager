@@ -259,14 +259,13 @@ create table if not exists results_entries (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 	
-	
 create table if not exists orders (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `shop_id` int(10) NOT NULL,
   `created` datetime DEFAULT NULL,
   `user_id` int(10) NOT NULL,
   `status` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin not null ,
-  --`status` enum('reserved', 'available', 'waiting', 'paid'),
+  `legals_mentions` text CHARACTER SET utf8 COLLATE utf8_bin,
   `delivery_date` datetime,
   `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
   `discount` float(3) default 0 ,

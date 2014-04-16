@@ -144,7 +144,18 @@ echo $this->Html->css(
   </div>
   <?php //echo $this->element('sql_dump'); 
   echo $this->Html->script('main');
+echo $this->Html->script(
+    array(
+			'tinymce/tinymce.min.js',
+     ),
+     array('inline' => 'false')
+  );
   ?>
+<script type="text/javascript">
+tinymce.init({
+    selector: "textarea.textEditor"
+ });
+</script>
 	
 </body>
 </html>

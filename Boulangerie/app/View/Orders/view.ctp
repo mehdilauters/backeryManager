@@ -27,6 +27,40 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
 		<li><?php echo $this->Html->link($this->Html->image('icons/view-list-details.png', array('alt' => '')).' '.__('Lister les commandes'), array('action' => 'index'),array('escape' => false)); ?> </li>
 	</ul>
 </div>
+
+<h3><?php echo __('Totaux'); ?></h3>
+<table cellpadding = "0" cellspacing = "0" class="table" >
+
+  <tr>
+    <th>HT</th>
+    <th>TVA %</th>
+    <th>TTC</th>
+    <th>TVA €</th>
+  </tr>
+<?php foreach ($total['tva'] as $tva => $data):  ?>
+<tr>
+  <td><?php echo round($data['HT'],2) ?></td>
+  <td><?php echo $tva ?>%</td>
+  <td><?php echo round($data['TTC']) ?></td>
+  <td><?php echo round($data['tva_total'],2) ?></td>
+</tr>
+<?php endforeach; ?>
+</table>
+
+
+
+	<div>
+		<p>Arrêtée à la somme de <b><?php echo round($total['total']['HT'],2); ?>€</b></p>
+	</div>
+	<?php if($order['User']['rib_on_orders']): ?>
+	<h3>Rib</h3>
+	<img class="rib" src="<?php echo APP.'webroot/img/photos/normal/'.$company['Media']['path']; ?>" />
+	<?php endif; ?>
+
+	<p id="legalMentions">
+		<?php echo $company['Company']['order_legals_mentions']; ?>
+	</p>
+
 <div class="related">
 	<h3><?php echo __('Items commandés'); ?></h3>
 	<?php if (!empty($order['OrderedItem'])): ?>
@@ -70,33 +104,5 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
 	</table>
 <?php endif; ?>
 </div>
-<h3><?php echo __('Totaux'); ?></h3>
-<table cellpadding = "0" cellspacing = "0" class="table" >
-
-  <tr>
-    <th>HT</th>
-    <th>TVA %</th>
-    <th>TTC</th>
-    <th>TVA €</th>
-  </tr>
-<?php foreach ($total['tva'] as $tva => $data):  ?>
-<tr>
-  <td><?php echo round($data['HT'],2) ?></td>
-  <td><?php echo $tva ?>%</td>
-  <td><?php echo round($data['TTC']) ?></td>
-  <td><?php echo round($data['tva_total'],2) ?></td>
-</tr>
-<?php endforeach; ?>
-</table>
-
-
-
-	<div>
-		<p>Arrêtée à la somme de <b><?php echo round($total['total']['HT'],2); ?>€</b></p>
-	</div>
-	<?php if($order['User']['rib_on_orders']): ?>
-	<h3>Rib</h3>
-	<img class="rib" src="<?php echo APP.'webroot/img/photos/normal/'.$company['Media']['path']; ?>" />
-	<?php endif; ?>
 
 </div>
