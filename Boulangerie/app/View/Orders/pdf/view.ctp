@@ -14,6 +14,7 @@
   $date = new DateTime($order['Order']['delivery_date']);
   echo $this->Dates->getMoisFr($date->format('m')).' '.$date->format('Y') ?></h2></center>
 <center>
+	  Facture #<?php echo $order['Order']['id'] ?>
 	  <?php if($order['Order']['discount'] != 0 ): ?>
 		  <p>Remise de <?php echo $order['Order']['discount'] ?>%</p>
 	  <?php endif; ?>
@@ -98,5 +99,4 @@
 	</table>
 <?php endif; ?>
 </div>
-Commande #<?php echo $order['Order']['id'] ?>
 </div>
