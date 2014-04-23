@@ -33,7 +33,9 @@ class ConfigController extends AppController {
       'dbBackup/false/true' => 'downloadSql',
 	  'dbBackup/true/true' => 'download Demo Sql',
       'deleteSession' => 'deleteSession',
-	  'emailTest' => 'Test email'
+	  'emailTest' => 'Test email',
+	  'phpInfo' => 'phpInfo',
+	  'console' => 'console'
     );
     $this->set('actions', $actions);
 	
@@ -42,6 +44,19 @@ class ConfigController extends AppController {
 	
   }
   
+  public function phpInfo()
+  {
+  }
+  
+  public function console()
+  {
+	$output = '';
+  	if ($this->request->is('post')) {
+		chdir('/tmp');
+		$output = shell_exec($this->request->data['Console']['commands']);
+	}
+	$this->set('output', $output);
+  }
   
   public function emailTest()
   {
