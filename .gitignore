@@ -1,0 +1,9 @@
+/app/Config/database.php
+/app/Config/email.php
+/app/webroot/img/photos/preview/*.jpg
+/app/webroot/img/photos/normal/*.jpg
+/app/tmp
+/lib/Cake/Console/Templates/skel/tmp/
+*~
+.DS_Store
+/tags
