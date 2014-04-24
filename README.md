@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CakePHP
 =======
 
@@ -37,3 +38,9 @@ Get Support!
 [![Bake Status](https://secure.travis-ci.org/cakephp/cakephp.png?branch=master)](http://travis-ci.org/cakephp/cakephp)
 
 ![Cake Power](https://raw.github.com/cakephp/cakephp/master/lib/Cake/Console/Templates/skel/webroot/img/cake.power.gif)
+=======
+backeryManager
+==============
+
+This project is an fullweb open source backery manager tool
+>>>>>>> c50cd1cb5fc86fe3a51abb11825102d2ebaded87
