@@ -1,7 +1,6 @@
 #!/bin/bash    
 HOST="ftp.boulangerie-faury.fr"
 USER="boulangey"
-# "8iWTx6Km"
 LCD="./"
 RCD="/www/dev"
 if [ "$2" = "backup" ]
@@ -48,9 +47,11 @@ mirror --reverse \
 	--verbose \
 	--exclude-glob tests/ \
 	--exclude-glob .svn/ \
+	--exclude-glob .git/ \
 	--exclude-glob *.log \
 	--exclude-glob *.tmp \
 	--exclude-glob database.php \
+	--exclude-glob email.php \
 	--exclude-glob core.php \
 	--exclude-glob *~ \
 	--exclude-glob app/webroot/img/photos/ \
