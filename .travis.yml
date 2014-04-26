@@ -33,54 +33,17 @@ before_script:
   - pear install --alldeps cakephp/CakePHP_CodeSniffer
   - phpenv rehash
   - set +H
-  - echo "<?php
+ - echo "<?php
     class DATABASE_CONFIG {
-    private \$identities = array(
-      'mysql' => array(
-        'datasource' => 'Database/Mysql',
-        'host' => '0.0.0.0',
-        'login' => 'travis'
-      ),
-      'pgsql' => array(
-        'datasource' => 'Database/Postgres',
-        'host' => '127.0.0.1',
-        'login' => 'postgres',
-        'database' => 'cakephp_test',
-        'schema' => array(
-          'default' => 'public',
-          'test' => 'public',
-          'test2' => 'test2',
-          'test_database_three' => 'test3'
-        )
-      ),
-      'sqlite' => array(
-        'datasource' => 'Database/Sqlite',
-        'database' => array(
-          'default' => ':memory:',
-          'test' => ':memory:',
-          'test2' => '/tmp/cakephp_test2.db',
-          'test_database_three' => '/tmp/cakephp_test3.db'
-        ),
-      )
-    );
-    public \$default = array(
-      'persistent' => false,
-      'host' => '',
-      'login' => '',
-      'password' => '',
-      'database' => 'cakephp_test',
-      'prefix' => ''
-    );
     public \$test = array(
-      'datasource' => 'Database/mysql',
-      'persistent' => false,
+      'datasource' => 'Database/Mysql',
+      'database' => 'cakephp_test',
       'host' => '0.0.0.0',
       'login' => 'travis',
-      'password' => '',
-      'database' => 'cakephp_test',
-      'prefix' => ''
+      'persistent' => false,
     );
-    }" > app/Config/database.php
+    }" > ../cakephp/app/Config/database.php
+ 
 
 script:
   - sh -c "if [ '$PHPCS' != '1' ]; then ./lib/Cake/Console/cake test core AllTests --stderr; else phpcs -p --extensions=php --standard=CakePHP ./lib/Cake; fi"
