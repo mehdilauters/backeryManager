@@ -72,9 +72,9 @@ before_script:
       'prefix' => ''
     );
     public \$test = array(
-      'datasource' => 'Database/Mysql',
+      'datasource' => 'Database/mysql',
       'persistent' => false,
-      'host' => '',
+      'host' => '0.0.0.0',
       'login' => 'travis',
       'password' => '',
       'database' => 'cakephp_test',
