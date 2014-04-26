@@ -72,27 +72,12 @@ before_script:
       'prefix' => ''
     );
     public \$test = array(
+      'datasource' => 'Database/Mysql',
       'persistent' => false,
       'host' => '',
-      'login' => '',
+      'login' => 'travis',
       'password' => '',
       'database' => 'cakephp_test',
-      'prefix' => ''
-    );
-    public \$test2 = array(
-      'persistent' => false,
-      'host' => '',
-      'login' => '',
-      'password' => '',
-      'database' => 'cakephp_test2',
-      'prefix' => ''
-    );
-    public \$test_database_three = array(
-      'persistent' => false,
-      'host' => '',
-      'login' => '',
-      'password' => '',
-      'database' => 'cakephp_test3',
       'prefix' => ''
     );
     }" > app/Config/database.php
