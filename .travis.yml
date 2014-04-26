@@ -42,7 +42,7 @@ before_script:
       'login' => 'travis',
       'persistent' => false,
     );
-    }" > ../cakephp/app/Config/database.php
+    }" > app/Config/database.php
  
 
 script:
