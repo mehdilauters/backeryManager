@@ -540,3 +540,9 @@ legend {
 .ui-datepicker-calendar th {
  color:black; 
 }
+
+
+td.actions img.icon {
+  height:16px;
+  width:16;
+}

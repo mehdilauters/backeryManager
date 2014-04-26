@@ -1,6 +1,7 @@
 /app/uploadDate.txt
 /app/Config/database.php
 /app/Config/email.php
+*.log
 /app/webroot/img/photos/preview/*.jpg
 /app/webroot/img/photos/normal/*.jpg
 /app/tmp

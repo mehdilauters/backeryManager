@@ -13,7 +13,19 @@ class OrdersController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->set('orders', $this->paginate());
+	    $conditions = array();
+	     if(!isset($this->request->data['Order']['statusSelect']))
+	    {
+		$this->request->data['Order']['statusSelect'] = 'reserved';
+	    }
+
+	    if($this->request->data['Order']['statusSelect'] != '')
+	    {
+	      $conditions['Order.status'] = $this->request->data['Order']['statusSelect'];
+	    }
+	    
+
+		$this->set('orders', $this->paginate($conditions));
 	}
 
 /**
