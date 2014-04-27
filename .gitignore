@@ -1,4 +1,5 @@
 /app/uploadDate.txt
+/app/Version.txt
 /app/Config/database.php
 /app/Config/email.php
 *.log

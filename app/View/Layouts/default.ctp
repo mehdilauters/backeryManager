@@ -133,13 +133,25 @@ echo $this->Html->css(
     
     
   	<footer>
+<div>
   	<?php echo $this->Html->link(
       $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
       'http://www.cakephp.org/',
       array('target' => '_blank', 'escape' => false)
-    );
-    echo file_get_contents(APP.'uploadDate.txt');
-  ?>
+    ); ?>
+</div>
+<div>
+  last update :
+  <?php
+      echo file_get_contents(APP.'uploadDate.txt');
+    ?>
+</div>
+<div>
+  App version :
+  <?php
+      echo file_get_contents(APP.'Version.txt');
+    ?>
+</div>
   	</footer>
   </div>
   <?php //echo $this->element('sql_dump'); 

@@ -41,23 +41,23 @@ class AppController extends Controller {
   public $components = array(
  			  'DebugKit.Toolbar',
 			   'Session', 'Cookie',
-'Auth' => array(
-																'authenticate' => array(
-																	'Form' => array(
-																		'fields' => array('username' => 'email'),
-																		'passwordHasher' => array(
-																			'className' => 'Simple',
-																			'hashType' => 'sha256'
-																		)
-																	)
-																),
-																'loginRedirect' => '/',
-																'logoutRedirect' => '/',
-																'authorize' => array('Controller'),
-															),
-															'RequestHandler',
-'Functions'
-);
+			    'Auth' => array(
+				'authenticate' => array(
+				      'Form' => array(
+					  'fields' => array('username' => 'email'),
+					  'passwordHasher' => array(
+					      'className' => 'Simple',
+					      'hashType' => 'sha1'
+					      )
+					    )
+				  ),
+				  'loginRedirect' => '/',
+				  'logoutRedirect' => '/',
+				   'authorize' => array('Controller'),
+				),
+			  'RequestHandler',
+			  'Functions'
+			  );
   public $menu = array('Menu' => 
 			array( 
 				'Magasins' => 
@@ -232,7 +232,7 @@ class AppController extends Controller {
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
-	$news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews'));
+    $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews'));
     $this->set('news',$news);
   }
   

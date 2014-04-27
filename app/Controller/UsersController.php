@@ -8,6 +8,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
 	var $publicActions = array('login', 'add', 'autologin');
+	var $memberActions = array('logout');
 
 /**
  * index method
@@ -144,8 +145,9 @@ class UsersController extends AppController {
 	
 	public function login() {
 		if ($this->request->is('post')) {
-// 			debug($this->request->data['User']['password']);
-			if ($this->Auth->login()) {
+// $this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
+			$authRes = $this->Auth->login();
+			if ($authRes) {
 				$cookieValue = array(
 										'id' => $this->Auth->user('id'),
 										'key' => AuthComponent::password(AuthComponent::password($this->data['User']['password']).$this->Auth->user('id'))
