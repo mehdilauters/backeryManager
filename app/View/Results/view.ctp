@@ -26,6 +26,11 @@
 			<?php echo h($result['Result']['check']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Card'); ?></dt>
+		<dd>
+			<?php echo h($result['Result']['card']); ?>
+			&nbsp;
+		</dd>
 	</dl>
 </div>
 <div class="actions">

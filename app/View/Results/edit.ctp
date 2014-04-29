@@ -8,6 +8,7 @@
 		echo $this->Form->input('date');
 		echo $this->Form->input('cash');
 		echo $this->Form->input('check');
+		echo $this->Form->input('card');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

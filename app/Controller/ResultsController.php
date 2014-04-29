@@ -186,7 +186,8 @@ class ResultsController extends AppController {
 			  'conditions' => $conditions['Result'],
               'fields' => array('SUM(Result.cash) as `cash`',
                     'SUM(Result.check) as `check`',
-                    'SUM(Result.check + Result.cash) as `total`',
+					'SUM(Result.card) as `card`',
+                    'SUM(Result.check + Result.cash + Result.card) as `total`',
                     'Result.date',
                     'Result.comment',
                     'Result.shop_id',
@@ -264,7 +265,7 @@ public function getData($dateStart = '', $dateEnd = '')
 
     $results = $this->Result->find('all', array( 'conditions'=>$dateSelect, 'order' => 'Result.date'));
     $data = array(
-      'total' => array('cash'=>0, 'check'=> 0),
+      'total' => array('cash'=>0, 'check'=> 0, 'card'=>0),
       );
 
     $ids = array();
@@ -272,17 +273,18 @@ public function getData($dateStart = '', $dateEnd = '')
     {
       if(!isset($ids[$result['Result']['shop_id']]))
       {
-  $ids[$result['Result']['shop_id']] = 0;
+			$ids[$result['Result']['shop_id']] = 0;
       }
       else
       {
-   $ids[$result['Result']['shop_id']] ++;
+			$ids[$result['Result']['shop_id']] ++;
       }
       $i = $ids[$result['Result']['shop_id']];
       $data['entries'][$result['Result']['shop_id']]['entries'][$i] = array(
     'cash' => $result['Result']['cash'],
     'date' => $result['Result']['date'],
     'check' => $result['Result']['check'],
+	'card' => $result['Result']['card'],
     'comment' => $result['Result']['comment'],
     'resultId' => $result['Result']['id'],
     'productTypes' => array()
@@ -294,14 +296,17 @@ public function getData($dateStart = '', $dateEnd = '')
 //   debug($data['entries'][$result['Result']['shop_id']]);
   $data['entries'][$result['Result']['shop_id']]['total']['cash'] = 0;
   $data['entries'][$result['Result']['shop_id']]['total']['check'] = 0;
+  $data['entries'][$result['Result']['shop_id']]['total']['card'] = 0;
       }
 
   
   $data['entries'][$result['Result']['shop_id']]['total']['cash'] += $result['Result']['cash'];
   $data['entries'][$result['Result']['shop_id']]['total']['check'] += $result['Result']['check'];
+  $data['entries'][$result['Result']['shop_id']]['total']['card'] += $result['Result']['card'];
 
    $data['total']['cash'] += $result['Result']['cash'];
    $data['total']['check'] += $result['Result']['check'];
+   $data['total']['card'] += $result['Result']['card'];
       
       foreach($result['ResultsEntry'] as $resultEntry)
       {
@@ -356,12 +361,16 @@ public function getData($dateStart = '', $dateEnd = '')
             );
             if($result['cash'] != '')
             {
-          $resultData['Result']['cash'] = $result['cash'];
+				$resultData['Result']['cash'] = $result['cash'];
             }
 
             if($result['check'] != '')
             {
-          $resultData['Result']['check'] = $result['check'];
+				$resultData['Result']['check'] = $result['check'];
+            }
+			 if($result['card'] != '')
+            {
+				$resultData['Result']['card'] = $result['card'];
             }
             if($result['resultId'] != '')
             {

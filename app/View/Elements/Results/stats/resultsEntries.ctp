@@ -158,7 +158,8 @@ if(isset($this->request->data['group']))
   		<?php if($config['interactive'])
 		{
 		?>
-			var tfConfig2 = {
+		// js exception
+	/*		var tfConfig2 = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
 			  extensions: {
 					name:['ColsVisibility'],
@@ -173,6 +174,8 @@ if(isset($this->request->data['group']))
 			  setFilterGrid("resultsEntriesStatValues",tfConfig2);  
 			  
 			//tf1 = new TF('resultsEntriesStatValues', tfConfig2); tf1.AddGrid();
+			*/
+			histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>');
 				<?php }else{ ?>
 		histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>');
 	<?php } ?>

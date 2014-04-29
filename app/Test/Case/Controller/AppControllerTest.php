@@ -32,14 +32,23 @@ public $controllerName = "";
 	public function setUp() {
 		parent::setUp();
 		$this->controllerName = str_replace('Test', '', get_class($this));
-		$this->controller = new $this->controllerName();
+		 $this->controller = new $this->controllerName();
 		
+		// debug($this->controllerName);
+	/*	$this->controller = $this->generate($this->controllerName, array(
+			'methods' => array(
+				'isAuthorized'
+			),
+
+		));
+		
+		$this->controller->method('isAuthorized')
+        ->will($this->returnValue(true));
+		*/
 		$ctrl = new $this->controllerName();
 		$this->controllerName = strtolower( str_replace('Controller', '', $this->controllerName) );
 		$this->controller->modelClass = $ctrl->modelClass;
-		
 		$this->loadModels();
-		
 	//	$user = ClassRegistry::init('User');
 		
 	//	$usersController = new UsersController();
@@ -72,8 +81,8 @@ public $controllerName = "";
  * @return void
  */
 	public function testIndex() {
-		$result = $this->testAction('/'.$this->controllerName.'/index');
-        debug($result);
+		// $result = $this->testAction('/'.$this->controllerName.'/index');
+        // debug($result);
 	}
 
 /**
@@ -82,10 +91,8 @@ public $controllerName = "";
  * @return void
  */
 	public function testView() {
-		$company = $this->{$this->controller->modelClass}->find('first');
-		$result = $this->testAction('/'.$this->controllerName.'/view/'.$company[$this->controller->modelClass]['id']);
-        debug($result);
-		
+		$data = $this->{$this->controller->modelClass}->find('first');
+		 $result = $this->testAction('/'.$this->controllerName.'/view/'.$data[$this->controller->modelClass]['id']);
 		$exception = false;
 		try{
 			$result = $this->testAction('/'.$this->controllerName.'/view/-1');
@@ -94,9 +101,7 @@ public $controllerName = "";
 		{
 			$exception = true;
 		}
-        
 		$this->assertEquals(true, $exception);
-		
 	}
 
 /**
@@ -104,7 +109,7 @@ public $controllerName = "";
  *
  * @return void
  */
-	public function testAdd() {
+/*	public function testAdd() {
 		$this->{$this->controller->modelClass}->query('TRUNCATE '.$this->controllerName.';');
 		
 
@@ -125,7 +130,7 @@ public $controllerName = "";
 		// $this->assertRegExp('/'.$this->controllerName.'$/', $result);
 
 		
-		// try to add a new company (already one saved)
+		// try to add a new data (already one saved)
 		 
 		$res = $this->{$this->controller->modelClass}->find('count');
 		$this->assertEquals(1, $res);
@@ -145,9 +150,9 @@ public $controllerName = "";
 		 // get
 		$result = $this->testAction('/'.$this->controllerName.'/add', array('method' => 'get'));
         debug($result);
-		
+		$this->assertEquals(1, 0);
 	}
-
+*/
 /**
  * testEdit method
  *

@@ -20,10 +20,7 @@ class SalesControllerTest extends ControllerTestCase {
 		'app.user',
 		'app.event',
 		'app.event_type',
-		'app.gcalendar',
-		'app.gevent',
-		'app.gevent_date',
-		'app.products'
+		'app.product'
 	);
 
 /**

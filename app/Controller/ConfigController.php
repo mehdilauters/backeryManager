@@ -336,7 +336,7 @@ class ConfigController extends AppController {
 		$sql = '';
 		$sql .= '
 
-alter table companies add `order_legals_mentions` text CHARACTER SET utf8 COLLATE utf8_bin;
+alter table results add `card` float(10) NOT NULL;
 
 
 ';	

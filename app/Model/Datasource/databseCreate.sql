@@ -1,4 +1,4 @@
-SET FOREIGN_KEY_CHECKS = 0;
+hpSET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `database_version`;
 DROP TABLE IF EXISTS `acos`;
 DROP TABLE IF EXISTS `aros`;
@@ -239,6 +239,7 @@ create table if not exists results (
   `date` datetime NOT NULL,
   `cash` float(10) NOT NULL,
   `check` float(10) NOT NULL,
+  `card` float(10) NOT NULL,
   `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null,
   PRIMARY KEY (`id`),
   KEY `fk_results_shops` (`shop_id`)

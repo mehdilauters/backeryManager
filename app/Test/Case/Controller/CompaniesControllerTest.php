@@ -6,10 +6,13 @@ include 'AppControllerTest.php';
  * CompaniesController Test Case
  *
  */
+
+App::uses('AppControllerTest ', 'Controller');
+
 class CompaniesControllerTest extends AppControllerTest {
 
 public $controllerName = "";
-public $modelName = "";
+public $modelName = "Company";
 
 /**
  * Fixtures
@@ -49,10 +52,10 @@ public $modelName = "";
 	}*/
 	
 	public function testAdd() {
+
+ 	$this->{$this->modelName}->query('TRUNCATE companies;');
 		
-		$this->{$this->modelName}->query('TRUNCATE companies;');
-		
-		$data = array(
+	$data = array(
             $this->modelName => array(
                 'id' => '',
                 'name' => 'test 1',
@@ -60,24 +63,24 @@ public $modelName = "";
         );
 		// post
 		$res = $this->{$this->modelName}->find('count');
-		$this->assertEquals(0, $res);
-		
+		$this->assertEquals(0, $res);	
+//buuuuuuuuu here
 		$result = $this->testAction(
 			'/'.$this->controllerName.'/add',
 			array('data' => $data, 'method' => 'post')
 		);
+//////////////////
 		$res = $this->{$this->modelName}->find('count');
 		$this->assertEquals(1, $res);
-		
 		
 		$result = $this->headers['Location'];
 		$this->assertRegExp('/companies$/', $result);
 
 		
 		// try to add a new company (already one saved)
-		 
+
 		$res = $this->{$this->modelName}->find('count');
-		$this->assertEquals(1, $res);
+		debug($this->assertEquals(1, $res));
 		
 		$data[$this->modelName]['name'] = 'test 2';
 		
@@ -94,8 +97,9 @@ public $modelName = "";
 		 
 		 // get
 		$result = $this->testAction('/'.$this->controllerName.'/add', array('method' => 'get'));
+
         debug($result);
-		
+$this->assertEquals(0, 1);		
 	}
 	
 	

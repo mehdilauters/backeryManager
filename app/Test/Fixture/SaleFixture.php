@@ -5,6 +5,8 @@
  */
 class SaleFixture extends CakeTestFixture {
 
+// public $import = array('table' => 'sales', 'records' => true);
+
 /**
  * Fields
  *

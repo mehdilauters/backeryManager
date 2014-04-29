@@ -19,6 +19,7 @@ foreach($data['entries'] as $shopId => $shopData)
         array('label' => 'total'),
         array('label' => 'especes'),
         array('label' => 'chèques'),
+		array('label' => 'carte bleue'),
     );
     foreach($productTypes as $typeId => $typeName)
     {
@@ -34,9 +35,10 @@ foreach($data['entries'] as $shopId => $shopData)
 	$date = new DateTime($results['date']);
 	$data = array(
 	  $date->format('d/m/Y'),
-	  ($results['cash'] + $results['check']),
+	  ($results['cash'] + $results['check'] + $results['card']),
 	  $results['cash'],
 	  $results['check'],
+	  $results['card'],
 	);
 	foreach($productTypes as $typeId => $typeName)
 	{
@@ -52,9 +54,10 @@ foreach($data['entries'] as $shopId => $shopData)
     //totaux
     $data = array(
 		  'Totaux',
-		  ($shopData['total']['cash'] + $shopData['total']['check']),
+		  ($shopData['total']['cash'] + $shopData['total']['check'] + $shopData['total']['card']),
 		  $shopData['total']['cash'],
-		  $shopData['total']['check']
+		  $shopData['total']['check'],
+		  $shopData['total']['card']
 		  );
     foreach($productTypes as $typeId => $typeName)
     {

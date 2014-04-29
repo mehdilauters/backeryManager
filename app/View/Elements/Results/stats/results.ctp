@@ -62,6 +62,7 @@
 			<th class="rowTotal label_curve_total" >Total</th>
 			<th class="cash" >Especes %</th>
 			<th class="check" >Cheques %</th>
+			<th class="card" >Carte Bleue %</th>
 			<?php if($fields['comment']) { ?><th class="comment" >Commentaire</th><?php } ?>
 		  </tr>
 			<?php 
@@ -131,6 +132,7 @@
 			  <td class="rowTotal curve_total curve_Shop<?php echo  $result['Shop']['id']; ?>"><?php echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
+			  <td class="card"><?php if($total != 0){ echo round($result[0]['card'] / $total *100, 2); } ?></td>
 			  
 			  <?php if($fields['comment']) { ?><td class="comment" ><?php echo $result['Result']['comment'] ?></td><?php } ?>
 			</tr>

@@ -29,6 +29,7 @@
     <th class="rowTotal" >Total</th>
     <th class="cash" >Especes</th>
     <th class="check" >Cheques</th>
+	<th class="card" >Carte Bleue</th>
     <?php foreach($productTypes as $typeId => $typeName): ?>
       <th><?php echo $typeName; ?></th>
     <?php endforeach ?>
@@ -38,6 +39,7 @@
   
 	$total['cash'] = 0;
 	$total['check'] = 0;
+	$total['card'] = 0;
 	foreach($productTypes as $typeId => $typeName)
 	{
 		$total['productType'][$typeId] = 0;
@@ -55,9 +57,10 @@
 	 ?>
 		<tr class="total">
 		  <td class="date" ><?php echo $date->format('W'); ?></td>
-		  <td class="total" ><?php echo ($total['cash'] + $total['check']); ?></td>
+		  <td class="total" ><?php echo ($total['cash'] + $total['check'] + $total['card']); ?></td>
 		  <td class="cash" ><?php echo $total['cash']; ?></td>
 		  <td class="check" ><?php echo $total['check']; ?></td>
+		  <td class="card" ><?php echo $total['card']; ?></td>
 		  <?php 
 			foreach($productTypes as $typeId => $typeName): ?>
 			<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo $total['productType'][$typeId]; } ?></td>
@@ -68,6 +71,7 @@
 		$weekId = $date->format('W');
 		$total['cash'] = 0;
 		$total['check'] = 0;
+		$total['card'] = 0;
 		foreach($productTypes as $typeId => $typeName)
 		{
 			$total['productType'][$typeId] = 0;
@@ -77,9 +81,10 @@
      ?>
     <tr>
       <td class="date" ><?php echo $date->format('d/m/Y'); ?></td>
-      <td class="total" ><?php echo ($results['cash'] + $results['check']); ?></td>
+      <td class="total" ><?php echo ($results['cash'] + $results['check'] + $results['card']); ?></td>
       <td class="cash" ><?php echo $results['cash']; $total['cash'] += $results['cash'];  ?></td>
       <td class="check" ><?php echo $results['check']; $total['check'] += $results['check']; ?></td>
+	  <td class="card" ><?php echo $results['card']; $total['card'] += $results['card']; ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult" ><?php if(isset($results['productTypes'][$typeId])) { echo $results['productTypes'][$typeId]['result']; $total['productType'][$typeId] += $results['productTypes'][$typeId]['result']; } ?></td>
@@ -89,9 +94,10 @@
   <?php endforeach ?>
 	<tr class="total">
 	  <td class="date" ><?php echo $date->format('W'); ?></td>
-	  <td class="total" ><?php echo ($total['cash'] + $total['check']); ?></td>
+	  <td class="total" ><?php echo ($total['cash'] + $total['check'] + $total['card']); ?></td>
 	  <td class="cash" ><?php echo $total['cash']; ?></td>
 	  <td class="check" ><?php echo $total['check']; ?></td>
+	  <td class="card" ><?php echo $total['card']; ?></td>
 	  <?php 
 		foreach($productTypes as $typeId => $typeName): ?>
 		<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo $total['productType'][$typeId]; } ?></td>
@@ -100,9 +106,10 @@
 	</tr>
     <tr class="total" >
       <td class="total" >Totaux</td>
-      <td class="total"><?php echo ($shopData['total']['cash'] + $shopData['total']['check']) ?></td>
+      <td class="total"><?php echo ($shopData['total']['cash'] + $shopData['total']['check'] + $shopData['total']['card'] ) ?></td>
       <td class="cash"><?php echo $shopData['total']['cash'] ?></td>
       <td class="check"><?php echo $shopData['total']['check'] ?></td>
+	  <td class="card"><?php echo $shopData['total']['card'] ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult"><?php if(isset($shopData['total'][$typeId])) { echo $shopData['total'][$typeId]; } ?></td>
@@ -119,15 +126,17 @@
     <th class="total" >Total</th>
     <th class="cash" >Especes</th>
     <th class="check" >Cheques</th>
+	<th class="card" >Carte Bleue</th>
     <?php foreach($productTypes as $typeId => $typeName): ?>
       <th class="productTypeResult" ><?php echo $typeName; ?></th>
     <?php endforeach ?>
   </tr>
   <tr class="" >
       <td class="date" >Totaux</td>
-      <td class="total" ><?php echo ($data['total']['cash'] + $data['total']['check']) ?></td>
+      <td class="total" ><?php echo ($data['total']['cash'] + $data['total']['check'] + $data['total']['card']) ?></td>
       <td class="cash" ><?php echo $data['total']['cash'] ?></td>
       <td class="check" ><?php echo $data['total']['check'] ?></td>
+	  <td class="card" ><?php echo $data['total']['card'] ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult" ><?php if(isset($data['total'][$typeId])) { echo $data['total'][$typeId]; } ?></td>

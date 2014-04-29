@@ -15,12 +15,14 @@
 		  $resultId='';
 		  $cash = '';
 		  $check = '';
+		  $card = '';
 		  $comment = '';
 		  if(isset($data['entries'][$shopId]['entries'][0]))
 		  {
 		    $resultId=$data['entries'][$shopId]['entries'][0]['resultId'];
 		    $cash = $data['entries'][$shopId]['entries'][0]['cash'];
 		    $check = $data['entries'][$shopId]['entries'][0]['check'];
+			$card = $data['entries'][$shopId]['entries'][0]['card'];
 		    $comment = $data['entries'][$shopId]['entries'][0]['comment'];
 		  }
 		?>
@@ -28,6 +30,8 @@
 		    <label>Especes</label><input type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner" />€
 		    <br/>
 		    <label>Cheques</label><input type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="spinner" />€
+		    <br/>
+			<label>Carte Bleue</label><input type="text" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="spinner" />€
 		    <br/>
 		    <label>Commentaire</label><textarea name="Result[<?php echo $shopId; ?>][comment]" ><?php echo $comment ?></textarea>
 		    <input type="hidden" name="Result[<?php echo $shopId; ?>][resultId]" value="<?php echo $resultId; ?>" />
