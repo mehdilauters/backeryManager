@@ -133,6 +133,8 @@ echo $this->Html->css(
     
     
   	<footer>
+	<div>Credits : <href="http://www.lauters.fr" />Mehdi Lauters 2014</div>
+	<div>BackeryManager released under GPL licence  <href="https://github.com/mehdilauters/backeryManager" />https://github.com/mehdilauters/backeryManager</div>
 <div>
   	<?php echo $this->Html->link(
       $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
@@ -143,13 +145,13 @@ echo $this->Html->css(
 <div>
   last update :
   <?php
-      echo file_get_contents(APP.'uploadDate.txt');
+      echo @file_get_contents(APP.'uploadDate.txt');
     ?>
 </div>
 <div>
   App version :
   <?php
-      echo file_get_contents(APP.'Version.txt');
+      echo @file_get_contents(APP.'Version.txt');
     ?>
 </div>
   	</footer>
