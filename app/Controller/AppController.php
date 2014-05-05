@@ -159,7 +159,7 @@ class AppController extends Controller {
 	$config = array_merge($configDefault, $config);
 
 
-    debug($config);
+    // debug($config);
 	
 	$emailAddr = '';
 	if($config['user'] == NULL)
@@ -199,7 +199,7 @@ class AppController extends Controller {
         ->subject($config['subject'])
         ->send($config['message']);
 
-	$this->log('Email to '.$emailAddr.' : '.$config['subject'], 'email');
+	$this->log('Email to '.$emailAddr.' : '.$config['subject'].', attachment: '.$config['attachment'], 'email');
 	$this->Session->setFlash('Email to '.$emailAddr.$normalAddr.' : '.$config['subject'],'flash/ok');
 		
 
@@ -239,7 +239,7 @@ class AppController extends Controller {
   
   public function isAuthorized($user = null) {
 	$ret = false;
-	if(in_array('*',$this->publicActions))
+	if(in_array('*',$this->publicActions) || $this->isCommandLineInterface())
 	{
 		return true;
 	}
@@ -272,9 +272,17 @@ class AppController extends Controller {
 }
   
   
+ public function isCommandLineInterface()
+{
+    return (php_sapi_name() === 'cli');
+}
+  
   public function beforeFilter()
   {
-      
+   if( $this->isCommandLineInterface()   )
+   {
+	$this->Auth->allow();
+   }
 	  // $user = $this->User->find('first',array('conditions'=>array('User.email' => 'mehdilauters@gmail.com')));
 			// if(isset($user['User']['id']))
 			// {

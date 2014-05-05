@@ -23,6 +23,7 @@ class SalesController extends AppController {
   
 
 	public function dashboard() {
+
 		$this->set('title_for_layout', 'Tableau de bord');
 		$now = new DateTime();
 		

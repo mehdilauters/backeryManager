@@ -24,7 +24,7 @@
 						'name'=>'Boulangerie Faury'
 						),
 			'debug' => array(
-								'status' => true,
+								'status' => false,
 								'email' => array('boulangeriefaury@orange.fr','mehdilauters@gmail.com')
 							),
 			
