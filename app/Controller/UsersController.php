@@ -200,12 +200,13 @@ class UsersController extends AppController {
 		}
 	}
 
-//   public function beforeFilter()
-//   {
-//     if(!$this->request->params['action'] != 'autologin')
-//     {
-//       parent::beforeFilter();
-//     }
-//   }
+   public function beforeFilter()
+  {
+      parent::beforeFilter();
+      if(!($this->Session->check('noSSL') && $this->Session->read('noSSL')))
+      {
+	$this->Security->requireSecure('login');
+      }
+  }
 
 }

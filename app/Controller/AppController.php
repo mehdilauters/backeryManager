@@ -41,6 +41,7 @@ class AppController extends Controller {
   public $components = array(
  			  'DebugKit.Toolbar',
 			   'Session', 'Cookie',
+			    'Security',
 			    'Auth' => array(
 				'authenticate' => array(
 				      'Form' => array(
@@ -277,12 +278,27 @@ class AppController extends Controller {
     return (php_sapi_name() === 'cli');
 }
   
+  public function forceSSL() {
+        $this->redirect('https://' . env('SERVER_NAME') . $this->here);
+    }
+
   public function beforeFilter()
   {
+    $this->Security->blackHoleCallback = 'forceSSL';
    if( $this->isCommandLineInterface()   )
    {
 	$this->Auth->allow();
    }
+
+  if(!($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
+  {
+    if($this->Auth->user('isRoot'))
+    {
+	$this->Security->requireSecure();
+    }
+  }
+
+
 	  // $user = $this->User->find('first',array('conditions'=>array('User.email' => 'mehdilauters@gmail.com')));
 			// if(isset($user['User']['id']))
 			// {

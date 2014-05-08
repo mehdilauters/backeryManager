@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem');
   
-  var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/ );
+  var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL' );
   var $memberActions = array();
   
 /**
@@ -35,7 +35,8 @@ class ConfigController extends AppController {
       'deleteSession' => 'deleteSession',
 	  'emailTest' => 'Test email',
 	  'phpInfo' => 'phpInfo',
-	  'console' => 'console'
+	  'console' => 'console',
+	  'noSSL' => 'noSSL',
     );
     $this->set('actions', $actions);
 	
@@ -315,6 +316,22 @@ class ConfigController extends AppController {
     else
     {
       $this->Session->setFlash('Debug disabled','flash/warning');
+    }
+    $this->redirect($this->referer());
+  }
+
+   public function noSSL($bool)
+  {
+    $this->Session->write('noSSL',$bool);
+    if($bool)
+    {
+      $this->Session->setFlash('ssl disabled', 'flash/warning');
+      $this->log('ssl disableb by '.$this->request->clientIp(), 'debug');
+    }
+    else
+    {
+      $this->Session->setFlash('ssl enabled','flash/warning');
+      $this->log('ssl enabled by '.$this->request->clientIp(), 'debug');
     }
     $this->redirect($this->referer());
   }

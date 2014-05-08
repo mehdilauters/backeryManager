@@ -3,8 +3,9 @@
 /app/Config/database.php
 /app/Config/email.php
 *.log
-/app/webroot/img/photos/preview/*.jpg
-/app/webroot/img/photos/normal/*.jpg
+app/webroot/img/photos/*.*
+/app/webroot/img/photos/preview/*.*
+/app/webroot/img/photos/normal/*.*
 /app/tmp
 /lib/Cake/Console/Templates/skel/tmp/
 *~

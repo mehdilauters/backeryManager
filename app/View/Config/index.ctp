@@ -6,7 +6,6 @@ foreach($actions as $action => $name)
 <?php
 }
 ?>
-<li><a href="https://www.google.com/calendar/render?tab=mc" >Google Calendar</a></li>
 </ul>
 <h3>TODO</h3>
 <ul>
