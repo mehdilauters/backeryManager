@@ -70,6 +70,7 @@ if(isset($this->request->data['group']))
 			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th> <?php } ?>
 			<?php if($fields['productType']) { ?><th class="productType" >Type de Produit</th><?php } ?>
 			<th class="cash label_curve_total" >Somme €</th>
+			<th class="cash label_curve_totalApprox" >Somme approx €</th>
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th><?php } ?>
 			<?php if($fields['shop']) { ?> <th style="display:none" >Courbes</th> <?php } ?>
 		  </tr>
@@ -78,10 +79,10 @@ if(isset($this->request->data['group']))
 			 foreach($resultsEntries as $i=>$resultsEntry):
 			 $date = new DateTime($resultsEntry['ResultsEntry']['date']);
 			 
-			 $curveShopComparative = 'curve_productType'.$resultsEntry['ProductTypes']['id'];
+			 $curveShopComparative = 'productType'.$resultsEntry['ProductTypes']['id'];
 			if($config['shopComparative'])
 			{
-				$curveShopComparative = 'curve_productType'.$resultsEntry['ProductTypes']['id'].'_shop'.$resultsEntry['Shop']['id'];
+				$curveShopComparative = 'productType'.$resultsEntry['ProductTypes']['id'].'_shop'.$resultsEntry['Shop']['id'];
 			}
 			 
 			 //$total = $result[0]['total'];
@@ -117,7 +118,8 @@ if(isset($this->request->data['group']))
 			  <?php } ?>
 			  <?php if($fields['shop']) { ?><td class="shop" ><?php echo  $resultsEntry['Shop']['name']; ?></td><?php } ?>
 			  <?php if($fields['productType']) { ?><td class="productType label_curve_productType<?php echo $resultsEntry['ProductTypes']['id']; ?>"><?php echo $resultsEntry['ProductTypes']['name']; ?></td><?php } ?>
-			  <td class="rowTotal  curve_total <?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			  <td class="rowTotal  curve_total curve_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			  <td class="rowTotal  curve_totalApprox curve_approx_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['approximation'], 2) ?></td>
 			   <?php if($fields['date']) { ?><td class="date" style="display:none" ><?php 
 						switch($group['time'])
 						{	
@@ -144,7 +146,8 @@ if(isset($this->request->data['group']))
 						echo  $dateDisplay;
 			  ?></td>
 			  <?php } ?>
-			  <?php if($fields['shop']) { ?><td class="shopProduct label_<?php echo $curveShopComparative ?>" style="display:none" ><?php echo  $resultsEntry['ProductTypes']['name'].' '.$resultsEntry['Shop']['name']; ?></td><?php } ?>
+			  <?php if($fields['shop']) { ?><td class="shopProduct label_curve_<?php echo $curveShopComparative ?>" style="display:none" ><?php echo  $resultsEntry['ProductTypes']['name'].' '.$resultsEntry['Shop']['name']; ?></td><?php } ?>
+			  <?php if($fields['shop']) { ?><td class="shopProduct label_curve_approx_<?php echo $curveShopComparative ?>" style="display:none" ><?php echo  $resultsEntry['ProductTypes']['name'].' '.$resultsEntry['Shop']['name']; ?></td><?php } ?>
 		  
 			</tr>
 		  <?php

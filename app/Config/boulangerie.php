@@ -8,15 +8,12 @@
   Configure::write('Medias.Photos.xNormal', 800);  
   Configure::write('Medias.Photos.yNormal', 600);    
 
-//Configure::write('dbBackupPath', 'C:\\Users\\Pc\\Dropbox\\parents\\backup_db\\');
-//Configure::write('excelExportPath', 'C:\\Users\\Pc\\Dropbox\\parents\\backup_db\\');
     Configure::write('dbBackupPath', '/tmp/');
     Configure::write('excelExportPath', '/tmp/');
 	
 	Configure::write('databaseVersion', 6);
 	
-	Configure::write('dbBackupUrl', 'boulangerie-faury.fr/boulangerie/config/dbBackup/');
-	//Configure::write('dbBackupUrl', 'localhost/backery/Boulangerie/config/dbBackup/');
+	Configure::write('dbBackupUrl', 'boulangerie-faury.fr/boulangerie/');
 	
 	Configure::write('email', array('from' => 
 					array(
@@ -34,5 +31,10 @@
 	
 
 Configure::write('Order.pageBreakItemsMax', 20);
+
+Configure::write('Approximation.order', 8);
+Configure::write('Approximation.bcscale', 10);
+Configure::write('Approximation.nbProjectionsPoint', 0);
+
 	
 ?>

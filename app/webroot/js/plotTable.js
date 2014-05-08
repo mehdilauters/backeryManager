@@ -15,6 +15,22 @@ function curveDisplay(chartId, curveId, status)
 	}
   
   
+  function toggleAll(chartId)
+  {
+	var chartVarName = chartId + '_chartPlot';
+	var chart = window[chartVarName];
+	var checkBox = $('.controlChart_'+chartId+' input.curveControl');
+	checkBox.prop('checked',!checkBox.prop('checked'));
+	
+	
+	for (key in chart.series) {
+		chart.series[key].show = !chart.series[key].show;
+	}
+	
+	chart.replot();
+  }
+  
+  
   $(document).ready(function(){
     $('.chartDiv').each(function(index, item){
       
@@ -225,17 +241,22 @@ function curveDisplay(chartId, curveId, status)
     
     );
 	
-	html = '<ul>';
+	html = '<ul class="controlChart_'+chartId+'">';
+	var found = false;
 	for(var x in window[chartVarName].series)
 	{
 		label = window[chartVarName].series[x]['label'];
 		$('#'+chartId).parent().find('.control').html('');
-		
 		if( label != undefined )
 		{
-			
-			html += '<li><label>'+label+'</label><input type="checkbox" checked="checked" onchange="curveDisplay(\''+chartId+'\', '+x+')" /></li>';
+			found = true;
+			html += '<li><label>'+label+'</label><input class="curveControl" type="checkbox" checked="checked" onchange="curveDisplay(\''+chartId+'\', '+x+')" /></li>';
 		}
+	}
+	console.log(found);
+	if(found)
+	{
+		html += '<li><label>Tout cocher</label><input type="checkbox" checked="checked" onchange="toggleAll(\''+chartId+'\')" /></li>';
 	}
 	html += '<ul>';
 	$('#'+chartId).parent().find('.control').html(html)

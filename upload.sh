@@ -56,7 +56,6 @@ mirror --reverse \
 	--exclude-glob core.php \
 	--exclude-glob *~ \
 	--exclude-glob app/webroot/img/photos/ \
-	--exclude-glob app/Vendor/ \
 	--exclude-glob app/Plugin/ \
 	--exclude-glob app/tmp/cache/
        "

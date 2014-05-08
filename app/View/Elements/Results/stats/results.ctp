@@ -58,19 +58,17 @@
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th>
 				<th>date</th>
 			<?php } ?>
-			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th><?php } ?>
-			<th class="rowTotal label_curve_total" >Total</th>
+			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th><th class="shop" >Approximation</th><?php } ?>
+			<th class="rowTotal label_curve_total label_curve_totalApprox" >Total</th>
 			<th class="cash" >Especes %</th>
 			<th class="check" >Cheques %</th>
 			<th class="card" >Carte Bleue %</th>
 			<?php if($fields['comment']) { ?><th class="comment" >Commentaire</th><?php } ?>
 		  </tr>
 			<?php 
-			$i = 0;
-			 foreach($results as $i=>$result):
-			 
-			 $date = new DateTime($result['Result']['date']);
-			 $total = $result[0]['total'];
+		foreach($results as $i=>$result):
+			$date = new DateTime($result['Result']['date']);
+			$total = $result[0]['total'];
 			?>
 			<tr class="plot" >
 			  <?php if($fields['date']) { ?>
@@ -87,12 +85,15 @@
 							case 'week':
 								$weekNumber = $date->format('W');
 								$dateDisplay = date( 'd/m/Y', strtotime('last monday', strtotime('tomorrow', $date->getTimestamp())));
+								$nbDaysMax = 8;
 							break;
 							case 'month':
 								$dateDisplay = $date->format('01/m/Y');
+								$nbDaysMax = 32;
 							break;
 							case 'year':
 								$dateDisplay = $date->format('01/01/Y');
+								$nbDaysMax = 366;
 							break;
 							default:
 								$dateDisplay = $date->format('d/m/Y'); 
@@ -128,7 +129,46 @@
 					?>
 				</td>
 			<?php } ?>
-			  <?php if($fields['shop']) { ?><td class="shop label_curve_Shop<?php echo  $result['Shop']['id']; ?>" ><?php echo  $result['Shop']['name']; ?></td><?php } ?>
+			  <?php if($fields['shop']) { ?>
+				<td class="shop label_curve_Shop<?php echo  $result['Shop']['id']; ?> label_curve_ShopApprox<?php echo  $result['Shop']['id']; ?>" ><?php echo  $result['Shop']['name']; ?></td>
+				<td class="shop curve_totalApprox curve_ShopApprox<?php echo  $result['Shop']['id']; ?>" ><?php 
+					/*$coefficients = unserialize($result['Shop']['equation_parameters']);
+					
+					$lastDateDiff = $initDate->diff($lastDate);
+					$Y = 0;
+					$dateDiff = $initDate->diff($date);
+					// $x = $dateDiff->days;
+					// debug($lastDateDiff->days);
+					// debug($dateDiff->days);
+					
+					$xMax = min($lastDateDiff->days+$nbDaysMax,$dateDiff->days);
+					$xMin = $lastDateDiff->days;
+					
+					for($j = $xMin; $j<= $xMax ; $j++)
+					{
+						$y = 0;
+						$order = 0;
+						// $str = '';
+						foreach($coefficients as $coef)
+						{
+							// $str .= '+ ( ' .$coef.'x^'.$order.' )';
+							 $y += $coef * pow($j,$order);
+							$order++;
+						}
+						$Y += $y;
+					}
+					if($y > 0)
+					{
+						echo  $Y / ($xMax - $xMin +1);
+					}
+					else
+					{
+						echo 0;
+					}
+					$lastDate = $date;*/
+					echo $result[0]['approximation'];
+					?></td>
+			<?php } ?>
 			  <td class="rowTotal curve_total curve_Shop<?php echo  $result['Shop']['id']; ?>"><?php echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
@@ -137,7 +177,6 @@
 			  <?php if($fields['comment']) { ?><td class="comment" ><?php echo $result['Result']['comment'] ?></td><?php } ?>
 			</tr>
 		  <?php 
-			$i++;
 			endforeach ?>
 		</table>
 	</div>

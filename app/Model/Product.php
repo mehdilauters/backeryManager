@@ -58,7 +58,7 @@ class Product extends AppModel {
       'numeric' => array(
         'rule' => array('numeric'),
         'message' => 'Product::media_id must be numeric',
-        //'allowEmpty' => false,
+        'allowEmpty' => true,
         //'required' => false,
         //'last' => false, // Stop validation after this rule
         //'on' => 'create', // Limit validation to 'create' or 'update' operations
