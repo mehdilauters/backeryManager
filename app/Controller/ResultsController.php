@@ -203,6 +203,12 @@ class ResultsController extends AppController {
 	$regressions = array();
 	$initDate = array();
 	
+      $order = Configure::read('Approximation.order');
+      if(isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] != '')
+      {
+        $order = $this->request->data['approximationOrder'];
+      }
+
 	// add data to regression
 	$nbResults = count($results);
 	for($i=0; $i< ($nbResults-1); $i++)
@@ -210,7 +216,7 @@ class ResultsController extends AppController {
 		$res = $results[$i];
 		if(!isset($regressions[$res['Result']['shop_id']]))
 		{
-			$regressions[$res['Result']['shop_id']] = new PolynomialRegression( Configure::read('Approximation.order') );
+			$regressions[$res['Result']['shop_id']] = new PolynomialRegression( $order );
 			$initDate[$res['Result']['shop_id']] = new DateTime($res['Result']['date']);
 		}
 		$curDate = new DateTime($res['Result']['date']);

@@ -36,6 +36,7 @@ if(isset($this->request->data['group']))
     </fieldset>
 
     <fieldset>
+      <label>Approximation</label>
       <select name="approximationOrder" >
 	<option value="" ></option>
 	<option value="1" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '1') ? 'selected="selected"' : ''; ?>  >Lineaire</option>

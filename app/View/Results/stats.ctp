@@ -58,6 +58,16 @@
 	  <?php endforeach; ?>
     </select>
 	</fieldset>
+  <fieldset>
+      <label>Approximation</label>
+      <select name="approximationOrder" >
+	<option value="" ></option>
+	<option value="1" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '1') ? 'selected="selected"' : ''; ?>  >Lineaire</option>
+	<option value="2" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '2') ? 'selected="selected"' : ''; ?>  >Parabolique</option>
+	<option value="4" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '4') ? 'selected="selected"' : ''; ?>  >Quadratique</option>
+	<option value="<?php echo Configure::read('Approximation.order') ?>" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == Configure::read('Approximation.order')) ? 'selected="selected"' : ''; ?>  >Maximum</option>
+      </select>
+    </fieldset>
     <input type="submit" class="search" value="" />
   </form>
 </div>
