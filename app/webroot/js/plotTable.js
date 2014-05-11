@@ -21,12 +21,13 @@ function curveDisplay(chartId, curveId, status)
   {
 	var chartVarName = chartId + '_chartPlot';
 	var chart = window[chartVarName];
+	var status = $('#toggle_'+chartId).prop('checked');
 	var checkBox = $('.controlChart_'+chartId+' input.curveControl');
-	checkBox.prop('checked',!checkBox.prop('checked'));
+	checkBox.prop('checked',status);
 	
 	
 	for (key in chart.series) {
-		chart.series[key].show = !chart.series[key].show;
+		chart.series[key].show = status;
 	}
 	
 	chart.replot();
@@ -276,7 +277,7 @@ function curveDisplay(chartId, curveId, status)
 	}
 	if(found)
 	{
-		html += '<li><label>Tout cocher</label><input type="checkbox" checked="checked" onchange="toggleAll(\''+chartId+'\')" /></li>';
+		html += '<li><label>Tout cocher</label><input type="checkbox" checked="checked" id="toggle_'+chartId+'" onchange="toggleAll(\''+chartId+'\')" /></li>';
 	}
 	html += '<ul>';
 	$('#'+chartId).parent().find('.control').html(html);
