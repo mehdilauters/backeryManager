@@ -142,18 +142,6 @@ echo $this->Html->css(
       array('target' => '_blank', 'escape' => false)
     ); ?>
 </div>
-<div>
-  last update :
-  <?php
-      echo @file_get_contents(APP.'uploadDate.txt');
-    ?>
-</div>
-<div>
-  App version :
-  <?php
-      echo @file_get_contents(APP.'Version.txt');
-    ?>
-</div>
   	</footer>
   </div>
   <?php //echo $this->element('sql_dump'); 

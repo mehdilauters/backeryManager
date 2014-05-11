@@ -169,7 +169,7 @@
 					echo $result[0]['approximation'];
 					?></td>
 			<?php } ?>
-			  <td class="rowTotal curve_total curve_Shop<?php echo  $result['Shop']['id']; ?>"><?php echo round($total,2) ?></td>
+			  <td class="rowTotal noDisplay curve_total curve_Shop<?php echo  $result['Shop']['id']; ?>"><?php echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
 			  <td class="card"><?php if($total != 0){ echo round($result[0]['card'] / $total *100, 2); } ?></td>
@@ -181,6 +181,8 @@
 		</table>
 	</div>
 	<script>
+
+
   $(document).ready(function(){
 	
 		<?php if($config['interactive'])
@@ -196,7 +198,7 @@
 					description:['Columns visibility manager'],
 					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0);}]
 					},
-              on_after_refresh_counter: function(o,i){ histogram('resultsStatValues','resultsChart', true); }
+              on_after_refresh_counter: function(o,i){ histogram('resultsStatValues','resultsChart', true);  }
               };
               tf = new TF('resultsStatValues', tfConfig1); tf.AddGrid();
 	<?php }else{ ?>

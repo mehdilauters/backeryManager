@@ -20,7 +20,7 @@ then
 fi
 echo "Mise a jour de ${RCD}"
 echo `date` > app/uploadDate.txt
-echo `git rev-parse HEAD` >> app/Version.txt
+echo `git rev-parse HEAD` > app/Version.txt
 
 #--exclude-glob dev/ \
        #--exclude-glob blog/ \

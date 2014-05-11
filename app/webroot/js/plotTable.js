@@ -10,6 +10,8 @@ function curveDisplay(chartId, curveId, status)
 		{
 			status = !chart.series[curveId].show;
 		}
+		
+		$('#control_'+chartId+'_'+curveId).prop('checked',status);
 		chart.series[curveId].show = status;
 		chart.replot();
 	}
@@ -51,12 +53,13 @@ function curveDisplay(chartId, curveId, status)
     data = {};
 	data['plotData'] = {};
 	data['labels'] = {};
+	data['display'] = {};
+	
 	if(interactive == undefined)
 	{
 		interactive = false;
 	}
 	
-   
 
     row=0;
     $('#'+tableId+' tr.plot').each(function(index, item){
@@ -87,7 +90,8 @@ function curveDisplay(chartId, curveId, status)
 							if(data['plotData'][y] == undefined)
 							{
 								data['plotData'][y] = {};
-								htmlLabel = $(item).find('td.label_'+classes[x]).html();
+								labelItem = $(item).find('td.label_'+classes[x]);
+								htmlLabel = labelItem.html();
 								if( htmlLabel != undefined)
 								{
 									data['labels'][y] = htmlLabel;
@@ -97,12 +101,16 @@ function curveDisplay(chartId, curveId, status)
 							{
 								data['plotData'][y][dte] = 0;
 							}
+							
+							data['display'][y] = !($(this).hasClass('noDisplay'));
+							
+							
 							tmpData = parseFloat($(this).html());
 							if(isNaN(tmpData))
 							{
 							  tmpData = 0;
-							  console.log(y + " " + dte + "==> " +parseFloat($(this).html()));
-							  console.log($(this).html());
+// 							  console.log(y + " " + dte + "==> " +parseFloat($(this).html()));
+// 							  console.log($(this).html());
 							}
 							data['plotData'][y][dte] += tmpData;
 						}
@@ -130,6 +138,7 @@ function curveDisplay(chartId, curveId, status)
 							data['labels'][y] = $(this).html();
 						}
 					}
+// 					data['display'][y] = !($(this).hasClass('noDisplay'));
 				}
 		});
 	  }
@@ -138,8 +147,9 @@ function curveDisplay(chartId, curveId, status)
 
 	
 
-    plotData = [];
+	plotData = [];
 	var seriesLabel = [];
+	var displayCurves = [];
 	for (var x in data['plotData'] ) {
 		var tmpData = [];
 		for(y in data['plotData'][x])
@@ -147,9 +157,9 @@ function curveDisplay(chartId, curveId, status)
 			tmpData.push([y, data['plotData'][x][y]]);
 		}
 		seriesLabel.push({'label':data['labels'][x]});
+		displayCurves.push(data['display'][x])
 		plotData.push(tmpData);
 	}
-	//console.log(seriesLabel);
 
   
   
@@ -243,24 +253,44 @@ function curveDisplay(chartId, curveId, status)
 	
 	html = '<ul class="controlChart_'+chartId+'">';
 	var found = false;
+	var i = 0;
 	for(var x in window[chartVarName].series)
 	{
 		label = window[chartVarName].series[x]['label'];
 		$('#'+chartId).parent().find('.control').html('');
+		
+		var checked = '';
+		if(displayCurves[x])
+		{
+		    checked = 'checked="checked"';
+		}
+		
 		if( label != undefined )
 		{
 			found = true;
-			html += '<li><label>'+label+'</label><input class="curveControl" type="checkbox" checked="checked" onchange="curveDisplay(\''+chartId+'\', '+x+')" /></li>';
+			html += '<li><label>'+label+'</label><input id="control_'+chartId+'_'+x+'" class="curveControl" type="checkbox" '+checked+' onchange="curveDisplay(\''+chartId+'\', '+x+')" /></li>';
 		}
+		
+		window[chartVarName].series[x].show = displayCurves[x];
+	  i++;
 	}
-	console.log(found);
 	if(found)
 	{
 		html += '<li><label>Tout cocher</label><input type="checkbox" checked="checked" onchange="toggleAll(\''+chartId+'\')" /></li>';
 	}
 	html += '<ul>';
-	$('#'+chartId).parent().find('.control').html(html)
+	$('#'+chartId).parent().find('.control').html(html);
+	window[chartVarName].replot();
+// 	for(i=0; i< displayCurves.length; i++)
+// 	{
+// 	  status = displayCurves[i];
+// 	  $('#control_'+chartId+'_'+i).prop('checked',false);
+// 	  console.log($('#control_'+chartId+'_'+i).prop('checked'));
+// 	  window[chartVarName].series[i].show = status;
+// 	  console.log(i + ' ' + window[chartVarName].series[i].show);
+// 	}
 	
+//  	toggleAll(chartVarName);
     
     return false;
   }

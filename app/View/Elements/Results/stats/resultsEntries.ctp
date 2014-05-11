@@ -118,7 +118,7 @@ if(isset($this->request->data['group']))
 			  <?php } ?>
 			  <?php if($fields['shop']) { ?><td class="shop" ><?php echo  $resultsEntry['Shop']['name']; ?></td><?php } ?>
 			  <?php if($fields['productType']) { ?><td class="productType label_curve_productType<?php echo $resultsEntry['ProductTypes']['id']; ?>"><?php echo $resultsEntry['ProductTypes']['name']; ?></td><?php } ?>
-			  <td class="rowTotal  curve_total curve_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			  <td class="rowTotal noDisplay curve_total curve_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
 			  <td class="rowTotal  curve_totalApprox curve_approx_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['approximation'], 2) ?></td>
 			   <?php if($fields['date']) { ?><td class="date" style="display:none" ><?php 
 						switch($group['time'])

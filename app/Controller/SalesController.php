@@ -68,9 +68,8 @@ class SalesController extends AppController {
 
     public function stats($conditions = array(), $group = array()) {
 
-
     $groupBy = array();
-	if (empty($this->request->params['requested'])) {
+    if (true/*empty($this->request->params['requested'])*/) {
       $dateStart = date('01/m/Y');
       if(isset($this->request->data['dateStart']))
       {
@@ -186,28 +185,33 @@ class SalesController extends AppController {
 	bcscale( Configure::read('Approximation.bcscale') );
 	$regressions = array();
 	$initDate = NULL;
-	
+
+      $order = Configure::read('Approximation.order');
+      if(isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] != '')
+      {
+        $order = $this->request->data['approximationOrder'];
+      }
 	// add data to regression
 	$nbsales = count($sales);
 	for($i=0; $i< ($nbsales-1); $i++)
 	{
 		$res = $sales[$i];
-		if(!isset($regressions['produced']))
+		if(!isset($regressions[$res['Product']['id']][$res['Sale']['shop_id']]['produced']))
 		{
-			$regressions['produced'] = new PolynomialRegression( Configure::read('Approximation.order') );
-			$regressions['lost'] = new PolynomialRegression( Configure::read('Approximation.order') );
-			$regressions['sold'] = new PolynomialRegression( Configure::read('Approximation.order') );
-			$regressions['totalPrice'] = new PolynomialRegression( Configure::read('Approximation.order') );
-			$regressions['totalLost'] = new PolynomialRegression( Configure::read('Approximation.order') );
-			$initDate = new DateTime($res['Sale']['date']);
+			$regressions[$res['Product']['id']][$res['Sale']['shop_id']]['produced'] = new PolynomialRegression( $order );
+			$regressions[$res['Product']['id']][$res['Sale']['shop_id']]['lost'] = new PolynomialRegression( $order );
+			$regressions[$res['Product']['id']][$res['Sale']['shop_id']]['sold'] = new PolynomialRegression( $order );
+			$regressions[$res['Product']['id']][$res['Sale']['shop_id']]['totalPrice'] = new PolynomialRegression( $order );
+			$regressions[$res['Product']['id']][$res['Sale']['shop_id']]['totalLost'] = new PolynomialRegression( $order );
+			$initDate[$res['Product']['id']][$res['Sale']['shop_id']] = new DateTime($res['Sale']['date']);
 		}
 		$curDate = new DateTime($res['Sale']['date']);
-		$dateDiff = $initDate->diff($curDate);
+		$dateDiff = $initDate[$res['Product']['id']][$res['Sale']['shop_id']]->diff($curDate);
 		$x = $dateDiff->days / $nbDaysByInterval;
 		
-		foreach($regressions as $name => $regression)
+		foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $name => $regression)
 		{
-			$regressions[$name]->addData( $x, $res[0][$name] );
+			$regression->addData( $x, $res[0][$name] );
 		}
 		
 	}
@@ -215,79 +219,85 @@ class SalesController extends AppController {
 
 	// get equation parameters
 	$approximations = array();
-	
-	foreach($regressions as $name => $regression)
+	foreach($regressions as $productId => $regressionProduct)
 	{
-		$approximation[$name] = $regressions[$name]->getCoefficients();
+	    foreach($regressionProduct as $shopId => $regressionProductShop)
+	    {
+		  foreach($regressionProductShop as $name => $reg)
+		  {
+// 		    $coeffs = $reg->getCoefficients();
+// 		    $approximations[$productId][$shopId][$name] = $coeffs;
+		    $this->log('product #'.$productId.' shop #'.$shopId.' '.$this->getFunctionText($coeffs), 'debug');
+		  }
+	    }
 	}
 	
-	$lastDate = NULL;
-	// fill results
-	foreach($sales as &$sale)
-	{
-		$curDate = new DateTime($sale['Sale']['date']);
-		$dateDiff = $initDate->diff($curDate);
-		$x = $dateDiff->days / $nbDaysByInterval;
-		
-		foreach($regressions as $name => $regression)
-		{
-			$y = $regressions[$name]->interpolate($approximation[$name],$x);
-			if($y < 0)
-			{
-				$y =0;
-			}
-			$res[0][$name.'Approximation'] = $y;
-		}
-		$lastDate = $curDate;
-	}	
- 
- // extrapolate to future
-	$maxX = Configure::read('Approximation.nbProjectionsPoint');
-	for($i = 0; $i < $maxX; $i++)
-	{
-		$res = array(
-			0 => array(
-						'prodeuced' => '',
-						'lost' => '',
-						'sold' => '',
-						'totalPrice' => '',
-						'totalLost' => '',
-						'producedApproximation' => 0,
-						'lostApproximation' => 0,
-						'soldApproximation' => 0,
-						'totalPriceApproximation' => 0,
-						'totalLostApproximation' => 0
-						),
-			'Sale' => array(
-							'date' => '',
-							'comment' => 'Approximation',
-							'shop_id' => ''
-							),
-			'Product' => array(
-					'id' => '',
-					'ProductType' => array()
-					)
-			);
-		$lastDate->modify('+'.($nbDaysByInterval).' day');
-		foreach($regressions as $shopId => $regression)
-		{
-			$dateDiff = $initDate[$shopId]->diff($lastDate);
-			$x = $dateDiff->days / $nbDaysByInterval;
-			foreach($regressions as $name => $regression)
-			{
-				$y = $regressions[$name]->interpolate($approximation[$name],$x);
-				if($y < 0)
-				{
-					$y =0;
-				}
-				$res[0][$name.'Approximation'] = $y;
-			}
-			$res['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
-			$res['Product']['id']  = $shopId;
-			$res['Sale']['shop_id'] = $shopId;
-			$results[] = $res;
-		}		
-	}
+// 	$lastDate = NULL;
+// 	// fill results
+// 	foreach($sales as &$sale)
+// 	{
+// 		$curDate = new DateTime($sale['Sale']['date']);
+// 		$dateDiff = $initDate[$res['Product']['id']][$res['Sale']['shop_id']]->diff($curDate);
+// 		$x = $dateDiff->days / $nbDaysByInterval;
+// 		
+// 		foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $name => $regression)
+// 		{
+// 			$y = $regressions[$res['Product']['id']][$res['Sale']['shop_id']][$name]->interpolate($approximation[$res['Product']['id']][$res['Sale']['shop_id']][$name],$x);
+// 			if($y < 0)
+// 			{
+// 				$y =0;
+// 			}
+// 			$sale[0][$name.'Approximation'] = $y;
+// 		}
+// 		$lastDate = $curDate;
+// 	}	
+//  // extrapolate to future
+// 	$maxX = Configure::read('Approximation.nbProjectionsPoint');
+// 	for($i = 0; $i < $maxX; $i++)
+// 	{
+// 		$res = array(
+// 			0 => array(
+// 						'produced' => '',
+// 						'lost' => '',
+// 						'sold' => '',
+// 						'totalPrice' => '',
+// 						'totalLost' => '',
+// 						'producedApproximation' => 0,
+// 						'lostApproximation' => 0,
+// 						'soldApproximation' => 0,
+// 						'totalPriceApproximation' => 0,
+// 						'totalLostApproximation' => 0
+// 						),
+// 			'Sale' => array(
+// 							'date' => '',
+// 							'comment' => 'Approximation',
+// 							'shop_id' => ''
+// 							),
+// 			'Product' => array(
+// 					'id' => '',
+// 					'ProductType' => array()
+// 					)
+// 			);
+// 		$lastDate->modify('+'.($nbDaysByInterval).' day');
+// 		foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $shopId => $regression)
+// 		{
+// 			$dateDiff = $initDate[$res['Product']['id']][$res['Sale']['shop_id']]->diff($lastDate);
+// 			$x = $dateDiff->days / $nbDaysByInterval;
+// 			foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $name => $regression)
+// 			{
+// 				$y = $regressions[$res['Product']['id']][$res['Sale']['shop_id']][$name]->interpolate($approximation[$res['Product']['id']][$res['Sale']['shop_id']][$name],$x);
+// 				if($y < 0)
+// 				{
+// 					$y =0;
+// 				}
+// 				$res[0][$name.'Approximation'] = $y;
+// 			}
+// 			$res['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
+// 			$res['Product']['id']  = $shopId;
+// 			$res['Sale']['shop_id'] = $shopId;
+// 			$results[] = $res;
+// 		}		
+// 	}
  
 
     $this->Sale->Product->contain('ProductType');
@@ -513,4 +523,11 @@ public function results()
     $this->Session->setFlash(__('Sale was not deleted'),'flash/fail');
     $this->redirect(array('action' => 'index'));
   }
+
+
+public function beforeFilter() {
+	parent::beforeFilter();
+        $this->Security->requirePost('stats');
+    }
+
 }

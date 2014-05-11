@@ -278,13 +278,53 @@ class AppController extends Controller {
     return (php_sapi_name() === 'cli');
 }
   
-  public function forceSSL() {
+
+ function blackHole($error) {
+    switch ($error) {
+      case 'secure':
+	$this->log(Router::url( $this->here, true ).' redirected to https', 'debug');
         $this->redirect('https://' . env('SERVER_NAME') . $this->here);
+        break;
+      default:
+           $this->log('BlackHole error: '.$error, 'debug');
+        break;
     }
+}
+
+
+// TODO move into a helper/components
+public function getFunctionText($coefficients)
+	{
+		$functionText = "f(x) = ";
+
+			foreach($coefficients as $power => $coefficient)
+
+			{
+
+				$functionText .= ($coefficient > 0) ? " + " : " - ";
+
+			  $functionText .= abs(round($coefficient, 4));
+
+			  if ($power > 0)
+
+			  {
+
+				$functionText .= "x";
+
+				if ($power > 1)
+
+				  $functionText .= "^" . $power;
+
+			  }
+
+			}
+		return $functionText;
+		}
+
 
   public function beforeFilter()
   {
-    $this->Security->blackHoleCallback = 'forceSSL';
+    $this->Security->blackHoleCallback = 'blackHole';
    if( $this->isCommandLineInterface()   )
    {
 	$this->Auth->allow();

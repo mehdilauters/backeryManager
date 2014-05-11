@@ -93,7 +93,6 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
   $i = 0;
    foreach($sales as $sale)
    {
-      
       $class = 'lostProducts';
       if($sale[0]['lost'] <= 0 )
       {
@@ -160,16 +159,16 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
       <?php if($fields['product']) { ?><td class="productName"><?php echo $products[$sale['Sale']['product_id']]['Product']['name'] ?></td><?php } ?>
       <?php if($fields['productType']) { ?><td class="productTypeName"><?php echo $products[$sale['Sale']['product_id']]['ProductType']['name'] ?></td><?php } ?>
       <?php if($fields['shop']) { ?><td class="shopName"><?php echo $shops[$sale['Sale']['shop_id']] ?></td><?php } ?>
-      <td class="produced curve_produced" ><?php echo $sale[0]['produced'] ?></td>
-	  <td class="producedApprox curve_producedApproximation" ><?php echo $sale[0]['producedApproximation'] ?></td>
-      <td class="<?php echo $class ?> lost curve_lost" ><?php echo $sale[0]['lost'] ?></td>
-	  <td class="lostApprox curve_lostApproximation" ><?php echo $sale[0]['lostApproximation'] ?></td>
-      <td class="sold  curve_sold"><?php echo $sale[0]['sold'] ?></td>
-	  <td class="soldApprox curve_soldApproximation" ><?php echo $sale[0]['soldApproximation'] ?></td>
-      <td class="totalPrice  curve_totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
-	  <td class="totalPriceApprox curve_totalPriceApproximation" ><?php echo $sale[0]['totalPriceApproximation'] ?></td>
-      <td class="totalLost curve_totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
-	  <td class="totalLostApprox curve_totalLostApproximation" ><?php echo $sale[0]['totalLostApproximation'] ?></td>
+      <td class="produced noDisplay curve_produced" ><?php echo $sale[0]['produced'] ?></td>
+	  <td class="producedApprox curve_producedApproximation" ><?php echo round($sale[0]['producedApproximation'],2) ?></td>
+      <td class="<?php echo $class ?> lost noDisplay curve_lost" ><?php echo $sale[0]['lost'] ?></td>
+	  <td class="lostApprox curve_lostApproximation" ><?php echo round($sale[0]['lostApproximation'],2) ?></td>
+      <td class="sold noDisplay curve_sold"><?php echo $sale[0]['sold'] ?></td>
+	  <td class="soldApprox curve_soldApproximation" ><?php echo round($sale[0]['soldApproximation'],2) ?></td>
+      <td class="totalPrice noDisplay curve_totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
+	  <td class="totalPriceApprox curve_totalPriceApproximation" ><?php echo round($sale[0]['totalPriceApproximation'],2) ?></td>
+      <td class="totalLost noDisplay curve_totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
+	  <td class="totalLostApprox curve_totalLostApproximation" ><?php echo round($sale[0]['totalLostApproximation'],2) ?></td>
       <?php if($fields['comment']) { ?><td class="comment"><?php echo $sale['Sale']['comment'] ?></td><?php } ?>
    </tr>
    
@@ -190,6 +189,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
     return o;
   };
  
+
    
   $(document).ready(function(){
 
@@ -220,6 +220,8 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
   histogram('statValues','histogramChart'); 
 
 <?php endif; ?>
+
+
 
   });
 </script> 
