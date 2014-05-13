@@ -33,11 +33,15 @@ public function getOptionParser() {
 		
 		$ch = curl_init();
 		$timeout = 5;
-		
+		debug($loginUrl);
 		
 		// LOGIN
 		//Set the URL to work with
 		curl_setopt($ch, CURLOPT_URL, $loginUrl);
+
+		// https certificate
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
 		// ENABLE HTTP POST
 		curl_setopt($ch, CURLOPT_POST, 1);
@@ -55,7 +59,8 @@ public function getOptionParser() {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		//execute the request (the login)
-		$store = curl_exec($ch);
+		$res = curl_exec($ch);
+		debug(curl_error($ch));
 
 		//the login is now done and you can continue to get the
 		//protected content.
@@ -72,7 +77,7 @@ public function getOptionParser() {
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 		$sql = curl_exec($ch);
 		curl_close($ch);
-		//debug($sql);
+// 		debug($sql);
 		$this->out('Done');
 		$this->out('Applying to database');
 		App::uses('ConnectionManager', 'Model'); 

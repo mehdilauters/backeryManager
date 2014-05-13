@@ -36,6 +36,9 @@ class PhotosController extends AppController {
 
   function download($idPhoto, $preview = true)
 	{
+		if (!$this->Photo->exists($id)) {
+		  throw new NotFoundException(__('Invalid photo'));
+		}
 		$this->viewClass = 'Media';
 		if($preview)
 			$path='preview/';

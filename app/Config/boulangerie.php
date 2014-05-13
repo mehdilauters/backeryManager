@@ -13,7 +13,7 @@
 	
 	Configure::write('databaseVersion', 6);
 	
-	Configure::write('dbBackupUrl', 'boulangerie-faury.fr/boulangerie/');
+	Configure::write('dbBackupUrl', 'https://boulangerie-faury.fr/boulangerie/');
 	
 	Configure::write('email', array('from' => 
 					array(
@@ -32,7 +32,7 @@
 
 Configure::write('Order.pageBreakItemsMax', 20);
 
-Configure::write('Approximation.order', 8);
+Configure::write('Approximation.order', 0);
 Configure::write('Approximation.bcscale', 10);
 Configure::write('Approximation.nbProjectionsPoint', 0);
 

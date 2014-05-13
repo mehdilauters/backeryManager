@@ -64,6 +64,23 @@ public $modelName = "Company";
 		// post
 		$res = $this->{$this->modelName}->find('count');
 		$this->assertEquals(0, $res);	
+
+
+// 		$res = $this->{$this->modelName}->find('count');
+// 		$this->assertEquals(1, $res);
+		
+// 		$result = $this->headers['Location'];
+// 		$this->assertRegExp('/companies$/', $result);
+
+		
+		// try to add a new company (already one saved)
+//decomment to get working
+// 		$res = $this->{$this->modelName}->find('count');
+		$res=0;
+		debug($this->assertEquals(1, $res));
+		
+// 		$data[$this->modelName]['name'] = 'test 2';
+		
 //buuuuuuuuu here
 		$result = $this->testAction(
 			'/'.$this->controllerName.'/add',

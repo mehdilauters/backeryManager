@@ -66,6 +66,7 @@ class ConfigController extends AppController {
 				'subject' => 'TestMail '.date('d/m/Y')
 				);
 	$this->sendMail($mail);
+	$this->render('index');
   }
   
   public function demoBaseSql()

@@ -192,8 +192,9 @@ class AppController extends Controller {
 	{
 		$email->attachments($config['attachment']);
 	}
-	
+	debug(array(Configure::read('email.from.email') => Configure::read('email.from.name')));
     $email->from(array(Configure::read('email.from.email') => Configure::read('email.from.name')))
+	->sender(Configure::read('email.from.email'), Configure::read('email.from.name'))
         ->to($emailAddr)
         ->template($config['view'], 'default')
         ->viewVars($config['data'])
@@ -233,7 +234,7 @@ class AppController extends Controller {
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
-    $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews'));
+    $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ), array('return'=>true));
     $this->set('news',$news);
   }
   

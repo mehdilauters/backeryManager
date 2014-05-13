@@ -8,6 +8,7 @@ app/webroot/img/photos/*.*
 /app/webroot/img/photos/normal/*.*
 /app/tmp
 /lib/Cake/Console/Templates/skel/tmp/
+upload.*
 *~
 .DS_Store
 /tags
