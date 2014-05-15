@@ -32,9 +32,11 @@
 
 Configure::write('Order.pageBreakItemsMax', 20);
 
-Configure::write('Approximation.order', 0);
+Configure::write('Approximation.order', 3);
 Configure::write('Approximation.bcscale', 10);
 Configure::write('Approximation.nbProjectionsPoint', 0);
 
+
+Configure::write('Security.ssl', false);
 	
 ?>

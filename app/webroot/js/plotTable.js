@@ -56,12 +56,8 @@ function curveDisplay(chartId, curveId, status)
 	data['labels'] = {};
 	data['display'] = {};
 	
-	if(interactive == undefined)
-	{
-		interactive = false;
-	}
+	interactive = $('#'+tableId).css('display') !== 'none';
 	
-
     row=0;
     $('#'+tableId+' tr.plot').each(function(index, item){
       if(row > 0) //skip header

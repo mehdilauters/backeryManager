@@ -57,7 +57,6 @@ class NewsController extends AppController {
 										  'end'=>$dateEnd->getTimestamp()
 										  )
 								  )
-								  ,array('return')
 					);
 	}
      return $news;

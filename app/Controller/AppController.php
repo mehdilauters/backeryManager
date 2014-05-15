@@ -234,7 +234,7 @@ class AppController extends Controller {
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
-    $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ), array('return'=>true));
+    $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
     $this->set('news',$news);
   }
   
@@ -331,11 +331,11 @@ public function getFunctionText($coefficients)
 	$this->Auth->allow();
    }
 
-  if(!($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
+  if( Configure::read('Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
   {
     if($this->Auth->user('isRoot'))
     {
-	$this->Security->requireSecure();
+		$this->Security->requireSecure();
     }
   }
 

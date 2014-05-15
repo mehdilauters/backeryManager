@@ -62,10 +62,21 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
   
   //debug($fields);
   
+  	$titleDate = array(
+		''=> 'Jour',
+		'weekday'=> 'Jour de la semaine',
+		'day'=> 'Jour',
+		'week'=> 'Semaine',
+		'month'=> 'Mois',
+		'year'=> 'Année',
+		'weekday'=> 'Jour de la semaine',
+	);
+  
  ?>
 
 
 <div>
+	<h3>Historique production par <?php echo $titleDate[$group['time']] ?></h3>
 	<div id="histogramChart" style="width=500px;height=600px;" class="chartDiv" ></div>
 	<div class="control" ></div>
 </div>

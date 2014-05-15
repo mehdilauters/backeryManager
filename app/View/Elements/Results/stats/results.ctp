@@ -46,9 +46,21 @@
 	$fields['comment'] = true;
   }
   
+    
+  	$titleDate = array(
+		''=> 'Jour',
+		'weekday'=> 'Jour de la semaine',
+		'day'=> 'Jour',
+		'week'=> 'Semaine',
+		'month'=> 'Mois',
+		'year'=> 'Année',
+		'weekday'=> 'Jour de la semaine',
+	);
+  
 ?>
 <div>
 	<div>
+		<h3>Historique comptable par <?php echo $titleDate[$group['time']] ?></h3>
 		<div id="resultsChart" class="chartDiv" ></div>
 		<div class="control"></div>
 	</div>
