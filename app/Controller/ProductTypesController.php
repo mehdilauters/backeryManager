@@ -27,7 +27,7 @@ class ProductTypesController extends AppController {
 	else
 	{
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'productType'=>'productType'))));
-		$this->set('resultsEntries',$res['resultsEntries']);
+		$this->set('resultsEntries',$res);
 	}
     
 
@@ -73,7 +73,7 @@ class ProductTypesController extends AppController {
 	else
 	{
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array('productType'=>$id), 'group' => array('time'=>'week', 'shop'=>'shop'))));
-		$this->set('resultsEntries',$res['resultsEntries']);
+		$this->set('resultsEntries',$res);
 	}
 
     $contain = array('Media.Photo','Product'=> array('conditions'=>$conditions['Product']), 'Product.Media');

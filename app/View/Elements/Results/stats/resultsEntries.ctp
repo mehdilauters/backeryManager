@@ -76,19 +76,46 @@ if(isset($this->request->data['group']))
 		<div class="control"></div>
 	</div>
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
+		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>Legend" class="hideJs">
+			<tr>
+				<td class="label_curve_totalApprox" >Total € (approximation)</td>
+				<td class="label_curve_total" >Total € </td>
+				<?php foreach($resultsEntries['productTypes'] as $productTypeId => $productTypeName): ?>
+				<?php 			
+				$curveShopComparative = 'productType'.$productTypeId;
+				if($config['shopComparative'])
+				{
+					if($fields['shop']) :
+						foreach($resultsEntries['shops'] as $shopId => $shopName):
+							$curveShopComparative = 'productType'.$productTypeId.'_shop'.$shopId;
+							?>
+							<td class="shopProduct label_curve_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName.' '.$shopName; ?></td>
+							<td class="shopProduct label_curve_approx_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName.' '.$shopName; ?> (approximation) </td>
+							<?php
+						endforeach;
+					endif;
+				}
+				else
+				{ ?>
+							<td class="shopProduct label_curve_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName; ?></td>
+							<td class="shopProduct label_curve_approx_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName; ?> (approximation) </td>				
+				<?php }
+				endforeach; ?>
+			</tr>
+		</table>
 		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>" class="table-striped tablePreview">
 		  <tr class="legend plot" >
 			<?php if($fields['date']) { ?><th>Date</th><?php } ?>
 			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th> <?php } ?>
 			<?php if($fields['productType']) { ?><th class="productType" >Type de Produit</th><?php } ?>
-			<th class="cash label_curve_total" >Somme €</th>
-			<th class="cash label_curve_totalApprox" >Somme approx €</th>
+			<th class="cash" >Somme €</th>
+			<th class="cash" >Somme approx €</th>
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th><?php } ?>
 			<?php if($fields['shop']) { ?> <th style="display:none" >Courbes</th> <?php } ?>
 		  </tr>
 			<?php 
 			$i = 0;
-			 foreach($resultsEntries as $i=>$resultsEntry):
+			 foreach($resultsEntries['resultsEntries'] as $i=>$resultsEntry):
 			 $date = new DateTime($resultsEntry['ResultsEntry']['date']);
 			 
 			 $curveShopComparative = 'productType'.$resultsEntry['ProductTypes']['id'];
@@ -130,7 +157,7 @@ if(isset($this->request->data['group']))
 			  <?php } ?>
 			  <?php if($fields['shop']) { ?><td class="shop" ><?php echo  $resultsEntry['Shop']['name']; ?></td><?php } ?>
 			  <?php if($fields['productType']) { ?><td class="productType label_curve_productType<?php echo $resultsEntry['ProductTypes']['id']; ?>"><?php echo $resultsEntry['ProductTypes']['name']; ?></td><?php } ?>
-			  <td class="rowTotal noDisplay curve_total curve_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			  <td class="rowTotal noDisplay curve_total curve_<?php echo $curveShopComparative; ?> "><?php echo round($resultsEntry[0]['result'], 2) ?></td>
 			  <td class="rowTotal  curve_totalApprox curve_approx_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['approximation'], 2) ?></td>
 			   <?php if($fields['date']) { ?><td class="date" style="display:none" ><?php 
 						switch($group['time'])

@@ -353,14 +353,8 @@ class ConfigController extends AppController {
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= '
-alter table shops
-	add equation_parameters text CHARACTER SET utf8 COLLATE utf8_bin;
-
-alter table products
-	add equation_parameters text CHARACTER SET utf8 COLLATE utf8_bin;
-
-alter table product_types
-	add equation_parameters text CHARACTER SET utf8 COLLATE utf8_bin;
+		update sales set produced = 0 where produced is null;
+		update sales set lost = 0 where lost is null;
 
 ';	
 		$db = ConnectionManager::getDataSource('default');

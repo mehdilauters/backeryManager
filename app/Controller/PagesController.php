@@ -88,7 +88,6 @@ class PagesController extends AppController {
 										'end'=>(time() + 60*60*24*7)
 										)
 								)
-								,array('return')
 										    );
       $shops[$id]['Shop']['isOpened'] = $this->requestAction(array('controller'=>'shops', 'action'=>'isOpened'), array( 'pass'=>array($shops[$id])));
     }
@@ -124,7 +123,7 @@ class PagesController extends AppController {
 	if($this->Auth->user('isRoot'))
 	{
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>'shop'))));
-		$this->set('results',$res['results']);
+		$this->set('results',$res);
 	}
 	
     

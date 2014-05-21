@@ -41,7 +41,7 @@ class AppController extends Controller {
   public $components = array(
  			  'DebugKit.Toolbar',
 			   'Session', 'Cookie',
-			    'Security',
+			    // 'Security', // getNews requestAction redirection
 			    'Auth' => array(
 				'authenticate' => array(
 				      'Form' => array(
@@ -73,6 +73,15 @@ class AppController extends Controller {
 			);
   
   
+  /**
+    * Returns true if the action was called with requestAction()
+    *
+    * @return boolean
+    * @access public
+    */
+    public function isRequestedAction() {
+      return array_key_exists('requested', $this->params);
+    }
   
 
   public function backupDb()
@@ -287,7 +296,7 @@ class AppController extends Controller {
         $this->redirect('https://' . env('SERVER_NAME') . $this->here);
         break;
       default:
-           $this->log('BlackHole error: '.$error, 'debug');
+           $this->log('BlackHole error: '.$error.' for address '.$this->here, 'debug');
         break;
     }
 }
@@ -297,7 +306,11 @@ class AppController extends Controller {
 public function getFunctionText($coefficients)
 	{
 		$functionText = "f(x) = ";
-
+		if($coefficients === false)
+		{
+			$functionText .= 'error';
+			return $functionText;
+		}
 			foreach($coefficients as $power => $coefficient)
 
 			{
@@ -325,7 +338,6 @@ public function getFunctionText($coefficients)
 
   public function beforeFilter()
   {
-    $this->Security->blackHoleCallback = 'blackHole';
    if( $this->isCommandLineInterface()   )
    {
 	$this->Auth->allow();
@@ -335,7 +347,10 @@ public function getFunctionText($coefficients)
   {
     if($this->Auth->user('isRoot'))
     {
-		$this->Security->requireSecure();
+		if(!$this->request->is('ssl'))
+		{
+			$this->blackHole('secure');
+		}
     }
   }
 

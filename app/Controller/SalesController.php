@@ -28,11 +28,11 @@ class SalesController extends AppController {
 		$now = new DateTime();
 		
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>'shop'))));
-		$this->set('results',$res['results']);
+		$this->set('results',$res);
 		
 		
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'productType'=>'productType'))));
-		$this->set('resultsEntries',$res['resultsEntries']);
+		$this->set('resultsEntries',$res);
 	/*	
 		// select current days historic (ie Monday) lost/produced...
 		$res = $this->requestAction(array('controller'=>'sales', 'action'=>'stats'), array( 'pass'=>array('conditions'=>
@@ -49,7 +49,7 @@ class SalesController extends AppController {
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array( 'ResultsEntry' => array(
 																																	'DAYNAME(ResultsEntry.date) = DAYNAME(\''.$now->format('Y-m-d H:i:s').'\')'
 																																)), 'group' => array('time'=>'day', 'productType'=>'productType'))));
-		$this->set('dayStats',$res['resultsEntries']);
+		$this->set('dayStats',$res);
 		
 		
 		
@@ -67,9 +67,8 @@ class SalesController extends AppController {
 
 
     public function stats($conditions = array(), $group = array()) {
-
     $groupBy = array();
-    if (true/*empty($this->request->params['requested'])*/) {
+    if (empty($this->request->params['requested'])) {
       $dateStart = date('01/m/Y');
       if(isset($this->request->data['dateStart']))
       {
@@ -163,6 +162,8 @@ class SalesController extends AppController {
       {
 	$groupBy[] = 'Sale.date, Sale.product_id, Sale.shop_id';
       }
+	  
+	  // SELECT SUM(IF(myColumn IS NULL, 0, myColumn))
     $this->Sale->contain('Product.ProductType');
     $sales = $this->Sale->find('all', array('order'=>array('Sale.date'),
 					    'group' => $groupBy,
@@ -191,10 +192,10 @@ class SalesController extends AppController {
       {
         $order = $this->request->data['approximationOrder'];
       }
-
 	// add data to regression
-	$nbsales = count($sales);
-	for($i=0; $i< ($nbsales-1); $i++)
+	$nbSales = count($sales);
+
+	for($i=0; $i< $nbSales; $i++)
 	{
 		$res = $sales[$i];
 		if(!isset($regressions[$res['Product']['id']][$res['Sale']['shop_id']]['produced']))
@@ -209,13 +210,17 @@ class SalesController extends AppController {
 		$curDate = new DateTime($res['Sale']['date']);
 		$dateDiff = $initDate[$res['Product']['id']][$res['Sale']['shop_id']]->diff($curDate);
 		$x = $dateDiff->days / $nbDaysByInterval;
-		
-		foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $name => $regression)
+		if($i < ($nbSales -1) )
 		{
-			$regression->addData( $x, $res[0][$name] ); 
+			foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $name => &$regression)
+			{
+				$regressions[$res['Product']['id']][$res['Sale']['shop_id']][$name] ->addData( $x, $res[0][$name] ); 
+				// $regression->addData( $x, $res[0][$name] ); 
+			}
 		}
-		
 	}
+	
+	
 	// get equation parameters
 	$approximations = array();
 	foreach($regressions as $productId => $regressionProduct)
@@ -224,6 +229,7 @@ class SalesController extends AppController {
 	    {
 		  foreach($regressionProductShop as $name => $reg)
 		  {
+			// debug('product #'.$productId.' shop #'.$shopId.' '.$name, 'debug');
 		    $coeffs = $reg->getCoefficients();
 		    $approximations[$productId][$shopId][$name] = $coeffs;
 		    $this->log('product #'.$productId.' shop #'.$shopId.' '.$name.' '.$this->getFunctionText($coeffs), 'debug');
@@ -233,20 +239,28 @@ class SalesController extends AppController {
 	
 	$lastDate = NULL;
 	// fill results
-	foreach($sales as &$sale)
+	foreach($sales as &$res)
 	{
-		$curDate = new DateTime($sale['Sale']['date']);
+		$curDate = new DateTime($res['Sale']['date']);
 		$dateDiff = $initDate[$res['Product']['id']][$res['Sale']['shop_id']]->diff($curDate);
 		$x = $dateDiff->days / $nbDaysByInterval;
 		
 		foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $name => $regression)
 		{
-			$y = $regressions[$res['Product']['id']][$res['Sale']['shop_id']][$name]->interpolate($approximations[$res['Product']['id']][$res['Sale']['shop_id']][$name],$x);
+			$coeffs = $approximations[$res['Product']['id']][$res['Sale']['shop_id']][$name];
+			if( $coeffs === false )
+			{
+				$y = $res[0][$name];
+			}
+			else
+			{
+				$y = $regressions[$res['Product']['id']][$res['Sale']['shop_id']][$name]->interpolate($approximations[$res['Product']['id']][$res['Sale']['shop_id']][$name],$x);
+			}
 			if($y < 0)
 			{
 				$y =0;
 			}
-			$sale[0][$name.'Approximation'] = $y;
+			$res[0][$name.'Approximation'] = $y;
 		}
 		$lastDate = $curDate;
 	}	
@@ -307,11 +321,11 @@ class SalesController extends AppController {
     if (!empty($this->request->params['requested'])) {
             return compact('sales','products', 'shops');
         }
-    $this->set('sales', $sales);
+    $this->set('sales', compact('sales','products', 'shops'));
 
 $dateStart = $dateStart->format('d/m/Y');
 $dateEnd = $dateEnd->format('d/m/Y');
-    $this->set(compact('products', 'shops','dateStart','dateEnd'));
+    $this->set(compact('dateStart','dateEnd'));
   }
   
 /**
@@ -526,7 +540,7 @@ public function results()
 
 public function beforeFilter() {
 	parent::beforeFilter();
-        $this->Security->requirePost('stats');
+        // $this->Security->requirePost('stats');
     }
 
 }

@@ -87,7 +87,7 @@ function curveDisplay(chartId, curveId, status)
 							if(data['plotData'][y] == undefined)
 							{
 								data['plotData'][y] = {};
-								labelItem = $(item).find('td.label_'+classes[x]);
+								labelItem = $('#'+tableId+'Legend').find('td.label_'+classes[x]);
 								htmlLabel = labelItem.html();
 								if( htmlLabel != undefined)
 								{

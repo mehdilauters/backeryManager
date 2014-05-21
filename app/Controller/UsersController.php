@@ -205,7 +205,10 @@ class UsersController extends AppController {
       parent::beforeFilter();
       if( Configure::read('Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')))
       {
-		$this->Security->requireSecure('login');
+	  	if(!$this->request->is('ssl') && $this->request->params['action'] == 'login')
+		{
+			$this->blackHole('secure');
+		}
       }
   }
 

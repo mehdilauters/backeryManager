@@ -277,6 +277,10 @@ class PolynomialRegression
            && ( $activeRow < $rows ) )
       {
         ++$activeRow;
+		if(!isset($matrix[ $activeRow ]))
+		{
+			return false;
+		}
       }
 
       // Do we have a term in this row?

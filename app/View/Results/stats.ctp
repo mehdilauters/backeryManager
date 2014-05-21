@@ -62,8 +62,9 @@
       <label>Approximation</label>
       <select name="approximationOrder" >
 	<option value="" ></option>
-	<option value="1" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '1') ? 'selected="selected"' : ''; ?>  >Lineaire</option>
-	<option value="2" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '2') ? 'selected="selected"' : ''; ?>  >Parabolique</option>
+	<option value="1" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '1') ? 'selected="selected"' : ''; ?>  >Constante (moyenne)</option>
+	<option value="2" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '2') ? 'selected="selected"' : ''; ?>  >Linéaire (droite)</option>
+	<option value="3" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '3') ? 'selected="selected"' : ''; ?>  >Parabolique</option>
 	<option value="4" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '4') ? 'selected="selected"' : ''; ?>  >Quadratique</option>
 	<option value="<?php echo Configure::read('Approximation.order') ?>" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == Configure::read('Approximation.order')) ? 'selected="selected"' : ''; ?>  >Maximum</option>
       </select>
@@ -73,5 +74,5 @@
 </div>
 <?php   //echo $this->element('Results/stats', array('results'=>$results, 'resultsEntries'=>$resultsEntries, 'shops'=>$shops, 'productTypes'=>$productTypes)); ?>
 <?php   echo $this->element('Results/stats/results', array('results'=>$results)); ?>
-<?php   echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('shopComparative'=>true))); ?>
+<?php   echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$results, 'config'=>array('shopComparative'=>true))); ?>
 </div> 

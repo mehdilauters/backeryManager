@@ -34,7 +34,7 @@ class PhotosController extends AppController {
     $this->set('photo', $this->Photo->find('first', $options));
   }
 
-  function download($idPhoto, $preview = true)
+  function download($id, $preview = true)
 	{
 		if (!$this->Photo->exists($id)) {
 		  throw new NotFoundException(__('Invalid photo'));
@@ -45,7 +45,7 @@ class PhotosController extends AppController {
 		else
 			$path='normal/';
 		
-		$photo=$this->Photo->findById($idPhoto);
+		$photo=$this->Photo->findById($id);
 		$path_parts = pathinfo($photo['Photo']['path']);
  		$params = array(
               'id' => $photo['Photo']['path'],

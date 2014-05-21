@@ -242,7 +242,7 @@ class ResultsController extends AppController {
 		$curDate = new DateTime($res['Result']['date']);
 		$dateDiff = $initDate[$res['Result']['shop_id']]->diff($curDate);
 		$x = $dateDiff->days / $nbDaysByInterval;
-		$y = $regressions[$shopId]->interpolate($approximation[$res['Result']['shop_id']],$x);
+		$y = $regressions[$res['Result']['shop_id']]->interpolate($approximation[$res['Result']['shop_id']],$x);
 		if($y < 0)
 		{
 			$y =0;
@@ -409,7 +409,7 @@ class ResultsController extends AppController {
 	if (!empty($this->request->params['requested'])) {
             return compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes');
         }
-    $this->set(compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes'));
+    $this->set('results', compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes'));
 
   }
 
