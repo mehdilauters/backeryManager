@@ -46,8 +46,8 @@ class NewsController extends AppController {
 		$dateEnd = new DateTime('tomorrow');
 		$dateEnd->setTime(0,0);
 		//Import controller
-		App::import('Controller', 'full_calendar.events');
-		$eventsController = new EventsController;
+		App::import('Controller', 'FullCalendar.events');
+		$eventsController = new EventsController();
 		//Load model, components...
 		$eventsController->constructClasses();
 		$news = $eventsController->feed($eventType['EventType']['id'], $dateStart->getTimestamp(), $dateEnd->getTimestamp() );

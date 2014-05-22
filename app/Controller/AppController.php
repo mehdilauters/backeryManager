@@ -248,7 +248,7 @@ class AppController extends Controller {
 
     //Import controller
     App::import('Controller', 'News');
-    $newsController = new NewsController;
+    $newsController = new NewsController();
     //Load model, components...
     $newsController->constructClasses();
     $news = $newsController->getNews();
