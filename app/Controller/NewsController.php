@@ -45,19 +45,24 @@ class NewsController extends AppController {
 
 		$dateEnd = new DateTime('tomorrow');
 		$dateEnd->setTime(0,0);
-
-		$news = $this->requestAction(array(	'plugin'=>'full_calendar',
-							  'controller'=>'events',
-							  'action'=>'feed'
-						  ),
-						  array( 
-							  'pass'=>array(
-										  'idType'=>$eventType['EventType']['id'],
-										  'start' => $dateStart->getTimestamp(),
-										  'end'=>$dateEnd->getTimestamp()
-										  )
-								  )
-					);
+		//Import controller
+		App::import('Controller', 'full_calendar.events');
+		$eventsController = new EventsController;
+		//Load model, components...
+		$eventsController->constructClasses();
+		$news = $eventsController->feed($eventType['EventType']['id'], $dateStart->getTimestamp(), $dateEnd->getTimestamp() );
+// 		$news = $this->requestAction(array(	'plugin'=>'full_calendar',
+// 							  'controller'=>'events',
+// 							  'action'=>'feed'
+// 						  ),
+// 						  array( 
+// 							  'pass'=>array(
+// 										  'idType'=>$eventType['EventType']['id'],
+// 										  'start' => $dateStart->getTimestamp(),
+// 										  'end'=>$dateEnd->getTimestamp()
+// 										  )
+// 								  )
+// 					);
 	}
      return $news;
   }

@@ -23,6 +23,8 @@
 App::uses('Controller', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
 
+
+
 /**
  * Application Controller
  *
@@ -243,7 +245,15 @@ class AppController extends Controller {
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
-    $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
+
+    //Import controller
+    App::import('Controller', 'News');
+    $newsController = new NewsController;
+    //Load model, components...
+    $newsController->constructClasses();
+    $news = $newsController->getNews();
+
+//     $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
     $this->set('news',$news);
   }
   
