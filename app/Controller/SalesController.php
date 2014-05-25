@@ -292,24 +292,28 @@ class SalesController extends AppController {
 					)
 			);
 		$lastDate->modify('+'.($nbDaysByInterval).' day');
-		foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $shopId => $regression)
+		foreach($regressions as $productId => $regressionsData)
 		{
-			$dateDiff = $initDate[$res['Product']['id']][$res['Sale']['shop_id']]->diff($lastDate);
-			$x = $dateDiff->days / $nbDaysByInterval;
-			foreach($regressions[$res['Product']['id']][$res['Sale']['shop_id']] as $name => $regression)
-			{
-				$y = $regressions[$res['Product']['id']][$res['Sale']['shop_id']][$name]->interpolate($approximation[$res['Product']['id']][$res['Sale']['shop_id']][$name],$x);
-				if($y < 0)
-				{
-					$y =0;
-				}
-				$res[0][$name.'Approximation'] = $y;
-			}
-			$res['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
-			$res['Product']['id']  = $shopId;
-			$res['Sale']['shop_id'] = $shopId;
-			$results[] = $res;
-		}		
+		    foreach($regressions[$productId] as $shopId => $regressionData1)
+		    {
+		      $dateDiff = $initDate[$productId][$shopId]->diff($lastDate);
+		      $x = $dateDiff->days / $nbDaysByInterval;
+		      foreach($regressions[$productId][$shopId] as $name => $regression)
+		      {
+			$y = $regressions[$productId][$shopId][$name]->interpolate($approximations[$productId][$shopId][$name],$x);
+			  if($y < 0)
+			  {
+				  $y =0;
+			  }
+			  $res[0][$name.'Approximation'] = $y;
+		      }
+		      $res['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
+		      $res['Sale']['product_id']  = $productId;
+		      $res['Product']['id']  = $productId;
+		      $res['Sale']['shop_id'] = $shopId;
+		      $sales[] = $res;
+		    }
+		}
 	}
  
 
