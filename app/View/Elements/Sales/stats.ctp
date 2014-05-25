@@ -102,7 +102,8 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 </tr>
 <?php
   $i = 0;
-   foreach($sales as $sale)
+
+   foreach($sales['sales'] as $sale)
    {
       $class = 'lostProducts';
       if($sale[0]['lost'] <= 0 )
@@ -167,9 +168,17 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 		?>
 	  </td>
 	  <?php } ?>
-      <?php if($fields['product']) { ?><td class="productName"><?php echo $products[$sale['Sale']['product_id']]['Product']['name'] ?></td><?php } ?>
-      <?php if($fields['productType']) { ?><td class="productTypeName"><?php echo $products[$sale['Sale']['product_id']]['ProductType']['name'] ?></td><?php } ?>
-      <?php if($fields['shop']) { ?><td class="shopName"><?php echo $shops[$sale['Sale']['shop_id']] ?></td><?php } ?>
+<?php 
+//debug($sales['products']); 
+
+debug($sale['Sale']['product_id']);
+// debug($sales['products']);
+//debug($sales['products'][$sale['Sale']['product_id']]);
+?>
+      <?php if($fields['product']) { ?><td class="productName"><?php// echo $products[$sale['Sale']['product_id']]['Product']['name'] ?></td><?php } ?>
+      <?php if($fields['productType']) { ?><td class="productTypeName"><?php //echo $products[$sale['Sale']['product_id']]['ProductType']['name'] ?></td><?php } ?>
+      <?php if($fields['shop']) { ?><td class="shopName"><?php// echo $shops[$sale['Sale']['shop_id']] ?></td><?php } ?>
+
       <td class="produced noDisplay curve_produced" ><?php echo $sale[0]['produced'] ?></td>
 	  <td class="producedApprox curve_producedApproximation" ><?php echo round($sale[0]['producedApproximation'],2) ?></td>
       <td class="<?php echo $class ?> lost noDisplay curve_lost" ><?php echo $sale[0]['lost'] ?></td>

@@ -321,7 +321,7 @@ class SalesController extends AppController {
     if (!empty($this->request->params['requested'])) {
             return compact('sales','products', 'shops');
         }
-    $this->set('sales', compact('sales','products', 'shops'));
+    $this->set('sales', array('sales' => $sales, 'products'=>$products, 'shops'=>$shops));
 
 $dateStart = $dateStart->format('d/m/Y');
 $dateEnd = $dateEnd->format('d/m/Y');
