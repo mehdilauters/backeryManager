@@ -9,7 +9,7 @@ App::uses('AppController', 'Controller');
 */
 
 class ConfigController extends AppController {
-  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem');
+  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User');
   
   var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL' );
   var $memberActions = array();
@@ -226,6 +226,33 @@ class ConfigController extends AppController {
 			
 	
 	
+
+// change custommers name
+$row = 0;
+$names = array();
+if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
+    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+	if($row != 0)
+	{
+	  $names[] = $data[0];
+	  $names[] = $data[1];
+	}
+        $row++;
+//         for ($c=0; $c < $num; $c++) {
+//             echo $data[$c] . "<br />\n";
+//         }
+    }
+    fclose($handle);
+    $users = $this->User->find('all');
+    $nbMaxNames = count($names);
+    foreach($users as $user)
+    {
+	$name = $names[rand(0, $nbMaxNames)];
+	$sql .= 'update users set email = \''.$name.'@demo.fr\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
+    }
+}
+
+
 
 		// add demo user
 		$sql .= 'insert into users (email, password) values (\'demo@demo.fr\', \''.AuthComponent::password('demo')."\');\n";
