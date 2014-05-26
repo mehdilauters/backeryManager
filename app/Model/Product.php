@@ -16,9 +16,7 @@ class Product extends AppModel {
  */
   public $displayField = 'name';
   public $actsAs = array('Containable');
-  public $virtualFields = array(
-      'produced_today' => 'SELECT sum( produced )  FROM `sales` WHERE product_id = Product.id and date = CURDATE()'
-  );
+  public $virtualFields = array();
 
 /**
  * Validation rules
@@ -168,5 +166,11 @@ class Product extends AppModel {
       'counterQuery' => ''
     )
   );
+
+
+public function __construct($id = false, $table = null, $ds = null) {
+  parent::__construct();
+  $this->virtualFields[ 'produced_today'] = 'SELECT sum( produced )  FROM `'.($this->tablePrefix).'sales` WHERE product_id = Product.id and date = CURDATE()';
+}
 
 }

@@ -6,9 +6,9 @@
 <form id="resultsAdd" method="POST" >
 <input type="hidden" id="date" name="date" value="<?php echo $date ?>" />
 <h2>Le <?php echo $date ?></h2>
-<ul>
+<ul id="resultShops" >
 <?php foreach($shops as $shopId => $shopName){ ?>
-<li>
+<li id="resultsShop_<?php echo $shopId ?>" >
 	<h3><?php echo $shopName; ?></h3>
 	    <fieldset>
 	      <?php
@@ -27,11 +27,11 @@
 		  }
 		?>
 		    <legend>Totaux</legend>
-		    <label>Especes</label><input type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner" />€
+		    <label>Especes</label><input id="resultShop_<?php echo $shopId ?>_cash" type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
 		    <br/>
-		    <label>Cheques</label><input type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="spinner" />€
+		    <label>Cheques</label><input id="resultShop_<?php echo $shopId ?>_check" type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
 		    <br/>
-			<label>Carte Bleue</label><input type="text" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="spinner" />€
+			<label>Carte Bleue</label><input id="resultShop_<?php echo $shopId ?>_card" type="text" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
 		    <br/>
 		    <label>Commentaire</label><textarea name="Result[<?php echo $shopId; ?>][comment]" ><?php echo $comment ?></textarea>
 		    <input type="hidden" name="Result[<?php echo $shopId; ?>][resultId]" value="<?php echo $resultId; ?>" />
@@ -55,7 +55,7 @@
       ?>
 	<tr>
 	  <td><?php echo $typeName ?></td>
-	  <td><input type="text" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" size="10" class="spinner" />€
+	  <td><input type="text" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" size="10" class="spinner totalShopCategory" />€
 	  <input type="hidden" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][resultEntryId]"  value="<?php echo $resultEntryId ?>" />
 	</td>
 	</tr>
@@ -85,6 +85,41 @@
 	    $('#resultsAdd').show();
 	  }
 	});
+	var data = {};
+	$('#resultShops li').each(function( index ) {
+		var idShop = $( this ).attr('id');
+	
+		data[idShop] = {};
+		data[idShop]['totalPrice'] = 0 ;
+		data[idShop]['totalCategories'] = 0 ;
+		$( this ).find('input.totalShop').each(function( index ) {
+				var val = parseInt($(this).val());
+				if( !isNaN(val))
+				{
+					data[idShop]['totalPrice'] += parseInt(val);
+				}
+			});
+		$( this ).find('input.totalShopCategory').each(function( index ) {
+				var val = parseInt($(this).val());
+				if( !isNaN(val))
+				{
+					data[idShop]['totalCategories'] += parseInt(val);
+				}
+			});
+	});
+	
+	for(var shop in data)
+	{
+		if(data[shop]['totalPrice'] != data[shop]['totalCategories'])
+		{
+			console.log(shop + ' nok');
+		}
+		else
+		{
+			console.log(shop + ' ok');
+		}
+	}
+	
   });
 
 </script>

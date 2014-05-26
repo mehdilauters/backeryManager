@@ -9,7 +9,7 @@ App::uses('AppController', 'Controller');
 */
 
 class ConfigController extends AppController {
-  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User');
+  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User', 'Shop');
   
   var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL' );
   var $memberActions = array();
@@ -113,7 +113,7 @@ class ConfigController extends AppController {
 
 		
 		$sql = '';
-		$sql .= 'update sales Sale set 
+		$sql .= 'update demo_sales Sale set 
 			produced = '.$producedMapping.',
 			lost = '.$lostMapping.";\n";
 
@@ -157,7 +157,7 @@ class ConfigController extends AppController {
 	$cashMapping  	= '(cash  - '.$minCash.') / '.$rangeCash.' * '.$newMaxCash.' * '.$sin;
 	$checkMapping  		= '(`check` - '.$minCheck.') / '.$rangeCheck.' *'.$newMaxCheck.' * '.$sin;
 
-		$sql .= 'update results Result set 
+		$sql .= 'update demo_results Result set 
 			cash = '.$cashMapping.',
 			`check` = '.$checkMapping.";\n";
 
@@ -189,7 +189,7 @@ class ConfigController extends AppController {
 	$resultMapping  	= '(result  - '.$minResult.') / '.$rangeResult.' * '.$newMaxResult.' * '.$sin;
 
 
-		$sql .= 'update results_entries ResultsEntry set 
+		$sql .= 'update demo_results_entries ResultsEntry set 
 			result = '.$resultMapping.";\n";
 			
 			
@@ -221,7 +221,7 @@ class ConfigController extends AppController {
 	$quantityMapping  	= 'round( abs( (quantity  - '.$minItem.') / '.$rangeItem.' * '.$newMaxItem.' * '.$sin.' ) )';
 
 
-		$sql .= 'update ordered_items OrderedItem set 
+		$sql .= 'update demo_ordered_items OrderedItem set 
 			quantity = '.$quantityMapping.";\n";
 			
 	
@@ -248,14 +248,24 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     foreach($users as $user)
     {
 	$name = $names[rand(0, $nbMaxNames)];
-	$sql .= 'update users set email = \''.$name.'@demo.fr\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
+	$sql .= 'update demo_users set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', email = \''.$name.'@lauters.fr\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
     }
 }
 
+    $shops = $this->Shop->find('all');
+    $i = 1;
+    foreach($shops as $shop)
+    {
+	$name = 'magasin #'.$i;
+	$sql .= 'update demo_shops set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', description = \'Magasin demo #'.$i.'\' where id = '.$shop['Shop']['id'].";\n";
+	$i++;
+    }
 
+
+		 $sql .= 'update demo_companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\';'."\n";
 
 		// add demo user
-		$sql .= 'insert into users (email, password) values (\'demo@demo.fr\', \''.AuthComponent::password('demo')."\');\n";
+		$sql .= 'insert into demo_users (email, name, password, isRoot) values (\'demo@lauters.fr\', \'demo\', \''.AuthComponent::password('demo')."', true);\n";
 
 		
 		return $sql;
@@ -433,19 +443,27 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
         $tables = is_array($tables) ? $tables : explode(',', $tables);
     }
 
+	$tablePrefix = '';
+	if($demo)
+	{
+		$tablePrefix = 'demo_';
+	}
+
     // Run through all the tables
     foreach ($tables as $table) {
         $tableData = $this->{$modelName}->query('SELECT * FROM ' . $table);
 
-        $return .= 'DROP TABLE IF EXISTS ' . $table . ';';
+        $return .= 'DROP TABLE IF EXISTS ' .$tablePrefix. $table . ';';
         $createTableResult = $this->{$modelName}->query('SHOW CREATE TABLE ' . $table);
         $createTableEntry = current(current($createTableResult));
-        $return .= "\n\n" . $createTableEntry['Create Table'] . ";\n\n";
+	$create = str_replace('CREATE TABLE `'.$table.'`','CREATE TABLE `'.$tablePrefix.$table.'`', $createTableEntry['Create Table']);
+        $return .= "\n\n" . $create . ";\n\n";
+
 
         // Output the table data
         foreach($tableData as $tableDataIndex => $tableDataDetails) {
 
-            $return .= 'INSERT INTO ' . $table . ' VALUES(';
+            $return .= 'INSERT INTO ' . $tablePrefix.$table . ' VALUES(';
 
             foreach($tableDataDetails[$table] as $dataKey => $dataValue) {
 

@@ -24,6 +24,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?php echo $this->element('tracker'); ?>
   <?php echo $this->Html->charset(); ?>
   <title>
     Boulangerie Faury | 
