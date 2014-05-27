@@ -13,7 +13,7 @@
 	
 	Configure::write('databaseVersion', 6);
 	
-	Configure::write('dbBackupUrl', 'https://boulangerie-faury.fr/boulangerie/');
+	Configure::write('dbBackupUrl', 'https://boulangerie-faury.fr/dev/');
 	
 	Configure::write('email', array('from' => 
 					array(
@@ -38,5 +38,12 @@ Configure::write('Approximation.nbProjectionsPoint', 0);
 
 
 Configure::write('Security.ssl', false);
+
+Configure::write('demo', array(
+  'active' => true,
+  'dbPrefix' => 'demo_',
+
+));
+
 	
 ?>

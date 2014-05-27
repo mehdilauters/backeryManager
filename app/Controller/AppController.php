@@ -35,7 +35,7 @@ App::uses('CakeEmail', 'Network/Email');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	var $uses=array('User', 'EventType');
+	var $uses=array('User', 'EventType', 'Company');
 	public $helpers = array('Text','Rss', 'Html', 'MyHtml');
 	  var $publicActions = array('exportExcel', 'backupDb');
 	  var $memberActions = array();
@@ -255,6 +255,10 @@ class AppController extends Controller {
 
 //     $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
     $this->set('news',$news);
+	
+	$company = $this->Company->find('first');
+	$this->set('company',$company);
+	
   }
   
   

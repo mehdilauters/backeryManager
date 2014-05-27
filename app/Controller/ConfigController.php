@@ -28,10 +28,10 @@ class ConfigController extends AppController {
       'importProducts' => 'Importer les produits d\'un csv',
       'setAdmin/1' => 'set to admin',
        'upgradeDbStructure/1' => 'upgrade DBStructure',
-      'dbBackup/false' => 'backup database',
+      'dbBackup/0' => 'backup database',
       'setDebug/1' => 'activer debug',
-      'dbBackup/false/true' => 'downloadSql',
-	  'dbBackup/true/true' => 'download Demo Sql',
+      'dbBackup/0/1' => 'downloadSql',
+	  'dbBackup/1/1' => 'download Demo Sql',
       'deleteSession' => 'deleteSession',
 	  'emailTest' => 'Test email',
 	  'phpInfo' => 'phpInfo',
@@ -72,7 +72,7 @@ class ConfigController extends AppController {
   public function demoBaseSql()
   {
 		$sinCoef = 1;
-	
+	$tablePrefix = Configure::read('demo.dbPrefix');
 	$sin = 'abs('.$sinCoef.' * sin(Sale.id) )';
 
 	$sale = $this->Sale->find('first', array(
@@ -113,7 +113,7 @@ class ConfigController extends AppController {
 
 		
 		$sql = '';
-		$sql .= 'update demo_sales Sale set 
+		$sql .= 'update '.$tablePrefix.'sales Sale set 
 			produced = '.$producedMapping.',
 			lost = '.$lostMapping.";\n";
 
@@ -157,7 +157,7 @@ class ConfigController extends AppController {
 	$cashMapping  	= '(cash  - '.$minCash.') / '.$rangeCash.' * '.$newMaxCash.' * '.$sin;
 	$checkMapping  		= '(`check` - '.$minCheck.') / '.$rangeCheck.' *'.$newMaxCheck.' * '.$sin;
 
-		$sql .= 'update demo_results Result set 
+		$sql .= 'update '.$tablePrefix.'results Result set 
 			cash = '.$cashMapping.',
 			`check` = '.$checkMapping.";\n";
 
@@ -189,7 +189,7 @@ class ConfigController extends AppController {
 	$resultMapping  	= '(result  - '.$minResult.') / '.$rangeResult.' * '.$newMaxResult.' * '.$sin;
 
 
-		$sql .= 'update demo_results_entries ResultsEntry set 
+		$sql .= 'update '.$tablePrefix.'results_entries ResultsEntry set 
 			result = '.$resultMapping.";\n";
 			
 			
@@ -221,7 +221,7 @@ class ConfigController extends AppController {
 	$quantityMapping  	= 'round( abs( (quantity  - '.$minItem.') / '.$rangeItem.' * '.$newMaxItem.' * '.$sin.' ) )';
 
 
-		$sql .= 'update demo_ordered_items OrderedItem set 
+		$sql .= 'update '.$tablePrefix.'ordered_items OrderedItem set 
 			quantity = '.$quantityMapping.";\n";
 			
 	
@@ -244,11 +244,11 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     }
     fclose($handle);
     $users = $this->User->find('all');
-    $nbMaxNames = count($names);
+    $nbMaxNames = count($names) -1;
     foreach($users as $user)
     {
 	$name = $names[rand(0, $nbMaxNames)];
-	$sql .= 'update demo_users set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', email = \''.$name.'@lauters.fr\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
+	$sql .= 'update '.$tablePrefix.'users set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', email = \''.$name.'@lauters.fr\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
     }
 }
 
@@ -257,15 +257,15 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     foreach($shops as $shop)
     {
 	$name = 'magasin #'.$i;
-	$sql .= 'update demo_shops set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', description = \'Magasin demo #'.$i.'\' where id = '.$shop['Shop']['id'].";\n";
+	$sql .= 'update '.$tablePrefix.'shops set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', description = \'Magasin demo #'.$i.'\' where id = '.$shop['Shop']['id'].";\n";
 	$i++;
     }
 
 
-		 $sql .= 'update demo_companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\';'."\n";
+		 $sql .= 'update '.$tablePrefix.'companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\', title=\'Démo\';'."\n";
 
 		// add demo user
-		$sql .= 'insert into demo_users (email, name, password, isRoot) values (\'demo@lauters.fr\', \'demo\', \''.AuthComponent::password('demo')."', true);\n";
+		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot) values (\'demo@lauters.fr\', \'demo\', \''.AuthComponent::password('demo')."', true);\n";
 
 		
 		return $sql;
@@ -392,6 +392,8 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		$sql .= '
 		update sales set produced = 0 where produced is null;
 		update sales set lost = 0 where lost is null;
+		ALTER TABLE `companies`
+		add `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ;
 
 ';	
 		$db = ConnectionManager::getDataSource('default');
@@ -418,7 +420,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
  * @param string $tables Comma separated list of tables you want to download, or '*' if you want to download them all.
  */
 function dbBackup($demo = true, $download = false, $tables = '*') {
-	header('Content-Type: text/html; charset=utf-8');
+    header('Content-Type: text/html; charset=utf-8');
     $return = '';
 
     $modelName = $this->modelClass;
@@ -446,7 +448,7 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
 	$tablePrefix = '';
 	if($demo)
 	{
-		$tablePrefix = 'demo_';
+		$tablePrefix = Configure::read('demo.dbPrefix');
 	}
 
     // Run through all the tables
@@ -456,7 +458,13 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
         $return .= 'DROP TABLE IF EXISTS ' .$tablePrefix. $table . ';';
         $createTableResult = $this->{$modelName}->query('SHOW CREATE TABLE ' . $table);
         $createTableEntry = current(current($createTableResult));
-	$create = str_replace('CREATE TABLE `'.$table.'`','CREATE TABLE `'.$tablePrefix.$table.'`', $createTableEntry['Create Table']);
+	$create = $createTableEntry['Create Table'];
+	if($demo)
+	{
+	  $create = str_replace('CREATE TABLE `'.$table.'`','CREATE TABLE `'.$tablePrefix.$table.'`', $createTableEntry['Create Table']);
+	  $create = str_replace('`fk_','`fk_'.$tablePrefix, $create);
+	}
+
         $return .= "\n\n" . $create . ";\n\n";
 
 

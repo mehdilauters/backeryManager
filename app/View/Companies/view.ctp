@@ -36,6 +36,11 @@
 			<?php echo h($company['Company']['name']); ?>
 			&nbsp;
 		</dd>
+	<dt><?php echo __('Title'); ?></dt>
+		<dd>
+			<?php echo h($company['Company']['title']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Email'); ?></dt>
 		<dd>
 			<?php echo h($company['Company']['email']); ?>

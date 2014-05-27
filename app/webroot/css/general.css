@@ -546,3 +546,8 @@ td.actions img.icon {
   height:16px;
   width:16;
 }
+
+.demoWarning {
+  color:red;
+  font-size: 2em; 
+}

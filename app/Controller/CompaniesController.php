@@ -73,7 +73,8 @@ class CompaniesController extends AppController {
  */
 	public function edit($id = null) {
 		if (!$this->Company->exists($id)) {
-			throw new NotFoundException(__('Invalid company'));
+			$this->Session->setFlash(__('The company does not exists'),'flash/fail');
+			return $this->redirect(array('action' => 'add'));	      
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Company->save($this->request->data)) {

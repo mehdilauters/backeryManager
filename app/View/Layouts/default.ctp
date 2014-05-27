@@ -27,7 +27,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
   <?php echo $this->element('tracker'); ?>
   <?php echo $this->Html->charset(); ?>
   <title>
-    Boulangerie Faury | 
+    Boulangerie <?php echo $company['Company']['title'] ?> | 
     <?php echo $title_for_layout; ?>
   </title>
   <?php
@@ -89,14 +89,14 @@ echo $this->Html->css(
   	<header>
 	  	<div class="row">
 			  <div class="col-md-8">
-			  
+			  <?php if(Configure::read('demo.active')) { ?> <span class="demoWarning" >Attention, ceci est une version de démonstration</span> <? } ?>
 			  </div>
 			  <div class="col-md-4">
 					<div id="logo">
 						<h1>
-							<a href="<?php echo $this->webroot ?>">Boulangerie Faury</a>
+							<a href="<?php echo $this->webroot ?>">Boulangerie</a>
 						</h1>
-						Christiane &amp; Thierry FAURY
+						<?php echo $company['Company']['title'] ?>
 					</div>
 				</div>
 	  	</div>

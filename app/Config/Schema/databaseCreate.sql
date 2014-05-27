@@ -1,4 +1,4 @@
-hpSET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `database_version`;
 DROP TABLE IF EXISTS `acos`;
 DROP TABLE IF EXISTS `aros`;
@@ -295,6 +295,7 @@ create table if not exists companies (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `rib` int(10) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `address` text CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
   `phone` int not null ,
