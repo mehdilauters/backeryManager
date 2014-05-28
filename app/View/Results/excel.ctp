@@ -12,6 +12,8 @@ foreach($data['entries'] as $shopId => $shopData)
   $this->PhpExcel->setWorksheetName($shops[$shopId]);
   $sheetId++;
 
+  // freeze first row/column
+  $this->PhpExcel->getActiveSheet()->freezePane('B2');
 
   // define table cells
     $table = array(

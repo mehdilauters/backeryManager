@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class SalesController extends AppController {
 
-  var $helpers = array('Time');
+  var $helpers = array('Time', 'PhpExcel.PhpExcel');
   var $components = array('Functions');
   var $uses = array('Sale', 'Product', 'Shop', 'ProductType');
 /**

@@ -3,7 +3,7 @@
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
   <input type="submit" name="dateSelect" id="dateSelect" value="" class="dateSearch" />
 </form>
-<form id="resultsAdd" method="POST" >
+<form id="resultsAdd" method="POST" onSubmit="return checkForm()" >
 <input type="hidden" id="date" name="date" value="<?php echo $date ?>" />
 <h2>Le <?php echo $date ?></h2>
 <ul id="resultShops" >
@@ -27,13 +27,33 @@
 		  }
 		?>
 		    <legend>Totaux</legend>
-		    <label>Especes</label><input id="resultShop_<?php echo $shopId ?>_cash" type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
-		    <br/>
-		    <label>Cheques</label><input id="resultShop_<?php echo $shopId ?>_check" type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
-		    <br/>
-			<label>Carte Bleue</label><input id="resultShop_<?php echo $shopId ?>_card" type="text" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
-		    <br/>
-		    <label>Commentaire</label><textarea name="Result[<?php echo $shopId; ?>][comment]" ><?php echo $comment ?></textarea>
+			<table>
+				<tr>
+					<td>
+		    <label>Especes</label>
+				</td><td>
+			<input id="resultShop_<?php echo $shopId ?>_cash" type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
+				</tr>
+				<tr>
+					<td>
+		    <label>Cheques</label>
+				</td><td>	
+			<input id="resultShop_<?php echo $shopId ?>_check" type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
+				</tr>
+				<tr>
+					<td>
+			<label>Carte Bleue</label>
+					</td><td>	
+			<input id="resultShop_<?php echo $shopId ?>_card" type="text" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
+				</tr>
+				<tr>
+					<td>
+						<label>Commentaire</label>
+					</td><td>	
+						<textarea name="Result[<?php echo $shopId; ?>][comment]" ><?php echo $comment ?></textarea>
+					</td>
+				</tr>
+			</table>
 		    <input type="hidden" name="Result[<?php echo $shopId; ?>][resultId]" value="<?php echo $resultId; ?>" />
 	    </fieldset>
 	    <fieldset>
@@ -71,6 +91,73 @@
 </div>
 <script>
 
+function checkTotals()
+{
+	var data = {};
+	$('#resultShops li').each(function( index ) {
+		var idShop = $( this ).attr('id');
+	
+		data[idShop] = {};
+		data[idShop]['totalPrice'] = 0 ;
+		data[idShop]['totalCategories'] = 0 ;
+		$( this ).find('input.totalShop').each(function( index ) {
+				var val = parseInt($(this).val());
+				if( !isNaN(val))
+				{
+					data[idShop]['totalPrice'] += parseInt(val);
+					$(this).closest('tr').removeClass('invalid');
+					$(this).closest('tr').removeClass('valid');
+					$(this).closest('tr').removeClass('notSet');
+				}
+				else
+				{
+					$(this).closest('tr').addClass('notSet');
+				}
+			});
+		$( this ).find('input.totalShopCategory').each(function( index ) {
+				var val = parseInt($(this).val());
+				if( !isNaN(val))
+				{
+					data[idShop]['totalCategories'] += parseInt(val);
+					$(this).closest('tr').removeClass('invalid');
+					$(this).closest('tr').removeClass('valid');
+				}
+				else
+				{
+					$(this).closest('tr').addClass('notSet');
+				}
+			});
+	});
+	
+	var ok = true;
+	for(var shop in data)
+	{
+		if(data[shop]['totalPrice'] != data[shop]['totalCategories'])
+		{
+			ok = false;
+			$('li#'+shop).addClass('invalid');
+			$('li#'+shop).removeClass('valid');
+		}
+		else
+		{
+			$('li#'+shop).addClass('valid');
+			$('li#'+shop).removeClass('invalid');
+		}
+	}
+	return ok;
+}
+
+function checkForm()
+{
+	var ok = true;
+	ok = checkTotals();
+	if(!ok)
+	{
+		ok = confirm("Certaines valeurs ne sont peut-être pas valides\n Ok => enregistrer quand même");
+	}
+	return ok;
+}
+
  $(document).ready(function(){
 
 
@@ -85,40 +172,11 @@
 	    $('#resultsAdd').show();
 	  }
 	});
-	var data = {};
-	$('#resultShops li').each(function( index ) {
-		var idShop = $( this ).attr('id');
 	
-		data[idShop] = {};
-		data[idShop]['totalPrice'] = 0 ;
-		data[idShop]['totalCategories'] = 0 ;
-		$( this ).find('input.totalShop').each(function( index ) {
-				var val = parseInt($(this).val());
-				if( !isNaN(val))
-				{
-					data[idShop]['totalPrice'] += parseInt(val);
-				}
-			});
-		$( this ).find('input.totalShopCategory').each(function( index ) {
-				var val = parseInt($(this).val());
-				if( !isNaN(val))
-				{
-					data[idShop]['totalCategories'] += parseInt(val);
-				}
-			});
-	});
 	
-	for(var shop in data)
-	{
-		if(data[shop]['totalPrice'] != data[shop]['totalCategories'])
-		{
-			console.log(shop + ' nok');
-		}
-		else
-		{
-			console.log(shop + ' ok');
-		}
-	}
+	$('#resultShops input').change( function () { checkTotals(); });
+	checkTotals();
+	
 	
   });
 

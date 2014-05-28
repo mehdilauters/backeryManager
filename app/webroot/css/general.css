@@ -148,7 +148,7 @@ li .shop{
 
 
 .valid{
- color: green; 
+ color: #00FF00; 
 }
 
 .notSet{
@@ -550,4 +550,8 @@ td.actions img.icon {
 .demoWarning {
   color:red;
   font-size: 2em; 
+}
+
+#resultShops li{
+	border: 2px solid;
 }
