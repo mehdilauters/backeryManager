@@ -81,9 +81,7 @@ class ProductsController extends AppController {
 	{
 		$res = $this->requestAction(array('controller'=>'sales', 'action'=>'stats'), array( 'pass'=>array('conditions'=>array('Sale.product_id'=>$products['Product']['id']), 'group' => array('time'=>'day', 'shop'=>'shop', 'product'=>'product'))));
 		$this->set(compact('products','shops'));
-		$this->set('sales',$res['sales']);
-		$this->set('products',$res['products']);
-		$this->set('shops',$res['shops']);
+		$this->set('sales',$res);
 	}
 
 
