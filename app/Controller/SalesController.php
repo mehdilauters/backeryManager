@@ -69,7 +69,9 @@ class SalesController extends AppController {
     public function stats($conditions = array(), $group = array()) {
     $groupBy = array();
     if (empty($this->request->params['requested'])) {
-      $dateStart = date('01/m/Y');
+      $dateStart = new DateTime();
+      $dateStart->modify('-15 day');
+      $dateStart = $dateStart->format('d/m/Y');
       if(isset($this->request->data['dateStart']))
       {
         $dateStart = $this->request->data['dateStart'];

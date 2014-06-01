@@ -541,71 +541,199 @@ public function getData($dateStart = '', $dateEnd = '')
     {
        $date = $this->request->data['date'];
     }
+
+
     if ($this->request->is('post') && !isset($this->request->data['dateSelect'])) {
-      $errors = 0;
-      
 
 
-
-      foreach($this->request->data['Result'] as $shopId => $result)
+      if(isset($this->request->data['Result']['upload'])) // add results from excel file
       {
-          $this->Result->create();
-           $resultData = array();
-           $resultData['Result'] = array(
-        'date' => $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),
-        'shop_id'=> $shopId,
-            );
-            if($result['cash'] != '')
-            {
-				$resultData['Result']['cash'] = $result['cash'];
-            }
+	  $errors = 0;
+	  //TODO factorize
+	$alphabet =   array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+	try{
+	    // import excel library
+	    App::import('Vendor', 'PhpExcel.PHPExcel');
+	    // load uploaded document
+	    $excel = PHPExcel_IOFactory::load($this->request->data['Result']['upload']['tmp_name']);
 
-            if($result['check'] != '')
-            {
-				$resultData['Result']['check'] = $result['check'];
-            }
-			 if($result['card'] != '')
-            {
-				$resultData['Result']['card'] = $result['card'];
-            }
-            if($result['resultId'] != '')
-            {
-        $resultData['Result']['id'] = $result['resultId'];
-            }
-        $resultData['Result']['comment'] = $result['comment'];
-        if (!$this->Result->save($resultData)) {
-        $errors ++;  
-        }
-        if($result['resultId'] != '')
-        {
-          $resultId = $result['resultId'];
-        }
-        else
-        {
-          $resultId = $this->Result->getInsertID();
-        }
-        foreach($result['productTypes'] as $typeId => $resultEntry)
-        {
-          if($resultEntry['result'] != '')
-          {
-        $this->ResultsEntry->create();
-        $resultEntryData = array();
-        $resultEntryData['ResultsEntry'] = array(
-            'date' => $resultData['Result']['date'],
-            'shop_id' => $resultData['Result']['shop_id'],
-            'result_id' => $resultId,
-            'product_types_id' => $typeId,
-            'result' => $resultEntry['result'],
-          );
-        if($resultEntry['resultEntryId'] != '')
-        {
-          $resultEntryData['ResultsEntry']['id'] = $resultEntry['resultEntryId'];
-        }
-            if (!$this->ResultsEntry->save($resultEntryData)) {
-            $errors ++;  
-            }
-          }
-        }
+	    $nbSheets = $excel->getSheetCount();
+	    // foreach sheet, extract data
+	    for($i=0; $i<$nbSheets; $i++)
+	    {
+	      $excel->setActiveSheetIndex($i);
+	      // get shops ID from sheet title
+	      preg_match('/#(\d+) /', $excel->getActiveSheet()->getTitle(), $matches);
+	      if(count($matches) == 2)
+	      {
+		  $shopId = $matches[1];
+	      }
+
+	      
+	      // find product types from header
+	      // product_types_id => column
+	      $productTypes = array();
+	      $i = 0;
+	      do // while cell != NULL
+	      {
+		$column = $alphabet[$i];
+		$value = $excel->getActiveSheet()->rangeToArray($column.'1'); // get cell data
+		preg_match('/#(\d+) /', $value[0][0], $matches); // extract productType id
+		if(count($matches) == 2)
+		{
+		    $productTypes[$matches[1]] = $i;
+		}
+		$i++;
+	      }
+	      while($value[0][0] != NULL);
+	      
+	      // get max column from header
+	      $maxColumn = $alphabet[$i-2];
+	      
+	      // foreach data row of the sheet
+	      // TODO Configure => MaxExcel => 500
+	      for($j=2; $j< 500; $j++)
+	      {
+		// get data
+		$range = 'A'.$j.':'.$maxColumn.$j;
+		$row = $excel->getActiveSheet()->rangeToArray($range);
+		if($row[0][0] == NULL) // if date is not set, empty row
+		{
+		  break;
+		}
+
+		$this->Result->create();
+		// fill data
+		$resultData = array( 'Result' => array(
+				      'date' => $this->Functions->viewDateToDateTime($row[0][0], false)->format('Y-m-d H:i:s'),
+				      'shop_id' => $shopId,
+				      'cash' =>$row[0][3],
+				      'check' =>$row[0][4],
+				      'card' =>$row[0][5],
+				      'comment' =>$row[0][6],
+				    ));
+		  // check if already existing
+		  $tmpRes = $this->Result->find('count', array('conditions'=>array('date'=>$resultData['Result']['date'], 'shop_id' => $resultData['Result']['shop_id'])));
+		  // if yes, goto next row
+		  if($tmpRes == 1)
+		  {
+		      $this->log('result '.$resultData['Result']['date'].' for shop '.$resultData['Result']['shop_id'].' already set', 'debug');
+		      continue;
+		  }
+		  // save result
+		  if (!$this->Result->save($resultData)) {
+		    $errors ++;  
+		  }	    
+		  $resultId = $this->Result->getInsertID();
+	      
+	      // foreach productType from header
+	      foreach($productTypes as $typeId => $col)
+	      {
+		  // check data available
+		  if($row[0][$col] == null)
+		  {
+		    continue;
+		  }
+		  $this->ResultsEntry->create();
+		  // fill data
+		  $resultEntryData = array('ResultsEntry' => array(
+		      'date' => $resultData['Result']['date'],
+		      'shop_id' => $resultData['Result']['shop_id'],
+		      'result_id' => $resultId,
+		      'product_types_id' => $typeId,
+		      'result' => $row[0][$col],
+		    ));
+		    // save
+		    if (!$this->ResultsEntry->save($resultEntryData)) {
+		      $errors ++;  
+		      }
+	      }
+
+	      }
+	    }
+	  // check errors
+	  if($errors == 0)
+	  {
+	    $this->Session->setFlash(__('Les données ont été importées'),'flash/ok');
+	  }
+	  else
+	  {
+	    $this->Session->setFlash(__($errors.' à l\'importation'),'flash/fail');
+	  }
+	}
+	catch(Exception $e)
+	{
+	    $this->Session->setFlash(__('Veuillez vérifier le format de votre fichier Excel'),'flash/fail');
+	    debug($e);
+	    $this->log('Excel import issue '.$e, 'debug');
+	}
+      }	// endif excel upload
+      else
+      {
+	$errors = 0;
+	
+
+
+
+	foreach($this->request->data['Result'] as $shopId => $result)
+	{
+	    $this->Result->create();
+	    $resultData = array();
+	    $resultData['Result'] = array(
+	  'date' => $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),
+	  'shop_id'=> $shopId,
+	      );
+	      if($result['cash'] != '')
+	      {
+				  $resultData['Result']['cash'] = $result['cash'];
+	      }
+
+	      if($result['check'] != '')
+	      {
+				  $resultData['Result']['check'] = $result['check'];
+	      }
+			  if($result['card'] != '')
+	      {
+				  $resultData['Result']['card'] = $result['card'];
+	      }
+	      if($result['resultId'] != '')
+	      {
+	  $resultData['Result']['id'] = $result['resultId'];
+	      }
+	  $resultData['Result']['comment'] = $result['comment'];
+	  if (!$this->Result->save($resultData)) {
+	  $errors ++;  
+	  }
+	  if($result['resultId'] != '')
+	  {
+	    $resultId = $result['resultId'];
+	  }
+	  else
+	  {
+	    $resultId = $this->Result->getInsertID();
+	  }
+	  foreach($result['productTypes'] as $typeId => $resultEntry)
+	  {
+	    if($resultEntry['result'] != '')
+	    {
+	  $this->ResultsEntry->create();
+	  $resultEntryData = array();
+	  $resultEntryData['ResultsEntry'] = array(
+	      'date' => $resultData['Result']['date'],
+	      'shop_id' => $resultData['Result']['shop_id'],
+	      'result_id' => $resultId,
+	      'product_types_id' => $typeId,
+	      'result' => $resultEntry['result'],
+	    );
+	  if($resultEntry['resultEntryId'] != '')
+	  {
+	    $resultEntryData['ResultsEntry']['id'] = $resultEntry['resultEntryId'];
+	  }
+	      if (!$this->ResultsEntry->save($resultEntryData)) {
+	      $errors ++;  
+	      }
+	    }
+	  }
       }
 
 
@@ -615,6 +743,7 @@ public function getData($dateStart = '', $dateEnd = '')
       } else {
         $this->Session->setFlash(__('The result could not be saved. Please, try again.'),'flash/fail');
       }
+     }
     }
     $shops = $this->Result->Shop->find('list');
     $productTypes = $this->ProductType->find('list');

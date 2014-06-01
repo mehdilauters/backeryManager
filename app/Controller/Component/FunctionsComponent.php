@@ -46,13 +46,18 @@ class FunctionsComponent extends Component{
    *  "dd/mm/aaaa" or "dd/mm/aaaa hh:mm"
    */
   
-  function viewDateToDateTime($dateString)
+  function viewDateToDateTime($dateString, $fullYear = true)
   {
+    $year = 'y';
+    if($fullYear)
+    {
+      $year = 'Y';
+    }
     //->format('Y-m-d H:i')
-    $dateTime = DateTime::createFromFormat ( 'd/m/Y H:i' , $dateString );
+    $dateTime = DateTime::createFromFormat ( 'd/m/'.$year.' H:i' , $dateString );
     if($dateTime == false)
     {
-    	$dateTime = DateTime::createFromFormat ( 'd/m/Y H:i' , $dateString.' 00:00' );
+    	$dateTime = DateTime::createFromFormat ( 'd/m/'.$year.' H:i' , $dateString.' 00:00' );
     }
     return  $dateTime;
   }

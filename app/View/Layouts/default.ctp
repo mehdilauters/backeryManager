@@ -89,7 +89,9 @@ echo $this->Html->css(
   	<header>
 	  	<div class="row">
 			  <div class="col-md-8">
-			  <?php if(Configure::read('demo.active')) { ?> <span class="demoWarning" >Attention, ceci est une version de démonstration</span> <? } ?>
+			  <?php if(Configure::read('demo.active')) { ?>
+			      <span class="demoWarning" >Attention, ceci est une version de démonstration</span>
+			  <?php } ?>
 			  </div>
 			  <div class="col-md-4">
 					<div id="logo">

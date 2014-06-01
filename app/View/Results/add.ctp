@@ -1,11 +1,17 @@
 <div class="results form">
+<?php echo $this->Form->create('Result',array('enctype' => 'multipart/form-data'));
+echo $this->Form->input('upload', array('label'=>'fichier', 'type'=>'file'));
+echo $this->Form->end(__('Submit'));
+?>
+
 <form id="resultsDateSelect" method="POST" >
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
   <input type="submit" name="dateSelect" id="dateSelect" value="" class="dateSearch" />
 </form>
+
 <form id="resultsAdd" method="POST" onSubmit="return checkForm()" >
 <input type="hidden" id="date" name="date" value="<?php echo $date ?>" />
-<h2>Le <?php echo $date ?></h2>
+<h2>Le <?php echo $date ?> <span id="totalDay"></span></h2>
 <ul id="resultShops" >
 <?php foreach($shops as $shopId => $shopName){ ?>
 <li id="resultsShop_<?php echo $shopId ?>" >
@@ -28,6 +34,10 @@
 		?>
 		    <legend>Totaux</legend>
 			<table>
+				<tr>
+				   <td>Total</td>
+				    <td id="total_resultsShop_<?php echo $shopId ?>"></td>
+				</tr>
 				<tr>
 					<td>
 		    <label>Especes</label>
@@ -101,10 +111,10 @@ function checkTotals()
 		data[idShop]['totalPrice'] = 0 ;
 		data[idShop]['totalCategories'] = 0 ;
 		$( this ).find('input.totalShop').each(function( index ) {
-				var val = parseInt($(this).val());
+				var val = parseFloat($(this).val());
 				if( !isNaN(val))
 				{
-					data[idShop]['totalPrice'] += parseInt(val);
+					data[idShop]['totalPrice'] += val;
 					$(this).closest('tr').removeClass('invalid');
 					$(this).closest('tr').removeClass('valid');
 					$(this).closest('tr').removeClass('notSet');
@@ -115,10 +125,10 @@ function checkTotals()
 				}
 			});
 		$( this ).find('input.totalShopCategory').each(function( index ) {
-				var val = parseInt($(this).val());
+				var val = parseFloat($(this).val());
 				if( !isNaN(val))
 				{
-					data[idShop]['totalCategories'] += parseInt(val);
+					data[idShop]['totalCategories'] += val;
 					$(this).closest('tr').removeClass('invalid');
 					$(this).closest('tr').removeClass('valid');
 				}
@@ -130,8 +140,11 @@ function checkTotals()
 	});
 	
 	var ok = true;
+	var totalDay = 0;
 	for(var shop in data)
 	{
+		$('#total_'+shop).html(data[shop]['totalPrice'] + ' €');
+		totalDay += data[shop]['totalPrice'];
 		if(data[shop]['totalPrice'] != data[shop]['totalCategories'])
 		{
 			ok = false;
@@ -144,6 +157,7 @@ function checkTotals()
 			$('li#'+shop).removeClass('invalid');
 		}
 	}
+	$('#totalDay').html('('+totalDay + ' €)');
 	return ok;
 }
 

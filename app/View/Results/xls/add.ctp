@@ -6,6 +6,7 @@ $this->PhpExcel->createWorksheet();
 
 $sheetId = 0;
 
+//TODO factorize
 $alphabet =   array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
 foreach($shops as $shopId => $shopName)
