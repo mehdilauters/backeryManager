@@ -6,13 +6,9 @@ $this->PhpExcel->createWorksheet();
 
 $sheetId = 0;
 
-$alphabet =   array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
-
 
 
 // Enum sheet
-
-$this->PhpExcel->createSheet();
   $this->PhpExcel->setRow(1);
   $this->PhpExcel->setActiveSheetIndex($sheetId);
   $this->PhpExcel->setWorksheetName('listes');
@@ -91,7 +87,7 @@ $this->PhpExcel->createSheet();
             );
 
 			
-	for($i = 2; $i < 5; $i++)
+	for($i = 2; $i < 500; $i++)
 	{
 		$objValidation = $this->PhpExcel->getActiveSheet()->getCell('B'.$i)->getDataValidation();
 		$objValidation->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
@@ -162,7 +158,7 @@ $this->PhpExcel->createSheet();
       }
       else
       {
-	$filename = 'Comptabilite'.'.xls';
+	$filename = 'Ventes'.'.xls';
         $this->PhpExcel->output($filename, $writer = 'Excel5');
       }
 

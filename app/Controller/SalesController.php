@@ -409,6 +409,120 @@ public function results()
   public function add() {
     if ($this->request->is('post') && !isset($this->request->data['dateSelect'])) {
     $error = 0;
+
+    if(isset($this->request->data['Sale']['upload'])) // add results from excel file
+    {
+	  //TODO factorize
+	$alphabet =   $alphabet = $this->Functions->getAlphabet();
+	try{
+	    $imported = 0;
+	    $notUpdated = 0;
+	    App::import('Vendor', 'PhpExcel.PHPExcel');
+	    // load uploaded document
+	    $excel = PHPExcel_IOFactory::load($this->request->data['Sale']['upload']['tmp_name']);
+
+	    $nbSheets = $excel->getSheetCount();
+	    
+	    $dataSheetId = 1;
+	    $excel->setActiveSheetIndex($dataSheetId);
+	    $maxColumn = $alphabet[7];
+	    // foreach data row of the sheet
+	      // TODO Configure => MaxExcel => 500
+	      for($j=2; $j< 500; $j++)
+	      {
+		// get data
+		$range = 'A'.$j.':'.$maxColumn.$j;
+		$row = $excel->getActiveSheet()->rangeToArray($range);
+		if($row[0][0] == NULL) // if date is not set, empty row
+		{
+		  break;
+		}
+
+
+		$shopName = $row[0][1];
+		preg_match('/#(\d+) /', $shopName, $matches); // extract shop id
+		if(count($matches) == 2)
+		{
+		    $shopId = $matches[1];
+		}
+		else
+		{
+		  $this->log('Could not detect shopId', 'debug');
+		  $error ++;
+		  continue;
+		}
+
+		$productName = $row[0][2];
+		preg_match('/#(\d+) /', $productName, $matches); // extract shop id
+		if(count($matches) == 2)
+		{
+		    $productId = $matches[1];
+		}
+		else
+		{
+		  $error ++;
+		  $this->log('Could not detect productId', 'debug');
+		  continue;
+		}
+
+
+		$productModel = $this->Product->findById($productId);
+		$this->Sale->create();
+		$data = array();
+		    $data['Sale'] = array(
+		      'date' => $this->Functions->viewDateToDateTime($row[0][0], false)->format('Y-m-d H:i:s'),
+		      'product_id' => $productId,
+		      'price' => $productModel['Product']['price'],
+		      'unity' => $productModel['Product']['unity'],
+		      'shop_id' => $shopId,
+		      'produced' => $row[0][4],
+		      'comment' => $row[0][6],
+		      'lost' => $row[0][5],
+		      );
+
+		    $tmpRes = $this->Sale->find('count', array('conditions'=>array('date'=>$data['Sale']['date'], 'shop_id' => $data['Sale']['shop_id'], 'product_id'=> $data['Sale']['product_id'] )));
+		  // if yes, goto next row
+		  if($tmpRes == 1)
+		  {
+		      $this->log('Could not save '.$data['Sale']['date'].' for shop '.$data['Sale']['shop_id'].' product '.$data['Sale']['product_id'].' already set ', 'debug');
+		      $notUpdated ++;
+		      continue;
+		  }
+
+		  if (!$this->Sale->save($data)) {
+			$this->log('Could not save '.$data['Sale']['date'].' for shop '.$data['Sale']['shop_id'].' product '.$data['Sale']['product_id'], 'debug');
+			$error ++;
+		      }
+		    else
+		   {
+		      $imported ++;
+		    }
+	      }
+	      if($error == 0)
+	      {
+		  $this->Session->setFlash(__($imported.' enregistrements sauvegardés, '.$notUpdated.' enregistrements ignorés'),'flash/ok');
+		  $this->redirect(array('action' => 'add'));
+	      }
+	      else
+	      {
+		$this->Session->setFlash(__($error.' erreurs, '.$imported.' enregistrements sauvegardés, '.$notUpdated.' enregistrements ignorés'),'flash/fail');
+	      }
+	}
+	catch(Exception $e)
+	{
+	    $this->Session->setFlash(__('Veuillez vérifier le format de votre fichier Excel'),'flash/fail');
+	    debug($e);
+	    $this->log('Excel import issue '.$e, 'debug');
+	}
+    } // endif upload
+    else
+    {
+
+
+
+
+
+
     $date = $this->request->data['date'];
     foreach($this->request->data['Sale'] as $shopId => $shop)
     {
@@ -441,7 +555,7 @@ public function results()
     }
     if($error == 0)
     {
-  $this->Session->setFlash(__('The sale has been saved'),'flash/ok');
+	$this->Session->setFlash(__('The sale has been saved'),'flash/ok');
         $this->redirect(array('action' => 'add'));
     }
     else
@@ -449,6 +563,7 @@ public function results()
       $this->Session->setFlash(__('The sale could not be saved. Please, try again.'),'flash/fail');
     }
   }
+}
     if(!isset($this->request->data['date']))
     {
       $date = date('d/m/Y');

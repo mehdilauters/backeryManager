@@ -1,4 +1,9 @@
 <div class="sales form">
+<?php echo $this->Form->create('Sale',array('enctype' => 'multipart/form-data'));
+echo $this->Form->input('upload', array('label'=>'fichier', 'type'=>'file'));
+echo $this->Form->end(__('Submit'));
+?>
+
 <form id="salesDateSelect" method="POST" >
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
   <input type="submit" name="dateSelect" id="dateSelect" class="dateSearch" value="" />

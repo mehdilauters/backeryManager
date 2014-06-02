@@ -549,8 +549,10 @@ public function getData($dateStart = '', $dateEnd = '')
       if(isset($this->request->data['Result']['upload'])) // add results from excel file
       {
 	  $errors = 0;
+	  $imported = 0;
+	  $notUpdated = 0;
 	  //TODO factorize
-	$alphabet =   array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+	$alphabet = $this->Functions->getAlphabet();
 	try{
 	    // import excel library
 	    App::import('Vendor', 'PhpExcel.PHPExcel');
@@ -568,27 +570,38 @@ public function getData($dateStart = '', $dateEnd = '')
 	      {
 		  $shopId = $matches[1];
 	      }
-
+	      else
+	      {
+		  $this->log('Could not detect shopId', 'debug');
+		  $errors++;
+		  continue;
+	      }
 	      
 	      // find product types from header
 	      // product_types_id => column
 	      $productTypes = array();
-	      $i = 0;
+	      $k = 0;
 	      do // while cell != NULL
 	      {
-		$column = $alphabet[$i];
+		$column = $alphabet[$k];
 		$value = $excel->getActiveSheet()->rangeToArray($column.'1'); // get cell data
 		preg_match('/#(\d+) /', $value[0][0], $matches); // extract productType id
 		if(count($matches) == 2)
 		{
-		    $productTypes[$matches[1]] = $i;
+		    $productTypes[$matches[1]] = $k;
 		}
-		$i++;
+		$k++;
 	      }
 	      while($value[0][0] != NULL);
 	      
+	      if(count($productTypes) == 0)
+	      {
+		  $this->log('Could not detect productsTypes for shop #'.$shopId, 'debug');
+		  continue;
+	      }
+
 	      // get max column from header
-	      $maxColumn = $alphabet[$i-2];
+	      $maxColumn = $alphabet[$k-2];
 	      
 	      // foreach data row of the sheet
 	      // TODO Configure => MaxExcel => 500
@@ -599,7 +612,26 @@ public function getData($dateStart = '', $dateEnd = '')
 		$row = $excel->getActiveSheet()->rangeToArray($range);
 		if($row[0][0] == NULL) // if date is not set, empty row
 		{
+		  $maxRow = $j;
 		  break;
+		}
+
+		$card =  0;
+		if($row[0][5] != NULL)
+		{
+		  $card = $row[0][5];
+		}
+
+		$cash =  0;
+		if($row[0][3] != NULL)
+		{
+		  $cash = $row[0][3];
+		}
+
+		$check =  0;
+		if($row[0][4] != NULL)
+		{
+		  $check = $row[0][4];
 		}
 
 		$this->Result->create();
@@ -607,9 +639,9 @@ public function getData($dateStart = '', $dateEnd = '')
 		$resultData = array( 'Result' => array(
 				      'date' => $this->Functions->viewDateToDateTime($row[0][0], false)->format('Y-m-d H:i:s'),
 				      'shop_id' => $shopId,
-				      'cash' =>$row[0][3],
-				      'check' =>$row[0][4],
-				      'card' =>$row[0][5],
+				      'cash' =>$cash,
+				      'check' =>$check,
+				      'card' =>$card,
 				      'comment' =>$row[0][6],
 				    ));
 		  // check if already existing
@@ -618,12 +650,18 @@ public function getData($dateStart = '', $dateEnd = '')
 		  if($tmpRes == 1)
 		  {
 		      $this->log('result '.$resultData['Result']['date'].' for shop '.$resultData['Result']['shop_id'].' already set', 'debug');
+		      $notUpdated ++;
 		      continue;
 		  }
 		  // save result
 		  if (!$this->Result->save($resultData)) {
+		    $this->log('Could not save Result', 'debug');
 		    $errors ++;  
-		  }	    
+		  }
+		  else
+		  {
+		     $imported++;
+		  }
 		  $resultId = $this->Result->getInsertID();
 	      
 	      // foreach productType from header
@@ -645,6 +683,7 @@ public function getData($dateStart = '', $dateEnd = '')
 		    ));
 		    // save
 		    if (!$this->ResultsEntry->save($resultEntryData)) {
+		      $this->log('Could not save ResultEntry', 'debug');
 		      $errors ++;  
 		      }
 	      }
@@ -654,11 +693,11 @@ public function getData($dateStart = '', $dateEnd = '')
 	  // check errors
 	  if($errors == 0)
 	  {
-	    $this->Session->setFlash(__('Les données ont été importées'),'flash/ok');
+	    $this->Session->setFlash(__($imported.' enregistrements importés, '.$notUpdated.' enregistrements ignorés'),'flash/ok');
 	  }
 	  else
 	  {
-	    $this->Session->setFlash(__($errors.' à l\'importation'),'flash/fail');
+	    $this->Session->setFlash(__($errors.' erreurs, '.$imported.' enregistrements importés, '.$notUpdated.' enregistrements ignorés'),'flash/fail');
 	  }
 	}
 	catch(Exception $e)

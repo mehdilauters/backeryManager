@@ -7,11 +7,14 @@ $this->PhpExcel->createWorksheet();
 $sheetId = 0;
 
 //TODO factorize
-$alphabet =   array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+$alphabet =   $this->MyHtml->getAlphabet();
 
 foreach($shops as $shopId => $shopName)
 {
-  $this->PhpExcel->createSheet();
+  if($sheetId != 0)
+  {
+    $this->PhpExcel->createSheet();
+  }
   $this->PhpExcel->setRow(1);
   $this->PhpExcel->setActiveSheetIndex($sheetId);
   $this->PhpExcel->setWorksheetName('#'.$shopId.' '.$shopName);
