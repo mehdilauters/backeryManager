@@ -1,21 +1,31 @@
 <div class="results form">
+<div class="alert alert-info">Saisissez au jour le jour le chiffre d'affaire récolté par vos différents magasins</div>
+
+<div class="alert alert-info">
+<p >
+    Téléchargez le fichier suivant, <a href="<?php echo $this->webroot ?>results/add.xls" >Comptabilité.xls</a> remplissez le, enregistrez le et enfin importez le directement sur le site. Il permet de gérer les données de comptabilité même sans connexion internet</p>
 <?php echo $this->Form->create('Result',array('enctype' => 'multipart/form-data'));
 echo $this->Form->input('upload', array('label'=>'fichier', 'type'=>'file'));
 echo $this->Form->end(__('Submit'));
 ?>
-
+</div>
+<div class="alert alert-info">
+<p class=""> selectionnez ici la date pour laquelle vous souhaitez saisir/modifier les données de comptabilité</p>
 <form id="resultsDateSelect" method="POST" >
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
   <input type="submit" name="dateSelect" id="dateSelect" value="" class="dateSearch" />
 </form>
-
+</div>
 <form id="resultsAdd" method="POST" onSubmit="return checkForm()" >
 <input type="hidden" id="date" name="date" value="<?php echo $date ?>" />
 <h2>Le <?php echo $date ?> <span id="totalDay"></span></h2>
 <ul id="resultShops" >
 <?php foreach($shops as $shopId => $shopName){ ?>
 <li id="resultsShop_<?php echo $shopId ?>" >
+	<div class="alert">
 	<h3><?php echo $shopName; ?></h3>
+	<span class="message"></span>
+	</div>
 	    <fieldset>
 	      <?php
 		  $resultId='';
@@ -148,13 +158,15 @@ function checkTotals()
 		if(data[shop]['totalPrice'] != data[shop]['totalCategories'])
 		{
 			ok = false;
-			$('li#'+shop).addClass('invalid');
-			$('li#'+shop).removeClass('valid');
+			$('li#'+shop+' div.alert').addClass('alert-danger');
+			$('li#'+shop+' div.alert').removeClass('alert-success');
+			$('li#'+shop+' div.alert > span').html('Certaines valeurs ne sont peut-être pas valides');
 		}
 		else
 		{
-			$('li#'+shop).addClass('valid');
-			$('li#'+shop).removeClass('invalid');
+			$('li#'+shop+' div.alert').addClass('alert-success');
+			$('li#'+shop+' div.alert').removeClass('alert-danger');
+			$('li#'+shop+' div.alert > span').html('');
 		}
 	}
 	$('#totalDay').html('('+totalDay + ' €)');

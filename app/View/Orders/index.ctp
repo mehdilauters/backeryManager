@@ -2,8 +2,9 @@
 	<h2><?php echo __('Orders'); ?></h2>
 
 <?php echo $this->Form->create('Order'); ?>
-	<fieldset>
+	<fieldset class="alert alert-info">
 		<legend><?php echo __('Filtrer par status'); ?></legend>
+		<div>Séléctionnez ici les commandes dont le status vous intéresse</div>
 	<?php echo $this->Form->input('statusSelect',array('options'=>array(''=>'', 'reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée'), 'label'=>'Status')); ?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
@@ -18,7 +19,7 @@
               tf = new TF('ordersIndexTable', tfConfig); tf.AddGrid();
   });
 </script>
-	<table id="ordersIndexTable" cellpadding="0" cellspacing="0">
+	<table id="ordersIndexTable" class="table-striped" cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('shop_id'); ?></th>
@@ -65,7 +66,7 @@
 			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('class'=>'icon','alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>
 			<?php echo $this->Html->link($this->Html->image('icons/folder-open.png', array('class'=>'icon','alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
 			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('class'=>'icon','alt' => __('Email'))), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\'Voulez vous vraiment envoyer un email à '.$order['User']['email'].'?\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
 			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
 		</td>
 	</tr>

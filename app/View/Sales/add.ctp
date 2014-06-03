@@ -1,13 +1,19 @@
 <div class="sales form">
-<?php echo $this->Form->create('Sale',array('enctype' => 'multipart/form-data'));
-echo $this->Form->input('upload', array('label'=>'fichier', 'type'=>'file'));
-echo $this->Form->end(__('Submit'));
-?>
-
-<form id="salesDateSelect" method="POST" >
-  <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
-  <input type="submit" name="dateSelect" id="dateSelect" class="dateSearch" value="" />
-</form>
+<div class="alert alert-info">
+  <p>
+    Téléchargez le fichier suivant, <a href="<?php echo $this->webroot ?>sales/add.xls" >Ventes.xls</a> remplissez le, enregistrez le et enfin importez le directement sur le site. Il permet de gérer les données de ventes même sans connexion internet</p>
+  <?php echo $this->Form->create('Sale',array('enctype' => 'multipart/form-data'));
+  echo $this->Form->input('upload', array('label'=>'fichier', 'type'=>'file'));
+  echo $this->Form->end(__('Submit'));
+  ?>
+</div>
+<div class="alert alert-info">
+  <p > selectionnez ici la date pour laquelle vous souhaitez saisir/modifier les données de production</p>
+  <form id="salesDateSelect" method="POST" >
+    <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
+    <input type="submit" name="dateSelect" id="dateSelect" class="dateSearch" value="" />
+  </form>
+</div>
 <form id="salesAdd" method="POST" onSubmit="return checkInputs(true);" >
 <h2>Le <?php echo $date ?></h2>
 <input type="hidden" name="date" id="date" value="<?php echo $date ?>" />

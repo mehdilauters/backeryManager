@@ -80,7 +80,8 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 	<div id="histogramChart" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 	<div class="control" ></div>
 </div>
-<table id="statValues" class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
+<div class="alert alert-info">Filtrez les colonnes qui vous interesse pour en afficher le graphe correspondant</div>
+<table id="statValues" class="table-striped <?php if(!$config['interactive']) echo 'hideJs' ?>" >
 <tr class="plot" >
   <?php if($fields['date']) { ?><th style="display:none" >Date</th>
   <th>Date</th>

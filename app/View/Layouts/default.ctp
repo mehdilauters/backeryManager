@@ -90,7 +90,7 @@ echo $this->Html->css(
 	  	<div class="row">
 			  <div class="col-md-8">
 			  <?php if(Configure::read('demo.active')) { ?>
-			      <span class="demoWarning" >Attention, ceci est une version de démonstration</span>
+			      <div class="demoWarning" ><div class="title" >Attention, ceci est une version de démonstration</div>Les adresses, numéros de téléphones, et noms d'utilisateurs sont volontairement faux. Les données de ventes et de gestion sont des simulations, et peuvent donc amener à des incohérences.</div>
 			  <?php } ?>
 			  </div>
 			  <div class="col-md-4">
@@ -137,7 +137,7 @@ echo $this->Html->css(
     
   	<footer>
 	<div>Credits : <href="http://www.lauters.fr" />Mehdi Lauters 2014</div>
-	<div>BackeryManager released under GPL licence  <href="https://github.com/mehdilauters/backeryManager" />https://github.com/mehdilauters/backeryManager</div>
+	<div>BackeryManager released under GPL licence  <a href="https://github.com/mehdilauters/backeryManager" >https://github.com/mehdilauters/backeryManager</a></div>
 <div>
   	<?php echo $this->Html->link(
       $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),

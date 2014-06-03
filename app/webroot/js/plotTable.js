@@ -248,7 +248,7 @@ function curveDisplay(chartId, curveId, status)
     
     );
 	
-	html = '<ul class="controlChart_'+chartId+'">';
+	html = '<div class="alert alert-info">Cochez/décochez les cases ci-dessous pour afficher/masquer la courbe souhaitée</div><ul class="controlChart_'+chartId+'">';
 	var found = false;
 	var i = 0;
 	for(var x in window[chartVarName].series)

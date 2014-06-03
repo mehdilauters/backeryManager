@@ -265,7 +265,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		 $sql .= 'update '.$tablePrefix.'companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\', title=\'Démo\';'."\n";
 
 		// add demo user
-		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot) values (\'demo@lauters.fr\', \'demo\', \''.AuthComponent::password('demo')."', true);\n";
+		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot) values (\''.Configure::read('demo.User.email').'\', \'demo\', \''.AuthComponent::password(Configure::read('demo.User.password'))."', true);\n";
 
 		
 		return $sql;

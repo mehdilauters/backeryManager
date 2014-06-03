@@ -75,6 +75,7 @@
 					?>
 			</tr>
 		</table>
+		<div class="alert alert-info">Filtrez les colonnes qui vous interesse pour en afficher le graphe correspondant</div>
 		<table id="resultsStatValues" class="tablePreview table-striped" >
 		  <tr class="legend plot" >
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th>

@@ -32,7 +32,7 @@
 
 Configure::write('Order.pageBreakItemsMax', 20);
 
-Configure::write('Approximation.order', 3);
+Configure::write('Approximation.order', 4);
 Configure::write('Approximation.bcscale', 10);
 Configure::write('Approximation.nbProjectionsPoint', 0);
 
@@ -42,6 +42,7 @@ Configure::write('Security.ssl', false);
 Configure::write('demo', array(
   'active' => true,
   'dbPrefix' => 'demo_',
+  'User' => array('email'=>'demo@lauters.fr', 'password'=> 'demo')
 
 ));
 

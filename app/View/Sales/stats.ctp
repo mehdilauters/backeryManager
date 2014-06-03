@@ -6,10 +6,10 @@ if(isset($this->request->data['group']))
 
 ?>
 <div>
-  Grouper par
   <form method="POST" >
-    <fieldset>
+    <fieldset  class="alert alert-info">
       <legend>Grouper par</legend>
+      <div>Grouper les données permet d'afficher les resultat sous des formes différentes (jour par jour/mois par mois, magasin par magasin/somme des magasins...) Le groupement est cumulatif</div>
       <label>date</label>
       <select name="group[time]" >
 	<option value="" ></option>
@@ -29,14 +29,16 @@ if(isset($this->request->data['group']))
 	<option value="shop" <?php echo (isset($group['shop']) && $group['shop'] == 'shop') ? 'selected="selected"' : ''; ?> >magasin</option>
       </select>
     </fieldset>
-    <fieldset>
+    <fieldset class="alert alert-info">
       <legend>Filtrer par</legend>
+      <div>Le filtrage permet de limiter les données séléctionnées. Concentrez vous par exemple sur une plage de date</div>
       <label>Début</label><input type="text" name="dateStart" id="dateStart" value="<?php echo $dateStart ?>" class="datepicker" />
       <label>Fin</label><input type="text" name="dateEnd" id="dateEnd" value="<?php echo $dateEnd ?>" class="datepicker" />
     </fieldset>
 
-    <fieldset>
+    <fieldset class="alert alert-info">
       <label>Approximation</label>
+<div>Afin de lisser les courbes, calculer une moyenne, donner une tendance sur le long terme, utilisez l'approximation. <div class="alert alert-danger">Attention! Une approximation ne reflète parfois pas la réalité! Utilisez les cases a cocher pour comparer le résultat avec les vraies données</div></div>
       <select name="approximationOrder" >
 	<option value="" ></option>
 	<option value="1" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '1') ? 'selected="selected"' : ''; ?>  >Constante (moyenne)</option>
@@ -46,7 +48,7 @@ if(isset($this->request->data['group']))
 	<option value="<?php echo Configure::read('Approximation.order') ?>" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == Configure::read('Approximation.order')) ? 'selected="selected"' : ''; ?>  >Maximum</option>
       </select>
     </fieldset>
-    <input type="submit" class="search" value="" />
+    <input type="submit" class="search btn" value="" />
   </form>
 </div>
 <?php
