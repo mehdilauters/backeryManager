@@ -77,7 +77,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 
 <div>
 	<h3>Historique production par <?php echo $titleDate[$group['time']] ?></h3>
-	<div id="histogramChart" style="width=500px;height=600px;" class="chartDiv" ></div>
+	<div id="histogramChart" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 	<div class="control" ></div>
 </div>
 <table id="statValues" class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >

@@ -74,20 +74,20 @@ $sheetId = 0;
 	
 	
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('A2:C500')
+            ->getStyle('A2:C'.Configure::read('Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 
 
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('E2:G500')
+            ->getStyle('E2:G'.Configure::read('Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 
 			
-	for($i = 2; $i < 500; $i++)
+	for($i = 2; $i < Configure::read('Excel.maxNbRow'); $i++)
 	{
 		$objValidation = $this->PhpExcel->getActiveSheet()->getCell('B'.$i)->getDataValidation();
 		$objValidation->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
@@ -126,7 +126,7 @@ $sheetId = 0;
 
     // set date format
     $this->PhpExcel->getActiveSheet()
-    ->getStyle('A2:A500')
+    ->getStyle('A2:A'.Configure::read('Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY
@@ -134,7 +134,7 @@ $sheetId = 0;
 
 	// set format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('D2:C500')
+    ->getStyle('D2:C'.Configure::read('Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
@@ -142,7 +142,7 @@ $sheetId = 0;
 
 	// set format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('E2:G500')
+    ->getStyle('E2:G'.Configure::read('Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1

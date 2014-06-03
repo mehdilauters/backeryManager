@@ -1,21 +1,21 @@
 ﻿<div class="results index">
 <div>
   <?php
-	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
+// 	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
 	$conditions = array('shop'=>'', 'productType'=>'');
 	
-	if(isset($this->request->data['group']))
-  {
-    $group['time'] = $this->request->data['group']['time'];
-    $group['shop'] = $this->request->data['group']['shop'];
-	$group['productType'] = $this->request->data['group']['productType'];
-  }
-  
-    if(isset($this->request->data['conditions']))
-  {
-    $conditions['shop'] = $this->request->data['conditions']['shop'];
-	$conditions['productType'] = $this->request->data['conditions']['productType'];
-  }
+//   if(isset($this->request->data['group']))
+//   {
+//     $group['time'] = $this->request->data['group']['time'];
+//     $group['shop'] = $this->request->data['group']['shop'];
+// 	$group['productType'] = $this->request->data['group']['productType'];
+//   }
+//   
+//     if(isset($this->request->data['conditions']))
+//   {
+//     $conditions['shop'] = $this->request->data['conditions']['shop'];
+// 	$conditions['productType'] = $this->request->data['conditions']['productType'];
+//   }
   ?>
   
   <form method="POST" >
@@ -46,14 +46,14 @@
 	<label>Magasin</label>
     <select name="conditions[shop]" >
       <option value="" ></option>
-	  <?php foreach($shops as $id => $shop): ?>
+	  <?php foreach($results['shops'] as $id => $shop): ?>
 		<option value="<?php echo $id; ?>" <?php echo ($conditions['shop'] == $id ) ? 'selected="selected"' : ''; ?>  ><?php echo $shop; ?></option>
 	  <?php endforeach; ?>
     </select>
 	<label>Types de produit</label>
     <select name="conditions[productType]" >
       <option value="" ></option>
-	  <?php foreach($productTypes as $id => $productType): ?>
+	  <?php foreach($results['productTypes'] as $id => $productType): ?>
 		<option value="<?php echo $id; ?>" <?php echo ($conditions['productType'] == $id ) ? 'selected="selected"' : ''; ?>  ><?php echo $productType; ?></option>
 	  <?php endforeach; ?>
     </select>

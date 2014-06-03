@@ -45,8 +45,9 @@ class ResultsController extends AppController {
     if(isset($this->request->data['excelDownload']) || $fileName != NULL)
     {
       $this->set('fileName', $fileName);
-      $this->layout = 'ajax'; 
-      $this->view = 'excel';
+      $this->layout = 'xls/default'; 
+      $this->view = 'xls/index';
+      ob_end_clean();
 //      $this->render('excel');
       //instantiate a new View class from the controller
       
@@ -54,16 +55,16 @@ class ResultsController extends AppController {
     $this->set(compact('data', 'dateStart', 'dateEnd', 'shops', 'productTypes', 'total'));
 
 
-        if($fileName != NULL)
-        {
-    $view = new View($this);
-    $viewdata = $view->render(null,'html','html');
-
-        }
-      else
-      {
-        ob_end_clean();
-      }
+//         if($fileName != NULL)
+//         {
+// 	    $view = new View($this);
+// 	    //$viewdata = $view->render(null,'html','html');
+// 
+//         }
+//       else
+//       {
+//         ob_end_clean();
+//       }
   }
 
   public function stats($_conditions = array(), $group = array()) {
@@ -130,6 +131,7 @@ class ResultsController extends AppController {
 		  }
 		}
 	}
+
     $groupByEntries = str_replace('Result', 'ResultsEntry',$groupBy);
       if(count($groupBy) == 0)
       {
@@ -195,7 +197,7 @@ class ResultsController extends AppController {
                     'Result.date',
                     'Result.comment',
                     'Result.shop_id',
-					'Shop.name',
+		    'Shop.name',
                     ),
               ));
 	require_once(APP . 'Vendor' . DS . 'PolynomialRegression.php');
@@ -286,7 +288,6 @@ class ResultsController extends AppController {
 	}
 	
 	
-     //debug($groupByEntries );
     $this->Result->ResultsEntry->contain('Shop', 'ProductTypes');
      $resultsEntries = $this->Result->ResultsEntry->find('all', array('order'=>array('ResultsEntry.date'),
               'group' => $groupByEntries,
@@ -307,9 +308,9 @@ class ResultsController extends AppController {
 	$initDate = array();
 	for($i=0; $i< ($nbResultsEntries-1); $i++)
 	{
-		$res = $resultsEntries[$i];
-		$productTypeId = $res['ProductTypes']['id'];
-		$shopId = $res['Shop']['id'];
+		$resEntry = $resultsEntries[$i];
+		$productTypeId = $resEntry['ProductTypes']['id'];
+		$shopId = $resEntry['Shop']['id'];
 		// debug($shopId);
 		// debug($productTypeId);
 		if(!isset($regressions[$productTypeId]))
@@ -320,15 +321,15 @@ class ResultsController extends AppController {
 		if(!isset($regressions[$productTypeId][$shopId]))
 		{
 			$regressions[$productTypeId][$shopId] = new PolynomialRegression( Configure::read('Approximation.order') );
-			$initDate[$productTypeId][$shopId] = new DateTime($res['ResultsEntry']['date']);
+			$initDate[$productTypeId][$shopId] = new DateTime($resEntry['ResultsEntry']['date']);
 			// debug($regressions);
 		}
-		$curDate = new DateTime($res['ResultsEntry']['date']);
-		$dateDiff = $initDate[$res['ProductTypes']['id']][$res['Shop']['id']]->diff($curDate);
+		$curDate = new DateTime($resEntry['ResultsEntry']['date']);
+		$dateDiff = $initDate[$resEntry['ProductTypes']['id']][$resEntry['Shop']['id']]->diff($curDate);
 		$x = $dateDiff->days / $nbDaysByInterval;
-		$y = $res[0]['result'];
+		$y = $resEntry[0]['result'];
 		
-		$regressions[$res['ProductTypes']['id']][$res['Shop']['id']]->addData( $x, $y );
+		$regressions[$resEntry['ProductTypes']['id']][$resEntry['Shop']['id']]->addData( $x, $y );
 	}
 	 
 	 
@@ -344,11 +345,11 @@ class ResultsController extends AppController {
 	}
 	$lastDate = NULL;
 	// fill results
-	foreach($resultsEntries as &$res)
+	foreach($resultsEntries as &$resEntry)
 	{
-		$productTypeId = $res['ProductTypes']['id'];
-		$shopId = $res['Shop']['id'];
-		$curDate = new DateTime($res['ResultsEntry']['date']);
+		$productTypeId = $resEntry['ProductTypes']['id'];
+		$shopId = $resEntry['Shop']['id'];
+		$curDate = new DateTime($resEntry['ResultsEntry']['date']);
 		$dateDiff = $initDate[$productTypeId][$shopId]->diff($curDate);
 		$x = $dateDiff->days / $nbDaysByInterval;
 		$y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$productTypeId][$shopId],$x);
@@ -356,7 +357,7 @@ class ResultsController extends AppController {
 		{
 			$y =0;
 		}
-		$res[0]['approximation'] = $y;
+		$resEntry[0]['approximation'] = $y;
 		$lastDate = $curDate;
 	}
 	
@@ -365,7 +366,7 @@ class ResultsController extends AppController {
 	$maxX = Configure::read('Approximation.nbProjectionsPoint');
 	for($i = 0; $i < $maxX; $i++)
 	{
-		$res = array(
+		$resEntry = array(
 			0 => array(
 						'result' => '',
 						'approximation' => 0,
@@ -392,12 +393,12 @@ class ResultsController extends AppController {
 				 $dateDiff = $initDate[$ProductTypeId][$shopId]->diff($lastDate);
 				 $x = $dateDiff->days / $nbDaysByInterval;
 				 $y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$ProductTypeId][$shopId],$x);
-				 $res[0]['approximation'] = $y;
-				 $res['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
-				 $res['Result']['shop_id']  = $ProductTypeId;
-				 $res['Shop']['id'] = $shopId;
-				 $res['Shop']['name'] = 'tmp_'.$shopId;
-				$resultsEntries[] = $res;
+				 $resEntry[0]['approximation'] = $y;
+				 $resEntry['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
+				 $resEntry['Result']['shop_id']  = $ProductTypeId;
+				 $resEntry['Shop']['id'] = $shopId;
+				 $resEntry['Shop']['name'] = 'tmp_'.$shopId;
+				$resultsEntries[] = $resEntry;
 			}
 		}	
 	}
@@ -409,6 +410,8 @@ class ResultsController extends AppController {
 	if (!empty($this->request->params['requested'])) {
             return compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes');
         }
+
+    $this->set('group', $group);
     $this->set('results', compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes'));
 
   }
@@ -604,8 +607,7 @@ public function getData($dateStart = '', $dateEnd = '')
 	      $maxColumn = $alphabet[$k-2];
 	      
 	      // foreach data row of the sheet
-	      // TODO Configure => MaxExcel => 500
-	      for($j=2; $j< 500; $j++)
+	      for($j=2; $j< Configure::read('Excel.maxNbRow'); $j++)
 	      {
 		// get data
 		$range = 'A'.$j.':'.$maxColumn.$j;

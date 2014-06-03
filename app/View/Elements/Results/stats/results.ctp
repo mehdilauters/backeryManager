@@ -13,11 +13,6 @@
 	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
 	$fields = array('date'=>true, 'shop'=>true, 'comment'=> false);
 	
-	if(isset($this->request->data['group']))
-  {
-    $group['time'] = $this->request->data['group']['time'];
-    $group['shop'] = $this->request->data['group']['shop'];
-  }
   
   
   
@@ -61,7 +56,7 @@
 <div>
 	<div>
 		<h3>Historique comptable par <?php echo $titleDate[$group['time']] ?></h3>
-		<div id="resultsChart" class="chartDiv" ></div>
+		<div id="resultsChart" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 		<div class="control"></div>
 	</div>
 	<div class="<?php if(!$config['interactive']) echo 'hideJs'; ?>" >
@@ -94,6 +89,7 @@
 		  </tr>
 			<?php 
 		foreach($results['results'] as $i=>$result):
+			if(!isset($result['Result']['date'])) debug($result);
 			$date = new DateTime($result['Result']['date']);
 			$total = $result[0]['total'];
 			?>

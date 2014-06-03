@@ -6,7 +6,6 @@ $this->PhpExcel->createWorksheet();
 
 $sheetId = 0;
 
-//TODO factorize
 $alphabet =   $this->MyHtml->getAlphabet();
 
 foreach($shops as $shopId => $shopName)
@@ -44,20 +43,20 @@ foreach($shops as $shopId => $shopName)
     }
 	$columnLetter = $alphabet[count($table) -1 ];
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('A2:A500')
+            ->getStyle('A2:A'.Configure::read('Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 	
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('D2:'.$columnLetter.'500')
+            ->getStyle('D2:'.$columnLetter.Configure::read('Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 	
 	// set date format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('A2:A500')
+    ->getStyle('A2:A'.Configure::read('Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY
@@ -65,28 +64,28 @@ foreach($shops as $shopId => $shopName)
 	
 	// set € format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('B2:B500')
+    ->getStyle('B2:B'.Configure::read('Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
     );
 	
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('D2:F500')
+    ->getStyle('D2:F'.Configure::read('Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
     );
 	
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('H2:'.$columnLetter.'500')
+    ->getStyle('H2:'.$columnLetter.Configure::read('Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
     );
 	
 	
-	for($i = 2; $i <= 500; $i++)
+	for($i = 2; $i <= Configure::read('Excel.maxNbRow'); $i++)
 	{
 
         $this->PhpExcel->getActiveSheet()->setCellValue(

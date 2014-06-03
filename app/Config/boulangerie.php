@@ -45,5 +45,11 @@ Configure::write('demo', array(
 
 ));
 
+
+Configure::write('Excel', array(
+  'maxNbRow' => 500,
+
+));
+
 	
 ?>

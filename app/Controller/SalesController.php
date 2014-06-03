@@ -109,7 +109,7 @@ class SalesController extends AppController {
 		    $group['time'] = 'day';
 		    $group['shop'] = 'shop';
 		    $group['product'] = 'product';
-			$this->request->data['group'] = $group;
+		    $this->request->data['group'] = $group;
 		}
 	}
 	$nbDaysByInterval = 1;
@@ -427,8 +427,7 @@ public function results()
 	    $excel->setActiveSheetIndex($dataSheetId);
 	    $maxColumn = $alphabet[7];
 	    // foreach data row of the sheet
-	      // TODO Configure => MaxExcel => 500
-	      for($j=2; $j< 500; $j++)
+	      for($j=2; $j< Configure::read('Excel.maxNbRow'); $j++)
 	      {
 		// get data
 		$range = 'A'.$j.':'.$maxColumn.$j;

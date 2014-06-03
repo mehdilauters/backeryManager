@@ -1,5 +1,4 @@
 ﻿<?php
-
 $defaultConfig = array('id'=>0,'interactive'=>true, 'shopComparative'=>false);
 	if(isset($config))
 	{
@@ -12,7 +11,6 @@ $defaultConfig = array('id'=>0,'interactive'=>true, 'shopComparative'=>false);
 	
 	
 	
- $group = array('time' => '', 'shop'=>'', 'productType'=>'');
  $fields = array('date'=>true, 'shop'=>true, 'productType'=>true);
 
 if(isset($this->request->data['group']))
@@ -72,7 +70,7 @@ if(isset($this->request->data['group']))
 <div>
 	<div>
 		<h3>Historique comptable par <?php echo $titleDate[$group['time']] ?></h3>
-		<div id="resultsEntriesChart_<?php echo $config['id'] ?>" class="chartDiv" ></div>
+		<div id="resultsEntriesChart_<?php echo $config['id'] ?>" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 		<div class="control"></div>
 	</div>
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
@@ -129,7 +127,7 @@ if(isset($this->request->data['group']))
 			<tr class=" plot" >
 			  <?php if($fields['date']) { ?>
 			  <td>
-				<?php
+				<?php //debug($group['time']);
 					switch($group['time'])
 						{	
 							case 'weekday':
