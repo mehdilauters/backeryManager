@@ -2,11 +2,22 @@
 <?php echo $this->Form->create('ProductType'); ?>
 	<fieldset>
 		<legend><?php echo __('Add Product Type'); ?></legend>
-	<?php
-		echo $this->Form->input('media_id');
-		echo $this->Form->input('name');
-		echo $this->Form->input('tva');
-		echo $this->Form->input('customer_display');
+	<div class="alert alert-info">
+	    
+	  Choisissez une photo pour cette catégorie
+	<?php echo $this->Form->input('media_id', array('label'=>'Photo', 'class'=>'formPhotoPreview')); ?>
+	  <img src="" id="ProductTypeMediaId_preview" />
+	  </div>
+		<?php echo $this->Form->input('name', array('label'=>'Nom')); ?>
+		<div class="alert alert-info">
+		Insérez ici le pourcentage de TVA sur cette catégorie de produits
+		<?php echo $this->Form->input('tva', array('label'=>'TVA %')); ?>
+		</div>
+		<div class="alert alert-info">
+		  Décocher la case pour masquer cette catégorie de produit aux clients
+		<?php echo $this->Form->input('customer_display', array('label'=>'Affiché aux clients')); ?>
+		</div>
+<?php
 		echo $this->Form->input('description', array('class'=>'textEditor'));
 	?>
 	</fieldset>
@@ -15,11 +26,7 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-
-		<li><?php echo $this->Html->link(__('List Product Types'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Media'), array('controller' => 'media', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Products'), array('controller' => 'products', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Nouvelle Photo'), array('controller' => 'photos', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('Nouveau Produit'), array('controller' => 'products', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

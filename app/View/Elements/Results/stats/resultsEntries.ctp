@@ -1,5 +1,5 @@
 ﻿<?php
-$defaultConfig = array('id'=>0,'interactive'=>true, 'shopComparative'=>false);
+$defaultConfig = array('id'=>0,'interactive'=>true);
 	if(isset($config))
 	{
 		$config = array_merge($defaultConfig, $config);
@@ -15,46 +15,46 @@ $defaultConfig = array('id'=>0,'interactive'=>true, 'shopComparative'=>false);
 
 if(isset($this->request->data['group']))
 {
-    $group = $this->request->data['group'];
+    $resultsEntries['group'] = $this->request->data['group'];
 }
  
  
- if($group['shop'] != '')
+ if($resultsEntries['group']['shop'])
   {
-    if( $group['time'] == '' )
+    if( $resultsEntries['group']['time'] == '' )
     {
       $fields['date'] = false;
     }
-	 if( $group['productType'] == '' )
+	 if( ! $resultsEntries['group']['productType'] )
     {
       $fields['productType'] = false;
     }
   }
   
-  if($group['time'] != '')
+  if($resultsEntries['group']['time'] != '')
   {
-    if( $group['shop'] == '' )
+    if( ! $resultsEntries['group']['shop'] )
     {
       $fields['shop'] = false;
     }
-	if( $group['productType'] == '' )
+	if( ! $resultsEntries['group']['productType']  )
     {
       $fields['productType'] = false;
     }
 	
-  if($group['productType'] != '')
+  if($resultsEntries['group']['productType'] )
   {
-		if( $group['shop'] == '' )
+		if( ! $resultsEntries['group']['shop'] )
 		{
 		  $fields['shop'] = false;
 		}
-		if( $group['time'] == '' )
+		if( $resultsEntries['group']['time'] == '' )
 		{
 		  $fields['date'] = false;
 		}
 	}
   }
-  
+ 
   
   	$titleDate = array(
 		''=> 'Jour',
@@ -69,7 +69,7 @@ if(isset($this->request->data['group']))
 
 <div>
 	<div>
-		<h3>Historique comptable par <?php echo $titleDate[$group['time']] ?></h3>
+		<h3>Historique comptable par <?php echo $titleDate[$resultsEntries['group']['time']] ?></h3>
 		<div id="resultsEntriesChart_<?php echo $config['id'] ?>" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 		<div class="control"></div>
 	</div>
@@ -78,57 +78,73 @@ if(isset($this->request->data['group']))
 			<tr>
 				<td class="label_curve_totalApprox" >Total € (approximation)</td>
 				<td class="label_curve_total" >Total € </td>
-				<?php foreach($resultsEntries['productTypes'] as $productTypeId => $productTypeName): ?>
-				<?php 			
-				$curveShopComparative = 'productType'.$productTypeId;
-				if($config['shopComparative'])
-				{
-					if($fields['shop']) :
-						foreach($resultsEntries['shops'] as $shopId => $shopName):
-							$curveShopComparative = 'productType'.$productTypeId.'_shop'.$shopId;
-							?>
-							<td class="shopProduct label_curve_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName.' '.$shopName; ?></td>
-							<td class="shopProduct label_curve_approx_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName.' '.$shopName; ?> (approximation) </td>
-							<?php
-						endforeach;
-					endif;
-				}
-				else
-				{ ?>
-							<td class="shopProduct label_curve_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName; ?></td>
-							<td class="shopProduct label_curve_approx_<?php echo $curveShopComparative ?>" ><?php echo  $productTypeName; ?> (approximation) </td>				
-				<?php }
-				endforeach; ?>
+				<?php
+				  $curves = array();
+				  if($fields['productType'] && $fields['shop'])
+				  {
+				    foreach($resultsEntries['productTypes'] as $productTypeId => $productTypeName)
+				    {
+				      foreach($resultsEntries['shops'] as $shopId => $shopName)
+				      {
+					$curves['productType'.$productTypeId.'_shop'.$shopId] = $productTypeName.' '.$shopName;
+				      }
+				    }
+				  }
+				  else
+				  {
+				    if(! $fields['productType'] && !$fields['shop'])
+				    {
+				      $curves['all'] = 'Tout';
+				    }
+				    else
+				    {
+				      if($fields['productType'])
+				      {
+					foreach($resultsEntries['productTypes'] as $productTypeId => $productTypeName)
+					{
+					    $curves['productType'.$productTypeId] = $productTypeName;
+					}
+				      }
+				      
+				      if($fields['shop'])
+				      {
+					foreach($resultsEntries['shops'] as $shopId => $shopName)
+					{
+					    $curves['shop'.$shopId] = $shopName;
+					}
+				      }
+				    }
+				  }
+				
+				  foreach($curves as $id => $name)
+				  { ?>
+				    <td class="label_curve_<?php echo $id ?>" ><?php echo  $name; ?></td>
+				    <td class="label_curve_approx_<?php echo $id ?>" ><?php echo  $name; ?> (approximation) </td>
+				 <?php } ?>
+
 			</tr>
 		</table>
 		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>" class="table-striped tablePreview">
 		  <tr class="legend plot" >
 			<?php if($fields['date']) { ?><th>Date</th><?php } ?>
 			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th> <?php } ?>
-			<?php if($fields['productType']) { ?><th class="productType" >Type de Produit</th><?php } ?>
+			<th class="productType" >Type de Produit</th>
 			<th class="cash" >Somme €</th>
 			<th class="cash" >Somme approx €</th>
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th><?php } ?>
-			<?php if($fields['shop']) { ?> <th style="display:none" >Courbes</th> <?php } ?>
 		  </tr>
 			<?php 
 			$i = 0;
 			 foreach($resultsEntries['resultsEntries'] as $i=>$resultsEntry):
 			 $date = new DateTime($resultsEntry['ResultsEntry']['date']);
 			 
-			 $curveShopComparative = 'productType'.$resultsEntry['ProductTypes']['id'];
-			if($config['shopComparative'])
-			{
-				$curveShopComparative = 'productType'.$resultsEntry['ProductTypes']['id'].'_shop'.$resultsEntry['Shop']['id'];
-			}
-			 
 			 //$total = $result[0]['total'];
 			?>
 			<tr class=" plot" >
 			  <?php if($fields['date']) { ?>
 			  <td>
-				<?php //debug($group['time']);
-					switch($group['time'])
+				<?php //debug($resultsEntries['group']['time']);
+					switch($resultsEntries['group']['time'])
 						{	
 							case 'weekday':
 								$dateDisplay = $this->Dates->getJourFr($date->format('w'));
@@ -152,13 +168,38 @@ if(isset($this->request->data['group']))
 						echo  $dateDisplay;
 				?>
 			  </td>
-			  <?php } ?>
-			  <?php if($fields['shop']) { ?><td class="shop" ><?php echo  $resultsEntry['Shop']['name']; ?></td><?php } ?>
-			  <?php if($fields['productType']) { ?><td class="productType label_curve_productType<?php echo $resultsEntry['ProductTypes']['id']; ?>"><?php echo $resultsEntry['ProductTypes']['name']; ?></td><?php } ?>
-			  <td class="rowTotal noDisplay curve_total curve_<?php echo $curveShopComparative; ?> "><?php echo round($resultsEntry[0]['result'], 2) ?></td>
-			  <td class="rowTotal  curve_totalApprox curve_approx_<?php echo $curveShopComparative; ?>  ?>"><?php echo round($resultsEntry[0]['approximation'], 2) ?></td>
+			  <?php } 
+			    $curveId = '';
+			    if($fields['productType'] && $fields['shop'])
+			    {
+				$curveId = 'productType'.$resultsEntry['ProductTypes']['id'].'_shop'.$resultsEntry['Shop']['id'];
+			    }
+			    else
+			    {
+				if(! $fields['productType'] && !$fields['shop'])
+				{
+				  $curveId = 'all';
+				}
+				else
+				{
+				  if($fields['productType'])
+				  {
+				    $curveId = 'productType'.$resultsEntry['ProductTypes']['id'];
+				  }
+				  
+				  if($fields['shop'])
+				  {
+				    $curveId = 'shop'.$resultsEntry['Shop']['id'];
+				  }
+			      }
+			    }
+			  ?>
+			  <td class="shop" ><?php if($fields['shop']) { echo  $resultsEntry['Shop']['name']; } else { echo 'Tous'; } ?></td>
+			  <td class="productType "><?php if($fields['productType']) { echo $resultsEntry['ProductTypes']['name']; } else {echo 'Tous';} ?></td>
+			  <td class="rowTotal noDisplay curve_total curve_<?php echo $curveId; ?> "><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			  <td class="rowTotal  curve_totalApprox curve_approx_<?php echo $curveId; ?>  ?>"><?php echo round($resultsEntry[0]['approximation'], 2) ?></td>
 			   <?php if($fields['date']) { ?><td class="date" style="display:none" ><?php 
-						switch($group['time'])
+						switch($resultsEntries['group']['time'])
 						{	
 							case 'weekday':
 								$dateDisplay = $date->format('d/m/Y'); 
@@ -183,8 +224,6 @@ if(isset($this->request->data['group']))
 						echo  $dateDisplay;
 			  ?></td>
 			  <?php } ?>
-			  <?php if($fields['shop']) { ?><td class="shopProduct label_curve_<?php echo $curveShopComparative ?>" style="display:none" ><?php echo  $resultsEntry['ProductTypes']['name'].' '.$resultsEntry['Shop']['name']; ?></td><?php } ?>
-			  <?php if($fields['shop']) { ?><td class="shopProduct label_curve_approx_<?php echo $curveShopComparative ?>" style="display:none" ><?php echo  $resultsEntry['ProductTypes']['name'].' '.$resultsEntry['Shop']['name']; ?></td><?php } ?>
 		  
 			</tr>
 		  <?php

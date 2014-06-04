@@ -1,56 +1,45 @@
-<?php 
-if(isset($this->request->data['group']))
-{
-	$group = $this->request->data['group'];
-}
+<?php echo $this->Form->create('Results'); ?>
+	  <fieldset class="alert alert-info">
+		<legend>Grouper par</legend>
+		<div>Grouper les données permet d'afficher les resultat sous des formes différentes (jour par jour/mois par mois, magasin par magasin/somme des magasins...) Le groupement est cumulatif</div>
+		<?php echo $this->Form->input('group.time', array(		'label' => 'Date',
+									      'options'=>(array( '' => '',
+											  'weekday' => 'Jour de la semaine',
+											  'day' => 'Jour',
+											  'semaine' => 'Semaine',
+											  'month' => 'Mois',
+											  'year' => 'Année',
+											)))); ?>
+		<?php echo $this->Form->input('group.shop', array(	'label' => 'Magasin',
+									'type'=>'checkbox')); ?>
+		<?php echo $this->Form->input('group.product', array(	'label' => 'produit',
+									'type'=>'checkbox')); ?>
+		
 
-?>
-<div>
-  <form method="POST" >
-    <fieldset  class="alert alert-info">
-      <legend>Grouper par</legend>
-      <div>Grouper les données permet d'afficher les resultat sous des formes différentes (jour par jour/mois par mois, magasin par magasin/somme des magasins...) Le groupement est cumulatif</div>
-      <label>date</label>
-      <select name="group[time]" >
-	<option value="" ></option>
-	<option value="day" <?php echo (isset($group['time']) && $group['time'] == 'day') ? 'selected="selected"' : ''; ?>  >jour</option>
-	<option value="week" <?php echo (isset($group['time']) && $group['time'] == 'week') ? 'selected="selected"' : ''; ?>  >semaine</option>
-	<option value="month" <?php echo (isset($group['time']) && $group['time'] == 'month') ? 'selected="selected"' : ''; ?> >mois</option>
-	<option value="year" <?php echo (isset($group['time']) && $group['time'] == 'year') ? 'selected="selected"' : ''; ?> >année</option>
-      </select>
-      <label>Produit</label>
-      <select name="group[product]" >
-	<option value="" ></option>
-	<option value="product" <?php echo (isset($group['product']) && $group['product'] == 'product') ? 'selected="selected"' : ''; ?> >Produit</option>
-      </select>
-      <label>Magasin</label>
-      <select name="group[shop]">
-	<option value="" ></option>
-	<option value="shop" <?php echo (isset($group['shop']) && $group['shop'] == 'shop') ? 'selected="selected"' : ''; ?> >magasin</option>
-      </select>
-    </fieldset>
-    <fieldset class="alert alert-info">
-      <legend>Filtrer par</legend>
-      <div>Le filtrage permet de limiter les données séléctionnées. Concentrez vous par exemple sur une plage de date</div>
-      <label>Début</label><input type="text" name="dateStart" id="dateStart" value="<?php echo $dateStart ?>" class="datepicker" />
-      <label>Fin</label><input type="text" name="dateEnd" id="dateEnd" value="<?php echo $dateEnd ?>" class="datepicker" />
-    </fieldset>
+	</fieldset>
+	<fieldset class="alert alert-info">
+	    <legend >filtrer par</legend>
+	    <div>Le filtrage permet de limiter les données séléctionnées. Concentrez vous sur un magasin particulier, un type de produit</div>
+	      <?php echo $this->Form->input('conditions.shop', array('label'=>'Magasin', 'options'=>(array(''=>'') + $sales['shops']))); ?>
+	      <?php echo $this->Form->input('conditions.product', array('label'=>'Produit', 'options'=>(array(''=>'') + $sales['productsList']))); ?>
+	    <?php echo $this->Form->input('conditions.dateStart', array('label'=>'Début', 'class'=>'datepicker')); ?>
+	    <?php echo $this->Form->input('conditions.dateEnd', array('label'=>'Fin', 'class'=>'datepicker')); ?>
+	
+	</fieldset>
 
-    <fieldset class="alert alert-info">
+<fieldset class="alert alert-info">
       <label>Approximation</label>
-<div>Afin de lisser les courbes, calculer une moyenne, donner une tendance sur le long terme, utilisez l'approximation. <div class="alert alert-danger">Attention! Une approximation ne reflète parfois pas la réalité! Utilisez les cases a cocher pour comparer le résultat avec les vraies données</div></div>
-      <select name="approximationOrder" >
-	<option value="" ></option>
-	<option value="1" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '1') ? 'selected="selected"' : ''; ?>  >Constante (moyenne)</option>
-	<option value="2" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '2') ? 'selected="selected"' : ''; ?>  >Linéaire (droite)</option>
-	<option value="3" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '3') ? 'selected="selected"' : ''; ?>  >Parabolique</option>
-	<option value="4" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == '4') ? 'selected="selected"' : ''; ?>  >Quadratique</option>
-	<option value="<?php echo Configure::read('Approximation.order') ?>" <?php echo (isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] == Configure::read('Approximation.order')) ? 'selected="selected"' : ''; ?>  >Maximum</option>
-      </select>
+		<div>Afin de lisser les courbes, calculer une moyenne, donner une tendance sur le long terme, utilisez l'approximation. <div class="alert alert-danger">Attention! Une approximation ne reflète parfois pas la réalité! Utilisez les cases a cocher pour comparer le résultat avec les vraies données</div></div>
+		<?php echo $this->Form->input('approximation.order', array('label'=>'Approximation', 'options'=>(array(
+												      '1'=>'Constante (moyenne)',
+												      '2'=>'Linéaire (droite)',
+												      '3'=>'Parabolique',
+												      '4'=>'Quadratique',
+												      Configure::read('Approximation.order') => 'Maximum',
+												      )))); ?>
     </fieldset>
-    <input type="submit" class="search btn" value="" />
-  </form>
-</div>
+
+<?php echo $this->Form->end(__('Submit')); ?>
 <?php
 echo $this->element('Sales/stats', array('sales'=>$sales)); 
 

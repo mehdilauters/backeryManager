@@ -95,7 +95,6 @@ class ProductsController extends AppController {
  * @return void
  */
   public function add() {
-	debug('nazdar iam not connected');
     if ($this->request->is('post')) {
       $this->Product->create();
       debug($this->request->data);

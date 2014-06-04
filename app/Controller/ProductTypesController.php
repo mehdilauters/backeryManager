@@ -26,7 +26,7 @@ class ProductTypesController extends AppController {
     }
 	else
 	{
-		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'productType'=>'productType'))));
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'productType'=>true, 'shop'=>false))));
 		$this->set('resultsEntries',$res);
 	}
     
@@ -72,7 +72,7 @@ class ProductTypesController extends AppController {
     }
 	else
 	{
-		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array('productType'=>$id), 'group' => array('time'=>'week', 'shop'=>'shop'))));
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array('productType'=>$id), 'group' => array('time'=>'week', 'shop'=>true, 'productType'=>false))));
 		$this->set('resultsEntries',$res);
 	}
 

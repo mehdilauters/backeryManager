@@ -72,31 +72,51 @@ class SalesController extends AppController {
       $dateStart = new DateTime();
       $dateStart->modify('-15 day');
       $dateStart = $dateStart->format('d/m/Y');
-      if(isset($this->request->data['dateStart']))
+      if(isset($this->request->data['conditions']['dateStart']) && $this->request->data['conditions']['dateStart'] != '')
       {
-        $dateStart = $this->request->data['dateStart'];
+        $dateStart = $this->request->data['conditions']['dateStart'];
+      }
+      else
+      {
+	  $this->request->data['conditions']['dateStart'] = $dateStart;
       }
 
       $dateEnd = date('d/m/Y');     
-      if(isset($this->request->data['dateEnd']))
+      if(isset($this->request->data['conditions']['dateEnd']) && $this->request->data['conditions']['dateEnd'] != '')
       {
-        $dateEnd = $this->request->data['dateEnd'];
+        $dateEnd = $this->request->data['conditions']['dateEnd'];
+      }
+      else
+      {
+	  $this->request->data['conditions']['dateStop'] = $dateEnd;
       }
 
 
       $dateStart = $this->Functions->viewDateToDateTime($dateStart);
       $dateEnd = $this->Functions->viewDateToDateTime($dateEnd);
 
-  if($dateEnd < $dateStart)
-  {
-    throw new NotFoundException(__('Invalid dates '.$dateStart.'===='.$dateEnd));
-  }
+      if($dateEnd < $dateStart)
+      {
+	$this->Session->setFlash(__('Dates invalides'),'flash/fail');
+	$this->redirect(array('action' => 'stats'));
+      }
 
 
       App::uses('CakeTime', 'Utility');
       $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Sale.date');
 
       $conditions[] = $dateSelect;
+
+      if(isset($this->request->data['conditions']['shop']) && $this->request->data['conditions']['shop'] != '')
+      {
+        $conditions['Sale.shop_id'] = $this->request->data['conditions']['shop'];
+      }
+
+      if(isset($this->request->data['conditions']['product']) && $this->request->data['conditions']['product'] != '')
+      {
+        $conditions['Sale.product_id'] = $this->request->data['conditions']['product'];
+      }
+
 	}
 	if(count($group) == 0)
 	{
@@ -107,8 +127,8 @@ class SalesController extends AppController {
 		else
 		{
 		    $group['time'] = 'day';
-		    $group['shop'] = 'shop';
-		    $group['product'] = 'product';
+		    $group['shop'] = 1;
+		    $group['product'] = 1;
 		    $this->request->data['group'] = $group;
 		}
 	}
@@ -164,7 +184,6 @@ class SalesController extends AppController {
       {
 	$groupBy[] = 'Sale.date, Sale.product_id, Sale.shop_id';
       }
-	  
 	  // SELECT SUM(IF(myColumn IS NULL, 0, myColumn))
     $this->Sale->contain('Product.ProductType');
     $sales = $this->Sale->find('all', array('order'=>array('Sale.date'),
@@ -190,9 +209,13 @@ class SalesController extends AppController {
 	$initDate = NULL;
 
       $order = Configure::read('Approximation.order');
-      if(isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] != '')
+      if(isset($this->request->data['approximation']['order']))
       {
-        $order = $this->request->data['approximationOrder'];
+        $order = $this->request->data['approximation']['order'];
+      }
+      else
+      {
+	$order = $this->request->data['approximation']['order'] = $order;
       }
 	// add data to regression
 	$nbSales = count($sales);
@@ -322,12 +345,13 @@ class SalesController extends AppController {
     $this->Sale->Product->contain('ProductType');
     $products = $this->Sale->Product->find('all');
     $products = Set::combine($products, '{n}.Product.id', '{n}');
+    $productsList = $this->Sale->Product->find('list');
     $shops = $this->Sale->Shop->find('list');
 
     if (!empty($this->request->params['requested'])) {
             return compact('sales','products', 'shops');
         }
-    $this->set('sales', array('sales' => $sales, 'products'=>$products, 'shops'=>$shops));
+    $this->set('sales', compact('sales', 'products', 'shops', 'productsList'));
 
 $dateStart = $dateStart->format('d/m/Y');
 $dateEnd = $dateEnd->format('d/m/Y');

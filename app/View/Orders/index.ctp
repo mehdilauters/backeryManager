@@ -5,7 +5,7 @@
 	<fieldset class="alert alert-info">
 		<legend><?php echo __('Filtrer par status'); ?></legend>
 		<div>Séléctionnez ici les commandes dont le status vous intéresse</div>
-	<?php echo $this->Form->input('statusSelect',array('options'=>array(''=>'', 'reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée'), 'label'=>'Status')); ?>
+	<?php echo $this->Form->input('statusSelect',array('options'=>array('all'=>'', 'reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée'), 'label'=>'Status')); ?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 <script>
@@ -60,7 +60,7 @@
 			}
 		
 		?>&nbsp;</td>
-		<td><?php echo h($order['Order']['discount']); ?>&nbsp;</td>
+		<td><?php echo h($order['Order']['discount']); ?>%&nbsp;</td>
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('class'=>'icon','alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>

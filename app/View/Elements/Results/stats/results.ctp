@@ -10,33 +10,32 @@
 		$config = $defaultConfig;
 	}
 	
-	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
+// 	$results['group'] = array('time' => '', 'shop'=>'', 'productType'=>'');
 	$fields = array('date'=>true, 'shop'=>true, 'comment'=> false);
 	
   
   
-  
-    if($group['shop'] != '')
+    if($results['group']['shop'])
   {
-    if( $group['time'] == '' )
+    if( $results['group']['time'] == '' )
     {
       $fields['date'] = false;
     }
-	 if( $group['productType'] == '' )
+	 if( !$results['group']['productType'])
     {
       $fields['productType'] = false;
     }
   }
   
-  if($group['time'] != '')
+  if($results['group']['time'] != '')
   {
-    if( $group['shop'] == '' )
+    if( !$results['group']['shop'] )
     {
       $fields['shop'] = false;
     }
   }
   
-  if($group['time'] == 'day')
+  if($results['group']['time'] == 'day')
   {
 	$fields['comment'] = true;
   }
@@ -55,7 +54,7 @@
 ?>
 <div>
 	<div>
-		<h3>Historique comptable par <?php echo $titleDate[$group['time']] ?></h3>
+		<h3>Historique comptable par <?php echo $titleDate[$results['group']['time']] ?></h3>
 		<div id="resultsChart" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 		<div class="control"></div>
 	</div>
@@ -71,6 +70,10 @@
 					<td class="label_curve_Shop<?php echo  $shopId; ?>"  ><?php echo  $shopName; ?> €</td>
 					<td class="label_curve_ShopApprox<?php echo  $shopId; ?>" ><?php echo  $shopName; ?> (approximation) €</td>
 				<?php endforeach;
+				else: ?>
+					<td class="label_curve_Shop<?php echo  0; ?>"  ><?php echo  'Tous'; ?> €</td>
+					<td class="label_curve_ShopApprox<?php echo  0; ?>" ><?php echo  'Tous'; ?> (approximation) €</td>
+				  <?php
 					endif;
 					?>
 			</tr>
@@ -81,7 +84,7 @@
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th>
 				<th>date</th>
 			<?php } ?>
-			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th><th class="shop" >Approximation</th><?php } ?>
+			<th class="shop" >Magasin</th><th class="shop" >Approximation</th>
 			<th class="rowTotal" >Total</th>
 			<th class="cash" >Especes %</th>
 			<th class="check" >Cheques %</th>
@@ -98,7 +101,7 @@
 			  <?php if($fields['date']) { ?>
 				<td class="date" style="display:none" >
 					<?php 
-						switch($group['time'])
+						switch($results['group']['time'])
 						{	
 							case 'weekday':
 								$dateDisplay = $date->format('d/m/Y'); 
@@ -128,7 +131,7 @@
 				</td>
 				<td class="humanDate" >
 					<?php 
-						switch($group['time'])
+						switch($results['group']['time'])
 						{	
 							case 'weekday':
 								$dateDisplay = $this->Dates->getJourFr($date->format('w'));
@@ -153,13 +156,9 @@
 					?>
 				</td>
 			<?php } ?>
-			  <?php if($fields['shop']) { ?>
-				<td class="shop" ><?php echo  $result['Shop']['name']; ?></td>
-				<td class="shop curve_totalApprox curve_ShopApprox<?php echo  $result['Shop']['id']; ?>" ><?php 
-					echo round($result[0]['approximation'],2);
-					?></td>
-			<?php } ?>
-			  <td class="rowTotal noDisplay curve_total curve_Shop<?php echo  $result['Shop']['id']; ?>"><?php echo round($total,2) ?></td>
+				<td class="shop" ><?php if($fields['shop']) {echo  $result['Shop']['name'];} else { echo 'Tous' ;} ?></td>
+				<td class="shop curve_totalApprox curve_ShopApprox<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0; } ?>" ><?php echo round($result[0]['approximation'],2); ?></td>
+			  <td class="rowTotal noDisplay curve_total curve_Shop<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>"><?php echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
 			  <td class="card"><?php if($total != 0){ echo round($result[0]['card'] / $total *100, 2); } ?></td>

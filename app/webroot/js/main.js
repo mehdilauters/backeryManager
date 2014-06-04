@@ -19,6 +19,16 @@ function parseDate(input) {
     return new Date(parts[2], month, parts[0]); // months are 0-based
 }
 
+
+    function imageUpdate()
+    {
+	$('.formPhotoPreview').each(function (){
+	    var inputId = $(this).attr('id');
+	    $('#'+inputId+'_preview').attr('src', webroot+ 'photos/download/'+ $('#'+ inputId).val() );    
+	  });
+    }
+
+
 $(document).ready(function(){
     $('.hideJs').each(function(index, item){
 	$(item).hide();
@@ -66,6 +76,12 @@ $(document).ready(function(){
 				]*/
 			});
     
+    
+    
+    $('.formPhotoPreview').change(function() {
+	  imageUpdate();
+	});
+	imageUpdate();
     
     
   }); 

@@ -71,7 +71,6 @@ class ResultsController extends AppController {
 
     $groupBy = array();
 	$nbDaysByInterval = 1;
-	
 	if(count($group) == 0)
 	{
 		if(isset($this->request->data['group']))
@@ -81,8 +80,9 @@ class ResultsController extends AppController {
 		else
 		{
 		  $group['time'] = 'month';
-		  $group['shop'] = 'shop';
-		  $group['productType'] = 'productType';
+		  $group['shop'] = true;
+		  $group['productType'] = true;
+		  $this->request->data['group'] = $group;
 		}
 	}
 	
@@ -118,18 +118,8 @@ class ResultsController extends AppController {
 		}
 		
 
-     if(isset($group['shop']))
-		{
-		  switch($group['shop'])
-			  {
-			case 'shop':
-			 $groupBy[] = 'Result.shop_id';
-			break;
-			default:
-		  //     $groupBy[] = 'Sale.shop_id';
-			break;
-		  }
-		}
+     if(isset($group['shop']) && $group['shop'])
+	    $groupBy[] = 'Result.shop_id';
 	}
 
     $groupByEntries = str_replace('Result', 'ResultsEntry',$groupBy);
@@ -138,17 +128,9 @@ class ResultsController extends AppController {
 		$groupBy[] = 'Result.date, Result.shop_id';
       }
 	  
-	  if(isset($group['productType']))
+	  if(isset($group['productType']) && $group['productType'])
 	  {
-		switch($group['productType'])
-		  {
-			case 'productType':
-			 $groupByEntries[] = 'ResultsEntry.product_types_id';
-			break;
-			default:
-		       //$groupByEntries[] = 'ResultsEntry.product_types_id';
-			break;
-		  }
+	      $groupByEntries[] = 'ResultsEntry.product_types_id';
 	  }
 
 	  if(count($groupByEntries) == 0)
@@ -184,8 +166,32 @@ class ResultsController extends AppController {
 		{
 			$conditions['ResultsEntry'] += $_conditions['ResultsEntry'];
 		}
+		
+		if(isset($_conditions['dateStart']) && $_conditions['dateStart'] != '')
+		{
+		          $dateStart = $this->Functions->viewDateToDateTime($_conditions['dateStart']);
+			  if(!isset($_conditions['dateEnd']) || $_conditions['dateEnd'] == '')
+			  {
+			      $this->Session->setFlash(__('Date de fin invalide'),'flash/fail');
+			      $this->redirect(array('action' => 'stats'));
+			  }
+			  $dateEnd = $this->Functions->viewDateToDateTime($_conditions['dateEnd']);
+
+			  if($dateEnd < $dateStart)
+			  {
+			      $this->Session->setFlash(__('Date de fin avant date de debut'),'flash/fail');
+			      $this->redirect(array('action' => 'stats'));
+			  }
+
+
+			      App::uses('CakeTime', 'Utility');
+			      $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Result.date');
+			      $conditions['Result'][] = $dateSelect;
+
+ 			      $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'ResultEntry.date');
+ 			      $conditions['ResultsEntry'][] = $dateSelect;
+		}
 	}
-	  
     $this->Result->contain('Shop');
      $results = $this->Result->find('all', array('order'=>array('Result.date'),
               'group' => $groupBy,
@@ -206,9 +212,13 @@ class ResultsController extends AppController {
 	$initDate = array();
 	
       $order = Configure::read('Approximation.order');
-      if(isset($this->request->data['approximationOrder']) && $this->request->data['approximationOrder'] != '')
+      if(isset($this->request->data['approximation']['order']))
       {
-        $order = $this->request->data['approximationOrder'];
+        $order = $this->request->data['approximation']['order'];
+      }
+      else
+      {
+	$this->request->data['approximation']['order'] = $order;
       }
 
 	// add data to regression
@@ -287,7 +297,6 @@ class ResultsController extends AppController {
 		}		
 	}
 	
-	
     $this->Result->ResultsEntry->contain('Shop', 'ProductTypes');
      $resultsEntries = $this->Result->ResultsEntry->find('all', array('order'=>array('ResultsEntry.date'),
               'group' => $groupByEntries,
@@ -320,7 +329,7 @@ class ResultsController extends AppController {
 		}
 		if(!isset($regressions[$productTypeId][$shopId]))
 		{
-			$regressions[$productTypeId][$shopId] = new PolynomialRegression( Configure::read('Approximation.order') );
+			$regressions[$productTypeId][$shopId] = new PolynomialRegression( $order );
 			$initDate[$productTypeId][$shopId] = new DateTime($resEntry['ResultsEntry']['date']);
 			// debug($regressions);
 		}
@@ -407,12 +416,14 @@ class ResultsController extends AppController {
 	// $products = Set::combine($products, '{n}.Product.id', '{n}');
     $shops = $this->Result->Shop->find('list');
     $productTypes = $this->ProductType->find('list');
+
+$datas = compact('group','results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes');
+
 	if (!empty($this->request->params['requested'])) {
-            return compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes');
+            return $datas;
         }
 
-    $this->set('group', $group);
-    $this->set('results', compact('results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes'));
+    $this->set('results', $datas);
 
   }
 

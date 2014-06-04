@@ -44,18 +44,23 @@ class PhotosController extends AppController {
 			$path='preview/';
 		else
 			$path='normal/';
-		
 		$photo=$this->Photo->findById($id);
 		$path_parts = pathinfo($photo['Photo']['path']);
  		$params = array(
               'id' => $photo['Photo']['path'],
-              'name' => $photo['Media']['title'],
+              'name' => $photo['Photo']['name'],
               'download' => true,
               'extension' => $path_parts['extension'],
               'path' => APP.'webroot/img/photos/'.$path
        );
        $this->set($params);
-    $modified = filemtime(APP.'webroot/img/photos/'.$path);
+    $filePath = APP.'webroot/img/photos/'.$path.$photo['Photo']['path'];
+    if( ! file_exists($filePath) )
+    {
+	$this->log('File '.$filePath.' doesn\'t exists for photo '.$photo['Photo']['id'], 'debug');
+	throw new NotFoundException(__('Invalid file'));
+    }
+    $modified = filemtime($filePath);
     $this->response->modified($modified);
     if ($this->response->checkNotModified($this->request))
     {
@@ -175,6 +180,7 @@ class PhotosController extends AppController {
           $this->Photo->invalidateField('upload','Erreur lors de l\'enregistrement du fichier');
         }
         $this->request->data['Photo']['path'] = $imgName;
+	$this->request->data['Photo']['user_id'] = $this->Auth->user('id');
 
 	$this->Photo->create();
 	if ( $this->Photo->save($this->request->data)) {
@@ -234,8 +240,6 @@ class PhotosController extends AppController {
       }
       } 
     }
-    $media = $this->Photo->Media->find('list');
-    $this->set(compact('media'));
   }
 
 /**
