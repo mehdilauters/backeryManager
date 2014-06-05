@@ -24,6 +24,8 @@ foreach($shops as $shopId => $shopName)
   
   //activate protection
 	$this->PhpExcel->getActiveSheet()->getProtection()->setSheet(true);
+	$this->PhpExcel->getActiveSheet()->getProtection()->setFormatColumns(false);
+    $this->PhpExcel->getActiveSheet()->getProtection()->setFormatCells(false);
   
   
   
@@ -43,20 +45,20 @@ foreach($shops as $shopId => $shopName)
     }
 	$columnLetter = $alphabet[count($table) -1 ];
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('A2:A'.Configure::read('Excel.maxNbRow'))
+            ->getStyle('A2:A'.Configure::read('Settings.Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 	
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('D2:'.$columnLetter.Configure::read('Excel.maxNbRow'))
+            ->getStyle('D2:'.$columnLetter.Configure::read('Settings.Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 	
 	// set date format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('A2:A'.Configure::read('Excel.maxNbRow'))
+    ->getStyle('A2:A'.Configure::read('Settings.Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY
@@ -64,28 +66,28 @@ foreach($shops as $shopId => $shopName)
 	
 	// set € format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('B2:B'.Configure::read('Excel.maxNbRow'))
+    ->getStyle('B2:B'.Configure::read('Settings.Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
     );
 	
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('D2:F'.Configure::read('Excel.maxNbRow'))
+    ->getStyle('D2:F'.Configure::read('Settings.Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
     );
 	
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('H2:'.$columnLetter.Configure::read('Excel.maxNbRow'))
+    ->getStyle('H2:'.$columnLetter.Configure::read('Settings.Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
     );
 	
 	
-	for($i = 2; $i <= Configure::read('Excel.maxNbRow'); $i++)
+	for($i = 2; $i <= Configure::read('Settings.Excel.maxNbRow'); $i++)
 	{
 
         $this->PhpExcel->getActiveSheet()->setCellValue(

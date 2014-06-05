@@ -79,7 +79,7 @@ class Photo extends AppModel {
   function deleteFile()
   {
 
-      $photosPath = Configure::read('Medias.Photos.path');
+      $photosPath = Configure::read('Settings.Medias.Photos.path');
     $filename = $this->data['Photo']['path'];
     if(file_exists ( $photosPath.'normal/'.$filename ))
       unlink($photosPath.'normal/'.$filename);

@@ -122,12 +122,12 @@ class PhotosController extends AppController {
     {
         $filename = basename($filePath);
     }
-      $photoPath =   Configure::read('Medias.Photos.path');
-      $xPreview = Configure::read('Medias.Photos.xPreview');  
-      $yPreview = Configure::read('Medias.Photos.yPreview');
+      $photoPath =   Configure::read('Settings.Medias.Photos.path');
+      $xPreview = Configure::read('Settings.Medias.Photos.xPreview');  
+      $yPreview = Configure::read('Settings.Medias.Photos.yPreview');
     
-      $xNormal = Configure::read('Medias.Photos.xNormal');  
-      $yNormal = Configure::read('Medias.Photos.yNormal');
+      $xNormal = Configure::read('Settings.Medias.Photos.xNormal');  
+      $yNormal = Configure::read('Settings.Medias.Photos.yNormal');
     
     $path_parts = pathinfo($filename);
     $filename = $this->Photo->getRandomName().'.'.strtolower($path_parts['extension']);

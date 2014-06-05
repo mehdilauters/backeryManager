@@ -89,7 +89,7 @@ echo $this->Html->css(
   	<header>
 	  	<div class="row">
 			  <div class="col-md-8">
-			  <?php if(Configure::read('demo.active')) { ?>
+			  <?php if(Configure::read('Settings.demo.active')) { ?>
 			      <div class="demoWarning" ><div class="title" >Attention, ceci est une version de démonstration</div>Les adresses, numéros de téléphones, et noms d'utilisateurs sont volontairement faux. Les données de ventes et de gestion sont des simulations, et peuvent donc amener à des incohérences.</div>
 			  <?php } ?>
 			  </div>

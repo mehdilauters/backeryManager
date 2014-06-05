@@ -72,7 +72,7 @@ class ConfigController extends AppController {
   public function demoBaseSql()
   {
 		$sinCoef = 1;
-	$tablePrefix = Configure::read('demo.dbPrefix');
+	$tablePrefix = Configure::read('Settings.demo.dbPrefix');
 	$sin = 'abs('.$sinCoef.' * sin(Sale.id) )';
 
 	$sale = $this->Sale->find('first', array(
@@ -265,7 +265,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		 $sql .= 'update '.$tablePrefix.'companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\', title=\'Démo\';'."\n";
 
 		// add demo user
-		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot) values (\''.Configure::read('demo.User.email').'\', \'demo\', \''.AuthComponent::password(Configure::read('demo.User.password'))."', true);\n";
+		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot) values (\''.Configure::read('Settings.demo.User.email').'\', \'demo\', \''.AuthComponent::password(Configure::read('demo.User.password'))."', true);\n";
 
 		
 		return $sql;
@@ -384,9 +384,9 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 	{
 		$version['DatabaseVersion']['version'] = -1;
 	}
-	if($version['DatabaseVersion']['version'] < Configure::read('databaseVersion'))
+	if($version['DatabaseVersion']['version'] < Configure::read('Settings.databaseVersion'))
 	{
-		$this->log('upgrade db from version '.$version['DatabaseVersion']['version'].' to '.Configure::read('databaseVersion'), 'debug');
+		$this->log('upgrade db from version '.$version['DatabaseVersion']['version'].' to '.Configure::read('Settings.databaseVersion'), 'debug');
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= '
@@ -399,7 +399,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);
 		
-		$version['DatabaseVersion']['version'] = Configure::read('databaseVersion');
+		$version['DatabaseVersion']['version'] = Configure::read('Settings.databaseVersion');
 		$this->DatabaseVersion->save($version);
 		if($redirect)
 		{
@@ -448,7 +448,7 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
 	$tablePrefix = '';
 	if($demo)
 	{
-		$tablePrefix = Configure::read('demo.dbPrefix');
+		$tablePrefix = Configure::read('Settings.demo.dbPrefix');
 	}
 
     // Run through all the tables
@@ -508,7 +508,7 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
     $fileName = $databaseName . '-backup-' . date('Y-m-d') . '.sql';
 	if(!$download)
 	{
-		file_put_contents ( Configure::read('dbBackupPath').$fileName , $return );
+		file_put_contents ( Configure::read('Settings.dbBackupPath').$fileName , $return );
 	}
 	else
 	{

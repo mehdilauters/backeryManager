@@ -203,7 +203,7 @@ class UsersController extends AppController {
    public function beforeFilter()
   {
       parent::beforeFilter();
-      if( Configure::read('Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')))
+      if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')))
       {
 	  	if(!$this->request->is('ssl') && $this->request->params['action'] == 'login')
 		{

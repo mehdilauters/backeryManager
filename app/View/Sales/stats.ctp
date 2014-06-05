@@ -35,7 +35,7 @@
 												      '2'=>'Linéaire (droite)',
 												      '3'=>'Parabolique',
 												      '4'=>'Quadratique',
-												      Configure::read('Approximation.order') => 'Maximum',
+												      Configure::read('Settings.Approximation.order') => 'Maximum',
 												      )))); ?>
     </fieldset>
 

@@ -54,9 +54,9 @@ $sheetId = 0;
   $this->PhpExcel->getActiveSheet()->freezePane('B2');
   
   //activate protection
-    $this->PhpExcel->getActiveSheet()->getProtection()->setSheet(true);
-    $this->PhpExcel->getActiveSheet()->getProtection()->setFormatColumns(true);
-    $this->PhpExcel->getActiveSheet()->getProtection()->setFormatCells(true);
+     $this->PhpExcel->getActiveSheet()->getProtection()->setSheet(true);
+     $this->PhpExcel->getActiveSheet()->getProtection()->setFormatColumns(false);
+     $this->PhpExcel->getActiveSheet()->getProtection()->setFormatCells(false);
   
   
   // define table cells
@@ -72,22 +72,32 @@ $sheetId = 0;
 	
 	$this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
 	
+	$alphabet =   $this->MyHtml->getAlphabet();
+	$nbCols = count($table);
+	for($i = 0; $i < $nbCols; $i++)
+	{
+		// $this->PhpExcel->getActiveSheet()->getColumnDimension($alphabet[$i])->setAutoSize(true);
+		$this->PhpExcel->getActiveSheet()->getColumnDimension($alphabet[$i])->setWidth(100);
+	}
+	
+	// freeze first row/column
+  $this->PhpExcel->getActiveSheet()->freezePane('B2');
 	
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('A2:C'.Configure::read('Excel.maxNbRow'))
+            ->getStyle('A2:C'.Configure::read('Settings.Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 
 
 	$this->PhpExcel->getActiveSheet()
-            ->getStyle('E2:G'.Configure::read('Excel.maxNbRow'))
+            ->getStyle('E2:G'.Configure::read('Settings.Excel.maxNbRow'))
             ->getProtection()->setLocked(
                 PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
             );
 
 			
-	for($i = 2; $i < Configure::read('Excel.maxNbRow'); $i++)
+	for($i = 2; $i < Configure::read('Settings.Excel.maxNbRow'); $i++)
 	{
 		$objValidation = $this->PhpExcel->getActiveSheet()->getCell('B'.$i)->getDataValidation();
 		$objValidation->setType( PHPExcel_Cell_DataValidation::TYPE_LIST );
@@ -123,10 +133,19 @@ $sheetId = 0;
         );
 	}
 
+	
+	// $objConditional = new PHPExcel_Style_Conditional();
+	// $objConditional->setConditionType(PHPExcel_Style_Conditional::CONDITION_CELLIS);
+	// $objConditional->setOperatorType(PHPExcel_Style_Conditional::OPERATOR_EQUAL);
+	// $objConditional->addCondition('D2');
+	// $objConditional->getStyle()->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_YELLOW);
+	// $objConditional->getStyle()->getFont()->setBold(true);
+	// $this->PhpExcel->getActiveSheet()->getStyle('B2')->setConditionalStyles(array($objConditional));
+	//$this->PhpExcel->getActiveSheet()->duplicateStyle( $this->PhpExcel->getActiveSheet()->getStyle('B2'), 'B3:B7' );
 
     // set date format
     $this->PhpExcel->getActiveSheet()
-    ->getStyle('A2:A'.Configure::read('Excel.maxNbRow'))
+    ->getStyle('A2:A'.Configure::read('Settings.Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY
@@ -134,7 +153,7 @@ $sheetId = 0;
 
 	// set format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('D2:C'.Configure::read('Excel.maxNbRow'))
+    ->getStyle('D2:C'.Configure::read('Settings.Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
@@ -142,7 +161,7 @@ $sheetId = 0;
 
 	// set format
 	$this->PhpExcel->getActiveSheet()
-    ->getStyle('E2:G'.Configure::read('Excel.maxNbRow'))
+    ->getStyle('E2:G'.Configure::read('Settings.Excel.maxNbRow'))
     ->getNumberFormat()
     ->setFormatCode(
         PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1

@@ -207,11 +207,11 @@ class ResultsController extends AppController {
                     ),
               ));
 	require_once(APP . 'Vendor' . DS . 'PolynomialRegression.php');
-	bcscale( Configure::read('Approximation.bcscale') );
+	bcscale( Configure::read('Settings.Approximation.bcscale') );
 	$regressions = array();
 	$initDate = array();
 	
-      $order = Configure::read('Approximation.order');
+      $order = Configure::read('Settings.Approximation.order');
       if(isset($this->request->data['approximation']['order']))
       {
         $order = $this->request->data['approximation']['order'];
@@ -264,7 +264,7 @@ class ResultsController extends AppController {
 	}
 	
 	// extrapolate to future
-	$maxX = Configure::read('Approximation.nbProjectionsPoint');
+	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
 	for($i = 0; $i < $maxX; $i++)
 	{
 		$res = array(
@@ -372,7 +372,7 @@ class ResultsController extends AppController {
 	
 	
 	// extrapolate to future
-	$maxX = Configure::read('Approximation.nbProjectionsPoint');
+	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
 	for($i = 0; $i < $maxX; $i++)
 	{
 		$resEntry = array(
@@ -618,7 +618,7 @@ public function getData($dateStart = '', $dateEnd = '')
 	      $maxColumn = $alphabet[$k-2];
 	      
 	      // foreach data row of the sheet
-	      for($j=2; $j< Configure::read('Excel.maxNbRow'); $j++)
+	      for($j=2; $j< Configure::read('Settings.Excel.maxNbRow'); $j++)
 	      {
 		// get data
 		$range = 'A'.$j.':'.$maxColumn.$j;

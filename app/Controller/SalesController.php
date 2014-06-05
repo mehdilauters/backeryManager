@@ -204,11 +204,11 @@ class SalesController extends AppController {
 						
 						
 	require_once(APP . 'Vendor' . DS . 'PolynomialRegression.php');
-	bcscale( Configure::read('Approximation.bcscale') );
+	bcscale( Configure::read('Settings.Approximation.bcscale') );
 	$regressions = array();
 	$initDate = NULL;
 
-      $order = Configure::read('Approximation.order');
+      $order = Configure::read('Settings.Approximation.order');
       if(isset($this->request->data['approximation']['order']))
       {
         $order = $this->request->data['approximation']['order'];
@@ -290,7 +290,7 @@ class SalesController extends AppController {
 		$lastDate = $curDate;
 	}	
  // extrapolate to future
-	$maxX = Configure::read('Approximation.nbProjectionsPoint');
+	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
 	for($i = 0; $i < $maxX; $i++)
 	{
 		$res = array(
@@ -451,7 +451,7 @@ public function results()
 	    $excel->setActiveSheetIndex($dataSheetId);
 	    $maxColumn = $alphabet[7];
 	    // foreach data row of the sheet
-	      for($j=2; $j< Configure::read('Excel.maxNbRow'); $j++)
+	      for($j=2; $j< Configure::read('Settings.Excel.maxNbRow'); $j++)
 	      {
 		// get data
 		$range = 'A'.$j.':'.$maxColumn.$j;
@@ -683,6 +683,7 @@ public function results()
 
 
 public function beforeFilter() {
+	debug(Configure::read());
 	parent::beforeFilter();
         // $this->Security->requirePost('stats');
     }

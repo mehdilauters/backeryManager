@@ -12,7 +12,7 @@ class RemoteDB extends AppModel {
 	
 	public function login($login, $password)
 	{
-		$loginUrl = Configure::read('dbBackupUrl').'users/login';
+		$loginUrl = Configure::read('Settings.dbBackupUrl').'users/login';
 		$postParams = 'data[User][email]='.$login.'&data[User][password]='.$password;
 		
 		$this->curlHandler = curl_init();
@@ -58,7 +58,7 @@ class RemoteDB extends AppModel {
 		{
 			$demoString = '0';
 		}
-		$backupUrl = Configure::read('dbBackupUrl').'config/dbBackup/'.$demoString.'/1';
+		$backupUrl = Configure::read('Settings.dbBackupUrl').'config/dbBackup/'.$demoString.'/1';
 		debug($backupUrl);
 		curl_setopt($this->curlHandler, CURLOPT_URL, $backupUrl);
 		curl_setopt($this->curlHandler, CURLOPT_RETURNTRANSFER, 1);
@@ -71,7 +71,7 @@ class RemoteDB extends AppModel {
 	
 	public function applyToDB($sql)
 	{
-	    if(Configure::read('demo.active'))
+	    if(Configure::read('Settings.demo.active'))
 	    {
 		App::uses('ConnectionManager', 'Model'); 
 		$db = ConnectionManager::getDataSource('default');

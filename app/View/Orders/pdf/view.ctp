@@ -53,7 +53,7 @@
 </div>
 <?php 
   $class = '';
-  if(count($order['OrderedItem']) > Configure::read('Order.pageBreakItemsMax') )
+  if(count($order['OrderedItem']) > Configure::read('Settings.Order.pageBreakItemsMax') )
   {
     $class = 'page-break-before:always';
   }

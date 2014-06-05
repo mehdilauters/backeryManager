@@ -93,7 +93,7 @@ class AppController extends Controller {
     App::uses('File', 'Utility');
 
     $backupExists = false;
-    $dirPath = Configure::read('dbBackupPath');
+    $dirPath = Configure::read('Settings.dbBackupPath');
     $dir = new Folder($dirPath);
     $files = $dir->find('.*backup.*\.sql', true);
     foreach( $files as $file )
@@ -122,7 +122,7 @@ class AppController extends Controller {
     App::uses('File', 'Utility');
 
     $backupExists = false;
-    $dirPath = Configure::read('excelExportPath');
+    $dirPath = Configure::read('Settings.excelExportPath');
     $dir = new Folder($dirPath);
     $files = $dir->find('.*backup.*\.xls', true);
     $d = new DateTime();
@@ -192,10 +192,10 @@ class AppController extends Controller {
 	}
 	
 	$normalAddr = '';
-	if( Configure::read('email.debug.status') )
+	if( Configure::read('Settings.email.debug.status') )
 	{
 		$normalAddr = ' (debug dest : '.$emailAddr.')';
-		$emailAddr = Configure::read('email.debug.email');
+		$emailAddr = Configure::read('Settings.email.debug.email');
 	}
 	
     $email = new CakeEmail('default');
@@ -203,9 +203,9 @@ class AppController extends Controller {
 	{
 		$email->attachments($config['attachment']);
 	}
-	debug(array(Configure::read('email.from.email') => Configure::read('email.from.name')));
-    $email->from(array(Configure::read('email.from.email') => Configure::read('email.from.name')))
-	->sender(Configure::read('email.from.email'), Configure::read('email.from.name'))
+	debug(array(Configure::read('Settings.email.from.email') => Configure::read('email.from.name')));
+    $email->from(array(Configure::read('Settings.email.from.email') => Configure::read('email.from.name')))
+	->sender(Configure::read('Settings.email.from.email'), Configure::read('email.from.name'))
         ->to($emailAddr)
         ->template($config['view'], 'default')
         ->viewVars($config['data'])
@@ -357,7 +357,7 @@ public function getFunctionText($coefficients)
 	$this->Auth->allow();
    }
 
-  if( Configure::read('Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
+  if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
   {
     if($this->Auth->user('isRoot'))
     {
