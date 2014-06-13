@@ -22,7 +22,7 @@ public function getOptionParser() {
     public function main() {
         $this->out('Import remote database');
 
-	if(!Configure::read('demo.active'))
+	if(!Configure::read('Settings.demo.active'))
 	{
 	  $this->out('######## This is not a demo version! #########');
 	  return;

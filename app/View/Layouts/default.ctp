@@ -85,7 +85,6 @@ echo $this->Html->css(
 </head>
 <body>
   <div class="container">
-  	
   	<header>
 	  	<div class="row">
 			  <div class="col-md-8">

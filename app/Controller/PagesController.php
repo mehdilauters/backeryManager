@@ -122,7 +122,7 @@ class PagesController extends AppController {
     $this->set(compact('page', 'subpage', 'title_for_layout', 'daysProduct'));
 	if($this->Auth->user('isRoot'))
 	{
-		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>'shop'))));
+		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>true, 'productType'=>false))));
 		$this->set('results',$res);
 	}
 	

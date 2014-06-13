@@ -21,7 +21,7 @@
     {
       $fields['date'] = false;
     }
-	 if( !$results['group']['productType'])
+    if( !$results['group']['productType'])
     {
       $fields['productType'] = false;
     }
