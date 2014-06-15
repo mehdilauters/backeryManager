@@ -134,7 +134,7 @@ public function getOptionParser() {
 		}
 		
 		
-		$text = 'Configure::write(\'Settings\','.var_export($userConfig, true).');';
+		$text = '<?php Configure::write(\'Settings\','.var_export($userConfig, true).'); ?>';
 
 
 //  		$constant = get_defined_constants(true); // true => categorize
