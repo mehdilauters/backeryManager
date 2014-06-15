@@ -293,13 +293,14 @@ public function getOptionParser() {
 	      $this->log('Could not delete backup dir '.$backupPath, 'debug');
 	  }
 
-	  if(!$currentVersionDir->move(APP.'../../'))
+	  if(!$currentVersionDir->move($backupPath))
 	  {
-	    $this->log('Could not backup currentVersion', 'debug');
+	    $this->log('Could not backup currentVersion to '.$backupPath, 'debug');
 	  }
 
 	  $newVersionDir = new Folder($this->upgPath);
-	  if(!$newVersionDir->move(APP.'../../'))
+	  $newVersionDirPath = APP.'../../';
+	  if(!$newVersionDir->move($newVersionDirPath))
 	  {
 	    $this->log('Could not backup currentVersion', 'debug');
 	  }
