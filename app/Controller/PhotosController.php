@@ -51,10 +51,10 @@ class PhotosController extends AppController {
               'name' => $photo['Photo']['name'],
               'download' => true,
               'extension' => $path_parts['extension'],
-              'path' => APP.'webroot/img/photos/'.$path
+              'path' => Configure::read('Settings.Medias.Photos.path').$path
        );
        $this->set($params);
-    $filePath = APP.'webroot/img/photos/'.$path.$photo['Photo']['path'];
+    $filePath = Configure::read('Settings.Medias.Photos.path').$path.$photo['Photo']['path'];
     if( ! file_exists($filePath) )
     {
 	$this->log('File '.$filePath.' doesn\'t exists for photo '.$photo['Photo']['id'], 'debug');

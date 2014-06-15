@@ -4,15 +4,19 @@ define('UPG_DEBUG', true);
 
 class UpgradeShell extends AppShell {
 
+var $uses = array('DatabaseVersion');
+
 private $curlHandler;
 private $tmpFile = 'upgTmp.zip';
-private $tmpExtractFolder = 'upgTmp/';
-private $upgPath = 'upgTmp/';
+private $extractFolder = '../../';
+private $upgPath = '';
 
 private $upgrader = NULL;
 
 private $currentVersion;
 private $upgradeVersion;
+
+private $newDatabaseVersion = -1;
 
 // tracker.ctp
 // photos...
@@ -38,12 +42,12 @@ public function getOptionParser() {
 	
 	
 	$this->currentVersion = file_get_contents(APP.'Version.txt');
+	$this->currentDatabaseVersion = file_get_contents(APP.'dbVersion.txt');
 	$commitRes = $this->downloadUrl(Configure::read('Settings.github.apiUrl').'commits/'.$this->args[0]);
-	debug($commitRes);
-	return;
 	$commitInfos = json_decode($commitRes);
 	$this->upgradeVersion = $commitInfos->sha;
-	
+	debug("FORCE VERSION");
+	$this->upgradeVersion = 'master';
 	$this->log('From version '.$this->currentVersion.' to '.$this->upgradeVersion, 'debug');
 	
 	
@@ -54,18 +58,16 @@ public function getOptionParser() {
 	
 	 $zip->open(TMP.$this->tmpFile, false);
 	
-	$extractPath = TMP.$this->tmpExtractFolder;
-	$this->log('Extracting to '.$extractPath, 'debug');
+	$this->log('Extracting to '.APP.$this->extractFolder, 'debug');
 	
 	App::uses('Folder', 'Utility');
 	App::uses('File', 'Utility');
 	
-	$dir = new Folder($extractPath, true);
 	
-	 // $zip->extractTo($extractPath);
+	$zip->extractTo(APP.$this->extractFolder);
 	$extractedFiles = $zip->getNameIndex(0);
-	
-	$this->upgPath = $extractPath.$extractedFiles;
+
+	$this->upgPath = APP.$this->extractFolder.$extractedFiles;
 	require $this->upgPath.'app/Config/upgScripts/Upgrader.php';
 	$this->upgrader = new Upgrader($this->upgPath, APP);
 	
@@ -89,7 +91,11 @@ public function getOptionParser() {
 		return false;
 	}
 	
-
+	if(!$this->upgradeApp())
+	{
+		$this->clean();
+		return false;
+	}
 	
 	
 	if(!$this->upgrader->afterUpgrade())
@@ -112,26 +118,32 @@ public function getOptionParser() {
 		}
 		$userInitConfig = Configure::read('Settings');
 		require $this->upgPath.'app/Config/boulangerie.php';
+
+		$this->newDatabaseVersion = Configure::read('Settings.databaseVersion');
 		
 		$upgInitConfig = Configure::read('Settings');
 		
-		// TODO Do not preserve constant such as TMP, APP..
+
+
 		$userConfig = array_replace_recursive($userInitConfig, $upgInitConfig);
 		
-		$configFile = new File(APP.'Config/boulangerie.php');
-		if( !$configFile->copy(APP.'Config/boulangerie.php.backup') )
+		$configFile = new File($this->upgPath.'app/Config/boulangerie.php');
+		if( !$configFile->copy($this->upgPath.'app/Config/boulangerie.php.backup') )
 		{
 			$this->log('Could not backup config file', 'debug');
 		}
 		
 		
 		$text = 'Configure::write(\'Settings\','.var_export($userConfig, true).');';
-		if(! UPG_DEBUG )
+
+
+//  		$constant = get_defined_constants(true); // true => categorize
+// 		debug($constant);
+		// TODO Do not preserve constant such as TMP, APP..
+
+		if(! $configFile->write($userConfig) )
 		{
-			if(! $configFile->write($userConfig) )
-			{
-				$this->log('Could not upgrade UserConfig', 'debug');
-			}
+			$this->log('Could not upgrade UserConfig', 'debug');
 		}
 		
 		if(!$this->upgrader->afterConfigUpgrade())
@@ -146,6 +158,7 @@ public function getOptionParser() {
 	
 	public function upgradeDatabase()
 	{
+	  $return = true;
 		if(!$this->upgrader->beforeDatabaseUpgrade())
 		{
 			$this->log('Before database upgrade callback fails', 'debug');
@@ -153,55 +166,89 @@ public function getOptionParser() {
 			return -1;
 		}
 		$sqlHistory = array();
-		$commits = json_decode($this->downloadUrl(Configure::read('Settings.github.apiUrl').'commits'));
-		
-		$record = false;
-		
-		
-		foreach($commits as $commit)
-		{
-			$this->out('Commit '.$commit->sha);
-			if($commit->sha == $this->currentVersion)
-			{
-				break;
-			}
-			if($commit->sha == $this->upgradeVersion)
-			{
-				$record = true;
-			}
-			
-			if($record)
-			{
-				$treeUrl = $commit->url;
-				$commitInfos = json_decode($this->downloadUrl($treeUrl));
-				foreach($commitInfos->files as $file)
-				{
-					$this->out('File '.$file->filename);
-					// https://api.github.com/repos/mehdilauters/bakeryManager/commits/b9a98d18559c5ae6483ebaba9855b9732986182b
-					if($file->filename == 'app/Config/boulangerie.php' ) // database
-					{
-						$sql = '';
-						$sql .= '-- ################### commit '.$commit->sha." --\n\n";
-						// TODO multiline messages
-						$sql .= '-- '.$commit->message." --\n\n";
-						
-						$fileInfos = json_decode($this->downloadUrl($file->contents_url));
-						$sql .= $this->downloadUrl($file->content);
-						$sqlHistory[] = base64_decode ($sql);
-					}
-				}
-			}
+
+
+
+
+	try{
+	  $version = $this->DatabaseVersion->find('first');
+	}
+	catch (Exception $e)
+	{
+		$version['DatabaseVersion']['version'] = -1;
+	}
+	
+	$this->log('database : upgrade from '.$version['DatabaseVersion']['version'].' to '.$this->newDatabaseVersion, 'debug');
+
+	if($version['DatabaseVersion']['version'] < $this->newDatabaseVersion)
+	{
+	      $this->log('database upgrade started', 'debug');
+	      $dataSource = $this->DatabaseVersion->getDataSource();
+	      $databaseName = $dataSource->getSchemaName();
+	      $fileName = $databaseName . '-upgBackup-' . date('Y-m-d') . '.sql';
+
+	      $dbBackupPath = $this->upgPath.'app/Config/upgScripts/schema/'.$fileName;
+	      $this->log('backup database to '.$dbBackupPath, 'debug');
+
+	      $sqlBackup = $dataSource->backup(false);
+	      $file = new File($dbBackupPath);
+	      $file->write($sqlBackup);
+	      $file->close();
+
+
+
+		$dir = new Folder($this->upgPath.'app/Config/upgScripts/schema/');
+		$files = $dir->find('.*\.sql');
+
+		foreach ($files as $file) {
+		    $file = new File($dir->pwd() . DS . $file);
+
+		    preg_match ( '/(\d+)\.sql/' , $file->name , $matches );
+		    if(count($matches) == 2)
+		    {
+		      if($matches[1] >= $version['DatabaseVersion']['version'])
+		      {
+			  $this->log('database getting upgrade script from '.$matches[1], 'debug');
+			  $sqlHistory[$matches[1]] =  $file->read();
+		      }
+		    }
 		}
 		
-		
-		// TODO reverse array
-		debug($sqlHistory);
+
+
+
+	      App::uses('ConnectionManager', 'Model'); 
+	      $db = ConnectionManager::getDataSource('default');
+
+	      foreach($sqlHistory as $dbVersionFrom => $sql)
+	      {
+		  $this->log('database upgrade from '.$dbVersionFrom, 'debug');
+		try{
+		  $db->rawQuery($sql);
+		}
+		catch (Exception $e)
+		{
+			$this->log('database upgrade from '.$dbVersionFrom.' failed', 'debug');
+			$return = false;
+		}
+	      }
+
+		$version['DatabaseVersion']['version'] = $this->newDatabaseVersion;
+// 		$this->DatabaseVersion->save($version);
+	}
+	else
+	    {
+	      $this->log('database already up to date', 'debug');
+	    }
+
 		if(!$this->upgrader->afterDatabaseUpgrade())
 		{
 			$this->log('after database upgrade callback fails', 'debug');
 			$this->clean();
 			return -1;
 		}
+
+	  return $return;
 	}
 	
 	private function downloadUrl($url)
@@ -234,6 +281,29 @@ public function getOptionParser() {
 		return file_put_contents(TMP.$this->tmpFile, $res);
 	}
 	
+
+	public function upgradeApp()
+	{
+	  // backup previous version
+	  $currentVersionDir = new Folder(APP.'../');
+	  $backupPath = APP.'../../backup';
+	  $backupDir = new Folder($backupPath);
+	  if($backupDir->delete())
+	  {
+	      $this->log('Could not delete backup dir '.$backupPath, 'debug');
+	  }
+
+	  if(!$currentVersionDir->move(APP.'../../'))
+	  {
+	    $this->log('Could not backup currentVersion', 'debug');
+	  }
+
+	  $newVersionDir = new Folder($this->upgPath);
+	  if(!$newVersionDir->move(APP.'../../'))
+	  {
+	    $this->log('Could not backup currentVersion', 'debug');
+	  }
+	}
 	
 	public function clean()
 	{

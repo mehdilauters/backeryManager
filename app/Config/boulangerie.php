@@ -1,6 +1,6 @@
 <?php
   
-  Configure::write('Settings.Medias.Photos.path', WWW_ROOT.'img/photos/');  
+  Configure::write('Settings.Medias.Photos.path', APP.'../../bakeryManagerPhotos/');  
 
   Configure::write('Settings.Medias.Photos.xPreview', 200);  
   Configure::write('Settings.Medias.Photos.yPreview', 150);  
@@ -10,8 +10,6 @@
 
     Configure::write('Settings.dbBackupPath', '/tmp/');
     Configure::write('Settings.excelExportPath', '/tmp/');
-	
-	Configure::write('Settings.databaseVersion', 6);
 	
 	Configure::write('Settings.dbBackupUrl', 'https://boulangerie-faury.fr/dev/');
 	
