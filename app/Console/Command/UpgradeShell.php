@@ -8,7 +8,7 @@ var $uses = array('DatabaseVersion');
 
 private $curlHandler;
 private $tmpFile = 'upgTmp.zip';
-private $extractFolder = '../../';
+private $extractFolder = '../../upg';
 private $upgPath = '';
 
 private $upgrader = NULL;
@@ -141,11 +141,18 @@ public function getOptionParser() {
 // 		debug($constant);
 		// TODO Do not preserve constant such as TMP, APP..
 
-		if(! $configFile->write($userConfig) )
+		if(! $configFile->write($text) )
 		{
 			$this->log('Could not upgrade UserConfig', 'debug');
 		}
 		
+
+		$dbConfigFile = new File(APP.'Config/database.php');
+		if( !$dbConfigFile->copy($this->upgPath.'app/Config/database.php') )
+		{
+			$this->log('Could not upgrade database config file', 'debug');
+		}
+
 		if(!$this->upgrader->afterConfigUpgrade())
 		{
 			$this->log('after config upgrade callback fails', 'debug');
