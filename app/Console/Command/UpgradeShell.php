@@ -8,7 +8,7 @@ var $uses = array('DatabaseVersion');
 
 private $curlHandler;
 private $tmpFile = 'upgTmp.zip';
-private $extractFolder = '../../upg';
+private $extractFolder = '../../upg/';
 private $upgPath = '';
 
 private $upgrader = NULL;
