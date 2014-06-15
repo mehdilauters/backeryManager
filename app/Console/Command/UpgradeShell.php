@@ -306,10 +306,15 @@ public function getOptionParser() {
 	  }
 
 	  $newVersionDir = new Folder($this->upgPath);
-	  $newVersionDirPath = APP.'../../';
+
+	  $newVersionDirPath = str_replace('app/', '', APP);
 	  if(!$newVersionDir->move($newVersionDirPath))
 	  {
-	    $this->log('Could not backup currentVersion', 'debug');
+	    $this->log('Could not move to '.$newVersionDirPath, 'debug');
+	  }
+	  else
+	  {
+	      $this->log('move '.$this->upgPath.' to '.$newVersionDirPath, 'debug');
 	  }
 	}
 	
