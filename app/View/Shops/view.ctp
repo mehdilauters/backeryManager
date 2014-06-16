@@ -19,7 +19,7 @@ if($tokens['isAdmin'])
 }
 	?>
 <div>
-  <img class="imageShopView" src="<?php echo $this->webroot.'img/photos/normal/'.$shop['Media']['path'] ?>" alt="<?php echo $shop['Media']['name'] ?>" />
+  <img class="imageShopView" src="<?php echo $this->webroot.'photos/download/'.$shop['Media']['id'].'/0'.$this->MyHtml->getLinkTitle($shop['Media']['name']); ?>" alt="<?php echo $shop['Media']['name'] ?>" />
   <div class="slate slateShop slateShopView cursorHand"  onClick="toggleMap();">
       <div>
 	<?php echo h($shop['Shop']['phone']); ?>

@@ -287,7 +287,7 @@ class EventsController extends FullCalendarAppController {
 					//debug(week);
 					$nbWeeks = round( - ( $dateStart->diff($eventStart)->format('%R%a') ) / 7 +1);
 					
-					$nbEvents = round( ( $dateStop->diff($dateStart)->format('%R%a') ) / 7 +1);
+					$nbEvents = round( abs( $dateStop->diff($dateStart)->format('%R%a') ) / 7 +1);
 					for($i = 0; $i< abs($nbEvents); $i++)
 					{
 
@@ -391,7 +391,6 @@ class EventsController extends FullCalendarAppController {
 			
 			
 		}
-		
 		if (!empty($this->request->params['requested'])) {
 			    return $data;
 			}

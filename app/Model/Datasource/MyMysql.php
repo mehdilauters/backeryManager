@@ -43,6 +43,7 @@ class MyMysql extends Mysql {
 	{
 	  $create = str_replace('CREATE TABLE `'.$table.'`','CREATE TABLE `'.$tablePrefix.$table.'`', $createTableEntry['Create Table']);
 	  $create = str_replace('`fk_','`fk_'.$tablePrefix, $create);
+	  $create = str_replace('REFERENCES `','REFERENCES `'.$tablePrefix, $create);
 	}
 
         $return .= "\n\n" . $create . ";\n\n";
