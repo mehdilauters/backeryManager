@@ -90,3 +90,9 @@ if(!$slideshowInserted)
 
  } ?>
   </ul>
+<?php if(Configure::read('Settings.demo.active')) { ?>
+<ul class="tips" >
+  <li data-id="logo" >Bienvenue sur le site de démonstration</li>
+  <li data-id="login" >Connectez vous pour découvrir la partie Administration</li>
+</ul>
+<?php } ?>

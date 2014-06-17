@@ -8,7 +8,7 @@ App::uses('AppController', 'Controller');
 class PhotosController extends AppController {
 
   var $publicActions = array('download');
-  var $uses = array('Photo', 'Media');
+  var $uses = array('Photo', 'Media', 'Company');
 /**
  * index method
  *
@@ -39,6 +39,15 @@ class PhotosController extends AppController {
 		if (!$this->Photo->exists($id)) {
 		  throw new NotFoundException(__('Invalid photo'));
 		}
+		if(! $this->Auth->user('isRoot') )
+		{
+		  $isRib = ($this->Company->find('count', array('conditions'=>array('Company.rib' => $id))) == 0);
+		  if (!$isRib) {
+		    $this->log('trying to access rib from ip '.$this->request->clientIp(),'debug');
+		    throw new NotFoundException(__('Invalid photo'));
+		  }
+		}
+
 		$this->viewClass = 'Media';
 		if($preview)
 			$path='preview/';

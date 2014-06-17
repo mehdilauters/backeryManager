@@ -212,14 +212,12 @@ class AppController extends Controller {
         ->subject($config['subject'])
         ->send($config['message']);
 
+	if(is_array($emailAddr))
+	{
+	  $emailAddr = implode(', ', $emailAddr);
+	}
 	$this->log('Email to '.$emailAddr.' : '.$config['subject'].', attachment: '.$config['attachment'], 'email');
 	$this->Session->setFlash('Email to '.$emailAddr.$normalAddr.' : '.$config['subject'],'flash/ok');
-		
-
-    if ( Configure::read('debug') != 0)
-    {
-      //$this->Session->setFlash('Debug: email envoyé', 'flash/ok');
-    }
   }
   
   public function beforeRender()
@@ -233,11 +231,11 @@ class AppController extends Controller {
   
 	if($this->Auth->user())
 	{
-		$this->menu['Menu']['Deconnexion'] = array( 'url' => $this->webroot.'users/logout', 'active' => false );
+		$this->menu['Menu']['Deconnexion'] = array( 'url' => $this->webroot.'users/logout', 'active' => false, 'id'=>'logout' );
 	}
 	else
 	{
-		$this->menu['Menu']['Connexion'] = array( 'url' => $this->webroot.'users/login', 'active' => false );
+		$this->menu['Menu']['Connexion'] = array( 'url' => $this->webroot.'users/login', 'active' => false, 'id'=>'login' );
 	}
   
      $this->set('menu', $this->menu);

@@ -9,7 +9,7 @@ App::uses('AppController', 'Controller');
 */
 
 class ConfigController extends AppController {
-  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User', 'Shop');
+  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User', 'Shop', 'RemoteDB');
   
   var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL' );
   var $memberActions = array();
@@ -37,6 +37,7 @@ class ConfigController extends AppController {
 	  'phpInfo' => 'phpInfo',
 	  'console' => 'console',
 	  'noSSL' => 'noSSL',
+	  'importDb' => 'import db'
     );
     $this->set('actions', $actions);
 	
@@ -455,6 +456,36 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
    // $this->response->body($return);
 }
 
+  public function importDb()
+  {
+    if(!Configure::read('Settings.demo.active'))
+    {
+      $this->Session->setFlash('This is not a demo version!', 'flash/warning');
+      $this->redirect(array('action' => 'index'));
+      return;
+    }
+      if ($this->request->is('post')) {
+	  $demo = true;
+// 	  if($this->params['noDemo'])
+// 	  {
+// 		  $demo = false;
+// 	  }
+	  
+	  $login = $this->request->data['User']['email'];
+	  $password = $this->request->data['User']['password'];
+
+	  $this->RemoteDB->login($login, $password);
+	  
+
+	  debug('Fteching...');
+	  $sql = $this->RemoteDB->download($demo);
+	  debug('Done');
+
+	  debug('Applying to database');
+	  $this->RemoteDB->applyToDB($sql);
+	  debug('Done');
+      }
+  }
 
   
 }

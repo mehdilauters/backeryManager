@@ -683,7 +683,6 @@ public function results()
 
 
 public function beforeFilter() {
-	debug(Configure::read());
 	parent::beforeFilter();
         // $this->Security->requirePost('stats');
     }
