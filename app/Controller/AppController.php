@@ -355,16 +355,7 @@ public function getFunctionText($coefficients)
 	$this->Auth->allow();
    }
 
-  if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
-  {
-    if($this->Auth->user('isRoot'))
-    {
-		if(!$this->request->is('ssl'))
-		{
-			$this->blackHole('secure');
-		}
-    }
-  }
+
 
 
 	  // $user = $this->User->find('first',array('conditions'=>array('User.email' => 'mehdilauters@gmail.com')));
@@ -395,6 +386,17 @@ public function getFunctionText($coefficients)
 	  if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))
 	  {
 		  $this->requestAction(array('plugin'=> '', 'controller' => 'users', 'action' => 'autologin'));
+	  }
+	}
+
+	if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
+	{
+	  if($this->Auth->user('isRoot'))
+	  {
+		      if(!$this->request->is('ssl'))
+		      {
+			      $this->blackHole('secure');
+		      }
 	  }
 	}
 
