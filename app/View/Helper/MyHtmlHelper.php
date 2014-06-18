@@ -28,6 +28,13 @@ class MyHtmlHelper extends HtmlHelper{
 		return str_replace($replace,$by,$title);
 	}
 
+  function getPhoneNumberText($phoneNumber)
+  {
+    
+    $twoDigits = str_split($phoneNumber, 2);
+    return implode('.', $twoDigits);
+  }
+
 
   function getAlphabet()
   {

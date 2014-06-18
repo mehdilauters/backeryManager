@@ -50,7 +50,8 @@ Configure::write('Settings.Excel', array(
 
 ));
 
-	
+    Configure::write('Settings.midday', 14);
+
 	// https://github.com/mehdilauters/bakeryManager/archive/b9a98d18559c5ae6483ebaba9855b9732986182b.zip
 	// https://github.com/mehdilauters/bakeryManager/archive/master.zip
 	

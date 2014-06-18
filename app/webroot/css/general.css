@@ -129,11 +129,9 @@ li .shop{
 
 
 .shopClosed{
-  color: red;
 }
 
 .shopOpened{
-  color: green;
 }
 
 
@@ -280,9 +278,21 @@ li .shop{
 
 }
 
-.timetable td{
+.timetable td, .timetable th{
     min-width: 20%;
     text-align: center;
+}
+
+.timetable tr:hover{
+  background-color : rgba(255, 155, 0, 0.7);
+}
+
+.timetable tr.today{
+  background-color : rgba(255, 155, 0, 0.2);
+}
+
+.timetable td.now{
+  background-color : rgba(255, 155, 0, 0.4);
 }
 
 .timetable span.dayName{

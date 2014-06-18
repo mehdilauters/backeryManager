@@ -185,7 +185,7 @@ public function isToday($event)
     $i = 0;
     foreach ($events['Event'] as $event)
 	{
-		if( date('G',strtotime($event['end'])) < 14 )
+		if( date('G',strtotime($event['end'])) < Configure::read('Settings.midday') )
 		{
 			$key = 'morning';
 		}
@@ -199,6 +199,39 @@ public function isToday($event)
 		ksort($days);
 
     return $days;
+  }
+
+  public function getNextOpenClose($events)
+  {
+      $nextOpened = 0;
+      $nextClose = 0;
+      $days = $this->getTimeTable($events);
+      foreach($days as $dayId => $timeTable)
+      {
+	if($dayId >= mktime(0, 0, 0, date("m")  , date("d"), date("Y")))
+	{
+	    krsort($timeTable); // process morning before afternoon
+	    foreach($timeTable as $key => $time)
+	    {
+	      if($nextOpened == 0 && strtotime($time['start']) > time() )
+	      {
+		if(strtotime($time['start']) > $nextOpened)
+		{
+		  $nextOpened = strtotime($time['start']);
+		}
+	      }
+	      if($nextClose == 0 && strtotime($time['end']) > time() )
+	      {
+		if(strtotime($time['end']) > $nextClose)
+		{
+		  $nextClose = strtotime($time['end']);
+		}
+	      }
+	    }
+	  $day = $this->getJourFr(date('N',$dayId ));
+	}
+      }
+    return array('nextClose'=> $nextClose, 'nextOpened'=>$nextOpened);
   }
 
 

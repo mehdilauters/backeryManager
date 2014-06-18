@@ -180,9 +180,6 @@ class EventsController extends FullCalendarAppController {
 		}
 		
 		$data = array();
-// 		$this->Event->bindModel(
-// 			array ('belongsTo' => array ('EventType'))
-// 		);
 		
 		
 		$conditions = array('conditions' => array(
@@ -285,9 +282,9 @@ class EventsController extends FullCalendarAppController {
 				break;
 				case 'week':
 					//debug(week);
-					$nbWeeks = round( - ( $dateStart->diff($eventStart)->format('%R%a') ) / 7 +1);
+					$nbWeeks = round( - ( $dateStart->diff($eventStart)->format('%R%a') ) / 7 );
 					
-					$nbEvents = round( abs( $dateStop->diff($dateStart)->format('%R%a') ) / 7 +1);
+					$nbEvents = round( abs( $dateStop->diff($dateStart)->format('%R%a') ) / 7 );
 					for($i = 0; $i< abs($nbEvents); $i++)
 					{
 

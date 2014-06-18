@@ -21,13 +21,26 @@ if($tokens['isAdmin'])
 <div>
   <img class="imageShopView" src="<?php echo $this->webroot.'photos/download/'.$shop['Media']['id'].'/0'.$this->MyHtml->getLinkTitle($shop['Media']['name']); ?>" alt="<?php echo $shop['Media']['name'] ?>" />
   <div class="slate slateShop slateShopView cursorHand"  onClick="toggleMap();">
+<div class="isOpened">
+    <?php
+      $nextDates = $this->Dates->getNextOpenClose($shop['EventType']);
+      if($isOpened)
+      {?>
+	<span class="shopOpened label label-success">ouverte jusqu'à <?php echo date('G:i',$nextDates['nextClose']) ?></span>
+      <?php }
+      else
+      {?>
+	<span class="shopClosed label label-danger">fermé <?php if($nextDates['nextOpened'] != 0){ ?> jusqu'au <?php echo date('d/m/Y',$nextDates['nextOpened']).' à '.date('G:i',$nextDates['nextOpened']); }?></span>
+      <?php } 
+    ?>
+</div>
       <div>
-	<?php echo h($shop['Shop']['phone']); ?>
+	<?php echo $this->MyHtml->getPhoneNumberText($shop['Shop']['phone']); ?>
       </div>
     <div>
-	<?php echo h($shop['Shop']['address']); ?>
+	<a href="http://maps.google.com/maps?q=<?php echo urlencode($shop['Shop']['address']); ?>&z=17" target="_blank" ><?php echo $shop['Shop']['address']; ?></a>
 	<br/>
-	( carte )
+	<a href="#" onclick="return false;">( carte )</a>
     </div>
   </div>
 </div>
@@ -43,22 +56,9 @@ if($tokens['isAdmin'])
       <?php echo $shop['Shop']['description']; ?>
 </p>
   <hr/>
-  <?php
-  if($isOpened)
-  {?>
-    <span class="shopOpened">La boulangerie est ouverte</span>
-  <?php }
-  else
-  {?>
-    <span class="shopClosed">La boulangerie est fermée</span>
-  <?php } 
-?>
-  <hr/>
 
   <?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
-  
-  
-<!--     <div id="calendar" class="slate" >Calendar loading</div> -->
+
 </div>
 <div class="actions">
   <ul>

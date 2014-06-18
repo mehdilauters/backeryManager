@@ -114,7 +114,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
       
 	  $date = new DateTime($sale['Sale']['date']);
    ?>
-      <tr class="table-striped plot" >
+      <tr class="plot" >
       <?php if($fields['date']) { ?><td class="date" style="display:none" >
 		<?php 
 						switch($group['time'])
