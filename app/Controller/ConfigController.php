@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 App::uses('AppController', 'Controller');
 
 
@@ -263,7 +263,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     }
 
 
-		 $sql .= 'update '.$tablePrefix.'companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\', title=\'D�mo\';'."\n";
+		 $sql .= 'update '.$tablePrefix.'companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\', title=\'Démo\';'."\n";
 
 		// add demo user
 		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot) values (\''.Configure::read('Settings.demo.User.email').'\', \'demo\', \''.AuthComponent::password(Configure::read('demo.User.password'))."', true);\n";
@@ -480,7 +480,6 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
 	  debug('Fteching...');
 	  $sql = $this->RemoteDB->download($demo);
 	  debug('Done');
-
 	  debug('Applying to database');
 	  $this->RemoteDB->applyToDB($sql);
 	  debug('Done');

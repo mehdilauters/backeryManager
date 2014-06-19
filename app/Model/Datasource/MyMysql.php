@@ -10,8 +10,8 @@ class MyMysql extends Mysql {
 
 
     // Do a short header
-    $return .= '-- Database: `' . $databaseName . '`' . "\n";
-    $return .= '-- Generation time: ' . date('D jS M Y H:i:s') . "\n\n\n";
+     $return .= '-- Database: `' . $databaseName . '`' . "\n";
+     $return .= '-- Generation time: ' . date('D jS M Y H:i:s') . "\n\n\n";
     $return .= "SET FOREIGN_KEY_CHECKS = 0;\n";
 
 

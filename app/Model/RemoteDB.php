@@ -1,5 +1,8 @@
-<?php
+﻿<?php
 App::uses('AppModel', 'Model');
+
+App::uses('User', 'Model');
+
 /**
  * Result Model
  *
@@ -9,6 +12,7 @@ class RemoteDB extends AppModel {
 	public $useTable = false;
 	
 	private $curlHandler;
+	private $demo = false;
 	
 	public function login($login, $password)
 	{
@@ -52,6 +56,7 @@ class RemoteDB extends AppModel {
 	
 	public function download($demo = true)
 	{
+		$this->demo = $demo;
 		$timeout = 5;
 		$demoString = '1';
 		if(!$demo)
@@ -66,6 +71,7 @@ class RemoteDB extends AppModel {
 		$sql = curl_exec($this->curlHandler);
 		curl_close($this->curlHandler);
  		//debug($sql);
+		$sql = $this->removeUtf8Bom($sql);
 		return $sql;
 	}
 	
@@ -75,13 +81,38 @@ class RemoteDB extends AppModel {
 	    {
 		App::uses('ConnectionManager', 'Model'); 
 		$db = ConnectionManager::getDataSource('default');
-// 		$db = $this->getDataSource ( ) ;
 		$res = $db->execute($sql);
 		debug($res);
+		
+		
+		if( $this->demo )
+		{
+			// hash password
+			$userModel = new User();
+			$users = $userModel->find('all');
+			App::import('Component','Auth');
+			foreach( $users as $user )
+			{
+				$user['User']['password'] = AuthComponent::password($user['User']['name']);
+				$userModel->save($user);
+			}
+		}
+		
 		return $res;
 	    }
+		
+
 	    return false;
 	}
+	
+	
+	function removeUtf8Bom($str=""){
+    if(substr($str, 0,3) == pack("CCC",0xef,0xbb,0xbf)) {
+        $str=substr($str, 3);
+    }
+    return $str;
+}
+
 }
 
 ?>
