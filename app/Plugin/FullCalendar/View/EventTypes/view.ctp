@@ -51,7 +51,7 @@
 <div class="related">
 	<h3><?php echo __('Related Events');?></h3>
 	<?php if (!empty($eventType['Event'])):?>
-	<table cellpadding = "0" cellspacing = "0">
+	<table cellpadding = "0" cellspacing = "0" class="table-striped" style="width:100%;" >
 	<tr>
 		<th><?php echo __('Title'); ?></th>
 		<th><?php echo __('Status'); ?></th>

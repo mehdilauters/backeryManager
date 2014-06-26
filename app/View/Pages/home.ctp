@@ -10,8 +10,11 @@ $(document).ready(function() {
 </script>
 <?php
 if($tokens['isAdmin'])
-{
-	echo $this->element('Results/stats/results', array('results'=>$results, 'config'=>array('interactive'=>false)));
+{	?>
+	<div id="globalResults" >
+		<?php echo $this->element('Results/stats/results', array('results'=>$results, 'config'=>array('interactive'=>false))); ?>
+	</div>
+	<?php
 }
 
  ?>
@@ -72,7 +75,7 @@ if(!$slideshowInserted)
 		}
 	  ?>
 	  <h3><?php echo $text ?></h3>
-      <div class="slideshow" >
+      <div id="slideshow" class="slideshow" >
 	<ul class="slides" id="homeSlideshow">
 	  <?php foreach($products as $product) { ?>
 	    <li class="slide"><a href="<?php echo $this->webroot.'products/view/'.$product['Product']['id'] ?>" >
@@ -90,9 +93,80 @@ if(!$slideshowInserted)
 
  } ?>
   </ul>
-<?php if(Configure::read('Settings.demo.active')) { ?>
-<ul class="tips" >
-  <li data-id="logo" >Bienvenue sur le site de démonstration</li>
-  <li data-id="login" >Connectez vous pour découvrir la partie Administration</li>
-</ul>
-<?php } ?>
+<script>
+
+      introSteps = [
+              { 
+                intro: 'Bienvenue dans la version de démonstration de <b>BakeryManager</b><br/>Vous êtes maintenant dans la peau d\'un boulanger ayant récemment ouvert un dépot de pain et visitant la page principale de son outil <br/> <a href="mailto:mehdilauters@gmail.com" >Mehdi Lauters</a>'
+              },
+              {
+                element: '#mainMenu',
+                intro: "Sur la droite se touve la barre de menu",
+				position: 'left'
+              },
+/*              {
+                element: document.querySelectorAll('#step2')[0],
+                intro: "Ok, wasn't that fun?",
+                position: 'right'
+              },*/
+              {
+                element: '#menu',
+                intro: 'Ce menu est accessible à tous les visiteurs',
+                position: 'left'
+              },
+              {
+                element: '#menuAdmin',
+                intro: "Ce menu est quant à lui accessible seulement aux gérants de la boulangerie",
+                position: 'left'
+              },
+              {
+                element: '#helpLink',
+                intro: "A tout moment, retrouvez cette aide en cliquant ici",
+                position: 'left'
+              },
+              {
+                element: '#globalResults',
+                intro: 'Ici sont présentés les courbes des résultats comptable, par magasin',
+				position: 'right'
+              }
+			  ,
+              {
+				element: '#controlChart_resultsChart',
+                intro: 'Cochez / décochez les cases pour afficher / masquer les courbes',
+				position: 'right'
+              },
+              {
+				element: '#shopPreview_1',
+                intro: 'Ensuite sont disponibles un apercu des magasins',
+				position: 'right'
+              },
+              {
+				element: '#shopStatus_1',
+                intro: 'Dont son statut (ouvert/fermé)',
+				position: 'right'
+              },
+			  {
+				element: '#timetable_1',
+                intro: 'Et les horaires complètes',
+				position: 'right'
+              },
+			  {
+				element: 'slideshow',
+                intro: 'Sont présentés ici les produits du jours',
+				position: 'right'
+              },
+			  {
+				element: '#logout',
+                intro: 'Pour passer en vue "Client", déconnectez vous, vous pourrez ensuite vous reconnecter si besoin',
+				position: 'left'
+              },
+			  
+			  {
+				element: '#dailyProductionLink',
+                intro: 'Vous pourrez ensuite vous rendre sur la page de saisie journalière des ventes',
+				position: 'left'
+              },
+			  
+            ];
+
+</script>

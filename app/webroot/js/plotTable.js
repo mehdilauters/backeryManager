@@ -248,7 +248,7 @@ function curveDisplay(chartId, curveId, status)
     
     );
 	
-	html = '<div class="alert alert-info">Cochez/décochez les cases ci-dessous pour afficher/masquer la courbe souhaitée</div><ul class="controlChart_'+chartId+'">';
+	html = '<div id="controlChart_'+chartId+'" ><div class="alert alert-info">Cochez/décochez les cases ci-dessous pour afficher/masquer la courbe souhaitée</div><ul class="controlChart">';
 	var found = false;
 	var i = 0;
 	for(var x in window[chartVarName].series)
@@ -265,7 +265,7 @@ function curveDisplay(chartId, curveId, status)
 		if( label != undefined )
 		{
 			found = true;
-			html += '<li><label>'+label+'</label><input id="control_'+chartId+'_'+x+'" class="curveControl" type="checkbox" '+checked+' onchange="curveDisplay(\''+chartId+'\', '+x+')" /></li>';
+			html += '<li><input id="control_'+chartId+'_'+x+'" class="curveControl" type="checkbox" '+checked+' onchange="curveDisplay(\''+chartId+'\', '+x+')" /> <label>'+label+'</label></li>';
 		}
 		
 		window[chartVarName].series[x].show = displayCurves[x];
@@ -273,9 +273,9 @@ function curveDisplay(chartId, curveId, status)
 	}
 	if(found)
 	{
-		html += '<li><label>Tout cocher</label><input type="checkbox" checked="checked" id="toggle_'+chartId+'" onchange="toggleAll(\''+chartId+'\')" /></li>';
+		html += '<li><input type="checkbox" checked="checked" id="toggle_'+chartId+'" onchange="toggleAll(\''+chartId+'\')" /> <label>Tout cocher</label></li>';
 	}
-	html += '<ul>';
+	html += '<ul></div>';
 	$('#'+chartId).parent().find('.control').html(html);
 	window[chartVarName].replot();
 // 	for(i=0; i< displayCurves.length; i++)

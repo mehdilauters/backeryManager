@@ -7,11 +7,11 @@
       $nextDates = $this->Dates->getNextOpenClose($shop['EventType']);
       if($shop['Shop']['isOpened'])
       {?>
-	<span class="shopOpened label label-success">ouvert jusqu'à <?php echo date('G:i',$nextDates['nextClose']) ?></span>
+	<span id="shopStatus_<?php echo $shop['Shop']['id'] ?>" class="shopOpened label label-success">ouvert jusqu'à <?php echo date('G:i',$nextDates['nextClose']) ?></span>
       <?php }
       else
       {?>
-	<span class="shopClosed label label-danger">fermé <?php if($nextDates['nextOpened'] != 0){ ?> jusqu'au <?php echo date('d/m/Y',$nextDates['nextOpened']).' à '.date('G:i',$nextDates['nextOpened']); }?></span>
+	<span id="shopStatus_<?php echo $shop['Shop']['id'] ?>" class="shopClosed label label-danger">fermé <?php if($nextDates['nextOpened'] != 0){ ?> jusqu'au <?php echo date('d/m/Y',$nextDates['nextOpened']).' à '.date('G:i',$nextDates['nextOpened']); }?></span>
       <?php } 
     ?>
 </div>
@@ -33,8 +33,9 @@
   <div class="phone" ><?php 
 
 echo $this->MyHtml->getPhoneNumberText($shop['Shop']['phone']); ?></div>
-
-    <?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
+	<div id="timetable_<?php echo $shop['Shop']['id'] ?>" >
+		<?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
+	</div>
     <?php if($tokens['isAdmin']) : ?>
       <ul>
 	<li><?php echo $this->Html->link(__('changer Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>

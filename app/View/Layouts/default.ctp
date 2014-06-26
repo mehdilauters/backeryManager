@@ -46,7 +46,8 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
         'jquery.qtip-1.0.0-rc3.min',
     	'jquery.fancybox.pack',
    		'TableFilter/tablefilter.js',
-'bootstrap.min',
+		'bootstrap.min',
+		'intro.js-0.9.0/minified/intro.min.js'
      ),
      array('inline' => 'false')
   );
@@ -56,8 +57,10 @@ echo $this->Html->css('bootstrap.min');
 echo $this->Html->script('jquery-ui-timepicker-addon');
 
 echo $this->Html->css(
-          'fullcalendar',
-           null,
+			array(
+			    'fullcalendar',
+				'introjs.min',
+			),
            array('inline' => false)
   );
 ?>
@@ -74,7 +77,10 @@ echo $this->Html->css(
 	
 	
   ?>
-  <script>var webroot = "<?php echo $this->Html->url('/'); ?>";</script>
+  <script>
+	var webroot = "<?php echo $this->Html->url('/'); ?>";
+	var introSteps = [];
+  </script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
@@ -127,14 +133,14 @@ echo $this->Html->css(
 		    <?php endif; ?>
 		    <?php echo $this->fetch('content'); ?>
 		</div>
-		<div class="col-md-3">  <!--  colonne de droite  -->
+		<div class="col-md-3" id="mainMenu" >  <!--  colonne de droite  -->
 		  	<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
 		</div>
   	</div>
  
     
     
-  	<footer>
+  	<div id="footer" >
 	<div>Credits : <href="http://www.lauters.fr" />Mehdi Lauters 2014</div>
 	<div>BackeryManager released under GPL licence  <a href="https://github.com/mehdilauters/backeryManager" >https://github.com/mehdilauters/backeryManager</a></div>
 <div>
@@ -144,7 +150,7 @@ echo $this->Html->css(
       array('target' => '_blank', 'escape' => false)
     ); ?>
 </div>
-  	</footer>
+  	</div>
   </div>
   <?php //echo $this->element('sql_dump'); 
   echo $this->Html->script('main');
@@ -159,6 +165,21 @@ echo $this->Html->script(
 tinymce.init({
     selector: "textarea.textEditor"
  });
+ 
+ function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: introSteps
+          });
+
+          intro.start();
+      }
+ 
+ $( document ).ready( function (){
+	startIntro();
+ });
+ 
+ 
 </script>
 	
 </body>

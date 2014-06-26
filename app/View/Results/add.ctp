@@ -9,7 +9,7 @@ echo $this->Form->input('upload', array('label'=>'fichier', 'type'=>'file'));
 echo $this->Form->end(__('Submit'));
 ?>
 </div>
-<div class="alert alert-info">
+<div id="selectResultDate" class="alert alert-info">
 <p class=""> selectionnez ici la date pour laquelle vous souhaitez saisir/modifier les données de comptabilité</p>
 <form id="resultsDateSelect" method="POST" >
   <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
@@ -26,7 +26,7 @@ echo $this->Form->end(__('Submit'));
 	<h3><?php echo $shopName; ?></h3>
 	<span class="message"></span>
 	</div>
-	    <fieldset>
+	    <fieldset id="paymentResults_<?php echo $shopId ?>" >
 	      <?php
 		  $resultId='';
 		  $cash = '';
@@ -76,7 +76,7 @@ echo $this->Form->end(__('Submit'));
 			</table>
 		    <input type="hidden" name="Result[<?php echo $shopId; ?>][resultId]" value="<?php echo $resultId; ?>" />
 	    </fieldset>
-	    <fieldset>
+	    <fieldset id="productTypesResults_<?php echo $shopId ?>">
 		    <legend><?php echo __('Product types'); ?></legend>
     <table>
       <tr>
@@ -107,7 +107,7 @@ echo $this->Form->end(__('Submit'));
 </li>
 <?php } ?>
 </ul>
-<input type="submit" value="" class="save" />
+<input type="submit" value="" class="save" id="saveResult" />
 </div>
 <script>
 
@@ -205,5 +205,42 @@ function checkForm()
 	
 	
   });
+
+
+
+
+
+
+      introSteps = [
+              { 
+                intro: 'Cette page permet de saisir les résultats comptables au jour le jour.<br/>Ces données servent également à afficher des graphs'
+              },
+              {
+                element: '#selectResultDate',
+                intro: "Commencez par saisir la date pour laquelle vous voulez saisir les informations.<br/>Cliquez sur le calendrier pour valider",
+		position: 'top'
+              },
+              {
+                element: '#resultsShop_<?php echo array_keys($shops)[0] ?>',
+                intro: "Ensuite, remplissez par magasin...",
+		position: 'right'
+              },
+              {
+                element: '#paymentResults_<?php echo array_keys($shops)[0] ?>',
+                intro: "Les différents moyens de paiement",
+		position: 'right'
+              },
+              {
+                element: '#productTypesResults_<?php echo array_keys($shops)[0] ?>',
+                intro: "les sommes encaissées pour chaque type de produit",
+		position: 'right'
+              },
+              {
+                element: '#saveResult',
+                intro: "et n'oubliez pas de valider",
+		position: 'right'
+              },
+
+            ];
 
 </script>

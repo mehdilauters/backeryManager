@@ -37,6 +37,12 @@ Configure::write('Settings.Approximation.nbProjectionsPoint', 0);
 
 Configure::write('Settings.Security.ssl', false);
 
+
+Configure::write('Settings.Cookie.Name', 'bakeryManager');
+
+
+
+
 Configure::write('Settings.demo', array(
   'active' => true,
   'dbPrefix' => 'demo_',

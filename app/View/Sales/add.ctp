@@ -7,7 +7,7 @@
   echo $this->Form->end(__('Submit'));
   ?>
 </div>
-<div class="alert alert-info">
+<div id="selectDateInfo" class="alert alert-info">
   <p > selectionnez ici la date pour laquelle vous souhaitez saisir/modifier les données de production</p>
   <form id="salesDateSelect" method="POST" >
     <input type="text" name="date" id="dateSelectValue" value="<?php echo $date ?>" class="datepicker" />
@@ -29,7 +29,7 @@
 foreach($products as $product)
 {
   ?>
-  <tr>
+  <tr id="productRow_<?php echo $product['Product']['id'] ?>" >
     <td id="product_<?php echo $product['Product']['id'] ?>" ><a href="<?php  echo $this->webroot.'produits/details/'.$product['Product']['id']; ?>" ><?php  echo $product['Product']['name']; ?></a>
       <?php echo $this->element('Medias/Medias/Preview', array('media'=>$product, 'config'=>array('name'=>false, 'description'=>false))); ?>
     </td>
@@ -44,7 +44,7 @@ foreach($products as $product)
         <?php } ?>
       </ul>
     </td>
-    <td>
+    <td id="produced_<?php echo $product['Product']['id'] ?>" >
       <ul>
         <?php foreach($shops as $shop){ ?>
           <li class="produced shop_<?php echo $shop ['Shop']['id'] ?> product_<?php echo $product['Product']['id']?>" >
@@ -68,7 +68,7 @@ foreach($products as $product)
         <?php } ?>
       </ul>
     </td>
-    <td>
+    <td id="lost_<?php echo $product['Product']['id'] ?>">
       <ul>
         <?php foreach($shops as $shop){ ?>
           <li class="lost shop_<?php echo $shop ['Shop']['id'] ?> product_<?php echo $product['Product']['id']?>" >
@@ -87,7 +87,7 @@ foreach($products as $product)
         <?php } ?>
       </ul>
     </td>
-<td>
+<td id="comments_<?php echo $product['Product']['id'] ?>" >
       <ul>
         <?php foreach($shops as $shop){ ?>
           <li class="lost" >
@@ -113,7 +113,7 @@ foreach($products as $product)
   
 ?>
 </table>
-<input type="submit" value="" class="save" />
+<input type="submit" value="" class="save" id="resultAddSubmit" />
 </form>
 
 </div>
@@ -215,4 +215,46 @@ function checkInputs(interactive)
     checkInputs(false);
   });
 
+  
+  introSteps = [
+              { 
+                intro: 'Cette page permet de saisir les données journalières de production, par magasin et par produit.<br/>Ce sont ensuite ces données qui sont utilisés pour tracer certains graphes'
+              },
+              {
+                element: '#selectDateInfo',
+                intro: "Commencez par sélectionner la date pour laquelle vous voulez saisir les données,<br/> puis cliquez sur le calendrier",
+				position: 'top'
+              },
+			  {
+                element: '#productRow_<?php echo $products[0]['Product']['id'] ?>',
+                intro: "Pour chaque produit, vous devrez ensuite saisir",
+				position: 'top'
+              },
+			  {
+                element: '#produced_<?php echo $products[0]['Product']['id'] ?>',
+                intro: "Pour chaque magasin, le nombre de produit fabriqués",
+				position: 'top'
+              },
+			  {
+                element: '#lost_<?php echo $products[0]['Product']['id'] ?>',
+                intro: "le nombre de produit perdus",
+				position: 'top'
+              },	  
+			  {
+                element: '#comments_<?php echo $products[0]['Product']['id'] ?>',
+                intro: "un commentaire si necessaire<br/>(jour de marché, concurrent malade...)",
+				position: 'top'
+              },
+			  {
+                element: '#resultAddSubmit',
+                intro: "Attention, n'oubliez pas de valider",
+				position: 'top'
+              },
+			  {
+                element: '#dailyResultsLink',
+                intro: "Ensuite rendez vous sur la page de saisie journalière comptable",
+				position: 'left'
+              },			  
+            ];
+  
 </script>

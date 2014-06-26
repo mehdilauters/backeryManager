@@ -145,6 +145,14 @@ class UsersController extends AppController {
 	
 	public function login() {
 		if ($this->request->is('post')) {
+		if( Configure::read('Settings.demo.active') )
+		{
+			if($this->Cookie->check('demoLogout'))
+			{
+				$this->Cookie->delete('demoLogout');
+			}
+		}
+		
 // $this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
 			$authRes = $this->Auth->login();
 			if ($authRes) {
@@ -152,7 +160,7 @@ class UsersController extends AppController {
 										'id' => $this->Auth->user('id'),
 										'key' => AuthComponent::password(AuthComponent::password($this->data['User']['password']).$this->Auth->user('id'))
 									);
-				$this->Cookie->write('boulangerieFaury', $cookieValue, true, '10 weeks');
+				$this->Cookie->write('bakeryManagerUser', $cookieValue, true, '10 weeks');
 				$this->log($this->request->data['User']['email'].' logged, redirect to '.$this->Auth->redirectUrl(), 'debug');
 				return $this->redirect($this->Auth->redirectUrl());
 				// Avant 2.3, utilisez
@@ -170,32 +178,48 @@ class UsersController extends AppController {
 	}
 
 	public function logout() {
-		$this->Cookie->destroy();
+		if( Configure::read('Settings.demo.active') )
+		{
+			$this->Cookie->write('demoLogout', true, true, '10 weeks');
+		}
 		$this->redirect($this->Auth->logout());
 	}	
 	
 	public function autologin()
 	{
-		if($this->Cookie->check('boulangerieFaury'))
+		if( Configure::read('Settings.demo.active') )
 		{
-			$user = $this->User->find('first',array('conditions'=>array('User.id' => $this->Cookie->read('boulangerieFaury.id'))));
+			if(!$this->Cookie->check('demoLogout'))
+			{
+				$user = $this->User->find('first',array('conditions'=>array('User.email' => Configure::read('Settings.demo.User.email'))));
+				if(isset($user['User']['id']))
+				{
+					$this->Auth->login($user['User']);
+				}
+			}
+		}
+	
+	
+		if($this->Cookie->check('bakeryManagerUser'))
+		{
+			$user = $this->User->find('first',array('conditions'=>array('User.id' => $this->Cookie->read('bakeryManagerUser.id'))));
 			if(isset($user['User']['id']))
 			{
 				$key = AuthComponent::password($user['User']['password'].$user['User']['id']);
-				if($key == $this->Cookie->read('boulangerieFaury.key'))
+				if($key == $this->Cookie->read('bakeryManagerUser.key'))
 				{
 					$this->Auth->login($user['User']);
 				}
 				else
 				{
-				  $this->log('invalid autologin cookie key for user '.$this->Cookie->read('boulangerieFaury.id'), 'debug');
-				  $this->Cookie->destroy();
+				  $this->log('invalid autologin cookie key for user '.$this->Cookie->read('bakeryManagerUser.id'), 'debug');
+				  $this->Cookie->delete('bakeryManagerUser');
 				}
 			}
 		      else
 		      {
-			$this->log('invalid autologin cookie: cannot find user id', 'debug');
-			$this->Cookie->destroy();
+				$this->log('invalid autologin cookie: cannot find user id', 'debug');
+				$this->Cookie->delete('bakeryManagerUser');
 		      }
 		}
 	}

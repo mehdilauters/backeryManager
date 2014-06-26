@@ -375,12 +375,17 @@ public function getFunctionText($coefficients)
 //  	debug($this->request->params['action']);
 	parent::beforeFilter();
 	
-	$this->Cookie->name='userAutoLogging';
 	if( count($this->publicActions) != 0)
 	{
 		// debug($this->publicActions);
 		$this->Auth->allow($this->publicActions);
 	}
+	
+	
+	$this->Cookie->name= Configure::read('Settings.Cookie.Name');
+	
+	
+	
 	if(!$this->Auth->loggedIn())
 	{
 	  if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))

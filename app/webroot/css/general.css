@@ -577,3 +577,14 @@ td.actions img.icon {
  text-align:center;
  vertical-align:middle;
 }
+
+
+.introjs-tooltip
+{
+	color: black;
+}
+
+.introjs-tooltip a
+{
+	color: blue;
+}
