@@ -36,7 +36,7 @@ foreach($menu as $title => $subMenu)
 	  <li><a href="<?php echo $this->webroot ?>productTypes/add">ajouter un type de produit</a></li>
 	  <li><a href="<?php echo $this->webroot ?>products/add">ajouter un produit</a></li>
 	  <li><a href="<?php echo $this->webroot ?>full_calendar/events/add"><?php echo $this->Html->image('icons/resource-calendar-insert.png', array('alt' => '')); ?> ajouter un evenement</a></li>
-	  <li><a href="<?php echo $this->webroot ?>orders/">Commandes</a></li>
+	  <li  id="ordersLink" ><a href="<?php echo $this->webroot ?>orders/">Commandes</a></li>
 	  <li><a href="<?php echo $this->webroot ?>news/add"><?php echo $this->Html->image('icons/news-subscribe.png', array('alt' => '')); ?> Ajouter une news</a></li>
 	  <li><a href="<?php echo $this->webroot ?>users"><?php echo $this->Html->image('icons/user-properties.png', array('alt' => '')); ?> Comptes utilisateurs</a></li>
 	  <li><a href="<?php echo $this->webroot ?>companies/edit/<?php echo $company['Company']['id'] ?>">Entreprise</a></li>

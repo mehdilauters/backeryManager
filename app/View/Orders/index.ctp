@@ -2,7 +2,7 @@
 	<h2><?php echo __('Orders'); ?></h2>
 
 <?php echo $this->Form->create('Order'); ?>
-	<fieldset class="alert alert-info">
+	<fieldset id="orderStatusSelect" class="alert alert-info">
 		<legend><?php echo __('Filtrer par status'); ?></legend>
 		<div>Séléctionnez ici les commandes dont le status vous intéresse</div>
 	<?php echo $this->Form->input('statusSelect',array('options'=>array('all'=>'', 'reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée'), 'label'=>'Status')); ?>
@@ -63,11 +63,11 @@
 		<td><?php echo h($order['Order']['discount']); ?>%&nbsp;</td>
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('class'=>'icon','alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/folder-open.png', array('class'=>'icon','alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\'Voulez vous vraiment envoyer un email à '.$order['User']['email'].'?\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
-			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('id'=>'pdf_'.$order['Order']['id'],'class'=>'icon','alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/folder-open.png', array('id'=>'view_'.$order['Order']['id'],'class'=>'icon','alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$order['Order']['id'],'class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\'Voulez vous vraiment envoyer un email à '.$order['User']['email'].'?\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
+			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$order['Order']['id'],'class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -89,8 +89,50 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('Nouvelle facturation'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('Nouvelle facturation'), array('action' => 'add'), array('id'=>'newOrder')); ?></li>
 		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
+<script>
+  introSteps = [
+              { 
+                intro: 'Cette page permet de visualiser les commandes / factures de vos clients'
+              },
+              {
+                element: '#orderStatusSelect',
+                intro: "Vous pouvez lister les commandes par leur statut",
+				position: 'top'
+              },
+              {
+                element: '#ordersIndexTable',
+                intro: "Filtrez les resultats en remplissant les filtres",
+				position: 'top'
+              },
+              {
+                element: '#pdf_<?php echo $orders[0]['Order']['id'] ?>',
+                intro: "téléchargez le PDF pour impression",
+				position: 'top'
+              },
+              {
+                element: '#view_<?php echo $orders[0]['Order']['id'] ?>',
+                intro: "Visualisez la",
+				position: 'top'
+              },
+              {
+                element: '#edit_<?php echo $orders[0]['Order']['id'] ?>',
+                intro: "Editez la",
+				position: 'top'
+              },
+			  {
+                element: '#email_<?php echo $orders[0]['Order']['id'] ?>',
+                intro: "Ou envoyez la directement par email au client concerné",
+				position: 'top'
+              },
+			  {
+                element: '#newOrder',
+                intro: "Cliquez maintenant ici pour créer une nouvelle commande",
+				position: 'top'
+              },
+            ];
+</script>

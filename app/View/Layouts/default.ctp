@@ -79,7 +79,7 @@ echo $this->Html->css(
   ?>
   <script>
 	var webroot = "<?php echo $this->Html->url('/'); ?>";
-	var introSteps = [];
+	var introSteps = [{intro: "Aucune aide disponible pour cette page"}];
   </script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
@@ -176,7 +176,10 @@ tinymce.init({
       }
  
  $( document ).ready( function (){
-	startIntro();
+	if( introSteps.length != 1 )
+	{
+		startIntro();
+	}
  });
  
  

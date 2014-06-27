@@ -252,9 +252,14 @@ function checkInputs(interactive)
               },
 			  {
                 element: '#dailyResultsLink',
-                intro: "Ensuite rendez vous sur la page de saisie journalière comptable",
+                intro: "Ensuite rendez vous sur la page de saisie journalière comptable<br/>Si vous l'avez déjà visité, votre travail journalier est terminé",
 				position: 'left'
-              },			  
+              },
+			  {
+                element: '#ordersLink',
+                intro: "Mais vous pouvez aussi gérer les commandes/factures de vos clients",
+				position: 'left'
+              },
             ];
   
 </script>

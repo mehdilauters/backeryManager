@@ -588,3 +588,14 @@ td.actions img.icon {
 {
 	color: blue;
 }
+
+.introjs-helperNumberLayer
+{
+  height:2.2em;
+  width:2.2em; 
+}
+
+.introjs-helperLayer
+{
+ background-color: rgba(255, 255, 255, 0.3); 
+}

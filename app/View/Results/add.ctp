@@ -240,7 +240,17 @@ function checkForm()
                 intro: "et n'oubliez pas de valider",
 		position: 'right'
               },
-
+              {
+                element: '#dailyProductionLink',
+                intro: "Si vous avez déjà saisis les données de productions,<br/>C'est tout ce dont vous avez besoin de saisir au jour le jour.",
+		position: 'left'
+              },
+			  {
+                element: '#ordersLink',
+                intro: "Mais vous pouvez aussi gérer les commandes/factures de vos clients",
+				position: 'left'
+              },
+			  
             ];
 
 </script>

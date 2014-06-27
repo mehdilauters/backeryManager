@@ -95,21 +95,22 @@ if(!$slideshowInserted)
   </ul>
 <script>
 
-      introSteps = [
+      introSteps = [];
+      <?php if(Configure::read('Settings.demo.active')) { ?>
+	introSteps.push(
               { 
                 intro: 'Bienvenue dans la version de démonstration de <b>BakeryManager</b><br/>Vous êtes maintenant dans la peau d\'un boulanger ayant récemment ouvert un dépot de pain et visitant la page principale de son outil <br/> <a href="mailto:mehdilauters@gmail.com" >Mehdi Lauters</a>'
-              },
+              });
+	<?php } ?>
+	    introSteps.push(
               {
                 element: '#mainMenu',
                 intro: "Sur la droite se touve la barre de menu",
-				position: 'left'
-              },
-/*              {
-                element: document.querySelectorAll('#step2')[0],
-                intro: "Ok, wasn't that fun?",
-                position: 'right'
-              },*/
-              {
+		position: 'left'
+              });
+	<?php if($tokens['isAdmin']) : ?>
+              introSteps.push(
+	      {
                 element: '#menu',
                 intro: 'Ce menu est accessible à tous les visiteurs',
                 position: 'left'
@@ -118,55 +119,62 @@ if(!$slideshowInserted)
                 element: '#menuAdmin',
                 intro: "Ce menu est quant à lui accessible seulement aux gérants de la boulangerie",
                 position: 'left'
-              },
+              });
+	  <?php endif; ?>
+	      introSteps.push(
               {
                 element: '#helpLink',
                 intro: "A tout moment, retrouvez cette aide en cliquant ici",
                 position: 'left'
-              },
-              {
+              });
+	    <?php if($tokens['isAdmin']) : ?>
+              introSteps.push(
+	      {
                 element: '#globalResults',
-                intro: 'Ici sont présentés les courbes des résultats comptable, par magasin',
-				position: 'right'
+                intro: 'Ici sont présentés les courbes des résultats comptables, par magasin',
+		position: 'right'
               }
-			  ,
+	      ,
               {
-				element: '#controlChart_resultsChart',
+		element: '#controlChart_resultsChart',
                 intro: 'Cochez / décochez les cases pour afficher / masquer les courbes',
-				position: 'right'
-              },
-              {
-				element: '#shopPreview_1',
+		position: 'right'
+              });
+	      <?php endif; ?>
+              introSteps.push(
+	      {
+		element: '#shopPreview_1',
                 intro: 'Ensuite sont disponibles un apercu des magasins',
-				position: 'right'
+		position: 'right'
               },
               {
-				element: '#shopStatus_1',
+		element: '#shopStatus_1',
                 intro: 'Dont son statut (ouvert/fermé)',
-				position: 'right'
+		position: 'right'
               },
-			  {
-				element: '#timetable_1',
+	      {
+		element: '#timetable_1',
                 intro: 'Et les horaires complètes',
-				position: 'right'
+		position: 'right'
               },
-			  {
-				element: 'slideshow',
-                intro: 'Sont présentés ici les produits du jours',
-				position: 'right'
-              },
-			  {
-				element: '#logout',
+	      {
+		element: '#slideshow',
+                intro: 'Sont présentées ici les produits du jours',
+		position: 'right'
+              });
+	      <?php if(AuthComponent::user()): ?>
+	      introSteps.push({
+		element: '#logout',
                 intro: 'Pour passer en vue "Client", déconnectez vous, vous pourrez ensuite vous reconnecter si besoin',
-				position: 'left'
-              },
-			  
-			  {
-				element: '#dailyProductionLink',
+		position: 'left'
+              });
+		<?php endif; ?>
+	      <?php if($tokens['isAdmin']) : ?>
+	      introSteps.push({
+		element: '#dailyProductionLink',
                 intro: 'Vous pourrez ensuite vous rendre sur la page de saisie journalière des ventes',
-				position: 'left'
-              },
-			  
-            ];
+		position: 'left'
+              });
+	      <?php endif; ?>
 
 </script>
