@@ -168,6 +168,12 @@ if(!$slideshowInserted)
                 intro: 'Pour passer en vue "Client", déconnectez vous, vous pourrez ensuite vous reconnecter si besoin',
 		position: 'left'
               });
+	      <?php else: ?>
+	      introSteps.push({
+		element: '#login',
+                intro: 'Pour passer en vue "Artisan", connectez-vous avec le compte de démonstration',
+		position: 'left'
+              });
 		<?php endif; ?>
 	      <?php if($tokens['isAdmin']) : ?>
 	      introSteps.push({

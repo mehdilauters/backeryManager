@@ -170,5 +170,23 @@ class User extends AppModel {
         }
         return true;
     }
+
+
+public function afterFind($results, $primary = false)
+  {
+    $results = parent::afterFind($results, $primary);
+    foreach($results as $id => $data)
+    {
+      if(isset($results[$id][$this->alias]['phone']))
+      {
+	if( strlen($results[$id][$this->alias]['phone']) == 9)
+	{
+	  
+	  $results[$id][$this->alias]['phone'] = '0'.$results[$id][$this->alias]['phone'];
+	}
+      }
+    }
+    return $results;
+  }
   
 }

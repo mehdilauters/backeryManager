@@ -1,53 +1,31 @@
 <div class="users view">
-<h2><?php  echo __('User'); ?></h2>
-	<dl>
-		<dt><?php echo __('Id'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['id']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Media'); ?></dt>
+<h2>#<?php  echo h($user['User']['id']).' '.h($user['User']['name']); ?></h2>
+<div> inscrit depuis le
+			<?php 
+		      $date = new DateTime($user['User']['created']);
+		      echo $date->format('d/m/Y H:i'); ?>
+</div>
+<div>
+<a href="mailto:<?php echo h($user['User']['email']); ?>" ><?php echo h($user['User']['email']); ?></a>, <?php echo $this->MyHtml->getPhoneNumberText($user['User']['phone']); ?>
+<br/>
+<a href="http://maps.google.com/maps?q=<?php echo urlencode($user['User']['address']); ?>&z=17" target="_blank" ><?php echo $user['User']['address']; ?></a>
+<br/>
+Afficher le rib sur les factures:  <?php if($user['User']['rib_on_orders'])
+		      {
+			echo $this->Html->image('icons/dialog-ok-apply.png', array('id'=>'orderRibCheck_'.$user['User']['id'],'class'=>'icon','alt' => __('oui')));
+		      } ?>
+<br/>
+Remise: <?php 
+		      if($user['User']['discount'] != 0 )
+		      {
+			echo h($user['User']['discount'].'%'); 
+		      }?>
+</div>
+<!--		<dt><?php echo __('Media'); ?></dt>
 		<dd>
 			<?php echo $this->Html->link($user['Media']['name'], array('controller' => 'media', 'action' => 'view', $user['Media']['id'])); ?>
 			&nbsp;
-		</dd>
-		<dt><?php echo __('Email'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['email']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Name'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['name']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Rib on order'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['rib_on_orders']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('discount'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['discount']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('address'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['address']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('phone'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['phone']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Created'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['created']); ?>
-			&nbsp;
-		</dd>
-	</dl>
-</div>
+		</dd>-->
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
@@ -91,10 +69,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
+<
 	<div class="actions">
 		<ul>
 			<li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>
+</div>
 </div>

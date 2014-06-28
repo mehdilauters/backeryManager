@@ -1,5 +1,5 @@
 ﻿<div class="orders view">
-<table class="header" >
+<table class="header table" >
   <tr>
     <td>
       <?php echo $this->element('Companies/Preview', array('company'=>$company)); ?>
@@ -50,7 +50,7 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
 
 
 	<div>
-		<p>Arrêtée à la somme de <b><?php echo round($total['total']['HT'],2); ?>€</b></p>
+		<p>Arrêtée à la somme de <b class="orderTotal" ><?php echo round($total['total']['HT'],2); ?>€</b></p>
 	</div>
 	<?php if($order['User']['rib_on_orders']): ?>
 	<h3>Rib</h3>

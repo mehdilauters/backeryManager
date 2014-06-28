@@ -28,10 +28,9 @@
 				</div>
 			</div>
 			<div class="actions">
-		<!--       <?php echo $this->Html->link(__('View'), array('action' => 'view', $productType['ProductType']['id'])); ?> -->
 			  <?php if($tokens['isAdmin']) : ?>
-				<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $productType['ProductType']['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $productType['ProductType']['id']), null, __('Are you sure you want to delete # %s?', $productType['ProductType']['id'])); ?>
+			    <?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$productType['ProductType']['id'],'class'=>'icon','alt' => __('Edition'))), array('controller'=>'productTypes','action' => 'edit', $productType['ProductType']['id']),  array('escape' => false, 'title'=>'editer')); ?>
+			    <?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$productType['ProductType']['id'],'class'=>'icon','alt' => __('supprimer'))), array('controller'=>'productTypes','action' => 'delete', $productType['ProductType']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $productType['ProductType']['id'])); ?>
 			  <?php endif ?> 
 			</div>
 		</div>

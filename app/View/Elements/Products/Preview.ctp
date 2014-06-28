@@ -64,8 +64,8 @@ $class = '';
 			<div>Disponible en permanance</div>
 		  <?php } ?>
 			<div class="actions">
-			  <?php echo $this->Html->link(__('Edit'), array('controller' => 'products', 'action' => 'edit', $data['id'])); ?>
-			  <?php echo $this->Form->postLink(__('Delete'), array('controller' => 'products', 'action' => 'delete', $data['id']), null, __('Are you sure you want to delete # %s?', $data['id'])); ?>
+			    <?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$data['id'],'class'=>'icon','alt' => __('Edition'))), array('controller'=>'products','action' => 'edit', $data['id']),  array('escape' => false, 'title'=>'editer')); ?>
+			    <?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$data['id'],'class'=>'icon','alt' => __('supprimer'))), array('controller'=>'products','action' => 'delete', $data['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $data['id'])); ?>
 		  </div>
 			<?php endif ?>
 	  </div>
