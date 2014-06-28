@@ -115,6 +115,7 @@ create table if not exists users (
   password varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   `rib_on_orders` boolean default TRUE,
+  `autostart_help` boolean default TRUE,
   `created` datetime DEFAULT NULL,
   address text CHARACTER SET utf8 COLLATE utf8_bin ,
   phone int ,

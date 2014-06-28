@@ -20,6 +20,13 @@ Remise: <?php
 		      {
 			echo h($user['User']['discount'].'%'); 
 		      }?>
+
+<br/>
+mode presentation : <?php if($user['User']['autostart_help'])
+		      {
+			echo $this->Html->image('icons/dialog-ok-apply.png', array('id'=>'orderRibCheck_'.$user['User']['id'],'class'=>'icon','alt' => __('oui')));
+		      } ?>
+
 </div>
 <!--		<dt><?php echo __('Media'); ?></dt>
 		<dd>

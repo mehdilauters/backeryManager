@@ -101,6 +101,13 @@ if(!$slideshowInserted)
               { 
                 intro: 'Bienvenue dans la version de démonstration de <b>BakeryManager</b><br/>Vous êtes maintenant dans la peau d\'un boulanger ayant récemment ouvert un dépot de pain et visitant la page principale de son outil <br/> <a href="mailto:mehdilauters@gmail.com" >Mehdi Lauters</a>'
               });
+	<?php } else { ?>
+	      introSteps.push(
+              { 
+                element: '#helpLink',
+                position: 'left',
+                intro: 'Pour désactiver l\'aide automatique, cliquez ici <a href="<?php echo $this->webroot ?>users/setPresentationMode/0" >Désactiver</a>',
+              });
 	<?php } ?>
 	    introSteps.push(
               {

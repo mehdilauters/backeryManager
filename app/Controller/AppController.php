@@ -240,6 +240,27 @@ class AppController extends Controller {
   
      $this->set('menu', $this->menu);
     
+    // check if we need to start intro.js
+    if(!$this->Session->check('intro'))
+    {
+      $this->Session->write('intro', array());
+    }
+    $introAutostart = false;
+    if($this->Auth->user('autostart_help'))
+    {
+      $introAutostart = true;
+    }
+    $introKey = 'intro.'.$this->request->params['controller'].'.'.$this->request->params['action'];
+    if(!$this->Session->check($introKey))
+    {
+      $introAutostart = true;
+      $this->Session->write($introKey, true);
+    }
+
+      $this->set('introAutostart', $introAutostart);
+$this->set('introAutostart', true);
+
+
      // debug($this->Auth->user('isRoot'));
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
@@ -355,8 +376,8 @@ public function getFunctionText($coefficients)
 	$this->Auth->allow();
    }
 
-
-
+    
+// if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))
 
 	  // $user = $this->User->find('first',array('conditions'=>array('User.email' => 'mehdilauters@gmail.com')));
 			// if(isset($user['User']['id']))

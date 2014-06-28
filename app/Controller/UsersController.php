@@ -90,6 +90,21 @@ class UsersController extends AppController {
 		$this->set(compact('media'));
 	}
 
+	public function setPresentationMode($autostartHelp = false) {
+			$id = $this->Auth->user('id');
+// 			if ($this->request->is('post') || $this->request->is('put')) {
+			  $user = $this->User->findById($id);
+			  $user['User']['autostart_help'] = $autostartHelp;
+			  if ($this->User->save($user)) {
+				  $this->Session->setFlash(__('L\aide à été désactivée pour le compte #'.$id),'flash/ok');
+				  $this->redirect('/');
+			  } else {
+				  $this->Session->setFlash(__('Impossible de désactiver l\'aide'),'flash/fail');
+				  $this->redirect('/');
+			  }
+// 			}
+	}
+
 	
 	public function setIsRoot($id = null, $isRoot = false) {
 		if (!$this->User->exists($id)) {

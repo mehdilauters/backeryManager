@@ -391,10 +391,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= '
-		update sales set produced = 0 where produced is null;
-		update sales set lost = 0 where lost is null;
-		ALTER TABLE `companies`
-		add `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ;
+		    alter table users add `autostart_help` boolean default TRUE;
 
 ';	
 		$db = ConnectionManager::getDataSource('default');
