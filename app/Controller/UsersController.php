@@ -197,6 +197,7 @@ class UsersController extends AppController {
 		{
 			$this->Cookie->write('demoLogout', true, true, '10 weeks');
 		}
+		$this->Cookie->delete('bakeryManagerUser');
 		$this->redirect($this->Auth->logout());
 	}	
 	
