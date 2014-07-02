@@ -246,17 +246,16 @@ class AppController extends Controller {
       $this->Session->write('intro', array());
     }
     $introAutostart = false;
-    if($this->Auth->user('autostart_help'))
-    {
-      $introAutostart = true;
-    }
     $introKey = 'intro.'.$this->request->params['controller'].'.'.$this->request->params['action'];
     if(!$this->Session->check($introKey))
     {
       $introAutostart = true;
       $this->Session->write($introKey, true);
     }
-
+    if(!$this->Auth->user('autostart_help'))
+    {
+      $introAutostart = false;
+    }
       $this->set('introAutostart', $introAutostart);
 // $this->set('introAutostart', true);
 

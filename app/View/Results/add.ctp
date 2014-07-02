@@ -149,6 +149,9 @@ function checkTotals()
 			});
 	});
 	
+	data[idShop]['totalCategories'] = Math.round(data[idShop]['totalCategories'] * 100) / 100;
+	data[idShop]['totalShopCategory'] = Math.round(data[idShop]['totalShopCategory'] * 100) / 100;
+
 	var ok = true;
 	var totalDay = 0;
 	for(var shop in data)
