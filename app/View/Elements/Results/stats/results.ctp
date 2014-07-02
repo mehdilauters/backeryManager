@@ -48,7 +48,6 @@
 		'week'=> 'Semaine',
 		'month'=> 'Mois',
 		'year'=> 'Année',
-		'weekday'=> 'Jour de la semaine',
 	);
   
 ?>
@@ -60,20 +59,60 @@
 	</div>
 	<div class="<?php if(!$config['interactive']) echo 'hideJs'; ?>" >
 		<table id="resultsStatValuesLegend" class="hideJs">
+<?php
+// get minYear and maxYear
+$compareCurve = '';
+$noCompareCurve = 'curve_';
+$yearDatePattern = 'Y';
+if($this->request->data['compare']['date'])
+{
+  $compareCurve = 'curve_';
+  $noCompareCurve = '';
+  $minYear = 65635;
+  $maxYear = 0;
+  foreach($results['results'] as $i=>$result)
+  {
+    $date = new DateTime($result['Result']['date']);
+    $curYear = $date->format('Y');
+    $datePattern = new DateTime();
+    $yearDatePattern = $datePattern->format('Y');
+    if( $curYear > $maxYear)
+    {
+      $maxYear = $curYear;
+    }
+    if( $curYear < $minYear)
+    {
+      $minYear = $curYear;
+    }
+  }
+}
+ ?>
 			<tr>
 				<td class="approxColumn label_curve_totalApprox" >Total € (approximation)</td>
 				<td class="label_curve_total" >Total € </td>
 				<?php if($fields['shop']) :
 					foreach($results['shops'] as $shopId => $shopName):
+					    if(!$this->request->data['compare']['date']):
 				?>
 				
 					<td class="label_curve_Shop<?php echo  $shopId; ?>"  ><?php echo  $shopName; ?> €</td>
 					<td class="approxColumn label_curve_ShopApprox<?php echo  $shopId; ?>" ><?php echo  $shopName; ?> (approximation) €</td>
+					<?php 
+					  else:
+					    for($i = $minYear; $i <= $maxYear; $i++): ?>
+					    <td class="label_curve_shop_<?php echo  $shopId; ?>_year_<?php echo $i ?>"  ><?php echo  $shopName.' année '.$i; ?></td>
+					  <?php endfor; 
+					  endif; ?>
 				<?php endforeach;
-				else: ?>
+				else: 
+				      if(!$this->request->data['compare']['date']): ?>
 					<td class="label_curve_Shop<?php echo  0; ?>"  ><?php echo  'Tous'; ?> €</td>
 					<td class="approxColumn label_curve_ShopApprox<?php echo  0; ?>" ><?php echo  'Tous'; ?> (approximation) €</td>
-				  <?php
+					 <?php else: ?>
+					    <?php for($i = $minYear; $i <= $maxYear; $i++): ?>
+					    <td class="label_curve_shop_0_year_<?php echo $i ?>"  ><?php echo  $shopName.' année '.$i; ?></td>
+					  <?php endfor; 
+					  endif;
 					endif;
 					?>
 			</tr>
@@ -105,26 +144,23 @@
 						switch($results['group']['time'])
 						{	
 							case 'weekday':
-								$dateDisplay = $date->format('d/m/Y'); 
+								$dateDisplay = $date->format('d/m/'.$yearDatePattern); 
 							break;
 							case 'day':
-								$dateDisplay = $date->format('d/m/Y');
+								$dateDisplay = $date->format('d/m/'.$yearDatePattern);
 							break;
 							case 'week':
 								$weekNumber = $date->format('W');
-								$dateDisplay = date( 'd/m/Y', strtotime('last monday', strtotime('tomorrow', $date->getTimestamp())));
-								$nbDaysMax = 8;
+								$dateDisplay = date( 'd/m/'.$yearDatePattern, strtotime('last monday', strtotime('tomorrow', $date->getTimestamp())));
 							break;
 							case 'month':
-								$dateDisplay = $date->format('01/m/Y');
-								$nbDaysMax = 32;
+								$dateDisplay = $date->format('01/m/'.$yearDatePattern);
 							break;
 							case 'year':
-								$dateDisplay = $date->format('01/01/Y');
-								$nbDaysMax = 366;
+								$dateDisplay = $date->format('01/01/'.$yearDatePattern);
 							break;
 							default:
-								$dateDisplay = $date->format('d/m/Y'); 
+								$dateDisplay = $date->format('d/m/'.$yearDatePattern); 
 							break;
 						}
 						echo  $dateDisplay;
@@ -157,9 +193,17 @@
 					?>
 				</td>
 			<?php } ?>
-				<td class="shop" ><?php if($fields['shop']) {echo  '<a href="'.$this->webroot.'shops/view/'.$result['Shop']['id'].'" >'.$result['Shop']['name'].'</a>';} else { echo 'Tous' ;} ?></td>
-				<td class="approxColumn shop noDisplay curve_totalApprox curve_ShopApprox<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0; } ?>" ><?php echo round($result[0]['approximation'],2); ?></td>
-			  <td class="rowTotal curve_total curve_Shop<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>"><?php echo round($total,2) ?></td>
+				<td class="shop" >
+				  <?php if($fields['shop']) {
+					  echo  '<a href="'.$this->webroot.'shops/view/'.$result['Shop']['id'].'" >'.$result['Shop']['name'].'</a>';
+					}
+					else
+					{ 
+					  echo 'Tous';
+					} ?>
+				  </td>
+				<td class="approxColumn shop noDisplay <?php echo $noCompareCurve?>totalApprox <?php echo $noCompareCurve?>ShopApprox<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0; } ?>" ><?php echo round($result[0]['approximation'],2); ?></td>
+			  <td class="rowTotal <?php echo $noCompareCurve?>total <?php echo $compareCurve?>shop_<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>_year_<?php echo $date->format('Y'); ?> <?php echo $noCompareCurve?>Shop<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>"><?php echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
 			  <td class="card"><?php if($total != 0){ echo round($result[0]['card'] / $total *100, 2); } ?></td>

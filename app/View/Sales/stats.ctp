@@ -6,7 +6,7 @@
 									      'options'=>(array( '' => '',
 											  'weekday' => 'Jour de la semaine',
 											  'day' => 'Jour',
-											  'semaine' => 'Semaine',
+											  'week' => 'Semaine',
 											  'month' => 'Mois',
 											  'year' => 'Année',
 											)))); ?>

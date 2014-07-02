@@ -252,14 +252,17 @@ class ResultsController extends AppController {
 	foreach($results as &$res)
 	{
 		$curDate = new DateTime($res['Result']['date']);
-		$dateDiff = $initDate[$res['Result']['shop_id']]->diff($curDate);
-		$x = $dateDiff->days / $nbDaysByInterval;
-		$y = $regressions[$res['Result']['shop_id']]->interpolate($approximation[$res['Result']['shop_id']],$x);
-		if($y < 0)
+		if(isset($initDate[$res['Result']['shop_id']])) // may not be set if it was the last res (for => nb-1)
 		{
-			$y =0;
+		  $dateDiff = $initDate[$res['Result']['shop_id']]->diff($curDate);
+		  $x = $dateDiff->days / $nbDaysByInterval;
+		  $y = $regressions[$res['Result']['shop_id']]->interpolate($approximation[$res['Result']['shop_id']],$x);
+		  if($y < 0)
+		  {
+			  $y =0;
+		  }
+		  $res[0]['approximation'] = $y;
 		}
-		$res[0]['approximation'] = $y;
 		$lastDate = $curDate;
 	}
 	
@@ -285,15 +288,18 @@ class ResultsController extends AppController {
 		$lastDate->modify('+'.($nbDaysByInterval).' day');
 		foreach($regressions as $shopId => $regression)
 		{
-			$dateDiff = $initDate[$shopId]->diff($lastDate);
-			$x = $dateDiff->days / $nbDaysByInterval;
-			$y = $regressions[$shopId]->interpolate($approximation[$shopId],$x);
-			$res[0]['approximation'] = $y;
-			$res['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
-			$res['Result']['shop_id']  = $shopId;
-			$res['Shop']['id'] = $shopId;
-			$res['Shop']['name'] = 'tmp_'.$shopId;
-			$results[] = $res;
+			if(isset($initDate[$shopId])) // may not be set if it was the last res (for => nb-1)
+			{
+			  $dateDiff = $initDate[$shopId]->diff($lastDate);
+			  $x = $dateDiff->days / $nbDaysByInterval;
+			  $y = $regressions[$shopId]->interpolate($approximation[$shopId],$x);
+			  $res[0]['approximation'] = $y;
+			  $res['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
+			  $res['Result']['shop_id']  = $shopId;
+			  $res['Shop']['id'] = $shopId;
+			  $res['Shop']['name'] = 'tmp_'.$shopId;
+			  $results[] = $res;
+			}
 		}		
 	}
 	
@@ -358,15 +364,18 @@ class ResultsController extends AppController {
 	{
 		$productTypeId = $resEntry['ProductTypes']['id'];
 		$shopId = $resEntry['Shop']['id'];
-		$curDate = new DateTime($resEntry['ResultsEntry']['date']);
-		$dateDiff = $initDate[$productTypeId][$shopId]->diff($curDate);
-		$x = $dateDiff->days / $nbDaysByInterval;
-		$y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$productTypeId][$shopId],$x);
-		if($y < 0)
+		if(isset($initDate[$productTypeId][$shopId])) // may not be set if it was the last res (for => nb-1)
 		{
-			$y =0;
+		  $curDate = new DateTime($resEntry['ResultsEntry']['date']);
+		  $dateDiff = $initDate[$productTypeId][$shopId]->diff($curDate);
+		  $x = $dateDiff->days / $nbDaysByInterval;
+		  $y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$productTypeId][$shopId],$x);
+		  if($y < 0)
+		  {
+			  $y =0;
+		  }
+		  $resEntry[0]['approximation'] = $y;
 		}
-		$resEntry[0]['approximation'] = $y;
 		$lastDate = $curDate;
 	}
 	

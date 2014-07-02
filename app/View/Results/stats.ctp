@@ -13,7 +13,7 @@
 									      'options'=>(array( '' => '',
 											  'weekday' => 'Jour de la semaine',
 											  'day' => 'Jour',
-											  'semaine' => 'Semaine',
+											  'week' => 'Semaine',
 											  'month' => 'Mois',
 											  'year' => 'Année',
 											)))); ?>
@@ -44,6 +44,13 @@
 												      '4'=>'Quadratique',
 												      Configure::read('Settings.Approximation.order') => 'Maximum',
 												      )))); ?>
+    </fieldset>
+
+
+<fieldset class="alert alert-info">
+      <label>Comparaison</label>
+		<div>Comparer sur plusieurs mois/années?</div>
+		<?php echo $this->Form->input('compare.date', array('label'=>'Comparer', 'type'=>'checkbox')); ?>
     </fieldset>
 
 <?php echo $this->Form->end(__('Submit')); ?>
