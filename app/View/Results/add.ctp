@@ -172,7 +172,7 @@ function checkTotals()
 			$('li#'+shop+' div.alert > span').html('');
 		}
 	}
-	$('#totalDay').html('('+totalDay + ' €)');
+	$('#totalDay').html('('+Math.round(totalDay  * 100) / 100;+ ' €)');
 	return ok;
 }
 
