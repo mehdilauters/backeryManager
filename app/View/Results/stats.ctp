@@ -50,6 +50,6 @@
 </div>
 <?php   //echo $this->element('Results/stats', array('results'=>$results, 'resultsEntries'=>$resultsEntries, 'shops'=>$shops, 'productTypes'=>$productTypes)); ?>
 <?php   echo $this->element('Results/stats/results', array('results'=>$results)); ?>
-<a name="resultsEntries" />
+<a name="resultsEntries" ></a>
 <?php   echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$results, 'config'=>array('shopComparative'=>true))); ?>
 </div> 

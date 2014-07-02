@@ -90,15 +90,15 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
   <?php if($fields['productType']) { ?><th>Type de produit</th><?php } ?>
   <?php if($fields['shop']) { ?><th>Magasin</th><?php } ?>
   <th class="label_curve_produced" >Production</th>
-  <th class="label_curve_producedApproximation" >Production Approximation</th>
+  <th class="approxColumn label_curve_producedApproximation" >Production Approximation</th>
   <th class="label_curve_lost" >Perte</th>
-  <th class="label_curve_lostApproximation" >Perte Approximation</th>
+  <th class="approxColumn label_curve_lostApproximation" >Perte Approximation</th>
   <th class="label_curve_sold" >Vente</th>
-  <th class="label_curve_soldApproximation" >Vente Approximation</th>
+  <th class="approxColumn label_curve_soldApproximation" >Vente Approximation</th>
   <th class="label_curve_totalPrice" >Prix (€)</th>
-  <th class="label_curve_totalPriceApproximation" >Prix € Approximation</th>
+  <th class="approxColumn label_curve_totalPriceApproximation" >Prix € Approximation</th>
   <th class="label_curve_totalLost" >Perte (€)</th>
-  <th class="label_curve_totalLostApproximation" >Perte € Approximation</th>
+  <th class="approxColumn label_curve_totalLostApproximation" >Perte € Approximation</th>
   <?php if($fields['comment']) { ?><th>Commentaires</th><?php } ?>
 </tr>
 <?php
@@ -169,20 +169,20 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 		?>
 	  </td>
 	  <?php } ?>
-      <?php if($fields['product']) { ?><td class="productName"><?php echo $sales['products'][$sale['Sale']['product_id']]['Product']['name'] ?></td><?php } ?>
-      <?php if($fields['productType']) { ?><td class="productTypeName"><?php echo $sales['products'][$sale['Sale']['product_id']]['ProductType']['name'] ?></td><?php } ?>
-      <?php if($fields['shop']) { ?><td class="shopName"><?php echo $sales['shops'][$sale['Sale']['shop_id']] ?></td><?php } ?>
+      <?php if($fields['product']) { ?><td class="productName"><a href="<?php echo $this->webroot ?>products/view/<?php echo $sale['Sale']['product_id']?>" ><?php echo $sales['products'][$sale['Sale']['product_id']]['Product']['name'] ?></a></td><?php } ?>
+      <?php if($fields['productType']) { ?><td class="productTypeName"><a href="<?php echo $this->webroot ?>productTypes/view/<?php echo $sale['Sale']['product_id'] ?>" ><?php echo $sales['products'][$sale['Sale']['product_id']]['ProductType']['name'] ?></a></td><?php } ?>
+      <?php if($fields['shop']) { ?><td class="shopName"><a href="<?php echo $this->webroot ?>shops/view/<?php echo $sale['Sale']['shop_id'] ?>" ><?php echo $sales['shops'][$sale['Sale']['shop_id']] ?></a></td><?php } ?>
 
-      <td class="produced noDisplay curve_produced" ><?php echo $sale[0]['produced'] ?></td>
-	  <td class="producedApprox curve_producedApproximation" ><?php echo round($sale[0]['producedApproximation'],2) ?></td>
-      <td class="<?php echo $class ?> lost noDisplay curve_lost" ><?php echo $sale[0]['lost'] ?></td>
-	  <td class="lostApprox curve_lostApproximation" ><?php echo round($sale[0]['lostApproximation'],2) ?></td>
-      <td class="sold noDisplay curve_sold"><?php echo $sale[0]['sold'] ?></td>
-	  <td class="soldApprox curve_soldApproximation" ><?php echo round($sale[0]['soldApproximation'],2) ?></td>
-      <td class="totalPrice noDisplay curve_totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
-	  <td class="totalPriceApprox curve_totalPriceApproximation" ><?php echo round($sale[0]['totalPriceApproximation'],2) ?></td>
-      <td class="totalLost noDisplay curve_totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
-	  <td class="totalLostApprox curve_totalLostApproximation" ><?php echo round($sale[0]['totalLostApproximation'],2) ?></td>
+      <td class="produced curve_produced" ><?php echo $sale[0]['produced'] ?></td>
+	  <td class="approxColumn producedApprox noDisplay curve_producedApproximation" ><?php echo round($sale[0]['producedApproximation'],2) ?></td>
+      <td class="<?php echo $class ?> lost curve_lost" ><?php echo $sale[0]['lost'] ?></td>
+	  <td class="approxColumn lostApprox noDisplay curve_lostApproximation" ><?php echo round($sale[0]['lostApproximation'],2) ?></td>
+      <td class="sold curve_sold"><?php echo $sale[0]['sold'] ?></td>
+	  <td class="approxColumn soldApprox noDisplay curve_soldApproximation" ><?php echo round($sale[0]['soldApproximation'],2) ?></td>
+      <td class="totalPrice curve_totalPrice"><?php echo round($sale[0]['totalPrice'],2) ?></td>
+	  <td class="approxColumn totalPriceApprox noDisplay curve_totalPriceApproximation" ><?php echo round($sale[0]['totalPriceApproximation'],2) ?></td>
+      <td class="totalLost curve_totalLost"><?php echo round($sale[0]['totalLost'],2) ?></td>
+	  <td class="approxColumn totalLostApprox noDisplay curve_totalLostApproximation" ><?php echo round($sale[0]['totalLostApproximation'],2) ?></td>
       <?php if($fields['comment']) { ?><td class="comment"><?php echo $sale['Sale']['comment'] ?></td><?php } ?>
    </tr>
    
@@ -216,7 +216,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 					name:['ColsVisibility'],
 					src:['<?php echo $this->webroot ?>/js/TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js'],
 					description:['Columns visibility manager'],
-					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0);}]
+					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0); o.HideCol(6); o.HideCol(8); o.HideCol(10); o.HideCol(12); o.HideCol(14);}]
 					},
               on_after_refresh_counter: function(o,i){ 
 				  try

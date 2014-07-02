@@ -1,7 +1,3 @@
-/*var markers = [
-	{}
-	];
-*/
 function curveDisplay(chartId, curveId, status)
 	{
 		var chartVarName = chartId + '_chartPlot';
@@ -22,9 +18,11 @@ function curveDisplay(chartId, curveId, status)
 	var chartVarName = chartId + '_chartPlot';
 	var chart = window[chartVarName];
 	var status = $('#toggle_'+chartId).prop('checked');
-	var checkBox = $('.controlChart_'+chartId+' input.curveControl');
-	checkBox.prop('checked',status);
+	var checkBox = $('#controlChart_'+chartId+' input.curveControl');
 	
+	checkBox.each(function(index, item){
+	    $(item).prop('checked',status);
+	});	
 	
 	for (key in chart.series) {
 		chart.series[key].show = status;

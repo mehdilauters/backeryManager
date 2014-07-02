@@ -604,3 +604,11 @@ td.actions img.icon {
     color: yellow;
     font-size:2em;
 }
+
+.approxColumn{
+ color:gray; 
+}
+
+.cols_checklist_item{
+   color:black;
+}

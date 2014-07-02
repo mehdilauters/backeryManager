@@ -47,22 +47,20 @@ class SalesController extends AppController {
 	*/	
 		// select current days historic (ie Monday) productTypes...
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array( 'ResultsEntry' => array(
-																																	'DAYNAME(ResultsEntry.date) = DAYNAME(\''.$now->format('Y-m-d H:i:s').'\')'
-																																)), 'group' => array('time'=>'day', 'productType'=>'productType'))));
+				'DAYNAME(ResultsEntry.date) = DAYNAME(\''.$now->format('Y-m-d H:i:s').'\')'
+				)),
+				'group' => array('time'=>'day', 'productType'=>'productType'))));
 		$this->set('dayStats',$res);
 		
 		
 		
 		// select current days historic (ie 21/03) productsTypes...
 		$res = $this->requestAction(array('controller'=>'sales', 'action'=>'stats'), array( 'pass'=>array('conditions'=>
-																										array(
-																											'DATE_FORMAT(Sale.date,"%m-%d") = DATE_FORMAT(\''.$now->format('Y-m-d H:i:s').'\', "%m-%d")'
-																											),
-																											'group' => array('time'=>'day', 'shop'=>'shop', 'product'=>''))));
-		$this->set(compact('products','shops'));
-		$this->set('sales',$res['sales']);
-		$this->set('products',$res['products']);
-		$this->set('shops',$res['shops']);
+					array(
+						'DATE_FORMAT(Sale.date,"%m-%d") = DATE_FORMAT(\''.$now->format('Y-m-d H:i:s').'\', "%m-%d")'
+						),
+						'group' => array('time'=>'day', 'shop'=>'shop', 'product'=>''))));
+		$this->set('sales',$res);
 	}
 
 

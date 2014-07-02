@@ -76,7 +76,7 @@ if(isset($this->request->data['group']))
 	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
 		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>Legend" class="hideJs">
 			<tr>
-				<td class="label_curve_totalApprox" >Total € (approximation)</td>
+				<td class="noDisplay approxColumn label_curve_totalApprox" >Total € (approximation)</td>
 				<td class="label_curve_total" >Total € </td>
 				<?php
 				  $curves = array();
@@ -119,18 +119,18 @@ if(isset($this->request->data['group']))
 				  foreach($curves as $id => $name)
 				  { ?>
 				    <td class="label_curve_<?php echo $id ?>" ><?php echo  $name; ?></td>
-				    <td class="label_curve_approx_<?php echo $id ?>" ><?php echo  $name; ?> (approximation) </td>
+				    <td class="noDisplay approxColumn label_curve_approx_<?php echo $id ?>" ><?php echo  $name; ?> (approximation) </td>
 				 <?php } ?>
 
 			</tr>
 		</table>
-		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>" class="table-striped tablePreview">
+		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>" class="table table-striped tablePreview">
 		  <tr class="legend plot" >
 			<?php if($fields['date']) { ?><th>Date</th><?php } ?>
 			<?php if($fields['shop']) { ?><th class="shop" >Magasin</th> <?php } ?>
 			<th class="productType" >Type de Produit</th>
 			<th class="cash" >Somme €</th>
-			<th class="cash" >Somme approx €</th>
+			<th class="noDisplay approxColumn cash" >Somme approx €</th>
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th><?php } ?>
 		  </tr>
 			<?php 
@@ -196,8 +196,8 @@ if(isset($this->request->data['group']))
 			  ?>
 			  <td class="shop" ><?php if($fields['shop']) { echo  $resultsEntry['Shop']['name']; } else { echo 'Tous'; } ?></td>
 			  <td class="productType "><?php if($fields['productType']) { echo $resultsEntry['ProductTypes']['name']; } else {echo 'Tous';} ?></td>
-			  <td class="rowTotal noDisplay curve_total curve_<?php echo $curveId; ?> "><?php echo round($resultsEntry[0]['result'], 2) ?></td>
-			  <td class="rowTotal  curve_totalApprox curve_approx_<?php echo $curveId; ?>  ?>"><?php echo round($resultsEntry[0]['approximation'], 2) ?></td>
+			  <td class="rowTotal curve_total curve_<?php echo $curveId; ?> "><?php echo round($resultsEntry[0]['result'], 2) ?></td>
+			  <td class="approxColumn noDisplay  rowTotal  curve_totalApprox curve_approx_<?php echo $curveId; ?>  ?>"><?php echo round($resultsEntry[0]['approximation'], 2) ?></td>
 			   <?php if($fields['date']) { ?><td class="date" style="display:none" ><?php 
 						switch($resultsEntries['group']['time'])
 						{	
@@ -237,23 +237,23 @@ if(isset($this->request->data['group']))
   		<?php if($config['interactive'])
 		{
 		?>
-		// js exception
-	/*		var tfConfig2 = {
-              base_path: '<?php echo $this->webroot ?>js/TableFilter/',
-			  extensions: {
-					name:['ColsVisibility'],
-					src:['<?php echo $this->webroot ?>/js/TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js'],
-					description:['Columns visibility manager'],
-					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0); o.HideCol(3);}]
-					},
-              rows_counter:true,
-              on_after_refresh_counter: function(o,i){ histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>', true); }
-              };
-			  
-			  setFilterGrid("resultsEntriesStatValues",tfConfig2);  
-			  
-			//tf1 = new TF('resultsEntriesStatValues', tfConfig2); tf1.AddGrid();
-			*/
+// 		// js exception
+// 			var tfConfig2 = {
+//               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
+// 			  /*extensions: {
+// 					name:['ColsVisibility'],
+// 					src:['<?php echo $this->webroot ?>/js/TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js'],
+// 					description:['Columns visibility manager'],
+// 					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0); o.HideCol(3);}]
+// 					},*/
+//               rows_counter:true,
+//               on_after_refresh_counter: function(o,i){ histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>', true); }
+//               };
+// 			  
+// // 			  setFilterGrid("resultsEntriesStatValues",tfConfig2);  
+// // 			  
+// 			tf1 = new TF('resultsEntriesStatValues_<?php echo $config['id'] ?>', tfConfig2); tf1.AddGrid();
+// 			
 			histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>');
 				<?php }else{ ?>
 		histogram('resultsEntriesStatValues_<?php echo $config['id'] ?>','resultsEntriesChart_<?php echo $config['id'] ?>');

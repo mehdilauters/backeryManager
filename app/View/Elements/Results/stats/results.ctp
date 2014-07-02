@@ -61,18 +61,18 @@
 	<div class="<?php if(!$config['interactive']) echo 'hideJs'; ?>" >
 		<table id="resultsStatValuesLegend" class="hideJs">
 			<tr>
-				<td class="label_curve_totalApprox" >Total € (approximation)</td>
+				<td class="approxColumn label_curve_totalApprox" >Total € (approximation)</td>
 				<td class="label_curve_total" >Total € </td>
 				<?php if($fields['shop']) :
 					foreach($results['shops'] as $shopId => $shopName):
 				?>
 				
 					<td class="label_curve_Shop<?php echo  $shopId; ?>"  ><?php echo  $shopName; ?> €</td>
-					<td class="label_curve_ShopApprox<?php echo  $shopId; ?>" ><?php echo  $shopName; ?> (approximation) €</td>
+					<td class="approxColumn label_curve_ShopApprox<?php echo  $shopId; ?>" ><?php echo  $shopName; ?> (approximation) €</td>
 				<?php endforeach;
 				else: ?>
 					<td class="label_curve_Shop<?php echo  0; ?>"  ><?php echo  'Tous'; ?> €</td>
-					<td class="label_curve_ShopApprox<?php echo  0; ?>" ><?php echo  'Tous'; ?> (approximation) €</td>
+					<td class="approxColumn label_curve_ShopApprox<?php echo  0; ?>" ><?php echo  'Tous'; ?> (approximation) €</td>
 				  <?php
 					endif;
 					?>
@@ -84,7 +84,8 @@
 			<?php if($fields['date']) { ?><th class="date" style="display:none" >Date</th>
 				<th>date</th>
 			<?php } ?>
-			<th class="shop" >Magasin</th><th class="shop" >Approximation</th>
+			<th class="shop" >Magasin</th>
+			<th class="approxColumn shop" >Approximation</th>
 			<th class="rowTotal" >Total</th>
 			<th class="cash" >Especes %</th>
 			<th class="check" >Cheques %</th>
@@ -156,9 +157,9 @@
 					?>
 				</td>
 			<?php } ?>
-				<td class="shop" ><?php if($fields['shop']) {echo  $result['Shop']['name'];} else { echo 'Tous' ;} ?></td>
-				<td class="shop curve_totalApprox curve_ShopApprox<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0; } ?>" ><?php echo round($result[0]['approximation'],2); ?></td>
-			  <td class="rowTotal noDisplay curve_total curve_Shop<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>"><?php echo round($total,2) ?></td>
+				<td class="shop" ><?php if($fields['shop']) {echo  '<a href="'.$this->webroot.'shops/view/'.$result['Shop']['id'].'" >'.$result['Shop']['name'].'</a>';} else { echo 'Tous' ;} ?></td>
+				<td class="approxColumn shop noDisplay curve_totalApprox curve_ShopApprox<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0; } ?>" ><?php echo round($result[0]['approximation'],2); ?></td>
+			  <td class="rowTotal curve_total curve_Shop<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>"><?php echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
 			  <td class="card"><?php if($total != 0){ echo round($result[0]['card'] / $total *100, 2); } ?></td>
@@ -185,7 +186,7 @@
 					name:['ColsVisibility'],
 					src:['<?php echo $this->webroot ?>/js/TableFilter/TFExt_ColsVisibility/TFExt_ColsVisibility.js'],
 					description:['Columns visibility manager'],
-					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0);}]
+					initialize:[function(o){o.SetColsVisibility(); o.HideCol(0); o.HideCol(3);}]
 					},
               on_after_refresh_counter: function(o,i){ histogram('resultsStatValues','resultsChart', true);  }
               };

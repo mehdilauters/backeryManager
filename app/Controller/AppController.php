@@ -258,7 +258,7 @@ class AppController extends Controller {
     }
 
       $this->set('introAutostart', $introAutostart);
-$this->set('introAutostart', true);
+// $this->set('introAutostart', true);
 
 
      // debug($this->Auth->user('isRoot'));
@@ -271,7 +271,6 @@ $this->set('introAutostart', true);
     //Load model, components...
     $newsController->constructClasses();
     $news = $newsController->getNews();
-
 //     $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
     $this->set('news',$news);
 	

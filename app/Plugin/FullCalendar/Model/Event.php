@@ -51,7 +51,7 @@ class Event extends FullCalendarAppModel {
 		),
 		'recursive' => array(
 			'inList' => array(
-				'rule' => array('inList', array('','day', 'week', 'month', 'day')),
+				'rule' => array('inList', array('','year','day', 'week', 'month', 'day')),
 			),
 		),
 		'recursive_start' => array(
@@ -93,18 +93,15 @@ class Event extends FullCalendarAppModel {
       {
 	$start = $this->data['Event']['start'];
 	$end = $this->data['Event']['end'];
-	return ($start < $end);
+	return ($start <= $end);
       }
 
       public function beforeSave($options = array())
       {
 	if( $this->data['Event']['recursive'] == '' )
 	{
-	  if(isset($this->data['Event']['recursive_start']))
-	  {
 	    $this->data['Event']['recursive_start'] = '';
-	    $this->data['Event']['recursive_start'] = '';
-	  }
+	    $this->data['Event']['recursive_end'] = '';
 	}
       }
 

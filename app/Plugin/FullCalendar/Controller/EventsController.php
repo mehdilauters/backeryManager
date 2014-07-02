@@ -57,35 +57,67 @@ class EventsController extends FullCalendarAppController {
 	  }
 
 
-	function add($eventTypeId = null) {
+	function add($eventTypeId = null, $id = null) {
 		if (!empty($this->data)) {
-			debug($this->data);
 			$this->Event->create();
 			$event = $this->data;
 			if($this->data['Event']['recursive'] != '')
 			{
 			  $startDate = $this->viewDateToDateTime($this->data['Event']['recursive_start'] . ' 00:00');
+			  if(!$startDate) // hour from Form
+			  {
+			      $startDate = $this->viewDateToDateTime($this->data['Event']['recursive_start']);
+			  }
 			  $endDate = $this->viewDateToDateTime($this->data['Event']['recursive_end'] . ' 23:59');
+			  if( !$endDate )
+			  {
+			    $endDate = $this->viewDateToDateTime($this->data['Event']['recursive_end']);
+			  }
 			  if($startDate != false &&  $endDate !=false )
 			  {
 			    $event['Event']['recursive_start'] = $startDate->format('Y-m-d H:i:s');
 			    $event['Event']['recursive_end'] = $endDate->format('Y-m-d H:i:s'); 
 			  }
+			  else
+			  {
+			    $this->log('event recursive date invalid : '.$startDate.' => '.$endDate,'debug');
+			  }
 			}
-
-			  $startDate = $this->viewDateToDateTime($this->data['Event']['start']);
-			  $endDate = $this->viewDateToDateTime($this->data['Event']['end']);
+			  if($event['Event']['all_day'] == 1)
+			  {
+			    $startDate = $this->viewDateToDateTime($this->data['Event']['start'].' 00:00');
+			    if(!$startDate) // hour from Form
+			    {
+				$startDate = $this->viewDateToDateTime($this->data['Event']['start']);
+			    }
+			    $endDate = $this->viewDateToDateTime($this->data['Event']['end'] . ' 23:59');
+			    if( !$endDate )
+			    {
+			      $endDate = $this->viewDateToDateTime($this->data['Event']['end']);
+			    }
+			  }
+			  else
+			  {
+			      $startDate = $this->viewDateToDateTime($this->data['Event']['start']);
+			      $endDate = $this->viewDateToDateTime($this->data['Event']['end']);
+			  }
 			  if($startDate != false &&  $endDate !=false )
 			  {
  			    $event['Event']['start'] = $startDate->format('Y-m-d H:i:s');
  			    $event['Event']['end'] = $endDate->format('Y-m-d H:i:s');
 			  }
-
+			  else
+			  {
+			    $this->log('event date invalid : '.$startDate.' => '.$endDate,'debug');
+			  }
 			  if($eventTypeId != null)
 			  {
 				$event['Event']['event_type_id'] = $eventTypeId;
-				}
-			  
+			  }
+			if($id != null)  
+			{
+			  $event['Event']['id'] = $id;
+			}
 			if ($this->Event->save($event)) {
 				$this->Session->setFlash(__('The event has been saved', true));
 				if($eventTypeId != null)
@@ -113,40 +145,14 @@ class EventsController extends FullCalendarAppController {
 			$this->Session->setFlash(__('Invalid event', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		if (!empty($this->data)) {
-			$event = $this->data;
-			if($this->data['Event']['recursive'] != '')
-			{
-			  $startDate = $this->viewDateToDateTime($this->data['Event']['recursive_start']);
-			  $endDate = $this->viewDateToDateTime($this->data['Event']['recursive_end']);
-			  if($startDate != false &&  $endDate !=false )
-			  {
-			    $event['Event']['recursive_start'] = $startDate->format('Y-m-d H:i:s');
-			    $event['Event']['recursive_end'] = $endDate->format('Y-m-d H:i:s');
-			  }
-			  
-			}
-
-			  $startDate = $this->viewDateToDateTime($this->data['Event']['start']);
-			  $endDate = $this->viewDateToDateTime($this->data['Event']['end']);
-			  if($startDate != false &&  $endDate !=false )
-			  {
-			    $event['Event']['start'] = $startDate->format('Y-m-d H:i:s');
-			    $event['Event']['end'] = $endDate->format('Y-m-d H:i:s');
-			  }
-			if ($this->Event->save($event)) {
-				$this->Session->setFlash(__('The event has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The event could not be saved. Please, try again.', true));
-			}
+		if ($this->request->is('post') || $this->request->is('put')) {
+		  $this->add($this->data['Event']['event_type_id'], $this->data['Event']['id']);
 		}
+		
 		if (empty($this->data)) {
 			$this->data = $this->Event->read(null, $id);
 		}
-// 		$this->Event->bindModel(
-// 			array ('belongsTo' => array ('EventType'))
-// 		);
+
 		$this->set('eventTypes', $this->Event->EventType->find('list'));
 	}
 
@@ -260,12 +266,19 @@ class EventsController extends FullCalendarAppController {
 						$start = new DateTime();
 						$start->setTimestamp($newDateStart);
 
+						$end = new DateTime();
+						$end->setTimestamp($newDateStop);
 						
 						if($start >= $recursiveEventStop)
 						{
 							break;
 						}
-						
+
+						if( ($start <= $dateStart  && $end <= $dateStart ) || ($start >= $dateStop  && $end >= $dateStop ) )
+						{
+							continue;
+						}
+
 						$event['Event']['start'] = date('Y-m-d H:i:s', $newDateStart);
 						$event['Event']['end'] = date('Y-m-d H:i:s', $newDateStop);
 						$data[] = array(
@@ -283,7 +296,6 @@ class EventsController extends FullCalendarAppController {
 				case 'week':
 					//debug(week);
 					$nbWeeks = round( - ( $dateStart->diff($eventStart)->format('%R%a') ) / 7 );
-					
 					$nbEvents = round( abs( $dateStop->diff($dateStart)->format('%R%a') ) / 7 );
 					for($i = 0; $i< abs($nbEvents); $i++)
 					{
@@ -294,10 +306,17 @@ class EventsController extends FullCalendarAppController {
 						$start = new DateTime();
 						$start->setTimestamp($newDateStart);
 
+						$end = new DateTime();
+						$end->setTimestamp($newDateStop);
 						
 						if($start >= $recursiveEventStop)
 						{
 							break;
+						}
+						
+						if( ($start <= $dateStart  && $end <= $dateStart ) || ($start >= $dateStop  && $end >= $dateStop ) )
+						{
+							continue;
 						}
 						
 						$event['Event']['start'] = date('Y-m-d H:i:s', $newDateStart);
@@ -316,7 +335,6 @@ class EventsController extends FullCalendarAppController {
 				break;
 				case 'month':
 					$nbMonth = round( - ( $dateStart->diff($eventStart)->format('%R%a') ) / 30 +1) ;
-					
 					$nbEvents = round( ( $dateStop->diff($dateStart)->format('%R%a') ) / 30 );
 
 					for($i = 0; $i< abs($nbEvents); $i++)
@@ -328,10 +346,17 @@ class EventsController extends FullCalendarAppController {
 						$start = new DateTime();
 						$start->setTimestamp($newDateStart);
 
+						$end = new DateTime();
+						$end->setTimestamp($newDateStop);
 						
 						if($start >= $recursiveEventStop)
 						{
 							break;
+						}
+						
+						if( ($start <= $dateStart  && $end <= $dateStart ) || ($start >= $dateStop  && $end >= $dateStop ) )
+						{
+							continue;
 						}
 						
 						$event['Event']['start'] = date('Y-m-d H:i:s', $newDateStart);
@@ -349,23 +374,28 @@ class EventsController extends FullCalendarAppController {
 					}
 				break;
 				case 'year':
-					$nbYear = round( - ( $dateStart->diff($eventStart)->format('%R%a') ) / 365 +1);
+					$nbYear = round( - ( $dateStart->diff($eventStart)->format('%R%a') ) / 365);
 					$nbEvents = round( ( $dateStop->diff($dateStart)->format('%R%a') ) / 365 ) + 1;
-
-					
 					for($i = 0; $i< abs($nbEvents); $i++)
 					{
-
 						$newDateStart = strtotime(($nbYear+$i)." year", $eventStart->getTimestamp());
 						$newDateStop = strtotime(($nbYear+$i)." year", $eventStop->getTimestamp());
 						
 						$start = new DateTime();
 						$start->setTimestamp($newDateStart);
 
+						$end = new DateTime();
+						$end->setTimestamp($newDateStop);
 						
-						if($start >= $recursiveEventStop)
+						if($start >= $recursiveEventStop )
 						{
-							break;
+						  break;
+						}
+
+
+						if( ($start <= $dateStart  && $end <= $dateStart ) || ($start >= $dateStop  && $end >= $dateStop ) )
+						{
+							continue;
 						}
 						
 						$event['Event']['start'] = date('Y-m-d H:i:s', $newDateStart);
@@ -388,10 +418,8 @@ class EventsController extends FullCalendarAppController {
 			
 			
 		}
-		if (!empty($this->request->params['requested'])) {
-			    return $data;
-			}
 		$this->set("json", json_encode($data));
+	  return $data;
 	}
 
         // The update action is called from "webroot/js/ready.js" to update date/time when an event is dragged or resized
