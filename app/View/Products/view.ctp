@@ -22,8 +22,6 @@ if($tokens['isAdmin'])
       <li><?php echo $this->Html->link(__('New Product'), array('action' => 'add')); ?> </li>
       <li><?php echo $this->Html->link(__('New Product Types'), array('controller' => 'product_types', 'action' => 'add')); ?> </li>
       <li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
-      <li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add', 'idProduct'=>$product['Product']['id'])); ?> </li>
-	  <li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add')); ?> </li>
   </ul>
 </div>
 <?php endif ?>

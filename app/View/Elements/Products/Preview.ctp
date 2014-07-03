@@ -43,13 +43,6 @@ $class = '';
 		<div>
 		<?php echo $data['price']; ?>€ <?php if(!$data['unity']) echo 'Kg' ?>
 		
-		<?php
-	// 	    foreach($data['Events'] as $event) : 
-	// 		foreach($event['Gevent']['GeventDate'] as $eventDate) : 
-	// 		  //debug($eventDate) 
-	// 		endforeach;
-	// 	      endforeach; 
-			?>
 		</div>
 			<?php if($tokens['isAdmin']) : ?>
 		  <?php if(!$data['customer_display'] ) { ?>

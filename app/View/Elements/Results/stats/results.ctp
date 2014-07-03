@@ -64,7 +64,7 @@
 $compareCurve = '';
 $noCompareCurve = 'curve_';
 $yearDatePattern = 'Y';
-if($this->request->data['compare']['date'])
+if(isset($this->request->data['compare']['date']) && $this->request->data['compare']['date'])
 {
   $compareCurve = 'curve_';
   $noCompareCurve = '';
@@ -92,7 +92,7 @@ if($this->request->data['compare']['date'])
 				<td class="label_curve_total" >Total € </td>
 				<?php if($fields['shop']) :
 					foreach($results['shops'] as $shopId => $shopName):
-					    if(!$this->request->data['compare']['date']):
+					    if(!isset($this->request->data['compare']['date'])):
 				?>
 				
 					<td class="label_curve_Shop<?php echo  $shopId; ?>"  ><?php echo  $shopName; ?> €</td>

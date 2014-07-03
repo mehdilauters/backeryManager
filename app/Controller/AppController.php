@@ -231,7 +231,7 @@ class AppController extends Controller {
   
 	if($this->Auth->user())
 	{
-		$this->menu['Menu']['Deconnexion'] = array( 'url' => $this->webroot.'users/logout', 'active' => false, 'id'=>'logout' );
+		$this->menu['Menu']['Deconnexion ('.$this->Auth->user('name').')'] = array( 'url' => $this->webroot.'users/logout', 'active' => false, 'id'=>'logout' );
 	}
 	else
 	{
