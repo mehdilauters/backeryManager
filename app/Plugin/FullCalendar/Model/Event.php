@@ -52,6 +52,8 @@ class Event extends FullCalendarAppModel {
 		'recursive' => array(
 			'inList' => array(
 				'rule' => array('inList', array('','year','day', 'week', 'month', 'day')),
+			'allowEmpty' => true,
+			'required' => false,
 			),
 		),
 		'recursive_start' => array(
