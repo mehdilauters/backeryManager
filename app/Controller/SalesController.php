@@ -159,23 +159,13 @@ class SalesController extends AppController {
 	break;
       }
 
-      switch($group['product'])
+      if($group['product'])
       {
-	case 'product':
  	  $groupBy[] = 'Sale.product_id';
-	break;
-	default:
-// 	  $groupBy[] = 'Sale.product_id';
-	break;
       }
-      switch($group['shop'])
+      if($group['shop'])
       {
-	case 'shop':
  	  $groupBy[] = 'Sale.shop_id';
-	break;
-	default:
-// 	  $groupBy[] = 'Sale.shop_id';
-	break;
       }
     }
       if(count($groupBy) == 0)
@@ -200,7 +190,7 @@ class SalesController extends AppController {
 							      )
 					    ));
 						
-						
+
 	require_once(APP . 'Vendor' . DS . 'PolynomialRegression.php');
 	bcscale( Configure::read('Settings.Approximation.bcscale') );
 	$regressions = array();

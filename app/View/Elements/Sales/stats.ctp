@@ -17,25 +17,25 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
     $group = $this->request->data['group'];
   }
 
-  if($group['product'] != '')
+  if($group['product'] )
   {
     if( $group['time'] == '' )
     {
       $fields['date'] = false;
     }
-    if( $group['shop'] == '' )
+    if( !$group['shop'] )
     {
       $fields['shop'] = false;
     }
   }
   
-  if($group['shop'] != '')
+  if($group['shop'] )
   {
     if( $group['time'] == '' )
     {
       $fields['date'] = false;
     }
-    if( $group['product'] == '' )
+    if( !$group['product'] )
     {
       $fields['product'] = false;
       $fields['productType'] = false;
@@ -44,12 +44,12 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
   
   if($group['time'] != '')
   {
-    if( $group['product'] == '' )
+    if( !$group['product'] )
     {
       $fields['product'] = false;
       $fields['productType'] = false;
     }
-    if( $group['shop'] == '' )
+    if( !$group['shop']  )
     {
       $fields['shop'] = false;
     }
@@ -59,8 +59,8 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
   {
 	$fields['comment'] = true;
 }
-  
-  //debug($fields);
+//   debug($group);
+//   debug($fields);
   
   	$titleDate = array(
 		''=> 'Jour',
