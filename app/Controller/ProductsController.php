@@ -126,10 +126,6 @@ class ProductsController extends AppController {
       throw new NotFoundException(__('Invalid product'));
     }
     if ($this->request->is('post') || $this->request->is('put')) {
-      if($this->request->data['Product']['media_id'] == '')
-      {
-	unset($this->request->data['Product']['media_id']);
-      }
       if ($this->Product->save($this->request->data)) {
         $this->Session->setFlash(__('The product has been saved'),'flash/ok');
         return $this->redirect(array('controller'=>'products', 'action' => 'index'));
