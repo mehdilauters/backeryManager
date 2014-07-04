@@ -188,7 +188,7 @@ class ResultsController extends AppController {
 			      $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Result.date');
 			      $conditions['Result'][] = $dateSelect;
 
- 			      $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'ResultEntry.date');
+ 			      $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Result.date');
  			      $conditions['ResultsEntry'][] = $dateSelect;
 		}
 	}
@@ -303,7 +303,7 @@ class ResultsController extends AppController {
 		}		
 	}
 	
-    $this->Result->ResultsEntry->contain('Shop', 'ProductTypes');
+    $this->Result->ResultsEntry->contain('Shop', 'ProductTypes','Result');
      $resultsEntries = $this->Result->ResultsEntry->find('all', array('order'=>array('ResultsEntry.date'),
               'group' => $groupByEntries,
 			  'conditions' => $conditions['ResultsEntry'],
