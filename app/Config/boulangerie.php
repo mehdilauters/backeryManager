@@ -44,7 +44,7 @@ Configure::write('Settings.Cookie.Name', 'bakeryManager');
 
 
 Configure::write('Settings.demo', array(
-  'active' => true,
+  'active' => false,
   'dbPrefix' => 'demo_',
   'User' => array('email'=>'demo@lauters.fr', 'password'=> 'demo')
 

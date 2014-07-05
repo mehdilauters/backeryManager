@@ -201,6 +201,7 @@ function curveDisplay(chartId, curveId, status)
       },
       cursor:{
 	      showVerticalLine:true,
+	      showHorizontalLine:true,
               show: true,
               followMouse: true,
               zoom:true,

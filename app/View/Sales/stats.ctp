@@ -76,11 +76,11 @@ echo $this->element('Sales/stats', array('sales'=>$sales));
                 intro: "Sur ce graph, il est possible d'afficher/masquer une courbe en la sélectionnant ici",
 		position: 'right'
               },
-              {
-                element: '#control_histogramChart_0',
-                intro: "Pour comparer la courbe représentant la tendance de la production avec les données réelles, vous pouvez simplement cocher cette case",
-		position: 'top'
-              },
+//               {
+//                 element: '#control_histogramChart_0',
+//                 intro: "Pour comparer la courbe représentant la tendance de la production avec les données réelles, vous pouvez simplement cocher cette case",
+// 		position: 'top'
+//               },
               {
                 element: '#statValues',
                 intro: "Les données servant au calcul du graphe sont disponibles également dans le tableau ci-contre.<br/> Vous pouvez également filtrer ces données, le graphique sera automatiquement mis-à-jour",

@@ -187,7 +187,7 @@ class EventsController extends FullCalendarAppController {
 		
 		$data = array();
 		
-		
+		// TODO datetime begins at 00:00?
 		$conditions = array('conditions' => array(
 				'UNIX_TIMESTAMP(end) >=' => $start,
 				'UNIX_TIMESTAMP(start) <=' => $end,

@@ -1,5 +1,5 @@
 <div class="sales form">
-<div class="alert alert-info">
+<div id="excelImport" class="alert alert-info">
   <p>
     Téléchargez le fichier suivant, <a href="<?php echo $this->webroot ?>sales/add.xls" >Ventes.xls</a> remplissez le, enregistrez le et enfin importez le directement sur le site. Il permet de gérer les données de ventes même sans connexion internet</p>
   <?php echo $this->Form->create('Sale',array('enctype' => 'multipart/form-data'));
@@ -249,6 +249,11 @@ function checkInputs(interactive)
                 element: '#resultAddSubmit',
                 intro: "Attention, n'oubliez pas de valider",
 				position: 'top'
+              },
+	      {
+                element: '#excelImport',
+                intro: "Afin de prévoir les coupures internet, veuillez télécharger le fichier Excel ci-contre. Lorsqu'une coupure d'internet survient, remplissez le simplement, et ce, même pendant plusieurs jours. Importez le ensuite directement sur le site lorsque l'accès à internet est rétabli. Toutes vos données seront ainsi automatiquement ajoutées",
+		position: 'right'
               },
 			  {
                 element: '#dailyResultsLink',

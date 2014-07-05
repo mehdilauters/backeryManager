@@ -187,6 +187,7 @@ CakeLog::config('error', array(
 
   CakePlugin::load('FullCalendar');
   CakePlugin::load('PhpExcel');
+  CakePlugin::load('AccountManagement');
 include('boulangerie.php');
 
 
@@ -196,3 +197,4 @@ function __autoload($className) {
     require APP.'Vendor/zetacomponents/Base/src/base.php';
 	ezcBase::autoload( $className );
 }*/
+// CakePlugin::load('AccountManagement', array('bootstrap' => false, 'routes' => false));

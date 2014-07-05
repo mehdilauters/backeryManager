@@ -1,15 +1,10 @@
 <div class="results index">
-<script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.min.js" type="text/javascript"></script>
-<script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
-<script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
-<script language="javascript" src="<?php echo $this->webroot ?>js/rainbow.js" type="text/javascript"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
 <div>
   <form id="resultsDateSelect" method="POST" >
     <label>Début</label><input type="text" name="dateStart" id="dateStart" value="<?php echo $dateStart ?>" class="datepicker" />
     <label>Fin</label><input type="text" name="dateEnd" id="dateEnd" value="<?php echo $dateEnd ?>" class="datepicker" />
     <input type="submit" name="dateSelect" id="dateSelect" value="" class="dateSearch" />
-    <input type="submit" name="excelDownload" id="dateSelect" value="" class="spreadsheet" />
+    <input type="submit" name="excelDownload" id="dateSelectExcel" value="" class="spreadsheet" />
   </form>
 </div>
 <hr/>
@@ -17,13 +12,15 @@
 <div id="resultsHistoPlot" ></div>
 <hr/>
 <ul id="resultList">
-  <?php if(isset($data['entries'])) foreach($data['entries'] as $shopId => $shopData): 
+  <?php 
+  	$firstWeek = -1;
+      if(isset($data['entries'])) foreach($data['entries'] as $shopId => $shopData): 
 	$weekId = -1;
 	$total = array();
 	
   ?>
     <li class="shop" id="result_shop_<?php echo $shopId ?>" > <h3><?php echo $shops[$shopId] ?></h3>
-      <table class="shop" >
+      <table class="shop table table-striped" >
   <tr class="legend" >
     <th class="date" >Date</th>
     <th class="rowTotal" >Total</th>
@@ -54,16 +51,20 @@
      
 	 if ($weekId != $date->format('W'))
 	 {
+		if ($firstWeek == -1 )
+		{
+		  $firstWeek = $weekId+1;
+		}
 	 ?>
-		<tr class="total">
+		<tr id="total_shop_<?php echo $shopId ?>_week_<?php echo $date->format('W'); ?>" class="total">
 		  <td class="date" ><?php echo $date->format('W'); ?></td>
-		  <td class="total" ><?php echo ($total['cash'] + $total['check'] + $total['card']); ?></td>
-		  <td class="cash" ><?php echo $total['cash']; ?></td>
-		  <td class="check" ><?php echo $total['check']; ?></td>
-		  <td class="card" ><?php echo $total['card']; ?></td>
+		  <td class="total" ><?php echo round(($total['cash'] + $total['check'] + $total['card']),2); ?></td>
+		  <td class="cash" ><?php echo round($total['cash'],2); ?></td>
+		  <td class="check" ><?php echo round($total['check'],2); ?></td>
+		  <td class="card" ><?php echo round($total['card'],2); ?></td>
 		  <?php 
 			foreach($productTypes as $typeId => $typeName): ?>
-			<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo $total['productType'][$typeId]; } ?></td>
+			<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo round($total['productType'][$typeId],2); } ?></td>
 		  <?php endforeach ?>
 		  <td class="comment" ></td>
 		</tr>
@@ -81,13 +82,13 @@
      ?>
     <tr>
       <td class="date" ><?php echo $date->format('d/m/Y'); ?></td>
-      <td class="total" ><?php echo ($results['cash'] + $results['check'] + $results['card']); ?></td>
-      <td class="cash" ><?php echo $results['cash']; $total['cash'] += $results['cash'];  ?></td>
-      <td class="check" ><?php echo $results['check']; $total['check'] += $results['check']; ?></td>
-	  <td class="card" ><?php echo $results['card']; $total['card'] += $results['card']; ?></td>
+      <td class="total" ><?php echo round($results['cash'] + $results['check'] + $results['card'], 2); ?></td>
+      <td class="cash" ><?php echo round($results['cash'],2); $total['cash'] += $results['cash'];  ?></td>
+      <td class="check" ><?php echo round($results['check'],2); $total['check'] += $results['check']; ?></td>
+	  <td class="card" ><?php echo round($results['card'],2); $total['card'] += $results['card']; ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
-        <td class="productTypeResult" ><?php if(isset($results['productTypes'][$typeId])) { echo $results['productTypes'][$typeId]['result']; $total['productType'][$typeId] += $results['productTypes'][$typeId]['result']; } ?></td>
+        <td class="productTypeResult" ><?php if(isset($results['productTypes'][$typeId])) { echo round($results['productTypes'][$typeId]['result'],2); $total['productType'][$typeId] += $results['productTypes'][$typeId]['result']; } ?></td>
       <?php endforeach ?>
       <td class="comment" ><?php echo $results['comment'] ?></td>
     </tr>
@@ -100,19 +101,19 @@
 	  <td class="card" ><?php echo $total['card']; ?></td>
 	  <?php 
 		foreach($productTypes as $typeId => $typeName): ?>
-		<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo $total['productType'][$typeId]; } ?></td>
+		<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo round($total['productType'][$typeId],2); } ?></td>
 	  <?php endforeach ?>
 	  <td class="comment" ></td>
 	</tr>
-    <tr class="total" >
+    <tr id="total_shop_<?php echo $shopId ?>" class="total" >
       <td class="total" >Totaux</td>
-      <td class="total"><?php echo ($shopData['total']['cash'] + $shopData['total']['check'] + $shopData['total']['card'] ) ?></td>
-      <td class="cash"><?php echo $shopData['total']['cash'] ?></td>
-      <td class="check"><?php echo $shopData['total']['check'] ?></td>
-	  <td class="card"><?php echo $shopData['total']['card'] ?></td>
+      <td class="total"><?php echo round($shopData['total']['cash'] + $shopData['total']['check'] + $shopData['total']['card'] ,2) ?></td>
+      <td class="cash"><?php echo round($shopData['total']['cash'],2) ?></td>
+      <td class="check"><?php echo round($shopData['total']['check'],2) ?></td>
+	  <td class="card"><?php echo round($shopData['total']['card'],2) ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
-        <td class="productTypeResult"><?php if(isset($shopData['total'][$typeId])) { echo $shopData['total'][$typeId]; } ?></td>
+        <td class="productTypeResult"><?php if(isset($shopData['total'][$typeId])) { echo round($shopData['total'][$typeId],2); } ?></td>
       <?php endforeach ?>
     </tr>
       </table>
@@ -120,7 +121,7 @@
   <?php endforeach ?>
     <li>
       <h3>Totaux</h3>
-      <table class="total" >
+      <table id="mainTotal" class="total" >
   <tr class="legend" >
     <th class="date" ></th>
     <th class="total" >Total</th>
@@ -133,13 +134,13 @@
   </tr>
   <tr class="" >
       <td class="date" >Totaux</td>
-      <td class="total" ><?php echo ($data['total']['cash'] + $data['total']['check'] + $data['total']['card']) ?></td>
-      <td class="cash" ><?php echo $data['total']['cash'] ?></td>
-      <td class="check" ><?php echo $data['total']['check'] ?></td>
-	  <td class="card" ><?php echo $data['total']['card'] ?></td>
+      <td class="total" ><?php echo round($data['total']['cash'] + $data['total']['check'] + $data['total']['card'],2) ?></td>
+      <td class="cash" ><?php echo round($data['total']['cash'],2) ?></td>
+      <td class="check" ><?php echo round($data['total']['check'],2) ?></td>
+	  <td class="card" ><?php echo round($data['total']['card'],2) ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
-        <td class="productTypeResult" ><?php if(isset($data['total'][$typeId])) { echo $data['total'][$typeId]; } ?></td>
+        <td class="productTypeResult" ><?php if(isset($data['total'][$typeId])) { echo round($data['total'][$typeId],2); } ?></td>
       <?php endforeach ?>
     </tr>
       </table>
@@ -149,137 +150,55 @@
 </div>
 <script type="text/javascript">
 
-function parseDate(input) {
-  var parts = input.split('/');
-  // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-  month = parts[1];
-  if( month == 0 )
-{
-  month = 11;
-}
-else
-{
-  month--;
-}
-  return new Date(parts[2], month, parts[0]); // months are 0-based
-}
+  introSteps = [];
+  introSteps.push(
+              { 
+                intro: 'Cette page affiche le chiffre d\'affaire, magasin par magasin, ainsi que le sous total, semaine par semaine, et le total complet'
+              },
+              {
+                element: '#resultsDateSelect',
+                intro: "Sélectionnez ici les dates qui vous interessent",
+		position: 'right'
+              },
+              {
+                element: '#dateSelect',
+                intro: "Et affichez les données correspondantes",
+		position: 'right'
+              },
+              {
+                element: '#dateSelectExcel',
+                intro: "Ou téléchargez le document excel recapitulatif (pour envoyer au comptable par exemple)",
+		position: 'right'
+              });
+	    <?php if(isset($data['entries'])): ?>
+	      introSteps.push(
+              {
+                element: '#result_shop_<?php echo array_keys($data['entries'])[0] ?>',
+                intro: "Pour chaque magasin",
+		position: 'right'
+              },
+              {
+                element: '#total_shop_<?php echo array_keys($data['entries'])[0] ?>_week_<?php echo $firstWeek ?>',
+                intro: "Retrouvez les sous-totaux semaine par semaine",
+		position: 'right'
+              },
+              {
+                element: '#total_shop_<?php echo array_keys($data['entries'])[0] ?>',
+                intro: "Le sous-total pour le magasin complet",
+		position: 'right'
+              },
+              {
+                element: '#mainTotal',
+                intro: "Et en bas de la page se trouve le total global, tous magasins confondus",
+		position: 'right'
+              });
+	      <?php else: ?>
+	      introSteps.push(
+		{
+		  element: '#resultsDateSelect',
+		  intro: "Selectionnez une plage de date pour lesquelles il y a des resultats",
+		  position: 'right'
+		});
+	      <?php endif; ?>
 
-   var histogramPlot;
-     function isValidDate(d) {
-              if ( Object.prototype.toString.call(d) !== "[object Date]" )
-                return false;
-              return !isNaN(d.getTime());
-            }
-            
-   function histogram()
-  {
-    data = [];
-    var tmpData = {};
-    var cumulativeData = {};
-    var lastSum = 0;
-    $('li.shop').each(function(index, shopLi){
-      row=0;
-      var shopId = $($(shopLi)).attr('id').replace('result_shop_', '');
-    tmpData[shopId] = new Array();
-    $($(shopLi)).find('table tr').each(function(index, item){
-    if(row > 0) //skip header
-    {
-      if($(item).css('display') !== 'none')
-      {
-        key = $(item).find('.date').text();
-        dte = parseDate(key);
-        
-        if( isValidDate(dte) )
-        {
-    //key = dte.getFullYear() + '-' + dte.getMonth() + '-' + dte.getDate();
-    if(tmpData[shopId][dte] == undefined)
-    {
-      tmpData[shopId][dte] = 0;
-    }
-    tmpData[shopId][dte] += parseInt($(item).find('.total').html());
-        }
-      }
-    }
-    row++;
-  });
-    });
-
-    /*tmpData.sort(function(a,b){
-    
-      /*var c;
-      var d;
-      console.log("a");
-      /*for(c in a) { break; }
-      for(d in b) { break; }
-      console.log(c);
-      return 2-1;//c-d;
-      });
-    */
-  
-    for(shopId in tmpData) { 
-      //console.log(tmpData[shopId]);
-      /*var t = [];
-      for(obj in tmpData[shopId]) { 
-  t.push(obj)
-  t.push(tmpData[shopId][obj])
-      }
-      console.log(t);*/
-      data.push(tmpData[shopId]);
-    }
-
-    console.log(data);
-    if(histogramPlot != undefined)
-    {
-      histogramPlot.destroy();
-    }
-    //console.log(data);
-    histogramPlot= jQuery.jqplot ('resultsHistoPlot', data,
-    {
-      title: 'Histogram',
-      seriesDefaults: {
-        //renderer: $.jqplot.BarRenderer,
-        rendererOptions: {
-          fillToZero: true,
-          barWidth:5,
-        },
-        pointLabels: { show: true }
-      },
-      height: 500,
-      width: 600,
-      axes:{
-        xaxis:{
-          label:'Date',
-          renderer:$.jqplot.DateAxisRenderer,
-          numberTicks:5,
-          tickOptions: {
-              formatString: '%b %y'
-          }
-        },
-        yaxis:{
-          label:'Count',
-          pad: 1.05,
-        }
-      },
-      cursor:{
-              show: true,
-              followMouse: true,
-              zoom:true,
-              height: 200,
-              width: 300,
-              showTooltip:true,
-      }, 
-      legend: {
-              show: true,
-              placement:'e'
-      },
-    }
-    
-    );
-    
-    return false;
-  }
-   
-  $(document).ready(function(){
-     // histogram();
-  });
 </script>
