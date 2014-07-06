@@ -174,7 +174,7 @@ class SalesController extends AppController {
       }
 	  // SELECT SUM(IF(myColumn IS NULL, 0, myColumn))
     $this->Sale->contain('Product.ProductType');
-    $sales = $this->Sale->find('all', array('order'=>array('Sale.date'),
+    $sales = $this->Sale->find('all', array('order'=>array('Sale.date', 'Sale.product_id', 'Sale.shop_id'),
 					    'group' => $groupBy,
 					    'conditions' => $conditions,
 					    'fields' => array('SUM(Sale.produced) as `produced`', 
