@@ -5,7 +5,7 @@
 	<fieldset id="orderStatusSelect" class="alert alert-info">
 		<legend><?php echo __('Filtrer par status'); ?></legend>
 		<div>Séléctionnez ici les commandes dont le status vous intéresse</div>
-	<?php echo $this->Form->input('statusSelect',array('options'=>array('all'=>'', 'reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée'), 'label'=>'Status')); ?>
+	<?php echo $this->Form->input('statusSelect',array('options'=>array('all'=>'', 'reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée', 'emailed'=>'email envoyé'), 'label'=>'Status')); ?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 <script>
@@ -66,10 +66,18 @@
 		}?>&nbsp;</td>
 		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
 		<td class="actions">
+			<?php
+			  $emailText = 'Voulez vous vraiment envoyer un email à '.$order['User']['email'].'?';
+			if( Configure::read('Settings.demo.active') )
+			{
+			  $emailText = 'Voulez vous recevoir un email d\\\'exemple?';
+			}
+
+ ?>
 			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('id'=>'pdf_'.$order['Order']['id'],'class'=>'icon','alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>
 			<?php echo $this->Html->link($this->Html->image('icons/document-preview.png', array('id'=>'view_'.$order['Order']['id'],'class'=>'icon','alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
 			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$order['Order']['id'],'class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\'Voulez vous vraiment envoyer un email à '.$order['User']['email'].'?\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
+			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\''.$emailText.'\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
 			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$order['Order']['id'],'class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
 		</td>
 	</tr>

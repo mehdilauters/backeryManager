@@ -201,6 +201,16 @@ class UsersController extends AppController {
 		$this->redirect($this->Auth->logout());
 	}	
 	
+
+	public function setDemoEmail()
+	{
+	    if ($this->request->is('post') || $this->request->is('put')) {
+	      $this->Session->write('demoEmail', $this->request->data['User']['email']);
+	      $this->log($this->request->data['User']['email'], 'demoEmail');
+	      $this->redirect($this->referer());
+	    }
+	}
+
 	public function autologin()
 	{
 		if( Configure::read('Settings.demo.active') )

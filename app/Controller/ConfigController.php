@@ -391,7 +391,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= '
-		    alter table users add `autostart_help` boolean default TRUE;
+
 
 ';	
 		$db = ConnectionManager::getDataSource('default');

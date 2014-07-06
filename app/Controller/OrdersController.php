@@ -113,6 +113,9 @@ class OrdersController extends AppController {
 						'attachment' => array('facture.pdf' => array( 'data' => $pdf ))
 					);
 		$this->sendMail($mail);
+		$order = $this->Order->findById($id);
+		$order['Order']['status'] = 'emailed';
+		$this->Order->save($order);
 		$this->redirect('/orders/view/'.$id);
 	}
 	

@@ -192,6 +192,20 @@ class AppController extends Controller {
 	}
 	
 	$normalAddr = '';
+	if( Configure::read('Settings.demo.active') )
+	{
+	     if($this->Session->check('demoEmail'))
+	     {
+		$normalAddr = ' (debug dest : '.$emailAddr.')';
+		$emailAddr = Configure::read('Settings.email.debug.email');
+	    }
+	    else
+	    {
+		$this->log('demo mode: email not sent', 'email');
+		$this->Session->setFlash('Email non envoyé. Pour tester et recevoir des emails d\'exemple, veuillez d\'abord <a href="'.$this->webroot.'users/setDemoEmail" >saisir</a> votre adresse.','flash/fail');
+	    }
+	}
+
 	if( Configure::read('Settings.email.debug.status') )
 	{
 		$normalAddr = ' (debug dest : '.$emailAddr.')';
@@ -203,14 +217,14 @@ class AppController extends Controller {
 	{
 		$email->attachments($config['attachment']);
 	}
-	debug(array(Configure::read('Settings.email.from.email') => Configure::read('email.from.name')));
     $email->from(array(Configure::read('Settings.email.from.email') => Configure::read('email.from.name')))
 	->sender(Configure::read('Settings.email.from.email'), Configure::read('email.from.name'))
         ->to($emailAddr)
         ->template($config['view'], 'default')
         ->viewVars($config['data'])
-        ->subject($config['subject'])
-        ->send($config['message']);
+        ->subject($config['subject']);
+
+    $email->send($config['message']);
 
 	if(is_array($emailAddr))
 	{

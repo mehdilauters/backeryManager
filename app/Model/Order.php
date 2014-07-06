@@ -47,7 +47,7 @@ class Order extends AppModel {
 				'rule' => array('notempty'),
 			),
 			'inList' => array(
-				'rule' => array('inList', array('reserved', 'available', 'waiting', 'paid')),
+				'rule' => array('inList', array('reserved', 'available', 'waiting', 'paid', 'emailed')),
 			),
 		),
 	);
