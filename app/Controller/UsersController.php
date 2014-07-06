@@ -207,7 +207,8 @@ class UsersController extends AppController {
 	    if ($this->request->is('post') || $this->request->is('put')) {
 	      $this->Session->write('demoEmail', $this->request->data['User']['email']);
 	      $this->log($this->request->data['User']['email'], 'demoEmail');
-	      $this->redirect($this->referer());
+	      $this->Session->setFlash(__('Adresse email prise en compte'),'flash/ok');
+	      $this->redirect('/');
 	    }
 	}
 

@@ -196,8 +196,8 @@ class AppController extends Controller {
 	{
 	     if($this->Session->check('demoEmail'))
 	     {
-		$normalAddr = ' (demo : '.Configure::read('Settings.email.debug.email').')';
-		$emailAddr = Configure::read('Settings.email.debug.email');
+		$normalAddr = ' (demo : '.$this->Session->read('demoEmail').')';
+		$emailAddr = $this->Session->read('demoEmail');
 	    }
 	    else
 	    {

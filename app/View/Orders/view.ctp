@@ -18,10 +18,19 @@ echo $date->format('d/m/Y'); ?></h2></center>
 	<?php endif; ?>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
+			<?php
+			  $emailText = 'Voulez vous vraiment envoyer un email à '.$order['User']['email'].'?';
+			if( Configure::read('Settings.demo.active') )
+			{
+			  $emailText = 'Voulez vous recevoir un email d\\\'exemple?';
+			}
+
+ ?>
 	<ul>
 		<li><?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('alt' => '')).' '.__('Modifier infos commande'), array('action' => 'edit', $order['Order']['id']),array('escape' => false)); ?> </li>
 		<li><?php echo $this->Html->link($this->Html->image('icons/list-add.png', array('alt' => '')).' '.__('Ajouter un item a la commande'), array('controller' => 'ordered_items', 'action' => 'add' ,
 $order['Order']['id']),array('escape' => false)); ?> </li>
+<li><?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\''.$emailText.'\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?></li>
 	      <li><?php echo $this->Html->link($this->Html->image('icons/document-print-frame.png', array('alt' => '')).' '.__('Imprimer'), array('action' => 'view', $order['Order']['id'].'.pdf'),array('escape' => false)); ?></li>
 		<li><?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('alt' => '')).' '.__('Supprimer commande'), array('action' => 'delete', $order['Order']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?> </li>
 		<li><?php echo $this->Html->link($this->Html->image('icons/view-list-details.png', array('alt' => '')).' '.__('Lister les commandes'), array('action' => 'index'),array('escape' => false)); ?> </li>
