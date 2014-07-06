@@ -196,7 +196,7 @@ class AppController extends Controller {
 	{
 	     if($this->Session->check('demoEmail'))
 	     {
-		$normalAddr = ' (demo : '.$this->Session->read('demoEmail').')';
+		$normalAddr = ' (demo)';
 		$emailAddr = $this->Session->read('demoEmail');
 	    }
 	    else
