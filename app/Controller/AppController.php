@@ -196,13 +196,14 @@ class AppController extends Controller {
 	{
 	     if($this->Session->check('demoEmail'))
 	     {
-		$normalAddr = ' (debug dest : '.$emailAddr.')';
+		$normalAddr = ' (demo : '.Configure::read('Settings.email.debug.email').')';
 		$emailAddr = Configure::read('Settings.email.debug.email');
 	    }
 	    else
 	    {
 		$this->log('demo mode: email not sent', 'email');
 		$this->Session->setFlash('Email non envoyé. Pour tester et recevoir des emails d\'exemple, veuillez d\'abord <a href="'.$this->webroot.'users/setDemoEmail" >saisir</a> votre adresse.','flash/fail');
+		return;
 	    }
 	}
 
