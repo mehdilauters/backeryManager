@@ -5,6 +5,7 @@
 		<legend><?php echo __('Demo Email'); ?></legend>
 	<?php
 		echo $this->Form->input('email');
+		echo $this->Form->input('referer', array('type'=>'hidden', 'value'=>$referer));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

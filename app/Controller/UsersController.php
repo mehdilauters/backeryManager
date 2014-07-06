@@ -208,8 +208,9 @@ class UsersController extends AppController {
 	      $this->Session->write('demoEmail', $this->request->data['User']['email']);
 	      $this->log($this->request->data['User']['email'], 'demoEmail');
 	      $this->Session->setFlash(__('Adresse email prise en compte'),'flash/ok');
-	      $this->redirect('/');
+	      $this->redirect($this->request->data['User']['referer']);
 	    }
+	  $this->set('referer', $this->referer());
 	}
 
 	public function autologin()
