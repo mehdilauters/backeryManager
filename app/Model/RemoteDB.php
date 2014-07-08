@@ -81,7 +81,14 @@ class RemoteDB extends AppModel {
 	    {
 		App::uses('ConnectionManager', 'Model'); 
 		$db = ConnectionManager::getDataSource('default');
-		$res = $db->execute($sql);
+		require_once(APP . 'Vendor' . DS . 'SqlFormatter.php');
+		$sqlSplitted = SqlFormatter::splitQuery($sql);
+		debug(count($sqlSplitted).' queries');
+		foreach($sqlSplitted as $sqlQuery)
+		{
+		  $res = $db->execute($sqlQuery);
+		  echo('.');
+		}
 		debug($res);
 		
 		
