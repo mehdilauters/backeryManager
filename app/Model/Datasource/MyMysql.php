@@ -34,7 +34,7 @@ class MyMysql extends Mysql {
     // Run through all the tables
     foreach ($tables as $table) {
 	$queryEnd = '';
-	if($demo && in_array($table, array('sales', 'results'))
+	if($demo && in_array($table, array('sales', 'results')))
 	{
 	    $queryEnd = ' order by date desc limit 4000';
 	}
