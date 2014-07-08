@@ -36,7 +36,7 @@ class MyMysql extends Mysql {
 	$queryEnd = '';
 	if($demo && in_array($table, array('sales', 'results')))
 	{
-	    $queryEnd = ' order by date desc limit 4000';
+	    $queryEnd = ' order by date desc limit '.Configure::read('Settings.demo.limit');
 	}
         $tableData = $this->query('SELECT * FROM ' . $table.$queryEnd);
 
