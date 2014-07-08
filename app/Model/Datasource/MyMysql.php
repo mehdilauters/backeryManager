@@ -33,7 +33,12 @@ class MyMysql extends Mysql {
 
     // Run through all the tables
     foreach ($tables as $table) {
-        $tableData = $this->query('SELECT * FROM ' . $table);
+	$queryEnd = '';
+	if($demo && in_array($table, array('sales', 'results'))
+	{
+	    $queryEnd = ' order by date desc limit 4000';
+	}
+        $tableData = $this->query('SELECT * FROM ' . $table.$queryEnd);
 
         $return .= 'DROP TABLE IF EXISTS ' .$tablePrefix. $table . ';';
         $createTableResult = $this->query('SHOW CREATE TABLE ' . $table);
