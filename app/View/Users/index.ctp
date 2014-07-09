@@ -50,7 +50,17 @@
 		<td class="actions">
 			<?php echo $this->Html->link($this->Html->image('icons/document-preview.png', array('id'=>'view_'.$user['User']['id'],'class'=>'icon','alt' => __('voir'))), array('action' => 'view', $user['User']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
 			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$user['User']['id'],'class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $user['User']['id']),  array('escape' => false, 'title'=>'editer')); ?>
-			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$user['User']['id'],'class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $user['User']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $user['User']['id'])); ?>
+			<?php 
+			  if($user['User']['id'] != AuthComponent::user('id') )
+			  {
+			    $rootText = '';
+			    if($user['User']['isRoot'])
+			    {
+			      $rootText = 'Attention, cet utilisateur fait parti des administrateurs ';
+			    }
+			    echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$user['User']['id'],'class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $user['User']['id']) , array('escape' => false, 'title'=>'supprimer'), __($rootText.'Are you sure you want to delete # %s?', $user['User']['id']));
+			  }
+			?>
 		</td>
 	</tr>
 <?php endforeach; ?>

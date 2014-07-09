@@ -24,7 +24,6 @@ class ConfigController extends AppController {
     $actions = array(
       'importPhotos' => 'Importer les photos d\'un dossier',
       //'importUsers' => 'Importer les photos d\'un csv',
-      'deleteGcalCache' => 'delete gcalendar Cache',
       'importProducts' => 'Importer les produits d\'un csv',
       'setAdmin/1' => 'set to admin',
        'upgradeDbStructure/1' => 'upgrade DBStructure',
@@ -62,12 +61,14 @@ class ConfigController extends AppController {
   
   public function emailTest()
   {
+    if ($this->request->is('post')) {
 	$mail = array(
-				'email' => 'mehdilauters@gmail.com',
+				'email' => $this->request->data['User']['email'],
 				'subject' => 'TestMail '.date('d/m/Y')
 				);
 	$this->sendMail($mail);
-	$this->render('index');
+    }
+	
   }
   
   public function demoBaseSql()
