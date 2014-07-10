@@ -83,6 +83,24 @@ class Company extends AppModel {
 	);
 
 
+        public $hasMany = array(
+	'User' => array(
+	  'className' => 'User',
+	  'foreignKey' => 'comapny_id',
+	  'dependent' => false,
+	  'conditions' => '',
+	  'fields' => '',
+	  'order' => '',
+	  'limit' => '',
+	  'offset' => '',
+	  'exclusive' => '',
+	  'finderQuery' => '',
+	  'counterQuery' => ''
+	),
+      );
+
+
+
   public function afterFind($results, $primary = false)
     {
       $results = parent::afterFind($results, $primary);

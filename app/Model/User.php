@@ -121,6 +121,13 @@ class User extends AppModel {
       'conditions' => '',
       'fields' => '',
       'order' => ''
+    ),
+    'Company' => array(
+      'className' => 'Company',
+      'foreignKey' => 'company_id',
+      'conditions' => '',
+      'fields' => '',
+      'order' => ''
     )
   );
 
