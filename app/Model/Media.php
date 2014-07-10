@@ -172,27 +172,27 @@ class Media extends AppModel {
   
   public function afterFind($results, $primary = false)
   {
-    foreach($results as $id => $data)
-     {
-       if( isset( $data['Media'] ) && count($data['Media']) != 0  ) // not 'count'
-       {
-       App::import('Model', 'Photo');
-       $photo = new Photo();
-       
-       $photoData = $photo->find('first', array(
-         
-         'conditions' => array('Photo.id'=>$data['Media']['id']),
-       
-         
-         'callbacks' => false
-       ));
-       if(isset($photoData['Photo']))
-       {
-         $results[$id]['Media']['Photo'] = $photoData['Photo'];
-       }   
-       }
-       
-     }
+    if(isset($data['Media']))
+    {
+      foreach($results as $id => $data)
+      {
+	App::import('Model', 'Photo');
+	$photo = new Photo();
+// 	debug($data);
+	$photoData = $photo->find('first', array(
+	  
+	  'conditions' => array('Photo.id'=>$data['Media']['id']),
+	
+	  
+	  'callbacks' => false
+	));
+	if(isset($photoData['Photo']))
+	{
+	  $results[$id]['Media']['Photo'] = $photoData['Photo'];
+	}   
+	
+      }
+    }
     return $results;
   }
 

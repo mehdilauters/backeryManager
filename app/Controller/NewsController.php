@@ -30,13 +30,15 @@ class NewsController extends AppController {
 
  public function add()
  {
-	$news = $this->EventType->findByName("news");
+	$company = $this->Company->findById($this->getCompanyId());
+	$news = $this->EventType->findById($company['EventType']['id']);
 	$this->redirect('/full_calendar/events/add/'.$news['EventType']['id']);
  }
 	  
   public function getNews()
   {
-      $eventType = $this->EventType->findByName('news');
+      $company = $this->Company->findById($this->getCompanyId());
+      $eventType = $this->EventType->findById($company['EventType']['id']);
       $news = array();
 	if( count($eventType) != 0)
 	{

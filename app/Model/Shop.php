@@ -105,7 +105,14 @@ class Shop extends AppModel {
       'fields' => '',
       'order' => '',
 	  'dependent'=> true,
-    )
+    ),
+    'Company' => array(
+      'className' => 'Company',
+      'foreignKey' => 'company_id',
+      'conditions' => '',
+      'fields' => '',
+      'order' => ''
+    ),
   );
 
   public function afterFind($results, $primary = false)

@@ -111,6 +111,7 @@ create table if not exists videos (
 create table if not exists users (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   media_id int(10), 
+  `company_id` int(10) NOT NULL,
   email varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
   password varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
@@ -127,6 +128,7 @@ create table if not exists users (
 -- patisserie -vienoiserie --pain.. services...
 create table if not exists product_types (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `company_id` int(10) NOT NULL,
   media_id int(10), 
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   description text CHARACTER SET utf8 COLLATE utf8_bin not null ,
@@ -159,6 +161,7 @@ create table if not exists products (
 
 create table if not exists shops (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `company_id` int(10) NOT NULL,
   media_id int(10),
   `event_type_id` int(10) NOT NULL ,
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
@@ -299,6 +302,7 @@ create table if not exists companies (
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `address` text CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
+  `event_type_id` int(10) NOT NULL ,
   `phone` int not null ,
   `capital` int not null ,
   `siret` bigint(20) not null ,
@@ -307,8 +311,12 @@ create table if not exists companies (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 
+ALTER TABLE `medias`
+  ADD CONSTRAINT `fk_medias_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
 ALTER TABLE `companies`
-  ADD CONSTRAINT `fk_companies_media` FOREIGN KEY (`rib`) REFERENCES `medias` (`id`);
+  ADD CONSTRAINT `fk_companies_media` FOREIGN KEY (`rib`) REFERENCES `medias` (`id`),
+  ADD CONSTRAINT `fk_companies_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
 
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
@@ -325,17 +333,20 @@ ALTER TABLE `videos`
   ADD CONSTRAINT `fk_videos_medias` FOREIGN KEY (`id`) REFERENCES `medias` (`id`);
   
 ALTER TABLE `users`
-  ADD CONSTRAINT `fk_users_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);
+  ADD CONSTRAINT `fk_users_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),
+  ADD CONSTRAINT `fk_users_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
   
 ALTER TABLE `product_types`
   ADD CONSTRAINT `fk_producttypes_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
+  ADD CONSTRAINT `fk_producttypes_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);  
   
 ALTER TABLE `products`
   ADD CONSTRAINT `fk_product_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
   
 ALTER TABLE `shops`
   ADD CONSTRAINT `fk_shops_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),
-  ADD CONSTRAINT `fk_shops_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);  
+  ADD CONSTRAINT `fk_shops_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`),
+  ADD CONSTRAINT `fk_shops_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
 
 -- ALTER TABLE `events`
 --   ADD CONSTRAINT `fk_events_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),

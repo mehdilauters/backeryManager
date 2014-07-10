@@ -40,8 +40,8 @@ class ResultsController extends AppController {
     $this->Result->contain('Shop','ResultsEntry');
     $data = $this->getData($dateStart, $dateEnd);
 
-    $shops = $this->Result->Shop->find('list');
-    $productTypes = $this->ProductType->find('list');
+    $shops = $this->Result->Shop->find('list', array('conditions' => array('Shop.company_id' => $this->getCompanyId())));
+    $productTypes = $this->ProductType->find('list', array('conditions' => array('ProductType.company_id' => $this->getCompanyId())));
     if(isset($this->request->data['excelDownload']) || $fileName != NULL)
     {
       $this->set('fileName', $fileName);
@@ -205,6 +205,7 @@ class ResultsController extends AppController {
                     'Result.shop_id',
 		    'Shop.name',
                     ),
+		'conditions' => array('Shop.company_id' => $this->getCompanyId()),
               ));
 	require_once(APP . 'Vendor' . DS . 'PolynomialRegression.php');
 	bcscale( Configure::read('Settings.Approximation.bcscale') );
@@ -312,7 +313,8 @@ class ResultsController extends AppController {
 								'ResultsEntry.date',
 								'ProductTypes.name',
 								),
-			  'order' => 'ResultsEntry.date'
+			  'order' => 'ResultsEntry.date',
+	      'conditions' => array('Shop.company_id' => $this->getCompanyId()),
               ));
      // debug($resultsEntries ); 
 	 
@@ -423,8 +425,8 @@ class ResultsController extends AppController {
 	 
 	 
 	// $products = Set::combine($products, '{n}.Product.id', '{n}');
-    $shops = $this->Result->Shop->find('list');
-    $productTypes = $this->ProductType->find('list');
+    $shops = $this->Result->Shop->find('list', array('conditions' => array('Shop.company_id' => $this->getCompanyId())));
+    $productTypes = $this->ProductType->find('list', array('conditions' => array('ProductType.company_id' => $this->getCompanyId())));
 
 $datas = compact('group','results', 'resultsEntries', 'dateStart', 'dateEnd', 'shops', 'productTypes');
 
@@ -444,11 +446,17 @@ $datas = compact('group','results', 'resultsEntries', 'dateStart', 'dateEnd', 's
  * @return void
  */
   public function view($id = null) {
-    if (!$this->Result->exists($id)) {
+    /*if (!$this->Result->exists($id)) {
       throw new NotFoundException(__('Invalid result'));
     }
     $options = array('conditions' => array('Result.' . $this->Result->primaryKey => $id));
-    $this->set('result', $this->Result->find('first', $options));
+
+  // check for company
+// if (!$this->Result->exists($id)) {
+//       throw new NotFoundException(__('Invalid result'));
+//     }
+
+    $this->set('result', $this->Result->find('first', $options)); */
   }
 
 public function getData($dateStart = '', $dateEnd = '')
@@ -806,8 +814,8 @@ public function getData($dateStart = '', $dateEnd = '')
       }
      }
     }
-    $shops = $this->Result->Shop->find('list');
-    $productTypes = $this->ProductType->find('list');
+    $shops = $this->Result->Shop->find('list', array('conditions' => array('Shop.company_id' => $this->getCompanyId())));
+    $productTypes = $this->ProductType->find('list', array('conditions' => array('ProductType.company_id' => $this->getCompanyId())));
     $data = $this->getData($date, $date);
     $this->set(compact('shops','productTypes', 'date', 'data'));
   }
@@ -833,6 +841,10 @@ public function getData($dateStart = '', $dateEnd = '')
     } else {
       $options = array('conditions' => array('Result.' . $this->Result->primaryKey => $id));
       $this->request->data = $this->Result->find('first', $options);
+      if($this->request->data['Shop']['company_id'] != $this->getCompanyId())
+      {
+	  throw new NotFoundException(__('Invalid result for this company'));
+      }
     }
     $shops = $this->Result->Shop->find('list');
     $this->set(compact('shops'));
@@ -851,6 +863,12 @@ public function getData($dateStart = '', $dateEnd = '')
     if (!$this->Result->exists()) {
       throw new NotFoundException(__('Invalid result'));
     }
+      $res = $this->Result->findById($id);
+      if($res['Shop']['company_id'] != $this->getCompanyId())
+      {
+	  throw new NotFoundException(__('Invalid result for this company'));
+      }
+
     $this->request->onlyAllow('post', 'delete');
     if ($this->Result->delete()) {
       $this->Session->setFlash(__('Result deleted'),'flash/ok');

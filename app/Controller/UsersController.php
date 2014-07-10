@@ -17,7 +17,7 @@ class UsersController extends AppController {
  */
 	public function index() {
 		$this->User->recursive = 0;
-		$this->set('users', $this->paginate());
+		$this->set('users', $this->paginate(array('conditions'=>array('User.company_id'=>$this->getCompanyId()))));
 	}
 
 /**
@@ -32,7 +32,12 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
-		$this->set('user', $this->User->find('first', $options));
+		$user = $this->User->find('first', $options);
+		if ($user['User']['company_id'] != $this->getCompanyId()) {
+			throw new NotFoundException(__('Invalid user for this company'));
+		}
+
+		$this->set('user', $user);
 	}
 
 /**
@@ -44,6 +49,7 @@ class UsersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->User->create();
 			$this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
+			$this->request->data['User']['company_id'] = $this->getCompanyId();
 			if ($this->User->save($this->request->data)) {
 				$this->Session->setFlash(__('The user has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
@@ -65,6 +71,10 @@ class UsersController extends AppController {
 	public function edit($id = null) {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
+		}
+		$user = $this->User->find('first', $options);
+		if ($user['User']['company_id'] != $this->getCompanyId()) {
+			throw new NotFoundException(__('Invalid user for this company'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if( $this->request->data['User']['password'] != '' )
@@ -110,6 +120,10 @@ class UsersController extends AppController {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
+		$user = $this->User->find('first', $options);
+		if ($user['User']['company_id'] != $this->getCompanyId()) {
+			throw new NotFoundException(__('Invalid user for this company'));
+		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			$nbRoot = $this->User->find('count', array('conditions'=>'User.isRoot = true'));
 			if(!(!$isRoot && $nbRoot = 1))
@@ -148,7 +162,10 @@ class UsersController extends AppController {
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-
+		$user = $this->User->find('first', $options);
+		if ($user['User']['company_id'] != $this->getCompanyId()) {
+			throw new NotFoundException(__('Invalid user for this company'));
+		}
 		if($id == $this->Auth->user('id'))
 		{
 		  $this->Session->setFlash(__('Vous ne pouvez pas vous supprimer vous-même'),'flash/fail');

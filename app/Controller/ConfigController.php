@@ -392,8 +392,34 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		App::uses('ConnectionManager', 'Model'); 
 		$sql = '';
 		$sql .= '
+SET FOREIGN_KEY_CHECKS = 0;
+alter table product_types
+add `company_id` int(10) NOT NULL,
+ADD CONSTRAINT `fk_producttypes_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`); 
+
+alter table shops
+add `company_id` int(10) NOT NULL,
+ADD CONSTRAINT `fk_shops_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
+
+alter table users
+add `company_id` int(10) NOT NULL,
+ADD CONSTRAINT `fk_users_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
+
+update medias set user_id = (select id from users where isRoot limit 1)
+ALTER TABLE `medias`
+  ADD CONSTRAINT `fk_medias_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+alter table companies
+  add `event_type_id` int(10) NOT NULL,
+  ADD CONSTRAINT `fk_companies_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
+update companies set event_type_id = (select id from event_types where name like "%news%");
+
+update product_types set company_id = 1;
+update shops set company_id = 1;
+update users set company_id = 1;
 
 
+SET FOREIGN_KEY_CHECKS = 1;
 ';	
 		$db = ConnectionManager::getDataSource('default');
 		$db->rawQuery($sql);

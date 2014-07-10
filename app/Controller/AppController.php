@@ -37,7 +37,7 @@ App::uses('CakeEmail', 'Network/Email');
 class AppController extends Controller {
 	var $uses=array('User', 'EventType', 'Company');
 	public $helpers = array('Text','Rss', 'Html', 'MyHtml');
-	  var $publicActions = array('exportExcel', 'backupDb');
+	  var $publicActions = array('exportExcel', 'backupDb', 'getCompanyId');
 	  var $memberActions = array();
 
   public $components = array(
@@ -328,6 +328,12 @@ class AppController extends Controller {
     return false;
 }
   
+  public function getCompanyId()
+  {
+    $company = $this->Company->find('first');
+    return $company['Company']['id'];
+  }
+
   
  public function isCommandLineInterface()
 {

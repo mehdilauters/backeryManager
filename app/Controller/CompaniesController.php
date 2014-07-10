@@ -52,6 +52,9 @@ class CompaniesController extends AppController {
 	    }
 	     
 		if ($this->request->is('post')) {
+			$eventType = array('EventType'=> array('name'=>'news'));
+			$this->Company->EventType->save($eventType);
+			$this->request->data['Company']['event_type_id'] = $this->Company->EventType->getInsertID();
 			$this->Company->create();
 			if ($this->Company->save($this->request->data)) {
 				$this->Session->setFlash(__('The company has been saved'),'flash/ok');

@@ -79,14 +79,22 @@ class Company extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+		),
+	      'EventType' => array(
+		'className' => 'FullCalendar.EventType',
+		'foreignKey' => 'event_type_id',
+		'conditions' => '',
+		'fields' => '',
+		'order' => '',
+		    'dependent'=> true,
+	      ),
 	);
 
 
         public $hasMany = array(
 	'User' => array(
 	  'className' => 'User',
-	  'foreignKey' => 'comapny_id',
+	  'foreignKey' => 'company_id',
 	  'dependent' => false,
 	  'conditions' => '',
 	  'fields' => '',

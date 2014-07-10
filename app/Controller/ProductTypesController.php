@@ -16,13 +16,13 @@ class ProductTypesController extends AppController {
     $this->set('title_for_layout', 'Catégories de Produits');
     
     $conditions = array();
-    $conditions['ProductType'] = '';
-    $conditions['Product'] = '';
+    $conditions['ProductType'] = array('company_id' => $this->getCompanyId());
+    $conditions['Product'] = array();
 
     if(!$this->Auth->user('isRoot'))
     {
-		$conditions['ProductType'] = 'ProductType.customer_display';
-		$conditions['Product'] = 'Product.customer_display';
+		$conditions['ProductType'][] = 'ProductType.customer_display';
+		$conditions['Product'][] = 'Product.customer_display';
     }
 	else
 	{
@@ -35,8 +35,10 @@ class ProductTypesController extends AppController {
     $isCalendarAvailable = false;//$this->requestAction(array('controller'=>'events', 'action'=>'eventsAvailable'));
     $this->set('isCalendarAvailable', $isCalendarAvailable);
 
-    $contain = array('Media.Photo'
-		,'Product'=> array('conditions'=>$conditions['Product']), 'Product.Media',
+    $contain = array('Media.Photo',
+		  'Product.ProductType',
+		    'Product'=> array('conditions'=>$conditions['Product']),
+		  'Product.Media'
 	);
 
 
@@ -83,7 +85,9 @@ class ProductTypesController extends AppController {
     $this->ProductType->contain($contain);
 
     $productTypes = $this->ProductType->find('first', array('conditions'=>$conditions['ProductType']));
-
+    if ($productTypes['ProductType']['company_id'] != $this->getCompanyId()) {
+      throw new NotFoundException(__('Invalid product type for this company'));
+    }
 	$this->set('title_for_layout', $productTypes['ProductType']['name'] );
 
     $this->set('productType', $productTypes);
@@ -97,6 +101,7 @@ class ProductTypesController extends AppController {
   public function add() {
     if ($this->request->is('post')) {
       $this->ProductType->create();
+	  $this->request->data['ProductType']['company_id'] = $this->getCompanyId();
       if ($this->ProductType->save($this->request->data)) {
         $this->Session->setFlash(__('The product type has been saved'),'flash/ok');
         $this->redirect(array('action' => 'index'));
@@ -119,6 +124,11 @@ class ProductTypesController extends AppController {
     if (!$this->ProductType->exists($id)) {
       throw new NotFoundException(__('Invalid product type'));
     }
+    $res = $this->ProductType->findById($id);
+	  if($res['ProductType']['company_id'] != $this->getCompanyId())
+	  {
+	      throw new NotFoundException(__('Invalid productType this company'));
+	  }
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->ProductType->save($this->request->data)) {
         $this->Session->setFlash(__('The product type has been saved'),'flash/ok');
@@ -147,6 +157,13 @@ class ProductTypesController extends AppController {
     if (!$this->ProductType->exists()) {
       throw new NotFoundException(__('Invalid product type'));
     }
+
+      $res = $this->ProductType->findById($id);
+      if($res['ProductType']['company_id'] != $this->getCompanyId())
+      {
+	  throw new NotFoundException(__('Invalid productType this company'));
+      }
+
     $this->request->onlyAllow('post', 'delete');
     if ($this->ProductType->delete()) {
       $this->Session->setFlash(__('Product type deleted'),'flash/ok');

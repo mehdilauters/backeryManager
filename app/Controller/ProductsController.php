@@ -22,7 +22,7 @@ class ProductsController extends AppController {
     $contain = array('ProductType.Media.Photo','Media');
     $this->Product->contain($contain);
 
-    $conditions = array();
+    $conditions = array('ProductType.company_id' => $this->getCompanyId());
 
     if(!$this->Auth->user('isRoot'))
     {
@@ -69,6 +69,11 @@ class ProductsController extends AppController {
 
     $this->Product->contain($contain);
     $products = $this->Product->find('first', $options);
+    
+  if ($products['ProductType']['company_id'] != $this->getCompanyId()) {
+      throw new NotFoundException(__('Invalid product for this company'));
+    }
+
     $this->set('title_for_layout', $products['Product']['name']);
   
     $this->set('product', $products);
@@ -125,6 +130,11 @@ class ProductsController extends AppController {
     if (!$this->Product->exists($id)) {
       throw new NotFoundException(__('Invalid product'));
     }
+    $product = $this->Product->findById($id);
+    if ($product['ProductType']['company_id'] != $this->getCompanyId()) {
+      throw new NotFoundException(__('Invalid product for this company'));
+    }
+
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->Product->save($this->request->data)) {
         $this->Session->setFlash(__('The product has been saved'),'flash/ok');
@@ -154,6 +164,11 @@ class ProductsController extends AppController {
     if (!$this->Product->exists()) {
       throw new NotFoundException(__('Invalid product'));
     }
+    $product = $this->Product->findById($id);
+    if ($product['ProductType']['company_id'] != $this->getCompanyId()) {
+      throw new NotFoundException(__('Invalid product for this company'));
+    }
+
     $this->request->onlyAllow('post', 'delete');
     if ($this->Product->delete()) {
       $this->Session->setFlash(__('Product deleted'),'flash/ok');
