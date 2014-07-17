@@ -405,7 +405,7 @@ alter table users
 add `company_id` int(10) NOT NULL,
 ADD CONSTRAINT `fk_users_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
 
-update medias set user_id = (select id from users where isRoot limit 1)
+update medias set user_id = (select id from users where isRoot limit 1);
 ALTER TABLE `medias`
   ADD CONSTRAINT `fk_medias_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 

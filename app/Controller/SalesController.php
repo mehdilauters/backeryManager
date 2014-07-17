@@ -334,7 +334,7 @@ class SalesController extends AppController {
     $this->Sale->Product->contain('ProductType');
     $products = $this->Sale->Product->find('all', array('conditions'=>array('ProductType.company_id'=>$this->getCompanyId())));
     $products = Set::combine($products, '{n}.Product.id', '{n}');
-    
+    $this->Sale->Product->contain('ProductType');
     $productsList = $this->Sale->Product->find('list', array('conditions'=>array('ProductType.company_id'=>$this->getCompanyId())));
 
 
