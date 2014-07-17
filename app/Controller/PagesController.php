@@ -74,7 +74,7 @@ class PagesController extends AppController {
     $title_for_layout = 'Nos magasins';
     $this->menu['Menu']['Magasins']['active'] = true;
 //     $this->Shop->recursive = 3;
-    $shops = $this->Shop->find('all');
+    $shops = $this->Shop->find('all', array('conditions'=>array('company_id'=> $this->getCompanyId())));
     foreach ($shops as $id=>$shop)
     {
       $shops[$id]['EventType']['Event'] = $this->requestAction(array(	'plugin'=>'full_calendar',
@@ -94,12 +94,12 @@ class PagesController extends AppController {
 
     $this->set('shops', $shops);
 
-    $conditions = array('Product.media_id');
+    $conditions = array('Product.media_id', 'ProductType.company_id' => $this->getCompanyId());
     if(!$this->Auth->user('isRoot'))
     {
       $conditions[] = 'Product.customer_display';
     }
-    $this->Product->contain('Media.Photo');
+    $this->Product->contain('Media.Photo', 'ProductType');
     $products = $this->Product->find('all', array('conditions'=>$conditions));
  
 	$displayProducts = array();

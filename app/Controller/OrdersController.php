@@ -13,7 +13,7 @@ class OrdersController extends AppController {
  * @return void
  */
 	public function index($status = 'reserved' ) {
-	    $conditions = array();
+	    $conditions = array('Shop.company_id' => $this->getCompanyId());
 
 
 	    if(isset($this->request->data['Order']['statusSelect']))
@@ -27,6 +27,7 @@ class OrdersController extends AppController {
 	      $conditions['Order.status'] = $status;
 	    }
 		$this->request->data['Order']['statusSelect'] = $status;
+		$this->Order->contain('Shop', 'User');
 		$this->set('orders', $this->paginate($conditions));
 	}
 
@@ -47,11 +48,12 @@ class OrdersController extends AppController {
 		$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
 		
 		$order = $this->Order->find('first', $options);
-		$company = $this->Company->find('first');
-		if(count($company) == 0)
+		if($order['Shop']['company_id'] != $this->getCompanyId() )
 		{
-			debug('company does not exists');
+		  throw new NotFoundException(__('Invalid order for this company'));
 		}
+		$company = $this->Company->findById($this->getCompanyId());
+		
 		$total = array('tva' => array(), 'total');
 		$tmp = array(
 		'HT' => 0,
@@ -126,9 +128,23 @@ class OrdersController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+
+			
+
+			$shop = $this->Order->Shop->findById($this->request->data['Order']['shop_id']);
+			$user = $this->Order->User->findById($this->request->data['Order']['user_id']);
+			if($shop['Shop']['company_id'] != $this->getCompanyId() )
+			{
+			  throw new NotFoundException(__('Invalid shop for this company'));
+			}
+
+			if($user['User']['company_id'] != $this->getCompanyId() )
+			{
+			  throw new NotFoundException(__('Invalid user for this company'));
+			}
+
 			$this->Order->create();
 			$this->request->data['Order']['status'] = 'reserved';
-			
 			$delivery = $this->Functions->viewDateToDateTime($this->request->data['Order']['delivery_date']);
 			if($delivery != false )
 			{
@@ -144,8 +160,8 @@ class OrdersController extends AppController {
 				$this->Session->setFlash(__('The order could not be saved. Please, try again.'),'flash/fail');
 			}
 		}
-		$shops = $this->Order->Shop->find('list');
-		$users = $this->Order->User->find('list');
+		$shops = $this->Order->Shop->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
+		$users = $this->Order->User->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
 		$this->set(compact('shops', 'users'));
 	}
 
@@ -160,7 +176,25 @@ class OrdersController extends AppController {
 		if (!$this->Order->exists($id)) {
 			throw new NotFoundException(__('Invalid order'));
 		}
+		$order = $this->Order->findById($id);
+		if($order['Shop']['company_id'] != $this->getCompanyId() )
+		{
+		  throw new NotFoundException(__('Invalid order for this company'));
+		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+		
+			$shop = $this->Order->Shop->findById($this->request->data['Order']['shop_id']);
+			$user = $this->Order->User->findById($this->request->data['Order']['user_id']);
+			if($shop['Shop']['company_id'] != $this->getCompanyId() )
+			{
+			  throw new NotFoundException(__('Invalid shop for this company'));
+			}
+
+			if($user['User']['company_id'] != $this->getCompanyId() )
+			{
+			  throw new NotFoundException(__('Invalid user for this company'));
+			}
+
 			$delivery = $this->Functions->viewDateToDateTime($this->request->data['Order']['delivery_date']);
 			if($delivery != false )
 			{
@@ -176,8 +210,8 @@ class OrdersController extends AppController {
 			$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
 			$this->request->data = $this->Order->find('first', $options);
 		}
-		$shops = $this->Order->Shop->find('list');
-		$users = $this->Order->User->find('list');
+		$shops = $this->Order->Shop->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
+		$users = $this->Order->User->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
 		$this->set(compact('shops', 'users'));
 	}
 
@@ -194,6 +228,13 @@ class OrdersController extends AppController {
 		if (!$this->Order->exists()) {
 			throw new NotFoundException(__('Invalid order'));
 		}
+		
+		$order = $this->Order->findById($id);
+		if($order['Shop']['company_id'] != $this->getCompanyId() )
+		{
+		  throw new NotFoundException(__('Invalid order for this company'));
+		}
+		
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Order->delete()) {
 			$this->Session->setFlash(__('Order deleted'),'flash/ok');

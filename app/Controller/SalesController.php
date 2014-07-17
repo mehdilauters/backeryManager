@@ -104,6 +104,7 @@ class SalesController extends AppController {
       $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Sale.date');
 
       $conditions[] = $dateSelect;
+      $conditions['Shop.company_id'] = $this->getCompanyId();
 
       if(isset($this->request->data['conditions']['shop']) && $this->request->data['conditions']['shop'] != '')
       {
@@ -173,7 +174,7 @@ class SalesController extends AppController {
 	$groupBy[] = 'Sale.date, Sale.product_id, Sale.shop_id';
       }
 	  // SELECT SUM(IF(myColumn IS NULL, 0, myColumn))
-    $this->Sale->contain('Product.ProductType');
+    $this->Sale->contain('Product.ProductType', 'Shop');
     $sales = $this->Sale->find('all', array('order'=>array('Sale.date', 'Sale.product_id', 'Sale.shop_id'),
 					    'group' => $groupBy,
 					    'conditions' => $conditions,
@@ -331,10 +332,13 @@ class SalesController extends AppController {
  
 
     $this->Sale->Product->contain('ProductType');
-    $products = $this->Sale->Product->find('all');
+    $products = $this->Sale->Product->find('all', array('conditions'=>array('ProductType.company_id'=>$this->getCompanyId())));
     $products = Set::combine($products, '{n}.Product.id', '{n}');
-    $productsList = $this->Sale->Product->find('list');
-    $shops = $this->Sale->Shop->find('list');
+    
+    $productsList = $this->Sale->Product->find('list', array('conditions'=>array('ProductType.company_id'=>$this->getCompanyId())));
+
+
+    $shops = $this->Sale->Shop->find('list', array('conditions'=>array('Shop.company_id'=>$this->getCompanyId())));
 
     if (!empty($this->request->params['requested'])) {
             return compact('sales','products', 'shops');
@@ -386,8 +390,8 @@ public function results()
     
     
     $shopData = array();
-    $shops = $this->Shop->find('list');
-    $productTypes = $this->ProductType->find('list');
+    $shops = $this->Shop->find('list',array('conditions'=>array('Shop.company_id'=>$this->getCompanyId())));
+    $productTypes = $this->ProductType->find('list',array('conditions'=>array('ProductType.company_id'=>$this->getCompanyId())));
 
     foreach($shops as $shopId => $shop)
     {
@@ -395,10 +399,11 @@ public function results()
           foreach($productTypes as $typeId => $productType)
     {
       $shopData[$shopId][$typeId] = array();
-      $this->Sale->contain();
+      $this->Sale->contain('Shop');
       $shopData[$shopId][$typeId]['Sales'] = $this->Sale->find('all', array('conditions'=>array('('.$dateSelectSale.')',
                     'Sale.product_id in (select P.id from products P where P.product_types_id = '.$typeId.')',
-                    'Sale.shop_id' => $shopId
+                    'Sale.shop_id' => $shopId,
+		     'Shop.company_id'=>$this->getCompanyId()
                   ),
                    //'group' =>'Date(Sale.date)',
                     'fields' => array(
@@ -476,7 +481,7 @@ public function results()
 		  continue;
 		}
 
-
+		$this->Product->contain('ProductType');
 		$productModel = $this->Product->findById($productId);
 		$this->Sale->create();
 		$data = array();
@@ -491,7 +496,9 @@ public function results()
 		      'lost' => $row[0][5],
 		      );
 
-		    $tmpRes = $this->Sale->find('count', array('conditions'=>array('date'=>$data['Sale']['date'], 'shop_id' => $data['Sale']['shop_id'], 'product_id'=> $data['Sale']['product_id'] )));
+		    $tmpRes = $this->Sale->find('count', array('conditions'=>array('date'=>$data['Sale']['date'], 'shop_id' => $data['Sale']['shop_id'], 'product_id'=> $data['Sale']['product_id'],
+		    'Shop.company_id'=>$this->getCompanyId()
+		    )));
 		  // if yes, goto next row
 		  if($tmpRes == 1)
 		  {
@@ -588,9 +595,9 @@ public function results()
     $this->Sale->Product->contain();
     $this->Sale->Product->contain(array('ProductType'=>array(),'Sale'=>array('conditions'=>'Sale.date = \''.$date.'\''), 'Media.Photo'=>array()));
 
-    $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id', 'conditions'=>array('Product.production_display')));
+    $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id', 'conditions'=>array('Product.production_display', 'ProductType.company_id'=>$this->getCompanyId())));
     //debug($products);
-    $shops = $this->Sale->Shop->find('all');
+    $shops = $this->Sale->Shop->find('all',array('conditions'=>array('Shop.company_id'=>$this->getCompanyId())));
 
     $this->set(compact('products', 'shops'));
   }
@@ -603,23 +610,23 @@ public function results()
  * @return void
  */
   public function edit($id = null) {
-    if (!$this->Sale->exists($id)) {
-      throw new NotFoundException(__('Invalid sale'));
-    }
-    if ($this->request->is('post') || $this->request->is('put')) {
-      if ($this->Sale->save($this->request->data)) {
-        $this->Session->setFlash(__('The sale has been saved'),'flash/ok');
-        $this->redirect(array('action' => 'index'));
-      } else {
-        $this->Session->setFlash(__('The sale could not be saved. Please, try again.'),'flash/flash');
-      }
-    } else {
-      $options = array('conditions' => array('Sale.' . $this->Sale->primaryKey => $id));
-      $this->request->data = $this->Sale->find('first', $options);
-    }
-    $products = $this->Sale->Product->find('list');
-    $shops = $this->Sale->Shop->find('list');
-    $this->set(compact('products', 'shops'));
+//     if (!$this->Sale->exists($id)) {
+//       throw new NotFoundException(__('Invalid sale'));
+//     }
+//     if ($this->request->is('post') || $this->request->is('put')) {
+//       if ($this->Sale->save($this->request->data)) {
+//         $this->Session->setFlash(__('The sale has been saved'),'flash/ok');
+//         $this->redirect(array('action' => 'index'));
+//       } else {
+//         $this->Session->setFlash(__('The sale could not be saved. Please, try again.'),'flash/flash');
+//       }
+//     } else {
+//       $options = array('conditions' => array('Sale.' . $this->Sale->primaryKey => $id));
+//       $this->request->data = $this->Sale->find('first', $options);
+//     }
+//     $products = $this->Sale->Product->find('list');
+//     $shops = $this->Sale->Shop->find('list');
+//     $this->set(compact('products', 'shops'));
   }
 
   
@@ -656,17 +663,17 @@ public function results()
  * @return void
  */
   public function delete($id = null) {
-    $this->Sale->id = $id;
-    if (!$this->Sale->exists()) {
-      throw new NotFoundException(__('Invalid sale'));
-    }
-    $this->request->onlyAllow('post', 'delete');
-    if ($this->Sale->delete()) {
-      $this->Session->setFlash(__('Sale deleted'),'flash/ok');
-      $this->redirect(array('action' => 'index'));
-    }
-    $this->Session->setFlash(__('Sale was not deleted'),'flash/fail');
-    $this->redirect(array('action' => 'index'));
+//     $this->Sale->id = $id;
+//     if (!$this->Sale->exists()) {
+//       throw new NotFoundException(__('Invalid sale'));
+//     }
+//     $this->request->onlyAllow('post', 'delete');
+//     if ($this->Sale->delete()) {
+//       $this->Session->setFlash(__('Sale deleted'),'flash/ok');
+//       $this->redirect(array('action' => 'index'));
+//     }
+//     $this->Session->setFlash(__('Sale was not deleted'),'flash/fail');
+//     $this->redirect(array('action' => 'index'));
   }
 
 

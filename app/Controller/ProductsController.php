@@ -102,7 +102,16 @@ class ProductsController extends AppController {
   public function add() {
     if ($this->request->is('post')) {
       $this->Product->create();
-      debug($this->request->data);
+      $productType = $this->Product->ProductType->findById($this->request->data['Product']['product_types_id']);
+      if ($productType ['ProductType']['company_id'] != $this->getCompanyId()) {
+	throw new NotFoundException(__('Invalid productType for this company'));
+      }
+
+      $media = $this->Product->Media->findById($this->request->data['Product']['media_id']);
+      if ($media['User']['company_id'] != $this->getCompanyId()) {
+	throw new NotFoundException(__('Invalid user for this company'));
+      }
+
       if($this->request->data['Product']['media_id'] == '')
       {
 		unset($this->request->data['Product']['media_id']);
@@ -114,8 +123,9 @@ class ProductsController extends AppController {
         $this->Session->setFlash(__('The product could not be saved. Please, try again.'),'flash/flash');
       }
     }
-    $productTypes = $this->Product->ProductType->find('list');
-    $media = array(''=>'') + $this->Product->Media->find('list');
+    $productTypes = $this->Product->ProductType->find('list', array('conditions'=>array('ProductType.company_id' => $this->getCompanyId())));
+    $this->Product->Media->contain('User');
+    $media = array(''=>'') + $this->Product->Media->find('list', array('conditions'=>array('User.company_id' => $this->getCompanyId())));
     $this->set(compact('productTypes', 'media'));
   }
 
@@ -136,6 +146,15 @@ class ProductsController extends AppController {
     }
 
     if ($this->request->is('post') || $this->request->is('put')) {
+      $productType = $this->Product->ProductType->findById($this->request->data['Product']['product_types_id']);
+      if ($productType ['ProductType']['company_id'] != $this->getCompanyId()) {
+	throw new NotFoundException(__('Invalid productType for this company'));
+      }
+
+      $media = $this->Product->Media->findById($this->request->data['Product']['media_id']);
+      if ($media['User']['company_id'] != $this->getCompanyId()) {
+	throw new NotFoundException(__('Invalid media for this company'));
+      }
       if ($this->Product->save($this->request->data)) {
         $this->Session->setFlash(__('The product has been saved'),'flash/ok');
         return $this->redirect(array('controller'=>'products', 'action' => 'index'));
@@ -146,8 +165,9 @@ class ProductsController extends AppController {
       $options = array('conditions' => array('Product.' . $this->Product->primaryKey => $id));
       $this->request->data = $this->Product->find('first', $options);
     }
-    $productTypes = $this->Product->ProductType->find('list');
-    $media = array(''=>'') + $this->Product->Media->find('list');
+    $productTypes = $this->Product->ProductType->find('list', array('conditions'=>array('ProductType.company_id' => $this->getCompanyId())));
+    $this->Product->Media->contain('User');
+    $media = array(''=>'') + $this->Product->Media->find('list', array('conditions'=>array('User.company_id' => $this->getCompanyId())));
     $this->set(compact('productTypes', 'media'));
   }
 

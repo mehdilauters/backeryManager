@@ -16,7 +16,8 @@ class PhotosController extends AppController {
  */
   public function index() {
     //$this->Photo->recursive = 0;
-    $this->set('photos', $this->paginate());
+    $this->Photo->contain('Media.User');
+    $this->set('photos', $this->paginate(array('Media.user_id in ( select U.'.$this->Photo->Media->User->primaryKey.' from '.$this->Photo->Media->User->table.' U where U.company_id = '.$this->getCompanyId().')')));
   }
 
 /**
@@ -30,8 +31,16 @@ class PhotosController extends AppController {
     if (!$this->Photo->exists($id)) {
       throw new NotFoundException(__('Invalid photo'));
     }
+    $this->Photo->contain('Media.User');
     $options = array('conditions' => array('Photo.' . $this->Photo->primaryKey => $id));
-    $this->set('photo', $this->Photo->find('first', $options));
+    $photo = $this->Photo->find('first', $options);
+    if($photo['Photo']['User']['company_id'] != $this->getCompanyId() )
+    {
+      throw new NotFoundException(__('Invalid photo for this company'));
+    }    
+
+
+    $this->set('photo', $photo);
   }
 
   function download($id, $preview = true)
@@ -39,6 +48,14 @@ class PhotosController extends AppController {
 		if (!$this->Photo->exists($id)) {
 		  throw new NotFoundException(__('Invalid photo'));
 		}
+		
+		$this->Photo->contain('Media.User');
+		$photo=$this->Photo->findById($id);
+		if($photo['Photo']['User']['company_id'] != $this->getCompanyId() )
+		{
+		  throw new NotFoundException(__('Invalid photo for this company'));
+		}    
+
 		if(! $this->Auth->user('isRoot') )
 		{
 		  $isRib = ($this->Company->find('count', array('conditions'=>array('Company.rib' => $id))) == 0);
@@ -53,7 +70,7 @@ class PhotosController extends AppController {
 			$path='preview/';
 		else
 			$path='normal/';
-		$photo=$this->Photo->findById($id);
+		
 		$path_parts = pathinfo($photo['Photo']['path']);
  		$params = array(
               'id' => $photo['Photo']['path'],
@@ -262,6 +279,15 @@ class PhotosController extends AppController {
     if (!$this->Photo->exists($id)) {
       throw new NotFoundException(__('Invalid photo'));
     }
+
+	$this->Photo->contain('Media.User');
+	$photo=$this->Photo->findById($id);
+	if($photo['Photo']['User']['company_id'] != $this->getCompanyId() )
+	{
+	  throw new NotFoundException(__('Invalid photo for this company'));
+	}
+
+
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->Photo->save($this->request->data)) {
         $this->Session->setFlash(__('The photo has been saved'),'flash/ok');
@@ -290,6 +316,15 @@ class PhotosController extends AppController {
     if (!$this->Photo->exists()) {
       throw new NotFoundException(__('Invalid photo'));
     }
+
+    $this->Photo->contain('Media.User');
+    $photo=$this->Photo->findById($id);
+    if($photo['Photo']['User']['company_id'] != $this->getCompanyId() )
+    {
+      throw new NotFoundException(__('Invalid photo for this company'));
+    }
+
+
     $this->request->onlyAllow('post', 'delete');
     if ($this->Photo->delete()) {
       $this->Session->setFlash(__('Photo deleted'),'flash/ok');

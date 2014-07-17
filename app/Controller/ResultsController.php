@@ -485,12 +485,15 @@ public function getData($dateStart = '', $dateEnd = '')
   }
 
     $this->Result->contain();
-    $this->Result->contain('ResultsEntry');
+    $this->Result->contain('ResultsEntry', 'Shop');
 
     App::uses('CakeTime', 'Utility');
-    $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Result.date');
+    $conditions = array(CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Result.date'),
+		      'Shop.company_id' => $this->getCompanyId()
+		      );
+    
 
-    $results = $this->Result->find('all', array( 'conditions'=>$dateSelect, 'order' => 'Result.date'));
+    $results = $this->Result->find('all', array( 'conditions'=>$conditions, 'order' => 'Result.date'));
     $data = array(
       'total' => array('cash'=>0, 'check'=> 0, 'card'=>0),
       );
@@ -675,7 +678,7 @@ public function getData($dateStart = '', $dateEnd = '')
 				      'comment' =>$row[0][6],
 				    ));
 		  // check if already existing
-		  $tmpRes = $this->Result->find('count', array('conditions'=>array('date'=>$resultData['Result']['date'], 'shop_id' => $resultData['Result']['shop_id'])));
+		  $tmpRes = $this->Result->find('count', array('conditions'=>array('date'=>$resultData['Result']['date'], 'shop_id' => $resultData['Result']['shop_id'], 'Shop.company_id'=>$this->getCompanyId())));
 		  // if yes, goto next row
 		  if($tmpRes == 1)
 		  {
@@ -828,26 +831,26 @@ public function getData($dateStart = '', $dateEnd = '')
  * @return void
  */
   public function edit($id = null) {
-    if (!$this->Result->exists($id)) {
-      throw new NotFoundException(__('Invalid result'));
-    }
-    if ($this->request->is('post') || $this->request->is('put')) {
-      if ($this->Result->save($this->request->data)) {
-        $this->Session->setFlash(__('The result has been saved'),'flash/ok');
-        $this->redirect(array('action' => 'index'));
-      } else {
-        $this->Session->setFlash(__('The result could not be saved. Please, try again.'),'flash/fail');
-      }
-    } else {
-      $options = array('conditions' => array('Result.' . $this->Result->primaryKey => $id));
-      $this->request->data = $this->Result->find('first', $options);
-      if($this->request->data['Shop']['company_id'] != $this->getCompanyId())
-      {
-	  throw new NotFoundException(__('Invalid result for this company'));
-      }
-    }
-    $shops = $this->Result->Shop->find('list');
-    $this->set(compact('shops'));
+//     if (!$this->Result->exists($id)) {
+//       throw new NotFoundException(__('Invalid result'));
+//     }
+//     if ($this->request->is('post') || $this->request->is('put')) {
+//       if ($this->Result->save($this->request->data)) {
+//         $this->Session->setFlash(__('The result has been saved'),'flash/ok');
+//         $this->redirect(array('action' => 'index'));
+//       } else {
+//         $this->Session->setFlash(__('The result could not be saved. Please, try again.'),'flash/fail');
+//       }
+//     } else {
+//       $options = array('conditions' => array('Result.' . $this->Result->primaryKey => $id));
+//       $this->request->data = $this->Result->find('first', $options);
+//       if($this->request->data['Shop']['company_id'] != $this->getCompanyId())
+//       {
+// 	  throw new NotFoundException(__('Invalid result for this company'));
+//       }
+//     }
+//     $shops = $this->Result->Shop->find('list');
+//     $this->set(compact('shops'));
   }
 
 /**

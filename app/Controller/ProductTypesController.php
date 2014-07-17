@@ -102,6 +102,10 @@ class ProductTypesController extends AppController {
     if ($this->request->is('post')) {
       $this->ProductType->create();
 	  $this->request->data['ProductType']['company_id'] = $this->getCompanyId();
+      $media = $this->ProductType->Media->findById($this->request->data['Product']['media_id']);
+      if ($media['User']['company_id'] != $this->getCompanyId()) {
+	throw new NotFoundException(__('Invalid media for this company'));
+      }
       if ($this->ProductType->save($this->request->data)) {
         $this->Session->setFlash(__('The product type has been saved'),'flash/ok');
         $this->redirect(array('action' => 'index'));
@@ -109,7 +113,8 @@ class ProductTypesController extends AppController {
         $this->Session->setFlash(__('The product type could not be saved. Please, try again.'),'flash/fail');
       }
     }
-    $media = array(''=>'')  + $this->ProductType->Media->find('list');
+    $this->ProductType->Media->contain('User');
+    $media = array(''=>'') + $this->ProductType->Media->find('list', array('conditions'=>array('User.company_id' => $this->getCompanyId())));
     $this->set(compact('media'));
   }
 
@@ -129,6 +134,12 @@ class ProductTypesController extends AppController {
 	  {
 	      throw new NotFoundException(__('Invalid productType this company'));
 	  }
+
+      $media = $this->ProductType->Media->findById($this->request->data['Product']['media_id']);
+      if ($media['User']['company_id'] != $this->getCompanyId()) {
+	throw new NotFoundException(__('Invalid media for this company'));
+      }
+
     if ($this->request->is('post') || $this->request->is('put')) {
       if ($this->ProductType->save($this->request->data)) {
         $this->Session->setFlash(__('The product type has been saved'),'flash/ok');
@@ -140,7 +151,7 @@ class ProductTypesController extends AppController {
       $options = array('conditions' => array('ProductType.' . $this->ProductType->primaryKey => $id));
       $this->request->data = $this->ProductType->find('first', $options);
     }
-    $media = array(''=>'') + $this->ProductType->Media->find('list');
+    $media = array(''=>'') + $this->ProductType->Media->find('list', array('conditions'=>array('User.company_id' => $this->getCompanyId())));
     $this->set(compact('media'));
   }
 

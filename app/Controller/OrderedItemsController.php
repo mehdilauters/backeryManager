@@ -13,8 +13,11 @@ class OrderedItemsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->OrderedItem->recursive = 0;
-		$this->set('orderedItems', $this->paginate());
+		  $this->OrderedItem->contain('Order.Shop', 'Product.ProductType');
+		// contain with belongs to not working, using subquery
+		$this->set('orderedItems', $this->paginate(
+		      array('Order.shop_id in ( select C.'.$this->OrderedItem->Order->Shop->primaryKey.' from '.$this->OrderedItem->Order->Shop->table.' C where company_id = '.$this->getCompanyId().')')
+		  ));
 	}
 
 /**
@@ -28,8 +31,17 @@ class OrderedItemsController extends AppController {
 		if (!$this->OrderedItem->exists($id)) {
 			throw new NotFoundException(__('Invalid ordered item'));
 		}
+
+		$this->OrderedItem->contain('Order.Shop');
 		$options = array('conditions' => array('OrderedItem.' . $this->OrderedItem->primaryKey => $id));
-		$this->set('orderedItem', $this->OrderedItem->find('first', $options));
+		$order = $this->OrderedItem->find('first', $options);
+		if ($order['Order']['Shop']['company_id'] != $this->getCompanyId()) {
+		    throw new NotFoundException(__('Invalid item for this company'));
+			}
+
+
+
+		$this->set('orderedItem', $order);
 	}
 
 /**
@@ -38,6 +50,10 @@ class OrderedItemsController extends AppController {
  * @return void
  */
 	public function add($orderId) {
+		$order = $this->OrderedItem->Order->findById($orderId);
+		if ($order['Shop']['company_id'] != $this->getCompanyId()) {
+		    throw new NotFoundException(__('Invalid item for this company'));
+			}
 		if ($this->request->is('post')) {
 			$this->OrderedItem->create();
 			$this->OrderedItem->Product->contain('ProductType');
@@ -78,6 +94,12 @@ class OrderedItemsController extends AppController {
 		if (!$this->OrderedItem->exists($id)) {
 			throw new NotFoundException(__('Invalid ordered item'));
 		}
+		$options = array('conditions' => array('OrderedItem.' . $this->OrderedItem->primaryKey => $id));
+		$this->OrderedItem->contain('Order.Shop');
+		$order = $this->OrderedItem->find('first', $options);
+		if ($order['Order']['Shop']['company_id'] != $this->getCompanyId()) {
+		    throw new NotFoundException(__('Invalid item for this company'));
+			}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			$date = $this->Functions->viewDateToDateTime($this->request->data['OrderedItem']['created']);
 			if($date != false )
@@ -91,8 +113,8 @@ class OrderedItemsController extends AppController {
 				$this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'));
 			}
 		} else {
-			$options = array('conditions' => array('OrderedItem.' . $this->OrderedItem->primaryKey => $id));
-			$this->request->data = $this->OrderedItem->find('first', $options);
+			
+			$this->request->data = $order;
 		}
 		$orders = $this->OrderedItem->Order->find('list');
 		$products = $this->OrderedItem->Product->find('list');
@@ -112,6 +134,12 @@ class OrderedItemsController extends AppController {
 		if (!$this->OrderedItem->exists()) {
 			throw new NotFoundException(__('Invalid ordered item'));
 		}
+		$options = array('conditions' => array('OrderedItem.' . $this->OrderedItem->primaryKey => $id));
+		$this->OrderedItem->contain('Order.Shop');
+		$order = $this->OrderedItem->find('first', $options);
+		if ($order['Order']['Shop']['company_id'] != $this->getCompanyId()) {
+		    throw new NotFoundException(__('Invalid item for this company'));
+			}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->OrderedItem->delete()) {
 			$this->Session->setFlash(__('Ordered item deleted'),'flash/ok');
