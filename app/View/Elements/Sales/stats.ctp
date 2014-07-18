@@ -169,7 +169,13 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 		?>
 	  </td>
 	  <?php } ?>
-      <?php if($fields['product']) { ?><td class="productName"><a href="<?php echo $this->webroot ?>products/view/<?php echo $sale['Sale']['product_id']?>" ><?php echo $sales['products'][$sale['Sale']['product_id']]['Product']['name'] ?></a></td><?php } ?>
+      <?php if($fields['product']) { ?>
+	  <td class="productName">
+	      <a href="<?php echo $this->webroot ?>products/view/<?php echo $sale['Sale']['product_id']?>" >
+		<?php echo $sales['products'][$sale['Sale']['product_id']]['Product']['name'] ?>
+	      </a>
+	  </td>
+      <?php } ?>
       <?php if($fields['productType']) { ?><td class="productTypeName"><a href="<?php echo $this->webroot ?>productTypes/view/<?php echo $sale['Sale']['product_id'] ?>" ><?php echo $sales['products'][$sale['Sale']['product_id']]['ProductType']['name'] ?></a></td><?php } ?>
       <?php if($fields['shop']) { ?><td class="shopName"><a href="<?php echo $this->webroot ?>shops/view/<?php echo $sale['Sale']['shop_id'] ?>" ><?php echo $sales['shops'][$sale['Sale']['shop_id']] ?></a></td><?php } ?>
 

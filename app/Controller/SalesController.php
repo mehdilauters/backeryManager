@@ -104,7 +104,7 @@ class SalesController extends AppController {
       $dateSelect = CakeTime::daysAsSql($dateStart->format('Y-m-d H:i:s'),$dateEnd->format('Y-m-d H:i:s'), 'Sale.date');
 
       $conditions[] = $dateSelect;
-      $conditions['Shop.company_id'] = $this->getCompanyId();
+      $conditions[] = 'Sale.shop_id in ( select C.'.$this->Shop->primaryKey.' from '.$this->Shop->table.' C where company_id = '.$this->getCompanyId().')';
 
       if(isset($this->request->data['conditions']['shop']) && $this->request->data['conditions']['shop'] != '')
       {
@@ -174,7 +174,7 @@ class SalesController extends AppController {
 	$groupBy[] = 'Sale.date, Sale.product_id, Sale.shop_id';
       }
 	  // SELECT SUM(IF(myColumn IS NULL, 0, myColumn))
-    $this->Sale->contain('Product.ProductType', 'Shop');
+    $this->Sale->contain('Product.ProductType'/*, 'Shop'*/);
     $sales = $this->Sale->find('all', array('order'=>array('Sale.date', 'Sale.product_id', 'Sale.shop_id'),
 					    'group' => $groupBy,
 					    'conditions' => $conditions,
@@ -403,7 +403,6 @@ public function results()
       $shopData[$shopId][$typeId]['Sales'] = $this->Sale->find('all', array('conditions'=>array('('.$dateSelectSale.')',
                     'Sale.product_id in (select P.id from products P where P.product_types_id = '.$typeId.')',
                     'Sale.shop_id' => $shopId,
-		     'Shop.company_id'=>$this->getCompanyId()
                   ),
                    //'group' =>'Date(Sale.date)',
                     'fields' => array(
@@ -596,7 +595,6 @@ public function results()
     $this->Sale->Product->contain(array('ProductType'=>array(),'Sale'=>array('conditions'=>'Sale.date = \''.$date.'\''), 'Media.Photo'=>array()));
 
     $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id', 'conditions'=>array('Product.production_display', 'ProductType.company_id'=>$this->getCompanyId())));
-    //debug($products);
     $shops = $this->Sale->Shop->find('all',array('conditions'=>array('Shop.company_id'=>$this->getCompanyId())));
 
     $this->set(compact('products', 'shops'));
