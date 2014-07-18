@@ -51,7 +51,8 @@ class AppController extends Controller {
 					  'passwordHasher' => array(
 					      'className' => 'Simple',
 					      'hashType' => 'sha1'
-					      )
+					      ),
+// 					    'scope' => array('User.company_id' => -1),
 					    )
 				  ),
 				  'loginRedirect' => '/',
@@ -276,6 +277,7 @@ class AppController extends Controller {
 
 
      // debug($this->Auth->user('isRoot'));
+
     $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
     $this->set('tokens', $tokens);
 
@@ -414,6 +416,8 @@ public function getFunctionText($coefficients)
 //  	debug($this->request->params['controller']);
 //  	debug($this->request->params['action']);
 	parent::beforeFilter();
+
+
 	
 	if( count($this->publicActions) != 0)
 	{
@@ -422,7 +426,7 @@ public function getFunctionText($coefficients)
 	}
 	
 	
-	$this->Cookie->name= Configure::read('Settings.Cookie.Name');
+	$this->Cookie->name= Configure::read('Settings.Cookie.Name').'_'.$this->getCompanyId();
 	
 	
 	

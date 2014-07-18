@@ -17,7 +17,7 @@ class UsersController extends AppController {
  */
 	public function index() {
 		$this->User->recursive = 0;
-		$this->set('users', $this->paginate(array('conditions'=>array('User.company_id'=>$this->getCompanyId()))));
+		$this->set('users', $this->paginate(array('User.company_id'=>$this->getCompanyId())));
 	}
 
 /**
@@ -47,6 +47,12 @@ class UsersController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+
+			$media = $this->User->Media->findById($this->request->data['User']['media_id']);
+			if ($media['User']['company_id'] != $this->getCompanyId()) {
+			      throw new NotFoundException(__('Invalid Media for this company'));
+			  }
+
 			$this->User->create();
 			$this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
 			$this->request->data['User']['company_id'] = $this->getCompanyId();
@@ -57,7 +63,7 @@ class UsersController extends AppController {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
 			}
 		}
-		$media = array(''=>'')  + $this->User->Media->find('list');
+		$media = array(''=>'')  + $this->User->Media->find('list', array('conditions' => array('User.company_id' => $this->getCompanyId())));
 		$this->set(compact('media'));
 	}
 
@@ -72,11 +78,17 @@ class UsersController extends AppController {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$user = $this->User->find('first', $options);
+		$user = $this->User->findById($id);
 		if ($user['User']['company_id'] != $this->getCompanyId()) {
 			throw new NotFoundException(__('Invalid user for this company'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+
+			$media = $this->User->Media->findById($this->request->data['User']['media_id']);
+			if ($media['User']['company_id'] != $this->getCompanyId()) {
+			      throw new NotFoundException(__('Invalid Media for this company'));
+			  }
+
 			if( $this->request->data['User']['password'] != '' )
 			{
 			  $this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
@@ -96,7 +108,7 @@ class UsersController extends AppController {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 			$this->request->data = $this->User->find('first', $options);
 		}
-		$media = array(''=>'')  + $this->User->Media->find('list');
+		$media = array(''=>'')  + $this->User->Media->find('list', array('conditions' => array('User.company_id' => $this->getCompanyId())));
 		$this->set(compact('media'));
 	}
 
@@ -162,7 +174,7 @@ class UsersController extends AppController {
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$user = $this->User->find('first', $options);
+		$user = $this->User->findById($id);
 		if ($user['User']['company_id'] != $this->getCompanyId()) {
 			throw new NotFoundException(__('Invalid user for this company'));
 		}
@@ -191,13 +203,22 @@ class UsersController extends AppController {
 			}
 		}
 		
-// $this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
+
 			$authRes = $this->Auth->login();
+			//TODO with auth scope??
+			if($this->Auth->user('company_id') != $this->getCompanyId())
+			{
+			      $this->Session->setFlash(
+					__('Invalid company'),
+					'flash/fail'
+				);
+			    $this->logout();
+			}
 			if ($authRes) {
 				$cookieValue = array(
-										'id' => $this->Auth->user('id'),
-										'key' => AuthComponent::password(AuthComponent::password($this->data['User']['password']).$this->Auth->user('id'))
-									);
+						'id' => $this->Auth->user('id'),
+						'key' => AuthComponent::password(AuthComponent::password($this->data['User']['password']).$this->Auth->user('id'))
+					);
 				$this->Cookie->write('bakeryManagerUser', $cookieValue, true, '10 weeks');
 				$this->log($this->request->data['User']['email'].' logged, redirect to '.$this->Auth->redirectUrl(), 'debug');
 				return $this->redirect($this->Auth->redirectUrl());
@@ -254,6 +275,18 @@ class UsersController extends AppController {
 		if($this->Cookie->check('bakeryManagerUser'))
 		{
 			$user = $this->User->find('first',array('conditions'=>array('User.id' => $this->Cookie->read('bakeryManagerUser.id'))));
+			//TODO with auth scope??
+			if($user['User']['company_id'] != $this->getCompanyId())
+			{
+			      $this->Session->setFlash(
+					__('Invalid company'),
+					'flash/fail'
+				);
+			    $this->log('invalid autologin cookie key for user '.$this->Cookie->read('bakeryManagerUser.id'), 'debug');
+			    $this->Cookie->delete('bakeryManagerUser');
+			    return;
+			}
+
 			if(isset($user['User']['id']))
 			{
 				$key = AuthComponent::password($user['User']['password'].$user['User']['id']);

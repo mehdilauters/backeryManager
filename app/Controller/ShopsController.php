@@ -15,8 +15,8 @@ var $helpers = array('Time');
  * @return void
  */
   public function index() {
-    $this->Shop->recursive = 0;
-    $this->set('shops', $this->paginate());
+//     $this->Shop->recursive = 0;
+//     $this->set('shops', $this->paginate(array('Shop.company_id' => $this->getCompanyId())));
   }
 
 /**
@@ -36,6 +36,10 @@ var $helpers = array('Time');
     $this->Shop->contain();
     $this->Shop->contain('Media.Photo', 'EventType');
     $shop = $this->Shop->find('first', $options);
+
+    if ($shop['Shop']['company_id'] != $this->getCompanyId()) {
+      throw new NotFoundException(__('Invalid shop for this company'));
+    }
 
     $this->set('title_for_layout', $shop['Shop']['name']);
 	// function feed($idType = null, $start = null, $end = null) {
@@ -101,7 +105,14 @@ var $helpers = array('Time');
 		$eventType = array( 'EventType' =>array( 'name' => $this->request->data['Shop']['name']));
 		$this->EventType->save($eventType);
 		$this->request->data['Shop']['event_type_id'] = $this->EventType->id;
+		$this->request->data['Shop']['company_id'] = $this->getCompanyId();
 		
+		$media = $this->Shop->Media->findById($this->request->data['Shop']['media_id']);
+		if ($media['User']['company_id'] != $this->getCompanyId()) {
+		      throw new NotFoundException(__('Invalid Media for this company'));
+		    }
+
+
 		if ($this->Shop->save($this->request->data)) {
 			        $this->Session->setFlash(__('The shop has been saved'),'flash/ok');
 					$this->redirect(array('action' => 'index'));
@@ -116,9 +127,9 @@ var $helpers = array('Time');
         $this->Session->setFlash(__('The shop could not be saved. Please, try again.'),'flash/error');
       }
     }
-    $media = array(''=>'')  + $this->Shop->Media->find('list');
-    $eventTypes = array_merge(array(''),$this->Shop->EventType->find('list'));
-    $this->set(compact('media','eventTypes'));
+    $this->Shop->Media->contain('User');
+    $media = array(''=>'')  + $this->Shop->Media->find('list', array('conditions' => array('User.company_id' => $this->getCompanyId())));
+    $this->set(compact('media'));
   }
 
 /**
@@ -132,7 +143,19 @@ var $helpers = array('Time');
     if (!$this->Shop->exists($id)) {
       throw new NotFoundException(__('Invalid shop'));
     }
+
+    $shop = $this->Shop->findById($id);
+    if ($shop['Shop']['company_id'] != $this->getCompanyId()) {
+      throw new NotFoundException(__('Invalid shop for this company'));
+    }
+
     if ($this->request->is('post') || $this->request->is('put')) {
+
+      $media = $this->Shop->Media->findById($this->request->data['Shop']['media_id']);
+      if ($media['User']['company_id'] != $this->getCompanyId()) {
+	    throw new NotFoundException(__('Invalid Media for this company'));
+	  }
+
       if ($this->Shop->save($this->request->data)) {
         $this->Session->setFlash(__('The shop has been saved'),'flash/ok');
         $this->redirect(array('action' => 'index'));
@@ -143,8 +166,8 @@ var $helpers = array('Time');
       $options = array('conditions' => array('Shop.' . $this->Shop->primaryKey => $id));
       $this->request->data = $this->Shop->find('first', $options);
     }
-    $media = array(''=>'') + $this->Shop->Media->find('list');
-    $eventTypes = $this->Shop->EventType->find('list');
+    $this->Shop->Media->contain('User');
+    $media = array(''=>'') + $this->Shop->Media->find('list', array('conditions' => array('User.company_id' => $this->getCompanyId())));
     $this->set(compact('media','eventTypes'));
   }
 
@@ -161,6 +184,12 @@ var $helpers = array('Time');
     if (!$this->Shop->exists()) {
       throw new NotFoundException(__('Invalid shop'));
     }
+
+    $shop = $this->Shop->findById($id);
+    if ($shop['Shop']['company_id'] != $this->getCompanyId()) {
+      throw new NotFoundException(__('Invalid shop for this company'));
+    }
+
     $this->request->onlyAllow('post', 'delete');
     if ($this->Shop->delete()) {
       $this->Session->setFlash(__('Shop deleted'),'flash/ok');
