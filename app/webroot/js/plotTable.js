@@ -158,13 +158,20 @@ function curveDisplay(chartId, curveId, status)
 
   
   
-    
-	
     var chartVarName = chartId + '_chartPlot';
     if(window[chartVarName]  != undefined)
     {
       window[chartVarName].destroy();
     }
+    
+    
+    if(plotData.length == 0)
+    {
+	$('#'+chartId+'Container').hide();
+      return false;
+    }
+    
+    
 //     console.log(plotData);
     window[chartVarName] = jQuery.jqplot (chartId, plotData,
     {

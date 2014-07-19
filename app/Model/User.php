@@ -167,8 +167,7 @@ class User extends AppModel {
 
    public function beforeSave($options = array()) {
         if (!$this->id) {
-			$count = $this->find('count');
-			debug($count);
+			$count = $this->find('count', array('conditions' => array('User.company_id' => $this->data[$this->alias]['company_id'])));
 			if($count == 0)
 			{
 					$this->data[$this->alias]['isRoot'] = true;

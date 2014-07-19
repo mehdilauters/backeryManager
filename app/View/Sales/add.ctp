@@ -120,7 +120,7 @@ foreach($products as $product)
 <div class="actions">
   <h3><?php echo __('Actions'); ?></h3>
   <ul>
-    <li><?php echo $this->Html->link(__('List Sales'), array('action' => 'index')); ?></li>
+    <li><?php echo $this->Html->link(__('stats Sales'), array('action' => 'stats')); ?></li>
     <li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
     <li><?php echo $this->Html->link(__('New Product'), array('controller' => 'products', 'action' => 'add')); ?> </li>
     <li><?php echo $this->Html->link(__('List Shops'), array('controller' => 'shops', 'action' => 'index')); ?> </li>
@@ -245,10 +245,15 @@ function checkInputs(interactive)
                 intro: "un commentaire si necessaire<br/>(jour de marché, concurrent malade...)",
 				position: 'top'
               },
-			  {
+	      {
                 element: '#resultAddSubmit',
                 intro: "Attention, n'oubliez pas de valider",
 				position: 'top'
+              },
+	      {
+                element: '#salesStats',
+                intro: "Des statistiques sur ces données seront ensuite disponibles sur cette page",
+				position: 'left'
               },
 	      {
                 element: '#excelImport',

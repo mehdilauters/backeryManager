@@ -290,7 +290,7 @@ class AppController extends Controller {
 //     $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
     $this->set('news',$news);
 	
-	$company = $this->Company->find('first');
+	$company = $this->Company->find('first',array('conditions'=>array('Company.id'=>$this->getCompanyId())));
 	$this->set('company',$company);
 	
   }
@@ -332,8 +332,18 @@ class AppController extends Controller {
   
   public function getCompanyId()
   {
-    $company = $this->Company->find('first');
-    return $company['Company']['id'];
+    if($this->Session->check('companyId') )
+    {
+      $companyId = $this->Session->read('companyId');
+    }
+    else
+    {
+      $company = $this->Company->find('first');
+      $companyId = $company['Company']['id'];
+    }
+
+    
+    return $companyId;
   }
 
   

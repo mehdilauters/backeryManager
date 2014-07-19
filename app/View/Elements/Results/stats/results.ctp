@@ -51,7 +51,7 @@
 	);
   
 ?>
-<div>
+<div id="resultsChartContainer">
 	<div>
 		<h3>Historique comptable par <?php echo $titleDate[$results['group']['time']] ?></h3>
 		<div id="resultsChart" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>

@@ -192,6 +192,10 @@ class PhotosController extends AppController {
  * @return void
  */
   public function add($filePath = null) {
+    if(!is_writable ( Configure::read('Settings.Medias.Photos.path') ))
+    {
+      throw new InternalErrorException(__('upload dir not writable '.Configure::read('Settings.Medias.Photos.path')));
+    }
     if ($this->request->is('post')) {
       $ok = true;
       if($this->upload())

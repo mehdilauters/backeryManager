@@ -33,8 +33,7 @@ endforeach; ?>
   <ul>
       <li><?php echo $this->Html->link(__('New Product'), array('action' => 'add')); ?></li>
       <li><?php echo $this->Html->link(__('New Product Types'), array('controller' => 'product_types', 'action' => 'add')); ?> </li>
-      <li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
-      <li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add', 'idProduct'=>$product['Product']['id'])); ?> </li>
+      <li><?php echo $this->Html->link(__('New Photo'), array('controller' => 'photos', 'action' => 'add')); ?> </li> </li>
   </ul>
 </div>
 <?php endif ?>

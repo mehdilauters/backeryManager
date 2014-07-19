@@ -100,25 +100,25 @@ var $helpers = array('Time');
   public function add() {
     if ($this->request->is('post')) {
       $this->Shop->create();
+      $this->request->data['Shop']['company_id'] = $this->getCompanyId();
+      
+      $media = $this->Shop->Media->findById($this->request->data['Shop']['media_id']);
+      if ($media['User']['company_id'] != $this->getCompanyId()) {
+	    throw new NotFoundException(__('Invalid Media for this company'));
+	  }
+
       if ($this->Shop->save($this->request->data)) {
 		$this->EventType->create();
 		$eventType = array( 'EventType' =>array( 'name' => $this->request->data['Shop']['name']));
 		$this->EventType->save($eventType);
 		$this->request->data['Shop']['event_type_id'] = $this->EventType->id;
-		$this->request->data['Shop']['company_id'] = $this->getCompanyId();
-		
-		$media = $this->Shop->Media->findById($this->request->data['Shop']['media_id']);
-		if ($media['User']['company_id'] != $this->getCompanyId()) {
-		      throw new NotFoundException(__('Invalid Media for this company'));
-		    }
-
-
 		if ($this->Shop->save($this->request->data)) {
 			        $this->Session->setFlash(__('The shop has been saved'),'flash/ok');
-					$this->redirect(array('action' => 'index'));
+					$this->redirect('/');
 		}
 		else
 		{
+			//TODO delete eventtype
 			$this->Session->setFlash(__('The shop has been saved but eventType not created'),'flash/warning');
 			$this->redirect(array('plugin'=>'full_calendar', 'controller'=>'eventTypes', 'action' => 'add'));
 		}

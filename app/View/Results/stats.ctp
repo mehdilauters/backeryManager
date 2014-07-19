@@ -1,4 +1,5 @@
 ﻿<div class="results index">
+<div class="alert alert-info">Ces statistiques sont calculées à partir des données saisies <a href="<?php echo $this->webroot ?>results/add" >ici</a></div>
 <div>
   <?php
 // 	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
@@ -55,10 +56,20 @@
 
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<?php   //echo $this->element('Results/stats', array('results'=>$results, 'resultsEntries'=>$resultsEntries, 'shops'=>$shops, 'productTypes'=>$productTypes)); ?>
-<?php   echo $this->element('Results/stats/results', array('results'=>$results)); ?>
+<?php 
+if(count($results['results']) != 0)
+{
+echo $this->element('Results/stats/results', array('results'=>$results)); ?>
 <a name="resultsEntries" ></a>
-<?php   echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$results, 'config'=>array('shopComparative'=>true))); ?>
+<?php   echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$results, 'config'=>array('shopComparative'=>true))); 
+}
+else
+{ ?>
+  <div class="alert alert-danger">Aucune donnée disponible. Veuillez vérifier vos critères de recherche ou saisir des données <a href="<?php echo $this->webroot ?>results/add" >ici</a></div>
+<?php
+}
+
+?>
 </div> 
 
 <script>

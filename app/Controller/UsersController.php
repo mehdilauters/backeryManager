@@ -47,11 +47,13 @@ class UsersController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-
-			$media = $this->User->Media->findById($this->request->data['User']['media_id']);
-			if ($media['User']['company_id'] != $this->getCompanyId()) {
-			      throw new NotFoundException(__('Invalid Media for this company'));
-			  }
+			if($this->request->data['User']['media_id'] != '')
+			{
+			  $media = $this->User->Media->findById($this->request->data['User']['media_id']);
+			  if ($media['User']['company_id'] != $this->getCompanyId()) {
+				throw new NotFoundException(__('Invalid Media for this company'));
+			    }
+			}
 
 			$this->User->create();
 			$this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
@@ -63,6 +65,7 @@ class UsersController extends AppController {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
 			}
 		}
+		$this->User->Media->contain('User');
 		$media = array(''=>'')  + $this->User->Media->find('list', array('conditions' => array('User.company_id' => $this->getCompanyId())));
 		$this->set(compact('media'));
 	}
@@ -83,12 +86,13 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user for this company'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-
-			$media = $this->User->Media->findById($this->request->data['User']['media_id']);
-			if ($media['User']['company_id'] != $this->getCompanyId()) {
-			      throw new NotFoundException(__('Invalid Media for this company'));
-			  }
-
+			if($this->request->data['User']['media_id'] != '')
+			{
+			  $media = $this->User->Media->findById($this->request->data['User']['media_id']);
+			  if ($media['User']['company_id'] != $this->getCompanyId()) {
+				throw new NotFoundException(__('Invalid Media for this company'));
+			    }
+			}
 			if( $this->request->data['User']['password'] != '' )
 			{
 			  $this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
@@ -108,6 +112,7 @@ class UsersController extends AppController {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 			$this->request->data = $this->User->find('first', $options);
 		}
+		$this->User->Media->contain('User');
 		$media = array(''=>'')  + $this->User->Media->find('list', array('conditions' => array('User.company_id' => $this->getCompanyId())));
 		$this->set(compact('media'));
 	}
@@ -132,7 +137,7 @@ class UsersController extends AppController {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		$user = $this->User->find('first', $options);
+		$user = $this->User->findById($id);
 		if ($user['User']['company_id'] != $this->getCompanyId()) {
 			throw new NotFoundException(__('Invalid user for this company'));
 		}
@@ -203,8 +208,13 @@ class UsersController extends AppController {
 			}
 		}
 		
-
-			$authRes = $this->Auth->login();
+		 $user = $this->User->find('first', array('conditions'=>array(
+					    'User.password' => AuthComponent::password($this->data['User']['password']),
+					    'User.email' => $this->data['User']['email'],
+					    'User.company_id' => $this->getCompanyId()
+					      )));
+		
+			$authRes = $this->Auth->login($user['User']);
 			//TODO with auth scope??
 			if($this->Auth->user('company_id') != $this->getCompanyId())
 			{

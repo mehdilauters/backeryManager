@@ -65,6 +65,7 @@ class SalesController extends AppController {
 
 
     public function stats($conditions = array(), $group = array()) {
+    $this->set('title_for_layout', 'Statistiques de ventes/production');
     $groupBy = array();
     if (empty($this->request->params['requested'])) {
       $dateStart = new DateTime();

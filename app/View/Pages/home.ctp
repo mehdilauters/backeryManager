@@ -58,7 +58,7 @@ if(count($eventType['Event']) != 0)
      <?php   echo $this->element('Shops/Preview', array('shop'=>$shop)); ?>
     </li>
     <?php
-if(!$slideshowInserted)
+if(!$slideshowInserted && count($products) != 0)
 { 
   $slideshowInserted = true;
   ?>
@@ -92,6 +92,9 @@ if(!$slideshowInserted)
 }
 
  } ?>
+<?php if($tokens['isAdmin']) : ?>
+  <li><a href="<?php echo $this->webroot ?>shops/add" >Ajouter un magasin</a></li>
+<?php endif ?>
   </ul>
 <script>
 

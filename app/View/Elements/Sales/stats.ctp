@@ -75,7 +75,7 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
  ?>
 
 
-<div>
+<div id="histogramChartContainer">
 	<h3>Historique production par <?php echo $titleDate[$group['time']] ?></h3>
 	<div id="histogramChart" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 	<div class="control" ></div>
@@ -198,7 +198,6 @@ $fields = array('date'=>true, 'day'=>true, 'week'=> true, 'product' => true, 'pr
 
 ?>
 </table>
-   
 <script type="text/javascript">
 
  //  var histogramPlot;

@@ -1,4 +1,5 @@
-<?php echo $this->Form->create('Results'); ?>
+<div class="alert alert-info">Ici sont disponible les données saisies sur <a href="<?php echo $this->webroot ?>sales/add" >cette page</a></div>
+<?php echo $this->Form->create('Sales'); ?>
 	  <fieldset id="groupFieldset" class="alert alert-info">
 		<legend>Grouper par</legend>
 		<div>Grouper les données permet d'afficher les resultat sous des formes différentes (jour par jour/mois par mois, magasin par magasin/somme des magasins...) Le groupement est cumulatif</div>
@@ -42,14 +43,26 @@
     </fieldset>
 
 <?php echo $this->Form->end(__('Submit')); ?>
+<?php if(count($sales['sales']) != 0)
+{ ?>
 <?php
 echo $this->element('Sales/stats', array('sales'=>$sales)); 
 
 ?>
+
+   <?php }else{ ?>
+<div class="alert alert-danger">Aucune donnée disponible. Veuillez vérifier vos critères de recherche ou saisir des données <a href="<?php echo $this->webroot ?>sales/add" >ici</a></div>
+<?php } ?>
+
 <script>
   introSteps = [
               { 
                 intro: 'Ici, vous pouvez visualiser, comparer, analyser les ventes de votre entreprise,<br/>en affichant les données par jour, par mois, par an..., magasin par magasin, produit par produit, ou au contraire de manière plus synthetiques comme par example, tous magasins et/ou tout produits confondus'
+              },
+	      {
+                element: '#dailyProductionLink',
+                intro: "Les données disponibles sont celles ayant été saisies sur cette page",
+		position: 'left'
               },
               {
                 element: '#groupFieldset',

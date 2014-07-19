@@ -62,7 +62,6 @@ $(document).ready(function(){
       <h3><?php echo __('Actions'); ?></h3>
       <ul>
       <li><?php echo $this->Html->link(__('New Product Type'), array('action' => 'add')); ?></li>
-      <li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
       <li><?php echo $this->Html->link(__('New Products'), array('controller' => 'products', 'action' => 'add')); ?> </li>
   </ul>
   </div>

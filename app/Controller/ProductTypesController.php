@@ -102,7 +102,7 @@ class ProductTypesController extends AppController {
     if ($this->request->is('post')) {
       $this->ProductType->create();
 	  $this->request->data['ProductType']['company_id'] = $this->getCompanyId();
-      $media = $this->ProductType->Media->findById($this->request->data['Product']['media_id']);
+      $media = $this->ProductType->Media->findById($this->request->data['ProductType']['media_id']);
       if ($media['User']['company_id'] != $this->getCompanyId()) {
 	throw new NotFoundException(__('Invalid media for this company'));
       }

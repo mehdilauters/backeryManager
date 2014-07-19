@@ -28,10 +28,10 @@ foreach($menu as $title => $subMenu)
 	<ul>
 	  <li><a href="<?php echo $this->webroot ?>sales/dashboard">Tableau de bord</a></li>
 	  <li id="dailyProductionLink" ><a href="<?php echo $this->webroot ?>sales/add"><?php echo $this->Html->image('icons/go-jump-today.png', array('alt' => '')); ?> Saisie journaliere production</a></li>
-	  <li><a href="<?php echo $this->webroot ?>sales/stats"><?php echo $this->Html->image('icons/view-statistics.png', array('alt' => '')); ?> stats production</a></li>
+	  <li id="salesStats" ><a href="<?php echo $this->webroot ?>sales/stats"><?php echo $this->Html->image('icons/view-statistics.png', array('alt' => '')); ?> stats production</a></li>
 	  <li id="dailyResultsLink" ><a href="<?php echo $this->webroot ?>results/add">saisie journaliere compta</a></li>
 	  <li><a href="<?php echo $this->webroot ?>results/"><?php echo $this->Html->image('icons/system-search.png', array('alt' => '')); ?> visualiastion compta</a></li>
-	  <li><a href="<?php echo $this->webroot ?>results/stats"><?php echo $this->Html->image('icons/office-chart-area-percentage.png', array('alt' => '')); ?> stats compta</a></li>
+	  <li id="resultsStats" ><a href="<?php echo $this->webroot ?>results/stats"><?php echo $this->Html->image('icons/office-chart-area-percentage.png', array('alt' => '')); ?> stats compta</a></li>
 	  <li><a href="<?php echo $this->webroot ?>photos/add"><?php echo $this->Html->image('icons/camera-photo.png', array('alt' => '')); ?> ajouter une photo</a></li>
 	  <li><a href="<?php echo $this->webroot ?>productTypes/add">ajouter un type de produit</a></li>
 	  <li><a href="<?php echo $this->webroot ?>products/add">ajouter un produit</a></li>

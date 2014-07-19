@@ -67,7 +67,7 @@ if(isset($this->request->data['group']))
 	);
 ?>
 
-<div>
+<div id="resultsEntriesChart_<?php echo $config['id'] ?>Container" >
 	<div>
 		<h3>Historique comptable par <?php echo $titleDate[$resultsEntries['group']['time']] ?></h3>
 		<div id="resultsEntriesChart_<?php echo $config['id'] ?>" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>

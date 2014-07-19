@@ -100,6 +100,12 @@ class ProductsController extends AppController {
  * @return void
  */
   public function add() {
+    $productTypeCount = $this->Product->ProductType->find('count', array('conditions' => array('ProductType.company_id' => $this->getCompanyId())));
+    if($productTypeCount == 0)
+    {
+         $this->Session->setFlash('Veuillez d\'abord rentrer une catégorie de produit','flash/fail');
+         return $this->redirect(array('controller'=>'productTypes', 'action' => 'add'));
+    }
     if ($this->request->is('post')) {
       $this->Product->create();
       $productType = $this->Product->ProductType->findById($this->request->data['Product']['product_types_id']);
@@ -118,7 +124,7 @@ class ProductsController extends AppController {
       }
       if ($this->Product->save($this->request->data)) {
         $this->Session->setFlash(__('The product has been saved'),'flash/ok');
-         return $this->redirect(array('action' => 'add'));
+         return $this->redirect(array('action' => 'index'));
       } else {
         $this->Session->setFlash(__('The product could not be saved. Please, try again.'),'flash/flash');
       }

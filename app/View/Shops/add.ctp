@@ -3,7 +3,9 @@
   <fieldset>
     <legend><?php echo __('Add Shop'); ?></legend>
   <?php
-    echo $this->Form->input('media_id');
+      echo $this->Form->input('media_id', array('label'=>'Photo', 'class'=>'formPhotoPreview')); ?>
+      <img src="" id="ShopMediaId_preview" />
+<?php
     echo $this->Form->input('name');
     echo $this->Form->input('phone');
     echo $this->Form->input('description', array('class'=>'textEditor'));

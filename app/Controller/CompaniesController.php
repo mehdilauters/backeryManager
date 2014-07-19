@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
  * @property Company $Company
  */
 class CompaniesController extends AppController {
-
+var $publicActions = array('view');
 /**
  * index method
  *
@@ -45,11 +45,6 @@ class CompaniesController extends AppController {
  */
 	public function add() {
 	    $company = $this->Company->find('first');
-	    if(count($company) != 0 )
-	    {
-		  $this->Session->setFlash(__('The company already exists'),'flash/fail');
-		  return $this->redirect(array('action' => 'edit', $company['Company']['id']));	      
-	    }
 	     
 		if ($this->request->is('post')) {
 			$eventType = array('EventType'=> array('name'=>'news'));

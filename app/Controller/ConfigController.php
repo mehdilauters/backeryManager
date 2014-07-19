@@ -9,7 +9,7 @@ App::uses('AppController', 'Controller');
 */
 
 class ConfigController extends AppController {
-  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User', 'Shop', 'RemoteDB');
+  var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User', 'Shop', 'RemoteDB', 'Company');
   
   var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL' );
   var $memberActions = array();
@@ -26,6 +26,7 @@ class ConfigController extends AppController {
       //'importUsers' => 'Importer les photos d\'un csv',
       'importProducts' => 'Importer les produits d\'un csv',
       'setAdmin/1' => 'set to admin',
+      'setCompany/id' => 'set to company id',
        'upgradeDbStructure/1' => 'upgrade DBStructure',
       'dbBackup/0' => 'backup database',
       'setDebug/1' => 'activer debug',
@@ -359,6 +360,18 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     }
     $this->redirect($this->referer());
   }
+
+
+public function setCompany($id)
+{
+  if (!$this->Company->exists($id)) {
+	  throw new NotFoundException(__('Invalid company'));
+  }
+  $this->Session->setFlash('Company set to #'.$id, 'flash/warning');
+  $this->Session->write('companyId',$id);
+  $this->redirect('/');
+}
+
 
    public function noSSL($bool)
   {
