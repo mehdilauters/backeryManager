@@ -362,14 +362,23 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
   }
 
 
-public function setCompany($id)
+public function setCompany($id = NULL)
 {
-  if (!$this->Company->exists($id)) {
-	  throw new NotFoundException(__('Invalid company'));
+  if ($this->request->is('post') && $id == NULL)
+  {
+    $id = $this->request->data['Company']['company_id'];
   }
-  $this->Session->setFlash('Company set to #'.$id, 'flash/warning');
-  $this->Session->write('companyId',$id);
-  $this->redirect('/');
+  if($id != NULL)
+  {
+    if (!$this->Company->exists($id)) {
+	    throw new NotFoundException(__('Invalid company'));
+    }
+    $this->Session->setFlash('Company set to #'.$id, 'flash/warning');
+    $this->Session->write('companyId',$id);
+    return $this->redirect('/');
+  }
+  $companies = $this->Company->find('list');
+  $this->set(compact('companies'));
 }
 
 
