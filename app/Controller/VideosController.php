@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
  *
  */
 class VideosController extends AppController {
-
+  var $administratorActions = array('*');
 /**
  * Scaffold
  *

@@ -6,6 +6,7 @@ App::uses('AppController', 'Controller');
  */
 class MediaController extends AppController {
 
+  var $administratorActions = array('*');
 /**
  * Scaffold
  *

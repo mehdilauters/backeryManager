@@ -7,6 +7,9 @@ App::uses('AppController', 'Controller');
  */
 class CompaniesController extends AppController {
 var $publicActions = array('view');
+
+  var $administratorActions = array('edit');
+
 /**
  * index method
  *

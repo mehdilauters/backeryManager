@@ -9,6 +9,7 @@ class UsersController extends AppController {
 
 	var $publicActions = array('login', 'add', 'autologin');
 	var $memberActions = array('logout');
+	var $administratorActions = array('*');
 
 /**
  * index method

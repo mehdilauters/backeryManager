@@ -37,8 +37,10 @@ App::uses('CakeEmail', 'Network/Email');
 class AppController extends Controller {
 	var $uses=array('User', 'EventType', 'Company');
 	public $helpers = array('Text','Rss', 'Html', 'MyHtml');
+	  
 	  var $publicActions = array('exportExcel', 'backupDb', 'getCompanyId');
 	  var $memberActions = array();
+	  var $administratorActions = array();
 
   public $components = array(
  			  'DebugKit.Toolbar',
@@ -60,7 +62,8 @@ class AppController extends Controller {
 				   'authorize' => array('Controller'),
 				),
 			  'RequestHandler',
-			  'Functions'
+			  'Functions',
+			  'Acl',
 			  );
   public $menu = array('Menu' => 
 			array( 
@@ -309,23 +312,37 @@ class AppController extends Controller {
 	
 	if($this->Auth->loggedIn())
 	{
-		if(in_array('*',$this->memberActions))
+		if( $this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'memberActions') )
 		{
-			return true;
-		}
-		if(in_array($this->request->params['action'],$this->memberActions))
-		{
-			return true;
+		  if(in_array('*',$this->memberActions))
+		  {
+			  return true;
+		  }
+		  if(in_array($this->request->params['action'],$this->memberActions))
+		  {
+			  return true;
+		  }
 		}
 		
-		if($this->Auth->user('isRoot'))
+		if( $this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'memberActions') )
 		{
+		  if(in_array('*',$this->administratorActions))
+		  {
+			  return true;
+		  }
+		  if(in_array($this->request->params['action'],$this->administratorActions))
+		  {
+			  return true;
+		  }
+		}
+		if( $this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'rootActions') )
+		{		
 			return true;
 		}
 	}
 	
 
-
+    debug($this->request->params['controller'].'/'.$this->request->params['action']);
     // Default deny
     return false;
 }

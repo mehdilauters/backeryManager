@@ -9,6 +9,9 @@ class ResultsController extends AppController {
   var $uses = array('Result', 'ProductType', 'ResultsEntry');
   var $components = array('Functions');
   var $helpers = array('PhpExcel.PhpExcel');
+
+  var $administratorActions = array('*');
+
 /**
  * index method
  *
