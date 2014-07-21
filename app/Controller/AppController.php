@@ -245,8 +245,8 @@ class AppController extends Controller {
     
 //    $this->backupDb();
 //     $this->exportExcel();
+      $this->theme = 'Company'.$this->getCompanyId();
 
-  
   
 	if($this->Auth->user())
 	{
