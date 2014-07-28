@@ -81,6 +81,7 @@ class RemoteDB extends AppModel {
 	    {
 		App::uses('ConnectionManager', 'Model'); 
 		$db = ConnectionManager::getDataSource('default');
+		file_put_contents(TMP.'tmp.sql', $sql);
 		$res = $db->execute($sql);
 		debug($res);
 		
