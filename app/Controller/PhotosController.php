@@ -198,6 +198,7 @@ class PhotosController extends AppController {
  * @return void
  */
   public function add($filePath = null) {
+    //TODO if user.company_id is null
     if(!is_writable ( Configure::read('Settings.Medias.Photos.path') ))
     {
       throw new InternalErrorException(__('upload dir not writable '.Configure::read('Settings.Medias.Photos.path')));

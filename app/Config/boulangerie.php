@@ -11,7 +11,7 @@
     Configure::write('Settings.dbBackupPath', '/tmp/');
     Configure::write('Settings.excelExportPath', '/tmp/');
 	
-	Configure::write('Settings.dbBackupUrl', 'https://boulangerie-faury.fr/dev/');
+	Configure::write('Settings.dbBackupUrl', 'https://boulangerie-faury.fr/boulangerie/');
 	
 	Configure::write('Settings.email', array('from' => 
 					array(
@@ -44,7 +44,7 @@ Configure::write('Settings.Cookie.Name', 'bakeryManager');
 
 
 Configure::write('Settings.demo', array(
-  'active' => true,
+  'active' => false,
   'dbPrefix' => 'demo_',
   'limit' => 2000,
   'User' => array('email'=>'demo@lauters.fr', 'password'=> 'demo')

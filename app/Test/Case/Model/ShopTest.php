@@ -21,9 +21,6 @@ class ShopTest extends CakeTestCase {
 		'app.product_type',
 		'app.products',
 		'app.event_type',
-		'app.gcalendar',
-		'app.gevent',
-		'app.gevent_date'
 	);
 
 /**

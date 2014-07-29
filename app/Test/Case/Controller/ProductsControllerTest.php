@@ -18,11 +18,13 @@ class ProductsControllerTest extends AppControllerTest {
 		'app.media',
 		'app.photo',
 		'app.shop',
-		'app.order',
-		'app.user',
-		'app.event',
+// 		'app.order',
+// 		'app.user',
+// 		'app.event',
 		'app.sale',
 		'app.product_type',
+		'app.company',
+// 		'app.EventType'
 	);
 	
 	
@@ -30,19 +32,19 @@ class ProductsControllerTest extends AppControllerTest {
 		parent::setUp();
 		$photo = $this->Product->Media->Photo->find('first');
 		$this->testRecord = array(
-								array(
-									'Product' => array(
-										'name' => 'testInsert1',
-										'media_id' => $photo['Photo']['id']
-									)
-								),
-								array(
-									'Product' => array(
-										'name' => 'testInsert2',
-										'media_id' => $photo['Photo']['id']
-									)
-								),
-							);
+					  array(
+						  'Product' => array(
+							  'name' => 'testInsert1',
+							  'media_id' => $photo['Photo']['id'],
+						  )
+					  ),
+					  array(
+						  'Product' => array(
+							  'name' => 'testInsert2',
+							  'media_id' => $photo['Photo']['id'],
+						  )
+					  ),
+				  );
 	}
 
 }

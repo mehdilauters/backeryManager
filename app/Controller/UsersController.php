@@ -17,6 +17,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function index() {
+		//TODO isRoot replacement
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate(array('User.company_id'=>$this->getCompanyId())));
 	}
@@ -60,6 +61,32 @@ class UsersController extends AppController {
 			$this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
 			$this->request->data['User']['company_id'] = $this->getCompanyId();
 			if ($this->User->save($this->request->data)) {
+
+				$parentId = 1; // members
+				//check users for this company
+				$count = $this->User->find('count', array('conditions' => array('User.company_id' => $this->getCompanyId())));
+				if($count == 1)
+				{
+				  $parentId = 2; // root
+				}
+				// check if already users registered
+				$count = $this->User->find('count');
+				if($count == 1)
+				{
+				  $parentId = 3; // root
+				}
+
+
+				// creating corresponding aro
+				$aro = $this->Acl->Aro;
+				$aroData = array('alias' => $this->data['User']['name'],
+				'parent_id' => $parentId,
+				'model' => 'User',
+				'foreign_key' => $this->User->getInsertID(),
+				);
+				$aro->create();
+				$aro->save($aroData);
+
 				$this->Session->setFlash(__('The user has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -134,37 +161,37 @@ class UsersController extends AppController {
 	}
 
 	
-	public function setIsRoot($id = null, $isRoot = false) {
-		if (!$this->User->exists($id)) {
-			throw new NotFoundException(__('Invalid user'));
-		}
-		$user = $this->User->findById($id);
-		if ($user['User']['company_id'] != $this->getCompanyId()) {
-			throw new NotFoundException(__('Invalid user for this company'));
-		}
-		if ($this->request->is('post') || $this->request->is('put')) {
-			$nbRoot = $this->User->find('count', array('conditions'=>'User.isRoot = true'));
-			if(!(!$isRoot && $nbRoot = 1))
-			{
-				$user = $this->User->findById($id);
-				$user['User']['isRoot'] = $isRoot;
-				$this->log('user '.$user['name'].' isRoot set from '.(!$isRoot).' to '.$isRoot.' by '.$this->Auth->user('name'), 'debug');
-				if ($this->User->save($user)) {
-					$this->Session->setFlash(__('The user has been saved'),'flash/ok');
-					$this->redirect(array('action' => 'index'));
-				} else {
-					$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
-					$this->redirect(array('action' => 'index'));
-				}
-			}
-			else
-			{
-				$this->Session->setFlash(__('This is the last Root user.'),'flash/error');
-				$this->redirect(array('action' => 'index'));
-			}
-		} else {
-		}
-	}
+// 	public function setIsRoot($id = null, $isRoot = false) {
+// 		if (!$this->User->exists($id)) {
+// 			throw new NotFoundException(__('Invalid user'));
+// 		}
+// 		$user = $this->User->findById($id);
+// 		if ($user['User']['company_id'] != $this->getCompanyId()) {
+// 			throw new NotFoundException(__('Invalid user for this company'));
+// 		}
+// 		if ($this->request->is('post') || $this->request->is('put')) {
+// 			$nbRoot = $this->User->find('count', array('conditions'=>'User.isRoot = true'));
+// 			if(!(!$isRoot && $nbRoot = 1))
+// 			{
+// 				$user = $this->User->findById($id);
+// 				$user['User']['isRoot'] = $isRoot;
+// 				$this->log('user '.$user['name'].' isRoot set from '.(!$isRoot).' to '.$isRoot.' by '.$this->Auth->user('name'), 'debug');
+// 				if ($this->User->save($user)) {
+// 					$this->Session->setFlash(__('The user has been saved'),'flash/ok');
+// 					$this->redirect(array('action' => 'index'));
+// 				} else {
+// 					$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
+// 					$this->redirect(array('action' => 'index'));
+// 				}
+// 			}
+// 			else
+// 			{
+// 				$this->Session->setFlash(__('This is the last Root user.'),'flash/error');
+// 				$this->redirect(array('action' => 'index'));
+// 			}
+// 		} else {
+// 		}
+// 	}
 
 	
 /**
@@ -176,6 +203,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+//TODO delete ARO
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
@@ -215,9 +243,10 @@ class UsersController extends AppController {
 					    'User.company_id' => $this->getCompanyId()
 					      )));
 		
-			$authRes = $this->Auth->login($user['User']);
+			$authRes = $this->Auth->login($user['User']); //TODO correct message if wrong user/pwd
 			//TODO with auth scope??
-			if($this->Auth->user('company_id') != $this->getCompanyId())
+			$tokens = $this->getUserTokens();
+			if(!$tokens['isRoot'] && $this->Auth->user('company_id') != $this->getCompanyId())
 			{
 			      $this->Session->setFlash(
 					__('Invalid company'),

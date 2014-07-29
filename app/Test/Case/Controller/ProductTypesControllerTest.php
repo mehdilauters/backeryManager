@@ -18,8 +18,6 @@ class ProductTypesControllerTest extends ControllerTestCase {
 		'app.user',
 		'app.event',
 		'app.product',
-		'app.product_types',
-		'app.products'
 	);
 
 /**

@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
 class ConfigController extends AppController {
   var $uses = array('Photo', 'Product', 'DatabaseVersion','Sale', 'Result', 'ResultsEntry', 'OrderedItem','User', 'Shop', 'RemoteDB', 'Company');
   
-  var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL' );
+  var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL', 'initAcl' );
   var $memberActions = array();
   
 /**
@@ -115,8 +115,8 @@ truncate acos;
 
 
 
-    debug($this->Acl->check('Members/Administrators', 'administratorActions'));
-    debug($this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'administratorActions'));
+//     debug($this->Acl->check('Members/Administrators', 'administratorActions'));
+//     debug($this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'administratorActions'));
 
   }
 
@@ -338,7 +338,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		 $sql .= 'update '.$tablePrefix.'companies set address=\'35 Rue Lakanal 31000 Bordeaux\', email=\'demo@lauters.fr\', phone=\'0656763875\', capital=\'7000\', siret=\'91919191919191\', name=\'SARL Demo\', title=\'Démo\';'."\n";
 
 		// add demo user
-		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot) values (\''.Configure::read('Settings.demo.User.email').'\', \'demo\', \''.AuthComponent::password(Configure::read('demo.User.password'))."', true);\n";
+		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, isRoot, company_id) values (\''.Configure::read('Settings.demo.User.email').'\', \'demo\', \''.AuthComponent::password(Configure::read('demo.User.password'))."', true, NULL);\n";
 
 		
 		return $sql;

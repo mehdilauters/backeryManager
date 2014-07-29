@@ -18,12 +18,9 @@ class SaleTest extends CakeTestCase {
 		'app.product_type',
 		'app.media',
 		'app.user',
-		'app.event',
-		'app.event_type',
-		'app.gcalendar',
-		'app.gevent',
-		'app.gevent_date',
-		'app.products'
+		'app.product',
+		'app.company',
+
 	);
 
 /**

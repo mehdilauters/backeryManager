@@ -111,7 +111,7 @@ create table if not exists videos (
 create table if not exists users (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   media_id int(10), 
-  `company_id` int(10) NOT NULL,
+  `company_id` int(10),
   email varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
   password varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
@@ -163,7 +163,7 @@ create table if not exists shops (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `company_id` int(10) NOT NULL,
   media_id int(10),
-  `event_type_id` int(10) NOT NULL ,
+  `event_type_id` int(10),
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   phone int not null ,
   address text CHARACTER SET utf8 COLLATE utf8_bin not null ,
@@ -337,7 +337,7 @@ ALTER TABLE `users`
   ADD CONSTRAINT `fk_users_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
   
 ALTER TABLE `product_types`
-  ADD CONSTRAINT `fk_producttypes_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`);  
+  ADD CONSTRAINT `fk_producttypes_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),
   ADD CONSTRAINT `fk_producttypes_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);  
   
 ALTER TABLE `products`
