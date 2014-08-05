@@ -165,14 +165,14 @@ echo $this->Html->script(
 tinymce.init({
     selector: "textarea.textEditor"
  });
- 
+ var intro;
  function startIntro(){
 	var steps = [{intro: "Aucune aide disponible pour cette page"}];
 	if( introSteps.length != 0 )
 	{
 	  steps = introSteps;
 	}
-        var intro = introJs();
+        intro = introJs();
           intro.setOptions({
             steps: steps
           });
