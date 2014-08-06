@@ -11,7 +11,11 @@
 # http://mehdi/bakeryManager/photos/add
 # http://mehdi/bakeryManager/shops/add
 
-BaseUrl = 'http://localhost'
+appRoot = ''
+if ARGV.length != 0
+  appRoot = ARGV[0]
+end
+BaseUrl = "http://localhost/#{appRoot}"
 require "selenium-webdriver"
 require "selenium-client"
 
@@ -49,9 +53,14 @@ Shops = [{ 'name' => 'testShop',
         ]
 
 driver = Selenium::WebDriver.for :firefox
-driver.navigate.to BaseUrl
 
 
+def goto(driver, url)
+  driver.navigate.to url
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
+  wait.until { driver.find_element(:css => "body") }
+  puts driver.page_source
+end
 
 
 def login(driver, user)
@@ -85,9 +94,7 @@ end
 
 def addUser(driver, user)
     puts "addUser #{user.to_s}"
-  driver.navigate.to BaseUrl + "users/add"
-    wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-    wait.until { driver.find_element(:id => "UserEmail") }
+  goto(driver, BaseUrl + "users/add")
     
     
     email = driver.find_element(:id => "UserEmail")
@@ -105,9 +112,8 @@ end
 
 def addPhoto(driver, photo)
     puts "addPhoto #{photo.to_s}"
-  driver.navigate.to BaseUrl + "photos/add"
-    wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-    wait.until { driver.find_element(:id => "PhotoName") }
+  goto(driver, BaseUrl + "photos/add")
+
     
     
     name = driver.find_element(:id => "PhotoName")
@@ -138,9 +144,7 @@ end
 
 def addCompany(driver, company)
     puts "addCompany #{company.to_s}"
-  driver.navigate.to BaseUrl + "companies/add"
-    wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-    wait.until { driver.find_element(:id => "CompanyEmail") }
+  goto(driver,BaseUrl + "companies/add")
     
     
     driver.find_element(:id => "CompanyEmail").send_keys(company['email'])
@@ -157,9 +161,7 @@ end
 
 def addShop(driver, shop)
   puts "addShop #{shop.to_s}"
-    driver.navigate.to BaseUrl + "shops/add"
-    wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-    wait.until { driver.find_element(:id => "ShopName") }
+    goto(driver,BaseUrl + "shops/add")
     driver.find_element(:id => "ShopName").send_keys(shop['name'])
     driver.find_element(:id => "ShopAddress").send_keys(shop['address'])
     driver.find_element(:id => "ShopPhone").send_keys(shop['phone'])
@@ -173,8 +175,10 @@ def closeIntro(driver)
   driver.execute_script "intro.exit()"
 end
 
+goto(driver, BaseUrl)
+
 logingLink = driver.find_element(:css => "#login > a");
-driver.navigate.to BaseUrl + "config/initAcl"
+goto(driver, BaseUrl + "config/initAcl")
 addUser(driver, Root);
 login(driver, Root);
 addPhoto(driver, Photo);
