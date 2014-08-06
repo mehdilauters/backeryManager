@@ -11,7 +11,7 @@
 # http://mehdi/bakeryManager/photos/add
 # http://mehdi/bakeryManager/shops/add
 
-BaseUrl = 'http://mehdi/bakeryManager/'
+BaseUrl = 'http://localhost'
 require "selenium-webdriver"
 require "selenium-client"
 
