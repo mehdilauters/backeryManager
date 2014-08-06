@@ -123,7 +123,7 @@ def addPhoto(driver, photo)
     name = driver.find_element(:id => "PhotoName")
     driver.action.send_keys(name, photo['name']).perform
     
-    wait.until { driver.find_element(:id => "PhotoUpload") }
+#     wait.until { driver.find_element(:id => "PhotoUpload") }
       driver.find_element(:id => "PhotoUpload").send_keys(photo['path'])
 #       return
 #     path = driver.attach_file( "PhotoUpload", photo['path'])
