@@ -47,7 +47,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
-  - curl -s http://localhost
+  - curl -s http://localhost/ && sudo cat /var/log/apache2/error.log
 
 
 script:
