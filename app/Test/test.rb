@@ -27,7 +27,7 @@ CompanyUser  = {'email' => 'companyManager@lauters.fr',
 		'password' => 'companyManager',
 		'name' => 'companyManager'}
 
-Photo = {'path' => '/home/mehdi/picture_6.png',
+Photo = {'path' => 'app/Test/data/shop.jpg',
 	 'name' => 'ribTest',
          'description' => 'ribTest photo'}
 Company = { 'name' => 'testCompany',
