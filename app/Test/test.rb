@@ -59,7 +59,8 @@ def goto(driver, url)
   driver.navigate.to url
   wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
   wait.until { driver.find_element(:css => "body") }
-  puts driver.page_source
+#   puts driver.page_source
+  puts driver.title
 end
 
 
