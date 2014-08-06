@@ -85,6 +85,9 @@ def login(driver, user)
   logingSubmit = driver.find_element(:css => "#UserLoginForm > .submit > input");
   logingSubmit.click
   
+    wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
+  wait.until { driver.find_element(:css => "body") }
+  
 end
 
 def logout(driver)
@@ -112,6 +115,8 @@ def addUser(driver, user)
     
   addSubmit = driver.find_element(:css => "#UserAddForm > .submit > input");
   addSubmit.click    
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
+  wait.until { driver.find_element(:css => "body") }
 end
 
 def addPhoto(driver, photo)
