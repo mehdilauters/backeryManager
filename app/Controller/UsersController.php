@@ -316,7 +316,7 @@ class UsersController extends AppController {
 		{
 			$user = $this->User->find('first',array('conditions'=>array('User.id' => $this->Cookie->read('bakeryManagerUser.id'))));
 			//TODO with auth scope??
-			if($user['User']['company_id'] != $this->getCompanyId())
+			if(isset($user['User']) && $user['User']['company_id'] != $this->getCompanyId())
 			{
 			      $this->Session->setFlash(
 					__('Invalid company'),

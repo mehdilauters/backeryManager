@@ -27,7 +27,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
   <?php echo $this->element('tracker'); ?>
   <?php echo $this->Html->charset(); ?>
   <title>
-    Boulangerie <?php echo $company['Company']['title'] ?> | 
+    Boulangerie <?php if(isset($company['Company'])) { echo $company['Company']['title']; } ?> | 
     <?php echo $title_for_layout; ?>
   </title>
   <?php
@@ -103,7 +103,7 @@ echo $this->Html->css(
 						<h1>
 							<a href="<?php echo $this->webroot ?>">Boulangerie</a>
 						</h1>
-						<?php echo $company['Company']['title'] ?>
+						<?php if(isset($company['Company'])) { echo $company['Company']['title']; } ?>
 					</div>
 				</div>
 	  	</div>
@@ -141,7 +141,7 @@ echo $this->Html->css(
     
     
   	<div id="footer" >
-	<div>Credits : <href="http://www.lauters.fr" />Mehdi Lauters 2014</div>
+	<div>Credits : <a href="http://www.lauters.fr" >Mehdi Lauters</a> 2014</div>
 	<div>BackeryManager released under GPL licence  <a href="https://github.com/mehdilauters/backeryManager" >https://github.com/mehdilauters/backeryManager</a></div>
 <div>
   	<?php echo $this->Html->link(
