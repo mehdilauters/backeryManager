@@ -20,17 +20,18 @@ before_install:
   - ./app/Test/install_dependencies.sh
 
 before_script:
+  - chmod -R 777 app/tmp
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -D cakephp_test < app/Config/Schema/databaseCreate.sql; fi"
   - gem install selenium-webdriver
   - chmod -R 777 ./app/tmp
-  - echo "var net = require('net');
-    var server = net.createServer();
-    server.listen(80, 'localhost');
-    console.log('TCP server listening on port 80 at localhost.');" > app/tmp/socket.js
-  - sudo node ./app/tmp/socket.js &
-  - pear channel-discover pear.cakephp.org
-  - pear install --alldeps cakephp/CakePHP_CodeSniffer
+#   - echo "var net = require('net');
+#     var server = net.createServer();
+#     server.listen(80, 'localhost');
+#     console.log('TCP server listening on port 80 at localhost.');" > app/tmp/socket.js
+#   - sudo node ./app/tmp/socket.js &
+#   - pear channel-discover pear.cakephp.org
+#   - pear install --alldeps cakephp/CakePHP_CodeSniffer
   - phpenv rehash
   - set +H
   - echo "<?php
