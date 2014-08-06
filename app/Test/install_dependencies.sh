@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Install everything
-sudo apt-get install -qq apache2
 
 # Configure Apache
 WEBROOT="$(pwd)"
@@ -9,23 +7,14 @@ CGIROOT=`dirname "$(which php-cgi)"`
 echo "WEBROOT: $WEBROOT"
 echo "CGIROOT: $CGIROOT"
 sudo echo "<VirtualHost *:80>
-        DocumentRoot $WEBROOT
-        <Directory />
-                Options FollowSymLinks
-                AllowOverride All
-        </Directory>
-        <Directory $WEBROOT >
-                Options Indexes FollowSymLinks MultiViews
-                AllowOverride All
-                Order allow,deny
-                allow from all
-        </Directory>
+         DocumentRoot %TRAVIS_BUILD_DIR%
 
-		# Configure PHP as CGI
-		ScriptAlias /local-bin $CGIROOT
-		DirectoryIndex index.php index.html
-		AddType application/x-httpd-php5 .php
-		Action application/x-httpd-php5 '/local-bin/php-cgi'
+  <Directory "%TRAVIS_BUILD_DIR%">
+    Options FollowSymLinks MultiViews ExecCGI
+    AllowOverride All
+    Order deny,allow
+    Allow from all
+  </Directory>
 
 </VirtualHost>" | sudo tee /etc/apache2/sites-available/default > /dev/null
 cat /etc/apache2/sites-available/default
