@@ -117,7 +117,7 @@ truncate acos;
 
 //     debug($this->Acl->check('Members/Administrators', 'administratorActions'));
 //     debug($this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'administratorActions'));
-
+    $this->redirect($this->referer());
   }
 
   public function console()

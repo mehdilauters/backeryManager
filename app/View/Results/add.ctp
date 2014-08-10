@@ -21,12 +21,12 @@ echo $this->Form->end(__('Submit'));
 <h2>Le <?php echo $date ?> <span id="totalDay"></span></h2>
 <ul id="resultShops" >
 <?php foreach($shops as $shopId => $shopName){ ?>
-<li id="resultsShop_<?php echo $shopId ?>" >
+<li id="resultsShop_<?php echo $shopId ?>" class="resultsShop" >
 	<div class="alert">
 	<h3><?php echo $shopName; ?></h3>
 	<span class="message"></span>
 	</div>
-	    <fieldset id="paymentResults_<?php echo $shopId ?>" >
+	    <fieldset id="paymentResults_<?php echo $shopId ?>" class="paymentResults" >
 	      <?php
 		  $resultId='';
 		  $cash = '';
@@ -76,7 +76,7 @@ echo $this->Form->end(__('Submit'));
 			</table>
 		    <input type="hidden" name="Result[<?php echo $shopId; ?>][resultId]" value="<?php echo $resultId; ?>" />
 	    </fieldset>
-	    <fieldset id="productTypesResults_<?php echo $shopId ?>">
+	    <fieldset id="productTypesResults_<?php echo $shopId ?>" class="productTypesResults" >
 		    <legend><?php echo __('Product types'); ?></legend>
     <table>
       <tr>

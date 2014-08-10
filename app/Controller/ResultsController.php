@@ -374,7 +374,15 @@ class ResultsController extends AppController {
 		  $curDate = new DateTime($resEntry['ResultsEntry']['date']);
 		  $dateDiff = $initDate[$productTypeId][$shopId]->diff($curDate);
 		  $x = $dateDiff->days / $nbDaysByInterval;
-		  $y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$productTypeId][$shopId],$x);
+		  if(isset($regressions[$ProductTypeId][$shopId]))
+		  {
+		    $y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$productTypeId][$shopId],$x);
+		  }
+		  else
+		  {
+		     $y = 0;
+		    $this->log('Regression issue $regressions['.$ProductTypeId.']['.$shopId.']', 'debug');
+		  }
 		  if($y < 0)
 		  {
 			  $y =0;

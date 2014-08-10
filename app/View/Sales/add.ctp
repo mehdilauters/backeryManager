@@ -90,7 +90,7 @@ foreach($products as $product)
 <td id="comments_<?php echo $product['Product']['id'] ?>" >
       <ul>
         <?php foreach($shops as $shop){ ?>
-          <li class="lost" >
+          <li class="comment" >
             <?php
                   $comment = '';
                   foreach($product['Sale'] as $sale)

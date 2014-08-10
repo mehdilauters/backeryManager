@@ -96,6 +96,23 @@ Products = [
    },
   ]
 
+
+Dates = [
+    '10/08/2014',
+    '11/08/2014',
+    '12/08/2014',
+    '13/08/2014',
+    '14/08/2014',
+    '15/08/2014',
+  ]
+
+# Sales = [
+#     {	
+#       'date' => '10/08/2014'
+#      
+#      }
+#   ]
+
 driver = Selenium::WebDriver.for :firefox
 
 
@@ -107,6 +124,7 @@ def goto(driver, url)
   puts driver.title
   if driver.title.match /Error/
     puts driver.page_source
+    raise "Error"
   end
 end
 
@@ -269,9 +287,80 @@ def addShop(driver, shop)
   driver.find_element(:css => "#ShopAddForm > .submit > input").click;
 end
 
+
+def addSales(driver, dte)
+    puts "addSales"
+    goto(driver,BaseUrl + "sales/add")
+    closeIntro(driver)
+    driver.find_element(:css => "#dateSelectValue").clear()
+    driver.find_element(:css => "#dateSelectValue").send_keys(dte)
+    driver.find_element(:css => "#dateSelect").click
+  i = 0
+  elts = driver.find_elements(:css => "li.produced input[type=text]")
+  elts.each{|e|
+            e.send_keys(i * 2)
+           i += 1
+            }
+  i = 0
+  elts = driver.find_elements(:css => "li.lost input[type=text]")
+  elts.each{|e|
+            e.send_keys(i)
+           i += 1
+            }
+  i = 0
+  elts = driver.find_elements(:css => ".comment textarea")
+  elts.each{|e|
+            e.send_keys("comment #{i}")
+           i += 1
+            }
+  driver.find_element(:css => "#salesAdd input[type=submit]").click
+end
+
+def addResult(driver, dte)
+    puts "addResult"
+    goto(driver,BaseUrl + "results/add")
+    closeIntro(driver)
+    driver.find_element(:css => "#dateSelectValue").clear()
+    driver.find_element(:css => "#dateSelectValue").send_keys(dte)
+    driver.find_element(:css => "#dateSelect").click
+    eltsContainer = driver.find_elements(:css => ".resultsShop")
+    chopId = 0
+    eltsContainer.each{|ec|
+      u0 = 100
+      r = 140 + chopId*10
+      i = 0
+      val = 0
+      elts = ec.find_elements(:css => ".paymentResults input[type=text]")
+      elts.each{|e|
+               val = u0 + i * r
+		e.send_keys(val)
+               i += 1
+		}                     
+                      
+	j = 0
+                      
+	  elts = ec.find_elements(:css => ".productTypesResults input[type=text]")
+	  sum = (i)*(u0+val)/2
+                      
+                      
+	  jStep = sum / elts.length
+	  elts.each{|e|
+		    j = jStep
+		    e.send_keys(j)
+		    }  
+           chopId += 1
+	}
+  
+  
+  driver.find_element(:css => "#resultsAdd input[type=submit]").click
+end
+
 def closeIntro(driver)
     puts "closeIntro"
-  driver.execute_script "intro.exit()"
+    begin
+      driver.execute_script "intro.exit()"
+    rescue
+    end
 end
 
 goto(driver, BaseUrl)
@@ -292,3 +381,10 @@ addProductType(driver, ProductTypes[0])
 addProductType(driver, ProductTypes[1])
 addProduct(driver, Products[0])
 addProduct(driver, Products[1])
+Dates.each{
+  |dte|
+  addSales(driver,dte)
+  addResult(driver, dte)
+  }
+goto(driver, BaseUrl + "sales/stats")
+goto(driver, BaseUrl + "results/stats")
