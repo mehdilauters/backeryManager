@@ -224,17 +224,17 @@ function checkForm()
 		position: 'top'
               },
               {
-                element: '#resultsShop_<?php echo array_keys($shops)[0] ?>',
+                element: '#resultsShop_<?php /* php3 compatibility */ $shops = array_keys($shops); echo $shops[0]; ?>',
                 intro: "Ensuite, remplissez par magasin...",
 		position: 'right'
               },
               {
-                element: '#paymentResults_<?php echo array_keys($shops)[0] ?>',
+                element: '#paymentResults_<?php $shops = array_keys($shops); echo $shops[0]; ?>',
                 intro: "Les différents moyens de paiement",
 		position: 'right'
               },
               {
-                element: '#productTypesResults_<?php echo array_keys($shops)[0] ?>',
+                element: '#productTypesResults_<?php $shops = array_keys($shops); echo $shops[0]; ?>',
                 intro: "les sommes encaissées pour chaque type de produit",
 		position: 'right'
               },
