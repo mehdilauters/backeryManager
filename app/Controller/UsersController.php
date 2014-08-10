@@ -67,7 +67,7 @@ class UsersController extends AppController {
 				$count = $this->User->find('count', array('conditions' => array('User.company_id' => $this->getCompanyId())));
 				if($count == 1)
 				{
-				  $parentId = 2; // root
+				  $parentId = 2; // administrators
 				}
 				// check if already users registered
 				$count = $this->User->find('count');
@@ -86,7 +86,6 @@ class UsersController extends AppController {
 				);
 				$aro->create();
 				$aro->save($aroData);
-
 				$this->Session->setFlash(__('The user has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -161,7 +160,7 @@ class UsersController extends AppController {
 	}
 
 	
-// 	public function setIsRoot($id = null, $isRoot = false) {
+// 	public function setIsAdmin($id = null, $isAdmin = false) {
 // 		if (!$this->User->exists($id)) {
 // 			throw new NotFoundException(__('Invalid user'));
 // 		}

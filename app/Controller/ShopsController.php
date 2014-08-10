@@ -63,8 +63,8 @@ class ShopsController extends AppController {
     $this->set('shop', $shop);
 	
 	
-	
-	if($this->Auth->user('isRoot'))
+	$tokens = $this->getUserTokens();
+	if($tokens['isAdmin'])
 	{
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array('shop'=>$id), 'group' => array('time'=>'week', 'shop'=>'shop', 'productType'=>'productType'))));
 		$this->set('resultsEntries',$res);

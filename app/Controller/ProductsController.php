@@ -24,8 +24,8 @@ class ProductsController extends AppController {
     $this->Product->contain($contain);
 
     $conditions = array('ProductType.company_id' => $this->getCompanyId());
-
-    if(!$this->Auth->user('isRoot'))
+    $tokens = $this->getUserTokens();
+    if(!$tokens['isAdmin'])
     {
       $conditions[] = 'Product.customer_display';
     }
@@ -58,8 +58,8 @@ class ProductsController extends AppController {
 
     $conditions = array();
     $conditions = array('Product.' . $this->Product->primaryKey => $id);
-
-    if(!$this->Auth->user('isRoot'))
+    $tokens = getUserTokens();
+    if(!$tokens['isAdmin'])
     {
       $conditions[] = 'Product.customer_display';
     }
@@ -82,8 +82,8 @@ class ProductsController extends AppController {
 
 
 
-
-	if($this->Auth->user('isRoot'))
+	$tokens = $this->getUserTokens();
+	if($tokens['isAdmin'])
 	{
 		$res = $this->requestAction(array('controller'=>'sales', 'action'=>'stats'), array( 'pass'=>array('conditions'=>array('Sale.product_id'=>$products['Product']['id']), 'group' => array('time'=>'day', 'shop'=>'shop', 'product'=>'product'))));
 		$this->set(compact('products','shops'));

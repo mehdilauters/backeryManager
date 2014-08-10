@@ -1,6 +1,6 @@
 <?php
   
-  Configure::write('Settings.Medias.Photos.path', APP.'tmp');  
+  Configure::write('Settings.Medias.Photos.path', APP.'tmp/');  
 
   Configure::write('Settings.Medias.Photos.xPreview', 200);  
   Configure::write('Settings.Medias.Photos.yPreview', 150);  

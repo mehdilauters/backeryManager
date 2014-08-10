@@ -302,7 +302,7 @@ public function getUserTokens($userId = NULL)
         $tokens = array(
 		     'isRoot'=> false,
 		     'isAdmin'=> false,
-		     'members'=>false);
+		     'member'=>false);
   if($userId == NULL)
   {
     $userId = $this->Auth->user('id');
@@ -313,6 +313,7 @@ public function getUserTokens($userId = NULL)
       $tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
       $tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
   }
+// debug($tokens);
   return $tokens;
 }
   

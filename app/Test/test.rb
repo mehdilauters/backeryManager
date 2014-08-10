@@ -27,7 +27,7 @@ CompanyUser  = {'email' => 'companyManager@lauters.fr',
 		'password' => 'companyManager',
 		'name' => 'companyManager'}
 
-Photo = {'path' => 'app/Test/data/shop.jpg',
+Photo = {'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
 	 'name' => 'ribTest',
          'description' => 'ribTest photo'}
 Company = { 'name' => 'testCompany',
@@ -51,6 +51,50 @@ Shops = [{ 'name' => 'testShop',
 	    'media' => 'ribtest'
 	   }
         ]
+
+
+ProductTypes = [
+  {
+   'name' => 'ProductTypeTest',
+   'tva' => '5.5',
+   'customerDisplay' => true,
+   'description' => 'ProductTypeTest Description',
+   'media' => 'ribtest'
+   },
+  {
+   'name' => 'ProductTypeTest 1',
+   'tva' => '10.5',
+   'customerDisplay' => true,
+   'description' => 'ProductTypeTest 1 Description',
+   'media' => 'ribtest'
+   }
+  
+  ]
+
+Products = [
+  {
+   'name' => 'ProductTest',
+   'productType' => 'ProductTypeTest',
+   'customerDisplay' => true,
+   'description' => 'ProductTest Description',
+   'media' => 'ribtest',
+   'price' => '1.5',
+   'unity' => true,
+   'salesDisplay' => true,
+   'productionAvailable' => true
+   },
+  {
+   'name' => 'ProductTest 1',
+   'productType' => 'ProductTypeTest 1',
+   'customerDisplay' => true,
+   'description' => 'ProductTest Description',
+   'media' => 'ribtest',
+   'price' => '2.5',
+   'unity' => true,
+   'salesDisplay' => true,
+   'productionAvailable' => false
+   },
+  ]
 
 driver = Selenium::WebDriver.for :firefox
 
@@ -167,6 +211,52 @@ def addCompany(driver, company)
     driver.find_element(:css => "#CompanyAddForm > .submit > input").click;
 end
 
+def addProductType(driver, productType)
+    puts "addProductType #{productType.to_s}"
+  goto(driver,BaseUrl + "productTypes/add")
+    
+  driver.find_element(:id => "ProductTypeMediaId").send_keys(productType['media'])
+  driver.find_element(:id => "ProductTypeName").send_keys(productType['name'])
+  driver.find_element(:id => "ProductTypeTva").send_keys(productType['tva'])
+  driver.execute_script "tinyMCE.activeEditor.setContent('Replace with your text')"  
+    
+  if(productType['customerDisplay'])
+    driver.find_element(:id => "ProductTypeCustomerDisplay").click
+  end
+    driver.find_element(:css => "#ProductTypeAddForm > .submit > input").click;
+end
+
+def addProduct(driver, product)
+    puts "addProduct #{product.to_s}"
+  goto(driver,BaseUrl + "products/add")
+    
+  driver.find_element(:id => "ProductMediaId").send_keys(product['media'])
+  driver.find_element(:id => "ProductProductTypesId").send_keys(product['productType'])
+  driver.find_element(:id => "ProductName").send_keys(product['name'])
+  driver.find_element(:id => "ProductPrice").send_keys(product['price'])
+  
+  driver.execute_script "tinyMCE.activeEditor.setContent('Replace with your text')"  
+    
+  if(product['customerDisplay'])
+    driver.find_element(:id => "ProductCustomerDisplay").click
+  end
+
+
+  if(product['salesDisplay'])
+    driver.find_element(:id => "ProductProductionDisplay").click
+  end
+  
+    if(product['productionAvailable'])
+    driver.find_element(:id => "ProductDependsOnProduction").click
+  end
+  
+  if(product['unity'])
+    driver.find_element(:id => "ProductUnity").click
+  end
+  
+    driver.find_element(:css => "#ProductAddForm > .submit > input").click;
+end
+
 
 def addShop(driver, shop)
   puts "addShop #{shop.to_s}"
@@ -198,3 +288,7 @@ login(driver, CompanyUser);
 addPhoto(driver, Photo);
 addShop(driver, Shops[0])
 addShop(driver, Shops[1])
+addProductType(driver, ProductTypes[0])
+addProductType(driver, ProductTypes[1])
+addProduct(driver, Products[0])
+addProduct(driver, Products[1])

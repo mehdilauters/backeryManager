@@ -8,7 +8,7 @@
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('rib_on_orders'); ?></th>
 			<th><?php echo $this->Paginator->sort('discount'); ?></th>
-			<th><?php echo $this->Paginator->sort('isRoot'); ?></th>
+			<th>isAdmin</th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
@@ -33,14 +33,14 @@
 		}?>
 		  &nbsp;</td>
 		<td id="userRoot_<?php echo $user['User']['id'] ?>"><?php 
-				if($user['User']['isRoot'])
+				if($tokens['isAdmin'])
 				{
 					echo $this->Html->image('icons/dialog-ok-apply.png', array('id'=>'rootCheck_'.$user['User']['id'],'class'=>'icon','alt' => __('oui')));
-					echo $this->Form->postLink($this->Html->image('icons/list-remove-user.png', array('id'=>'rootRemove_'.$user['User']['id'],'class'=>'icon','alt' => __('Retirer'))), array('action' => 'setIsRoot', $user['User']['id'],false) , array('escape' => false, 'title'=>'Retirer'), __('Voulez vous retirer les droits d\'administrateur à # %s?', $user['User']['id']));
+// 					echo $this->Form->postLink($this->Html->image('icons/list-remove-user.png', array('id'=>'rootRemove_'.$user['User']['id'],'class'=>'icon','alt' => __('Retirer'))), array('action' => 'setIsAdmin', $user['User']['id'],false) , array('escape' => false, 'title'=>'Retirer'), __('Voulez vous retirer les droits d\'administrateur à # %s?', $user['User']['id']));
 				}
 				else
 				{
-					echo $this->Form->postLink($this->Html->image('icons/list-add-user.png', array('id'=>'rootAdd_'.$user['User']['id'],'class'=>'icon','alt' => __('Ajouter'))), array('action' => 'setIsRoot', $user['User']['id'],true) , array('escape' => false, 'title'=>'Ajouter'), __('Voulez vous que l\'utilisateur # %s soit administrateur?', $user['User']['id']));
+// 					echo $this->Form->postLink($this->Html->image('icons/list-add-user.png', array('id'=>'rootAdd_'.$user['User']['id'],'class'=>'icon','alt' => __('Ajouter'))), array('action' => 'setIsAdmin', $user['User']['id'],true) , array('escape' => false, 'title'=>'Ajouter'), __('Voulez vous que l\'utilisateur # %s soit administrateur?', $user['User']['id']));
 				}
 			?>
 		</td>
@@ -54,7 +54,7 @@
 			  if($user['User']['id'] != AuthComponent::user('id') )
 			  {
 			    $rootText = '';
-			    if($user['User']['isRoot'])
+			    if($tokens['isAdmin'])
 			    {
 			      $rootText = 'Attention, cet utilisateur fait parti des administrateurs ';
 			    }

@@ -50,14 +50,14 @@ class ProductType extends AppModel {
       ),
     ),
     'name' => array(
-      'alphanumeric' => array(
-        'rule' => array('alphanumeric'),
-        'message' => 'ProductType::name must be alphanumeric',
-        //'allowEmpty' => false,
-        //'required' => false,
-        //'last' => false, // Stop validation after this rule
-        //'on' => 'create', // Limit validation to 'create' or 'update' operations
-      ),
+//       'alphanumeric' => array(
+//         'rule' => array('alphanumeric'),
+//         'message' => 'ProductType::name must be alphanumeric',
+//         //'allowEmpty' => false,
+//         //'required' => false,
+//         //'last' => false, // Stop validation after this rule
+//         //'on' => 'create', // Limit validation to 'create' or 'update' operations
+//       ),
       'notempty' => array(
         'rule' => array('notempty'),
         'message' => 'ProductType::name must be notempty',
