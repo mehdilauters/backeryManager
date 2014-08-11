@@ -57,7 +57,7 @@ before_script:
 
 
 script:
-  - sh -c "ruby app/Test/test.rb"
+  - sh -c "ruby app/Test/test.rb w"
 
 notifications:
   email: false

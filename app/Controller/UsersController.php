@@ -60,6 +60,13 @@ class UsersController extends AppController {
 			$this->User->create();
 			$this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
 			$this->request->data['User']['company_id'] = $this->getCompanyId();
+
+			$count = $this->User->find('count', array('conditions' => array('User.company_id' => $this->getCompanyId(), 'User.email' => $this->request->data['User']['email'] ))); 
+			if($count != 0)
+			{
+			    throw new NotFoundException(__('User already exists'));
+			}
+
 			if ($this->User->save($this->request->data)) {
 
 				$parentId = 1; // members

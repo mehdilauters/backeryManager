@@ -120,7 +120,7 @@ echo $this->Html->css(
 				//echo $this->Session->flash('flash/ok');
 				//echo $this->Session->flash('flash/warning');
 				//echo $this->Session->flash('flash/fail');
-				echo $this->Session->flash('auth',  'flash/ok');
+				echo $this->Session->flash('auth');
 				if(count($news) != 0) :
     			?>
     			

@@ -313,7 +313,7 @@ public function getUserTokens($userId = NULL)
       $tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
       $tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
   }
-// debug($tokens);
+debug($tokens);
   return $tokens;
 }
   
@@ -445,6 +445,8 @@ public function getFunctionText($coefficients)
    {
 	$this->Auth->allow();
    }
+
+    $this->Auth->flash['element'] = 'flash/auth';
 
     
 // if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))

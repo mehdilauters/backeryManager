@@ -12,10 +12,31 @@
 # http://mehdi/bakeryManager/shops/add
 
 appRoot = ''
-if ARGV.length != 0
-  appRoot = ARGV[0]
+host ='localhost'
+write = false #only allow reading tests TODO
+
+rootUser ={}
+
+if ARGV.length >= 1 && ARGV[0] == 'w'
+  write = true
 end
-BaseUrl = "http://localhost/#{appRoot}"
+
+if ARGV.length >= 2
+  host = ARGV[1]
+end
+
+if ARGV.length >= 3
+  appRoot = ARGV[2]
+end
+
+if ARGV.length >= 4
+  rootUser['email'] = ARGV[3].split(':')[0]
+  rootUser['password'] = ARGV[3].split(':')[1]
+end
+
+
+BaseUrl = "http://#{host}/#{appRoot}"
+puts BaseUrl
 require "selenium-webdriver"
 require "selenium-client"
 
@@ -106,6 +127,33 @@ Dates = [
     '15/08/2014',
   ]
 
+
+Orders = [
+  {
+   'shop' => Shops[0]['name'],
+   'user' => CompanyUser['name'],
+   'dueDate' => '13/08/2014',
+   'comment' => 'nazdar'
+   },
+  
+  ]
+
+OrderItems = [
+  {
+   'product' => Products[0]['name'],
+  'date' => '14/08/2014',
+   'quantity' => 100,
+   'comment' => 'coucou'
+   },
+  {
+   'product' => Products[1]['name'],
+  'date' => '15/08/2014',
+   'quantity' => 150,
+   'comment' => 'salut'
+   },  
+  
+  ]
+
 # Sales = [
 #     {	
 #       'date' => '10/08/2014'
@@ -116,7 +164,8 @@ Dates = [
 driver = Selenium::WebDriver.for :firefox
 
 
-def goto(driver, url)
+def goto(driver, url, raise = true)
+  puts url
   driver.navigate.to url
   wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
   wait.until { driver.find_element(:css => "body") }
@@ -125,6 +174,15 @@ def goto(driver, url)
   if driver.title.match /Error/
     puts driver.page_source
     raise "Error"
+  end
+  
+  begin
+    driver.find_element(:css => ".authError")
+   rescue
+     return
+  end
+  if raise
+    raise "authError"
   end
 end
 
@@ -287,6 +345,46 @@ def addShop(driver, shop)
   driver.find_element(:css => "#ShopAddForm > .submit > input").click;
 end
 
+def addOrder(driver, order)
+  puts "addOrder #{order.to_s}"
+  goto(driver,BaseUrl + "orders/add")
+  driver.find_element(:id => "OrderShopId").send_keys(order['shop'])
+  driver.find_element(:id => "OrderUserId").send_keys(order['user'])
+  driver.find_element(:id => "OrderDeliveryDate").send_keys(order['dueDate'])
+  driver.find_element(:id => "OrderComment").send_keys(order['comment'])
+  
+  driver.find_element(:css => "#OrderAddForm > .submit > input").click;
+end
+
+
+def selectFirstOrder(driver)
+  puts "selectFirstOrder"
+  
+  goto(driver,BaseUrl + "orders")
+  driver.find_element(:css => "#ordersIndexTable .actions a[title=Voir]").click;
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
+  wait.until { driver.find_element(:css => ".addItem > a") }
+  
+end
+  
+def addItem(driver, item)
+  puts "AddItem #{item.to_s}"
+  
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
+  driver.find_element(:css => ".addItem > a").click;
+  wait.until { driver.find_element(:css => "#OrderedItemProductId") }
+  
+  
+  driver.find_element(:id => "OrderedItemProductId").send_keys(item['product'])
+  driver.find_element(:id => "OrderedItemCreated").clear
+  driver.find_element(:id => "OrderedItemCreated").send_keys(item['date'])
+  driver.find_element(:id => "OrderedItemQuantity").send_keys(item['quantity'])
+  driver.find_element(:id => "OrderedItemComment").send_keys(item['comment'])
+  driver.find_element(:css => "#OrderedItemAddForm > .submit > input").click;
+  
+end
+
 
 def addSales(driver, dte)
     puts "addSales"
@@ -365,26 +463,67 @@ end
 
 goto(driver, BaseUrl)
 
-logingLink = driver.find_element(:css => "#login > a");
-goto(driver, BaseUrl + "config/initAcl")
-addUser(driver, Root);
-login(driver, Root);
-addPhoto(driver, Photo);
-addCompany(driver, Company)
-addUser(driver, CompanyUser);
-logout(driver)
-login(driver, CompanyUser);
-addPhoto(driver, Photo);
-addShop(driver, Shops[0])
-addShop(driver, Shops[1])
-addProductType(driver, ProductTypes[0])
-addProductType(driver, ProductTypes[1])
-addProduct(driver, Products[0])
-addProduct(driver, Products[1])
-Dates.each{
-  |dte|
-  addSales(driver,dte)
-  addResult(driver, dte)
-  }
-goto(driver, BaseUrl + "sales/stats")
-goto(driver, BaseUrl + "results/stats")
+
+if write
+  logingLink = driver.find_element(:css => "#login > a");
+  goto(driver, BaseUrl + "config/initAcl")
+  addUser(driver, Root);
+  login(driver, Root);
+  addPhoto(driver, Photo);
+  addCompany(driver, Company)
+  addUser(driver, CompanyUser);
+  logout(driver)
+  login(driver, CompanyUser);
+  addPhoto(driver, Photo);
+  addShop(driver, Shops[0])
+  addShop(driver, Shops[1])
+  addProductType(driver, ProductTypes[0])
+  addProductType(driver, ProductTypes[1])
+  addProduct(driver, Products[0])
+  addProduct(driver, Products[1])
+  Dates.each{
+    |dte|
+    addSales(driver,dte)
+    addResult(driver, dte)
+    }
+  goto(driver, BaseUrl + "sales/stats")
+  goto(driver, BaseUrl + "results/stats")
+
+  addOrder(driver, Orders[0])
+  selectFirstOrder(driver)
+  addItem(driver, OrderItems[0])
+  selectFirstOrder(driver)
+  addItem(driver, OrderItems[1])
+  selectFirstOrder(driver)
+  logout(driver)
+end
+  if rootUser == {}
+    rootUser = Root
+  end
+  login(driver, rootUser);
+  goto(driver, BaseUrl + "users")
+  goto(driver, BaseUrl + "users/add")
+  goto(driver, BaseUrl + "shops/add")
+  
+  goto(driver, BaseUrl + "productTypes")
+  goto(driver, BaseUrl + "productTypes/add")
+  
+  goto(driver, BaseUrl + "products")
+  goto(driver, BaseUrl + "products/add")
+  
+  goto(driver, BaseUrl + "sales")
+  goto(driver, BaseUrl + "sales/add")
+  goto(driver, BaseUrl + "sales/stats")
+  
+  goto(driver, BaseUrl + "results/")
+  goto(driver, BaseUrl + "results/add")
+  goto(driver, BaseUrl + "results/stats")
+  
+  goto(driver, BaseUrl + "photos/")
+  goto(driver, BaseUrl + "photos/add")
+  
+  goto(driver, BaseUrl + "orders")
+  goto(driver, BaseUrl + "orders/add")
+  
+
+
