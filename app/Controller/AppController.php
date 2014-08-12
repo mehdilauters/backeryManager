@@ -488,15 +488,17 @@ public function getFunctionText($coefficients)
 		  $this->requestAction(array('plugin'=> '', 'controller' => 'users', 'action' => 'autologin'));
 	  }
 	}
-
-	if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
+	else
 	{
-	  if($this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'rootActions'))
+	  if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
 	  {
-		      if(!$this->request->is('ssl'))
-		      {
-			      $this->blackHole('secure');
-		      }
+	    if($this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'rootActions'))
+	    {
+			if(!$this->request->is('ssl'))
+			{
+				$this->blackHole('secure');
+			}
+	    }
 	  }
 	}
 
