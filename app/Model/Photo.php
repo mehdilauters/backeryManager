@@ -159,6 +159,7 @@ class Photo extends AppModel {
     }
     elseif($source != $destination) { // Si le fichier doit etre uniquement deplace
       // Deplacer le fichier
+debug($destination);
       return copy($source,$destination);
     }
   

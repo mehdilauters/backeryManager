@@ -95,7 +95,8 @@ class PagesController extends AppController {
     $this->set('shops', $shops);
 
     $conditions = array('Product.media_id', 'ProductType.company_id' => $this->getCompanyId());
-    if(!$this->Auth->user('isRoot'))
+    $tokens = $this->getUserTokens();
+    if(!$tokens['isAdmin'])
     {
       $conditions[] = 'Product.customer_display';
     }
@@ -120,7 +121,7 @@ class PagesController extends AppController {
 	
 	$this->set('products', $displayProducts);
     $this->set(compact('page', 'subpage', 'title_for_layout', 'daysProduct'));
-	if($this->Auth->user('isRoot'))
+	if($tokens['isAdmin'])
 	{
 		$res = $this->requestAction(array('controller'=>'results', 'action'=>'stats'), array( 'pass'=>array('_conditions'=>array(), 'group' => array('time'=>'week', 'shop'=>true, 'productType'=>false))));
 		$this->set('results',$res);

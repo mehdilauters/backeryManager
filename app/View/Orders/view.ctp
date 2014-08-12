@@ -27,13 +27,13 @@ echo $date->format('d/m/Y'); ?></h2></center>
 
  ?>
 	<ul>
-		<li><?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('alt' => '')).' '.__('Modifier infos commande'), array('action' => 'edit', $order['Order']['id']),array('escape' => false)); ?> </li>
-		<li><?php echo $this->Html->link($this->Html->image('icons/list-add.png', array('alt' => '')).' '.__('Ajouter un item a la commande'), array('controller' => 'ordered_items', 'action' => 'add' ,
+		<li class="edit" ><?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('alt' => '')).' '.__('Modifier infos commande'), array('action' => 'edit', $order['Order']['id']),array('escape' => false)); ?> </li>
+		<li class="addItem" ><?php echo $this->Html->link($this->Html->image('icons/list-add.png', array('alt' => '')).' '.__('Ajouter un item a la commande'), array('controller' => 'ordered_items', 'action' => 'add' ,
 $order['Order']['id']),array('escape' => false)); ?> </li>
-<li><?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\''.$emailText.'\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?></li>
-	      <li><?php echo $this->Html->link($this->Html->image('icons/document-print-frame.png', array('alt' => '')).' '.__('Imprimer'), array('action' => 'view', $order['Order']['id'].'.pdf'),array('escape' => false)); ?></li>
-		<li><?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('alt' => '')).' '.__('Supprimer commande'), array('action' => 'delete', $order['Order']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?> </li>
-		<li><?php echo $this->Html->link($this->Html->image('icons/view-list-details.png', array('alt' => '')).' '.__('Lister les commandes'), array('action' => 'index'),array('escape' => false)); ?> </li>
+<li class="email" ><?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\''.$emailText.'\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?></li>
+	      <li class="pdf" ><?php echo $this->Html->link($this->Html->image('icons/document-print-frame.png', array('alt' => '')).' '.__('Imprimer'), array('action' => 'view', $order['Order']['id'].'.pdf'),array('escape' => false)); ?></li>
+		<li class="delete" ><?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('alt' => '')).' '.__('Supprimer commande'), array('action' => 'delete', $order['Order']['id']), array('escape' => false), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?> </li>
+		<li class="index" ><?php echo $this->Html->link($this->Html->image('icons/view-list-details.png', array('alt' => '')).' '.__('Lister les commandes'), array('action' => 'index'),array('escape' => false)); ?> </li>
 	</ul>
 </div>
 

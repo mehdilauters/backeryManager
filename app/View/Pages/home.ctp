@@ -20,7 +20,7 @@ if($tokens['isAdmin'])
  ?>
  
 <?php //debug($eventType); 
-if(count($eventType['Event']) != 0)
+if(isset($eventType['Event']) && count($eventType['Event']) != 0)
 {
   ?>
   <ul id="newsList" >

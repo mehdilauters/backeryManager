@@ -38,8 +38,13 @@ class NewsController extends AppController {
   public function getNews()
   {
       $company = $this->Company->findById($this->getCompanyId());
-      $eventType = $this->EventType->findById($company['EventType']['id']);
       $news = array();
+      if(!isset($company['EventType']))
+      {
+	return $news;
+      }
+      $eventType = $this->EventType->findById($company['EventType']['id']);
+
 	if( count($eventType) != 0)
 	{
 		$dateStart = new DateTime('yesterday');

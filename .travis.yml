@@ -1,9 +1,9 @@
 language: php
 
 php:
-  - 5.2
   - 5.3
   - 5.4
+  - 5.5
 
 env:
   - DB=mysql
@@ -13,29 +13,36 @@ env:
 matrix:
   include:
     - php: 5.4
-      env:
-        - PHPCS=1
+before_install:
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  - ./app/Test/install_dependencies.sh
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+  - sudo service apache2 restart
 
 before_script:
+  - chmod -R 777 app/tmp
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi"
-  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test2;'; fi"
-  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test3;'; fi"
-  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE cakephp_test;' -U postgres; fi"
-  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE SCHEMA test2;' -U postgres -d cakephp_test; fi"
-  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE SCHEMA test3;' -U postgres -d cakephp_test; fi"
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -D cakephp_test < app/Config/Schema/databaseCreate.sql; fi"
+  - gem install selenium-webdriver
   - chmod -R 777 ./app/tmp
-  - echo "var net = require('net');
-    var server = net.createServer();
-    server.listen(80, 'localhost');
-    console.log('TCP server listening on port 80 at localhost.');" > app/tmp/socket.js
-  - sudo node ./app/tmp/socket.js &
-  - pear channel-discover pear.cakephp.org
-  - pear install --alldeps cakephp/CakePHP_CodeSniffer
+#   - echo "var net = require('net');
+#     var server = net.createServer();
+#     server.listen(80, 'localhost');
+#     console.log('TCP server listening on port 80 at localhost.');" > app/tmp/socket.js
+#   - sudo node ./app/tmp/socket.js &
+#   - pear channel-discover pear.cakephp.org
+#   - pear install --alldeps cakephp/CakePHP_CodeSniffer
   - phpenv rehash
   - set +H
   - echo "<?php
     class DATABASE_CONFIG {
-    public \$test = array(
+    public \$default = array(
       'datasource' => 'Database/Mysql',
       'database' => 'cakephp_test',
       'host' => '0.0.0.0',
@@ -43,10 +50,14 @@ before_script:
       'persistent' => false,
     );
     }" > app/Config/database.php
- 
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+  - curl -s http://localhost/ && sudo cat /var/log/apache2/error.log
+
 
 script:
-  - sh -c "if [ '$PHPCS' != '1' ]; then ./lib/Cake/Console/cake test app Model/Company --stderr; else phpcs -p --extensions=php --standard=CakePHP ./lib/Cake; fi"
+  - sh -c "ruby app/Test/test.rb w"
 
 notifications:
   email: false

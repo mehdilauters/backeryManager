@@ -14,11 +14,17 @@ class ProductTest extends CakeTestCase {
  */
 	public $fixtures = array(
 		'app.product',
-		'app.product_types',
+		'app.product_type',
 		'app.media',
 		'app.user',
+		'app.company',
+		'app.event_type',
 		'app.event',
-		'app.products_type'
+		'app.order',
+		'app.shop',
+		'app.ordered_item',
+		'app.photo',
+		'app.sale'
 	);
 
 /**

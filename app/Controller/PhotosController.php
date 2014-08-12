@@ -61,8 +61,8 @@ class PhotosController extends AppController {
 		{
 		  throw new NotFoundException(__('Invalid photo for this company'));
 		}    
-
-		if(! $this->Auth->user('isRoot') )
+		$tokens = $this->getUserTokens();
+		if(! $tokens['isAdmin'] )
 		{
 		  $isRib = ($this->Company->find('count', array('conditions'=>array('Company.rib' => $id))) == 0);
 		  if (!$isRib) {
@@ -154,7 +154,16 @@ class PhotosController extends AppController {
     {
         $filename = basename($filePath);
     }
-      $photoPath =   Configure::read('Settings.Medias.Photos.path');
+      $photoPathNormal =   Configure::read('Settings.Medias.Photos.path').'normal/';
+      $photoPathPreview = Configure::read('Settings.Medias.Photos.path').'preview/';
+      if(!is_dir($photoPathNormal))
+      {
+	mkdir($photoPathNormal, 0755, true);
+      }
+      if(!is_dir($photoPathPreview))
+      {
+	mkdir($photoPathPreview, 0755, true);
+      }
       $xPreview = Configure::read('Settings.Medias.Photos.xPreview');  
       $yPreview = Configure::read('Settings.Medias.Photos.yPreview');
     
@@ -167,23 +176,24 @@ class PhotosController extends AppController {
     if(!empty($this->request->data['Photo']['upload']['name']) )
      {
        debug($filePath);
-       if(move_uploaded_file($filePath,$photoPath.'normal/'.$filename) != true)
+	$dest = $photoPathNormal.$filename;
+       if(move_uploaded_file($filePath,$dest) != true)
        {
-         $this->log('move_uploaded_file failed', 'debug');
+         $this->log('move_uploaded_file to '.$dest.' failed', 'debug');
          return false;
        }
-       $filePath = $photoPath.'normal/'.$filename;
+       $filePath = $photoPathNormal.$filename;
      }
     
 
     
     
-    if( !$this->Photo->redimentionnerImage($filePath, $photoPath.'normal/'.$filename,$xNormal , $yNormal))
+    if( !$this->Photo->redimentionnerImage($filePath, $photoPathNormal.$filename,$xNormal , $yNormal))
     {
       $this->log('Redimmentionner Image normal fail', 'debug');
       return false;
     }
-    if( !$this->Photo->redimentionnerImage($photoPath.'normal/'.$filename, $photoPath.'preview/'.$filename, $xPreview , $yPreview))
+    if( !$this->Photo->redimentionnerImage($photoPathNormal.$filename, $photoPathPreview.$filename, $xPreview , $yPreview))
     {
       $this->log('Redimmentionner Image miniature fail', 'debug');
       return false;
@@ -198,6 +208,7 @@ class PhotosController extends AppController {
  * @return void
  */
   public function add($filePath = null) {
+    //TODO if user.company_id is null
     if(!is_writable ( Configure::read('Settings.Medias.Photos.path') ))
     {
       throw new InternalErrorException(__('upload dir not writable '.Configure::read('Settings.Medias.Photos.path')));

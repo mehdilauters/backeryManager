@@ -17,8 +17,8 @@ class UserTest extends CakeTestCase {
 		'app.media',
 		'app.event',
 		'app.product',
-		'app.product_types',
-		'app.products_type',
+		'app.product_type',
+// 		'app.products_type',
 		'app.etyetyhet'
 	);
 

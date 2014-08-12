@@ -281,8 +281,7 @@ class AppController extends Controller {
 
      // debug($this->Auth->user('isRoot'));
 
-    $tokens = array('isAdmin'=> $this->Auth->user('isRoot') ,'members'=>$this->Auth->loggedIn());
-    $this->set('tokens', $tokens);
+    $this->set('tokens', $this->getUserTokens());
 
     //Import controller
     App::import('Controller', 'News');
@@ -298,6 +297,25 @@ class AppController extends Controller {
 	
   }
   
+public function getUserTokens($userId = NULL)
+{
+        $tokens = array(
+		     'isRoot'=> false,
+		     'isAdmin'=> false,
+		     'member'=>false);
+  if($userId == NULL)
+  {
+    $userId = $this->Auth->user('id');
+  }
+  if($this->Auth->loggedIn())
+  {
+      $tokens['member'] = $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'memberActions');
+      $tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
+      $tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
+  }
+// debug($tokens);
+  return $tokens;
+}
   
   public function isAuthorized($user = null) {
 	$ret = false;
@@ -309,10 +327,10 @@ class AppController extends Controller {
 	{
 		return true;
 	}
-	
+	$tokens = $this->getUserTokens();
 	if($this->Auth->loggedIn())
 	{
-		if( $this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'memberActions') )
+		if( $tokens['member'] )
 		{
 		  if(in_array('*',$this->memberActions))
 		  {
@@ -324,7 +342,7 @@ class AppController extends Controller {
 		  }
 		}
 		
-		if( $this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'memberActions') )
+		if( $tokens['isAdmin'] )
 		{
 		  if(in_array('*',$this->administratorActions))
 		  {
@@ -335,7 +353,7 @@ class AppController extends Controller {
 			  return true;
 		  }
 		}
-		if( $this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'rootActions') )
+		if( $tokens['isRoot'] )
 		{		
 			return true;
 		}
@@ -349,6 +367,7 @@ class AppController extends Controller {
   
   public function getCompanyId()
   {
+    $companyId = NULL;
     if($this->Session->check('companyId') )
     {
       $companyId = $this->Session->read('companyId');
@@ -356,7 +375,10 @@ class AppController extends Controller {
     else
     {
       $company = $this->Company->find('first');
-      $companyId = $company['Company']['id'];
+      if(isset($company['Company']['id']))
+      {
+	    $companyId = $company['Company']['id'];
+      }
     }
 
     
@@ -424,6 +446,8 @@ public function getFunctionText($coefficients)
 	$this->Auth->allow();
    }
 
+    $this->Auth->flash['element'] = 'flash/auth';
+
     
 // if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))
 
@@ -467,7 +491,7 @@ public function getFunctionText($coefficients)
 
 	if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
 	{
-	  if($this->Auth->user('isRoot'))
+	  if($this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'rootActions'))
 	  {
 		      if(!$this->request->is('ssl'))
 		      {
