@@ -8,7 +8,13 @@ App::uses('AppController', 'Controller');
 class PhotosController extends AppController {
 
   var $publicActions = array('download');
+  var $administratorActions = array('*');
+
+
   var $uses = array('Photo', 'Media', 'Company');
+
+
+
 /**
  * index method
  *

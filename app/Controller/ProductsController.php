@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class ProductsController extends AppController {
   var $publicActions = array('index','view');
+  var $administratorActions = array('*');
   var $uses = array('Product');
   
 /**

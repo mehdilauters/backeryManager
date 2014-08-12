@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class ProductTypesController extends AppController {
   var $publicActions = array('index','view');
+  var $administratorActions = array('*');
 /**
  * index method
  *

@@ -11,7 +11,9 @@
  */
 
 class EventsController extends FullCalendarAppController {
-// 	var $uses = array('FullCalendar.Event');
+
+	//TODO check over companyId
+	var $administratorActions = array('*');
 	var $name = 'Events';
 
         var $paginate = array(

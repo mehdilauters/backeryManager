@@ -7,6 +7,10 @@ App::uses('AppController', 'Controller');
  */
 class OrderedItemsController extends AppController {
 
+//   var $memberActions = array('view');
+  var $administratorActions = array('*');
+
+
 /**
  * index method
  *

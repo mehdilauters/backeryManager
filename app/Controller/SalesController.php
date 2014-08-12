@@ -10,6 +10,9 @@ class SalesController extends AppController {
   var $helpers = array('Time', 'PhpExcel.PhpExcel');
   var $components = array('Functions');
   var $uses = array('Sale', 'Product', 'Shop', 'ProductType');
+
+  var $administratorActions = array('*');
+
 /**
  * index method
  *

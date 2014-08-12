@@ -7,6 +7,9 @@ App::uses('AppController', 'Controller');
  */
 class OrdersController extends AppController {
 	var $uses = array('Order', 'Company');
+
+  var $administratorActions = array('*');
+
 /**
  * index method
  *

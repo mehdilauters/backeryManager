@@ -14,6 +14,8 @@ class EventTypesController extends FullCalendarAppController {
 
 	var $name = 'EventTypes';
 
+ 	var $administratorActions = array('view');
+
         var $paginate = array(
             'limit' => 15
         );

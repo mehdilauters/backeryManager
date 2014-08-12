@@ -22,22 +22,23 @@ class ConfigController extends AppController {
  
   public function index() {
     $actions = array(
-      'importPhotos' => 'Importer les photos d\'un dossier',
+//       'importPhotos' => 'Importer les photos d\'un dossier',
       //'importUsers' => 'Importer les photos d\'un csv',
-      'importProducts' => 'Importer les produits d\'un csv',
+//       'importProducts' => 'Importer les produits d\'un csv',
+      'initAcl' => 'initAcl',
       'setAdmin/1' => 'set to admin',
       'setCompany/id' => 'set to company id',
-       'upgradeDbStructure/1' => 'upgrade DBStructure',
+      'upgradeDbStructure/1' => 'upgrade DBStructure',
       'dbBackup/0' => 'backup database',
       'setDebug/1' => 'activer debug',
       'dbBackup/0/1' => 'downloadSql',
-	  'dbBackup/1/1' => 'download Demo Sql',
+      'dbBackup/1/1' => 'download Demo Sql',
       'deleteSession' => 'deleteSession',
-	  'emailTest' => 'Test email',
-	  'phpInfo' => 'phpInfo',
-	  'console' => 'console',
-	  'noSSL' => 'noSSL',
-	  'importDb' => 'import db'
+      'emailTest' => 'Test email',
+      'phpInfo' => 'phpInfo',
+      'console' => 'console',
+      'noSSL' => 'noSSL',
+      'importDb' => 'import db'
     );
     $this->set('actions', $actions);
 	
@@ -50,6 +51,75 @@ class ConfigController extends AppController {
   {
   }
   
+
+  public function initAcl()
+  {
+/*
+ truncate aros_acos;
+truncate aros;
+truncate acos;
+*/
+
+    $aro = $this->Acl->Aro;
+    $groups = array();
+    $groups[] = array('alias' => 'Members');
+    $groups[] = array('alias' => 'Administrators', 'parent_id' => 1);
+    $groups[] = array('alias' => 'Root', 'parent_id' => 2);
+  
+    foreach($groups as $data)
+    {
+      $aro->create();
+      $aro->save($data);
+    }
+
+
+    $aros = array();
+    $users = $this->User->find('all');
+    foreach($users as $user)
+    {
+      $parentId = 1; // members
+      if($user['User']['isRoot'])
+      {
+	 $parentId = 2;
+      }
+      $aros[] = array('alias' => $user['User']['name'],
+		  'parent_id' => $parentId,
+		  'model' => 'User',
+		  'foreign_key' => $user['User']['id'],
+		  );
+    }
+
+    foreach($aros as $aroData)
+    {
+      $aro->create();
+      $aro->save($aroData);
+    }
+
+    $aco = $this->Acl->Aco;
+    $acos = array();
+    $acos[] = array('alias' => 'memberActions');
+    $acos[] = array('alias' => 'administratorActions');
+    $acos[] = array('alias' => 'rootActions');
+    foreach($acos as $acoData)
+    {
+      $aco->create();
+      $aco->save($acoData);
+    }
+
+
+
+
+    $this->Acl->allow('Members', 'memberActions');
+    $this->Acl->allow('Members/Administrators', 'administratorActions');
+    $this->Acl->allow('Members/Administrators/Root', 'rootActions');
+
+
+
+    debug($this->Acl->check('Members/Administrators', 'administratorActions'));
+    debug($this->Acl->check(array('model' => 'User', 'foreign_key'=>$this->Auth->user('id')), 'administratorActions'));
+
+  }
+
   public function console()
   {
 	$output = '';
