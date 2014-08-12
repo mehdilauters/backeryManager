@@ -313,7 +313,7 @@ public function getUserTokens($userId = NULL)
       $tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
       $tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
   }
-debug($tokens);
+// debug($tokens);
   return $tokens;
 }
   

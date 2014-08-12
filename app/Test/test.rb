@@ -361,12 +361,40 @@ def selectFirstOrder(driver)
   puts "selectFirstOrder"
   
   goto(driver,BaseUrl + "orders")
-  driver.find_element(:css => "#ordersIndexTable .actions a[title=Voir]").click;
   
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-  wait.until { driver.find_element(:css => ".addItem > a") }
+  goto(driver,
+    driver.find_element(:css => "#ordersIndexTable .actions a[title=Voir]").attribute("href")
+      )
   
 end
+
+
+ def selectFirstShop(driver)
+  puts "selectFirstShop"
+  goto(driver,BaseUrl )
+  goto(driver,
+    driver.find_element(:css => ".shopPreview .title a").attribute("href")
+      )
+  
+
+  
+end
+
+def selectFirstProduct(driver)
+  puts "selectFirstProduct"
+  
+  goto(driver,BaseUrl + "products" )
+  
+  
+  goto(driver,
+    driver.find_element(:css => ".slate a").attribute("href")
+  )
+  
+end
+
+
+
+
   
 def addItem(driver, item)
   puts "AddItem #{item.to_s}"
@@ -524,6 +552,10 @@ end
   
   goto(driver, BaseUrl + "orders")
   goto(driver, BaseUrl + "orders/add")
+  
+  selectFirstOrder(driver)
+  selectFirstShop(driver)
+  selectFirstProduct(driver)
   
 
 

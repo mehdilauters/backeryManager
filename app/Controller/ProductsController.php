@@ -58,7 +58,7 @@ class ProductsController extends AppController {
 
     $conditions = array();
     $conditions = array('Product.' . $this->Product->primaryKey => $id);
-    $tokens = getUserTokens();
+    $tokens = $this->getUserTokens();
     if(!$tokens['isAdmin'])
     {
       $conditions[] = 'Product.customer_display';

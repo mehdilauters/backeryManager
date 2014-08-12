@@ -173,17 +173,17 @@
 	    <?php if(isset($data['entries'])): ?>
 	      introSteps.push(
               {
-                element: '#result_shop_<?php echo array_keys($data['entries'])[0] ?>',
+                element: '#result_shop_<?php /* php3 compatibility */ echo $entries = array_keys($data['entries']); $entries[0] ?>',
                 intro: "Pour chaque magasin",
 		position: 'right'
               },
               {
-                element: '#total_shop_<?php echo array_keys($data['entries'])[0] ?>_week_<?php echo $firstWeek ?>',
+                element: '#total_shop_<?php echo $entries[0] ?>_week_<?php echo $firstWeek ?>',
                 intro: "Retrouvez les sous-totaux semaine par semaine",
 		position: 'right'
               },
               {
-                element: '#total_shop_<?php echo array_keys($data['entries'])[0] ?>',
+                element: '#total_shop_<?php echo $entries[0] ?>',
                 intro: "Le sous-total pour le magasin complet",
 		position: 'right'
               },
