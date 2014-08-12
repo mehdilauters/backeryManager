@@ -214,7 +214,7 @@ class UsersController extends AppController {
 					    'User.company_id' => $this->getCompanyId()
 					      )));
 		
-			$authRes = $this->Auth->login($user['User']);
+			$authRes = $this->Auth->login($user['User']); //TODO correct message if wrong user/pwd
 			//TODO with auth scope??
 			if($this->Auth->user('company_id') != $this->getCompanyId())
 			{
