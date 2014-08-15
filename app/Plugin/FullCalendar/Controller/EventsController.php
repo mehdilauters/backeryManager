@@ -176,7 +176,7 @@ class EventsController extends FullCalendarAppController {
         // The feed action is called from "webroot/js/ready.js" to get the list of events (JSON)
 	function feed($idType = null, $start = null, $end = null) {
 		$this->layout = "ajax";
-		$vars = $this->params['url'];
+		$vars = $this->request['named'];
 		if($start == null)
 		{
 		  $start = $vars['start'];
@@ -426,7 +426,7 @@ class EventsController extends FullCalendarAppController {
 
         // The update action is called from "webroot/js/ready.js" to update date/time when an event is dragged or resized
 	function update() {
-		$vars = $this->params['url'];
+		$vars = $this->request['named'];
 		$this->Event->id = $vars['id'];
 		$this->Event->saveField('start', $vars['start']);
 		$this->Event->saveField('end', $vars['end']);

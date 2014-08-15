@@ -250,7 +250,7 @@ class SalesController extends AppController {
 			// debug('product #'.$productId.' shop #'.$shopId.' '.$name, 'debug');
 		    $coeffs = $reg->getCoefficients();
 		    $approximations[$productId][$shopId][$name] = $coeffs;
-		    $this->log('product #'.$productId.' shop #'.$shopId.' '.$name.' '.$this->getFunctionText($coeffs), 'debug');
+// 		    $this->log('product #'.$productId.' shop #'.$shopId.' '.$name.' '.$this->getFunctionText($coeffs), 'debug');
 		  }
 	    }
 	}

@@ -488,7 +488,7 @@ public function getFunctionText($coefficients)
 		  $this->requestAction(array('plugin'=> '', 'controller' => 'users', 'action' => 'autologin'));
 	  }
 	}
-	else
+	if($this->Auth->loggedIn())
 	{
 	  if( Configure::read('Settings.Security.ssl') && !($this->Session->check('noSSL') && $this->Session->read('noSSL')) && $this->action != 'noSSL')
 	  {
