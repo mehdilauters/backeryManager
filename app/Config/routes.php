@@ -25,11 +25,11 @@
  * its action called 'display', and we pass a param to select the view file
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
-	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
+	Router::connect('/:company/', array('controller' => 'pages', 'action' => 'display', 'home'));
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
-	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+	Router::connect('/:company/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
 /**
  * Load all plugin routes.  See the CakePlugin documentation on
@@ -41,17 +41,17 @@
 	Router::mapResources('sales');
 	Router::parseExtensions();
 
-	Router::connect('/magasins/details/*', array('controller' => 'shops', 'action'=>'view')); 	
-	Router::connect('/magasins/:action/*', array('controller' => 'shops')); 
-	Router::connect('/magasins', array('controller' => 'shops')); 
+	Router::connect('/:company/magasins/details/*', array('controller' => 'shops', 'action'=>'view')); 	
+	Router::connect('/:company/magasins/:action/*', array('controller' => 'shops')); 
+	Router::connect('/:company/magasins', array('controller' => 'shops')); 
 
-	Router::connect('/typesProduits/details/*', array('controller' => 'productTypes', 'action'=>'view')); 	
-	Router::connect('/typesProduits/:action/*', array('controller' => 'productTypes')); 
-	Router::connect('/typesProduits', array('controller' => 'productTypes')); 
+	Router::connect('/:company/typesProduits/details/*', array('controller' => 'productTypes', 'action'=>'view')); 	
+	Router::connect('/:company/typesProduits/:action/*', array('controller' => 'productTypes')); 
+	Router::connect('/:company/typesProduits', array('controller' => 'productTypes')); 
 
-	Router::connect('/produits/details/*', array('controller' => 'products', 'action'=>'view')); 	
-	Router::connect('/produits/:action/*', array('controller' => 'products')); 
-	Router::connect('/produits', array('controller' => 'products')); 
+	Router::connect('/:company/produits/details/*', array('controller' => 'products', 'action'=>'view')); 	
+	Router::connect('/:company/produits/:action/*', array('controller' => 'products')); 
+	Router::connect('/:company/produits', array('controller' => 'products')); 
 
 	
 /**

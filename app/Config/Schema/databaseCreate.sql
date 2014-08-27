@@ -367,3 +367,32 @@ ALTER TABLE `results_entries`
 ALTER TABLE `results`
   ADD CONSTRAINT `fk_results_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
 
+DELIMITER |
+
+ 
+ 
+CREATE FUNCTION translate(V_string VARCHAR(255), V_from VARCHAR(255), V_to VARCHAR(255)) RETURNS VARCHAR(255) DETERMINISTIC
+BEGIN
+ 
+DECLARE i INT;
+SET i = CHAR_LENGTH(V_from);
+ 
+WHILE i > 0 DO
+SET V_string = REPLACE(V_string, SUBSTR(V_from, i, 1), SUBSTR(V_to, i, 1));
+SET i = i - 1;
+END WHILE;
+ 
+RETURN V_string;
+ 
+END;
+|
+
+CREATE FUNCTION escapeLink(V_FROM VARCHAR(255)) RETURNS VARCHAR(255) DETERMINISTIC
+BEGIN
+declare RES VARCHAR(255);
+SET NAMES utf8;
+SET RES = translate(V_FROM, ' êé&"''(èçà)=+~#{[|`\^@]îï', '-ee----eca-------------ii');
+RETURN RES;
+END;
+|
+DELIMITER ;
