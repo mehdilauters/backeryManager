@@ -369,7 +369,7 @@ public function getUserTokens($userId = NULL)
   {
     $companyId = NULL;
 
-debug($this->request->params);
+// debug($this->request->params);
 
     $subdomain = explode('.', $_SERVER['HTTP_HOST']);
     if(count($subdomain) != 1)

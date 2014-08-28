@@ -1,5 +1,18 @@
 <?php
-  
+/**
+* setup:
+*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop
+*    optional
+*	apt-get install ruby
+*       gem install selenium
+* git clone https://github.com/mehdilauters/bakeryManager.git
+*  chown -R www-data:www-data bakeryManager
+* a2enmod rewrite
+* nano /etc/apache2/sites-enabled/000-default 
+* AllowOverride All
+* service apache2 restart
+*
+*/  
   Configure::write('Settings.Medias.Photos.path', APP.'tmp/');  
 
   Configure::write('Settings.Medias.Photos.xPreview', 200);  
