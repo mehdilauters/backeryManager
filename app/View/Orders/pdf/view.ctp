@@ -18,7 +18,10 @@
 	  <?php if($order['Order']['discount'] != 0 ): ?>
 		  <p>Remise de <?php echo $order['Order']['discount'] ?>%</p>
 	  <?php endif; ?>
-
+  <?php if($order['Order']['comment'] != ''): ?>
+    <?php echo $order['Order']['comment'] ?>
+    <br/>
+  <?php endif; ?>
   <h3><?php echo __('Totaux'); ?></h3>
   <table cellpadding = "0" cellspacing = "0" class="table" id="tvaTotal" >
     <tr>

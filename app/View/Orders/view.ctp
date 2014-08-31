@@ -36,7 +36,10 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
 		<li class="index" ><?php echo $this->Html->link($this->Html->image('icons/view-list-details.png', array('alt' => '')).' '.__('Lister les commandes'), array('action' => 'index'),array('escape' => false)); ?> </li>
 	</ul>
 </div>
-
+  <?php if($order['Order']['comment'] != ''): ?>
+    <?php echo $order['Order']['comment'] ?>
+    <br/>
+  <?php endif; ?>
 <h3><?php echo __('Totaux'); ?></h3>
 <table cellpadding = "0" cellspacing = "0" class="table" >
 
