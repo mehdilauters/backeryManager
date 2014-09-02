@@ -115,7 +115,7 @@ class ProductsController extends AppController {
       }
 
       $media = $this->Product->Media->findById($this->request->data['Product']['media_id']);
-      if ($media['User']['company_id'] != $this->getCompanyId()) {
+      if (!empty($media) && $media['User']['company_id'] != $this->getCompanyId()) {
 	throw new NotFoundException(__('Invalid user for this company'));
       }
 
@@ -159,7 +159,7 @@ class ProductsController extends AppController {
       }
 
       $media = $this->Product->Media->findById($this->request->data['Product']['media_id']);
-      if ($media['User']['company_id'] != $this->getCompanyId()) {
+      if (!empty($media) && $media['User']['company_id'] != $this->getCompanyId()) {
 	throw new NotFoundException(__('Invalid media for this company'));
       }
       if ($this->Product->save($this->request->data)) {

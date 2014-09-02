@@ -104,7 +104,7 @@ class ProductTypesController extends AppController {
       $this->ProductType->create();
 	  $this->request->data['ProductType']['company_id'] = $this->getCompanyId();
       $media = $this->ProductType->Media->findById($this->request->data['ProductType']['media_id']);
-      if ($media['User']['company_id'] != $this->getCompanyId()) {
+      if (!empty($media) && $media['User']['company_id'] != $this->getCompanyId()) {
 	throw new NotFoundException(__('Invalid media for this company'));
       }
       if ($this->ProductType->save($this->request->data)) {
@@ -137,7 +137,7 @@ class ProductTypesController extends AppController {
 	  }
 
       $media = $this->ProductType->Media->findById($this->request->data['Product']['media_id']);
-      if ($media['User']['company_id'] != $this->getCompanyId()) {
+      if (!empty($media) && $media['User']['company_id'] != $this->getCompanyId()) {
 	throw new NotFoundException(__('Invalid media for this company'));
       }
 
