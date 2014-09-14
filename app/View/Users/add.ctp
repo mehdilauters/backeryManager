@@ -1,16 +1,56 @@
 <div class="users form">
-<?php echo $this->Form->create('User'); ?>
+<?php echo $this->Form->create('User', array('class'=>'form-horizontal')); ?>
 	<fieldset>
 		<legend><?php echo __('Add User'); ?></legend>
 	<?php
-		echo $this->Form->input('media_id');
-		echo $this->Form->input('email');
-		echo $this->Form->input('password', array('value'=>''));
-		echo $this->Form->input('name');
-		echo $this->Form->input('address');
-		echo $this->Form->input('phone');
-		echo $this->Form->input('rib_on_orders');
-		echo $this->Form->input('discount');
+		echo $this->Form->input('media_id', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('email', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('password', array('value'=>'','label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('name', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('address', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('phone', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('rib_on_orders', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('discount', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

@@ -309,9 +309,16 @@ public function getUserTokens($userId = NULL)
   }
   if($this->Auth->loggedIn())
   {
-      $tokens['member'] = $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'memberActions');
-      $tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
-      $tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
+      try
+      {
+	$tokens['member'] = $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'memberActions');
+	$tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
+	$tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
+      }
+      catch(Exception $e)
+      {
+	$this->log('ACL error '.$e, 'debug');
+      }
   }
 // debug($tokens);
   return $tokens;
@@ -377,7 +384,7 @@ public function getUserTokens($userId = NULL)
       //     debug($subdomain);
       $subdomain = array_shift($subdomain);
       $this->Company->contain();
-      $company = $this->Company->find('first', array('conditions'=>array(' escapeLink(Company.title) like "%'.$subdomain.'%"')));
+      $company = $this->Company->find('first', array('conditions'=>array('Company.domain_name' => $subdomain)));
       $companyId = $company['Company']['id'];
     }
     else

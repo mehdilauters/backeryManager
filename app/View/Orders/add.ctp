@@ -1,14 +1,37 @@
 ﻿<div class="orders form">
-<?php echo $this->Form->create('Order'); ?>
+<?php echo $this->Form->create('Order', array('class'=>'form-horizontal')); ?>
 	<fieldset>
 		<legend><?php echo __('Add Order'); ?></legend>
 	<?php
-		echo $this->Form->input('shop_id', array('label' => 'Magasin'));
-		echo $this->Form->input('user_id', array('label' => 'Compte client'));
+		echo $this->Form->input('shop_id',array('label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Magasin'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('user_id', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Compte Client'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
 		//echo $this->Form->input('status',array('options'=>array('reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée')));
-		echo $this->Form->input('delivery_date', array('type'=>'text', 'class'=>'datetimepicker', 'label' => 'Date de livraison' ));
+		echo $this->Form->input('delivery_date', array('type'=>'text',
+					    'label'=>array(
+							  'class'=>'col-sm-3 control-label', 'text'=>'Date de livraison'
+						  ),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control datetimepicker'
+					  ));
 		//echo $this->Form->input('discount');
-		echo $this->Form->input('comment', array('label' => 'Commentaires'));
+		echo $this->Form->input('comment',array('label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Commentaires'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control textEditor'
+					  ));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(array('label'=>__('Submit'), 'id'=>'submit')); ?>

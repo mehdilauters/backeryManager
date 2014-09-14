@@ -1,19 +1,61 @@
 <div class="orderedItems form">
-<?php echo $this->Form->create('OrderedItem'); ?>
+<?php echo $this->element('Orders/Preview', array('order'=>$this->request->data['Order'])); ?>
+<?php echo $this->Form->create('OrderedItem', array('class'=>'form-horizontal')); ?>
 	<fieldset>
 		<legend><?php echo __('Edit Ordered Item'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('order_id');
 		$date = new DateTime($this->request->data['OrderedItem']['created']);
 		$date = $date->format('d/m/Y');
-		echo $this->Form->input('created', array('type'=>'text', 'class'=>'datepicker', 'label' => 'Date', 'value'=>$date ));
-		echo $this->Form->input('product_id');
-		echo $this->Form->input('tva');
-		echo $this->Form->input('price');
-		echo $this->Form->input('unity');
-		echo $this->Form->input('quantity', array('class'=>'spinner'));
-		echo $this->Form->input('comment');
+		echo $this->Form->input('created', array('type'=>'text', 'value'=>$date,
+					'label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Date'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control datepicker'
+					  ));
+		echo $this->Form->input('product_id', array(
+					'label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Produit'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('tva', array(
+					'label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Tva'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control spinner'
+					  ));
+		echo $this->Form->input('price', array(
+					'label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Prix'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control spinner'
+					  ));
+		echo $this->Form->input('unity', array(
+					'label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Prix calculé à l\'unité'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('quantity', array(
+					'label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Quantité'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control spinner'
+					  ));
+		echo $this->Form->input('comment', array(
+					'label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Commentaire'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control texteditor'
+					  ));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

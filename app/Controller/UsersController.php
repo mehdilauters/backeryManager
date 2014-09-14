@@ -7,8 +7,8 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
-	var $publicActions = array('login', 'add', 'autologin');
-	var $memberActions = array('logout');
+	var $publicActions = array('login', 'add', 'autologin','logout');
+	var $memberActions = array();
 	var $administratorActions = array('*');
 
 /**
