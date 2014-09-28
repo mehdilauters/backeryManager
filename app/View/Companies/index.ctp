@@ -9,6 +9,7 @@
 			<th><?php echo $this->Paginator->sort('capital'); ?></th>
 			<th><?php echo $this->Paginator->sort('siret'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('domainName'); ?></th>
 			<th><?php echo $this->Paginator->sort('title'); ?></th>
 			<th><?php echo $this->Paginator->sort('email'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -24,6 +25,7 @@
 		<td><?php echo h($company['Company']['capital']); ?>&nbsp;</td>
 		<td><?php echo h($company['Company']['siret']); ?>&nbsp;</td>
 		<td><?php echo h($company['Company']['name']); ?>&nbsp;</td>
+		<td><?php echo h($company['Company']['domain_name']); ?>&nbsp;</td>
 		<td><?php echo h($company['Company']['title']); ?>&nbsp;</td>
 		<td><?php echo h($company['Company']['email']); ?>&nbsp;</td>
 		<td class="actions">

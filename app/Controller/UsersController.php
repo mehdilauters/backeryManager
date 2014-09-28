@@ -255,7 +255,7 @@ class UsersController extends AppController {
 			if(!$tokens['isRoot'] && $this->Auth->user('company_id') != $this->getCompanyId())
 			{
 			      $this->Session->setFlash(
-					__('Invalid company'),
+					__('Invalid company for login'),
 					'flash/fail'
 				);
 			    $this->logout();
@@ -325,7 +325,7 @@ class UsersController extends AppController {
 			if(isset($user['User']) && $user['User']['company_id'] != $this->getCompanyId())
 			{
 			      $this->Session->setFlash(
-					__('Invalid company'),
+					__('Invalid company for autologin'),
 					'flash/fail'
 				);
 			    $this->log('invalid autologin cookie key for user '.$this->Cookie->read('bakeryManagerUser.id'), 'debug');

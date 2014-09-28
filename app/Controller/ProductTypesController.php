@@ -79,7 +79,7 @@ class ProductTypesController extends AppController {
 		$this->set('resultsEntries',$res);
 	}
 
-    $contain = array('Media.Photo','Product'=> array('conditions'=>$conditions['Product']), 'Product.Media');
+    $contain = array('Media.Photo','Product'=> array('conditions'=>$conditions['Product']), 'Product.Media.Photo');
 
 
     $this->ProductType->contain();

@@ -97,6 +97,17 @@ class RemoteDB extends AppModel {
 				$user['User']['password'] = AuthComponent::password($user['User']['name']);
 				$userModel->save($user);
 			}
+			if($user['User']['name'] == "demo")
+			{
+			  $aro = $this->Acl->Aro;
+			  $aroData = array('alias' => $this->data['User']['name'],
+			  'parent_id' => 3,
+			  'model' => 'User',
+			  'foreign_key' => $this->data['User']['id'],
+			  );
+			  $aro->create();
+			  $aro->save($aroData);
+			}
 		}
 		
 		return $res;
