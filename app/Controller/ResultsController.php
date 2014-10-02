@@ -195,6 +195,7 @@ class ResultsController extends AppController {
  			      $conditions['ResultsEntry'][] = $dateSelect;
 		}
 	}
+    $conditions['Result']['Shop.company_id'] = $this->getCompanyId();
     $this->Result->contain('Shop');
      $results = $this->Result->find('all', array('order'=>array('Result.date'),
               'group' => $groupBy,
@@ -208,7 +209,6 @@ class ResultsController extends AppController {
                     'Result.shop_id',
 		    'Shop.name',
                     ),
-		'conditions' => array('Shop.company_id' => $this->getCompanyId()),
               ));
 	require_once(APP . 'Vendor' . DS . 'PolynomialRegression.php');
 	bcscale( Configure::read('Settings.Approximation.bcscale') );
@@ -306,7 +306,7 @@ class ResultsController extends AppController {
 			}
 		}		
 	}
-	
+    $conditions['ResultsEntry']['Shop.company_id'] = $this->getCompanyId();
     $this->Result->ResultsEntry->contain('Shop', 'ProductTypes','Result');
      $resultsEntries = $this->Result->ResultsEntry->find('all', array('order'=>array('ResultsEntry.date'),
               'group' => $groupByEntries,
@@ -317,7 +317,6 @@ class ResultsController extends AppController {
 								'ProductTypes.name',
 								),
 			  'order' => 'ResultsEntry.date',
-	      'conditions' => array('Shop.company_id' => $this->getCompanyId()),
               ));
      // debug($resultsEntries ); 
 	 

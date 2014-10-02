@@ -73,7 +73,7 @@ if(isset($this->request->data['group']))
 		<div id="resultsEntriesChart_<?php echo $config['id'] ?>" class="chartDiv" >Chargement en cours... <img src="<?php echo $this->webroot ?>img/icons/load.gif" /></div>
 		<div class="control"></div>
 	</div>
-	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?>" >
+	<div class="<?php if(!$config['interactive']) echo 'hideJs' ?> plotData" >
 		<table id="resultsEntriesStatValues_<?php echo $config['id'] ?>Legend" class="hideJs">
 			<tr>
 				<td class="noDisplay approxColumn label_curve_totalApprox" >Total € (approximation)</td>
