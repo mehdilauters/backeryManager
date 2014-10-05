@@ -568,6 +568,16 @@ public function results()
     {
       $data['Sale']['id'] = $product['saleId'];
     }
+    else
+    {
+	$tmpRes = $this->Sale->find('count', array('conditions'=>array('date'=>$data['Sale']['date'], 'shop_id' => $data['Sale']['shop_id'], 'product_id'=> $data['Sale']['product_id'],
+	'Shop.company_id'=>$this->getCompanyId())));
+	if($tmpRes != 0)
+	{
+	  $this->Session->setFlash(__('Veuillez vérifier vos données et revalider'),'flash/fail');
+	  $this->redirect(array('action' => 'add'));
+	}
+    }
     if (!$this->Sale->save($data)) {
        $error ++;
     }

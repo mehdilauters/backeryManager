@@ -755,14 +755,16 @@ public function getData($dateStart = '', $dateEnd = '')
 	$errors = 0;
 	
 
+	$date = $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s');
 
 
 	foreach($this->request->data['Result'] as $shopId => $result)
 	{
+
 	    $this->Result->create();
 	    $resultData = array();
 	    $resultData['Result'] = array(
-	  'date' => $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s'),
+	  'date' => $date,
 	  'shop_id'=> $shopId,
 	      );
 	      if($result['cash'] != '')
@@ -780,7 +782,17 @@ public function getData($dateStart = '', $dateEnd = '')
 	      }
 	      if($result['resultId'] != '')
 	      {
-	  $resultData['Result']['id'] = $result['resultId'];
+		  $resultData['Result']['id'] = $result['resultId'];
+	      }
+	      else
+	      {
+		  $tmpRes = $this->Result->find('count', array('conditions'=>array('date'=>$date, 'shop_id' => $shopId, 'Shop.company_id'=>$this->getCompanyId())));
+		  if($tmpRes != 0)
+		  {
+		      $this->Session->setFlash(__('Erreur à l\'enregistrement, veuillez vérifier vos saisies et revalider'),'flash/fail');
+		      $this->log('probably several tab opened: results/add failed', 'debug');
+		      return $this->redirect(array('action' => 'add'));
+		  }
 	      }
 	  $resultData['Result']['comment'] = $result['comment'];
 	  if (!$this->Result->save($resultData)) {
