@@ -2,6 +2,7 @@
 App::uses('AppModel', 'Model');
 
 App::uses('User', 'Model');
+App::uses('Aro', 'Model');
 
 /**
  * Result Model
@@ -96,6 +97,15 @@ class RemoteDB extends AppModel {
 			{
 				$user['User']['password'] = AuthComponent::password($user['User']['name']);
 				$userModel->save($user);
+				$aro = new Aro();
+				$aroObject = $aro->findByForeignKey($user['User']['id']);
+				$aroObject['Aro']['alias'] = $user['User']['name'];
+				$aro->save($aroObject);
+				if($user['User']['name'] == 'demo')
+				{
+				      $aro->create();
+				      $aro->save(array('alias' => $user['User']['name'], 'parent_id' => 3));
+				}
 			}
 		}
 		
