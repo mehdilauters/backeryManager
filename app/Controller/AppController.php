@@ -368,19 +368,41 @@ public function getUserTokens($userId = NULL)
   public function getCompanyId()
   {
     $companyId = NULL;
-    if($this->Session->check('companyId') )
+
+// debug($this->request->params);
+    $companyCount = $this->Company->find('count');
+    if($companyCount == 1)
     {
-      $companyId = $this->Session->read('companyId');
+      $company = $this->Company->find('first');
+      $companyId = $company['Company']['id'];
     }
     else
     {
-      $company = $this->Company->find('first');
-      if(isset($company['Company']['id']))
-      {
-	    $companyId = $company['Company']['id'];
+	$subdomain = explode('.', $_SERVER['HTTP_HOST']);
+	if(count($subdomain) != 1)
+	{
+	  //     debug($subdomain);
+	  $subdomain = array_shift($subdomain);
+	  $this->Company->contain();
+	  $company = $this->Company->find('first', array('conditions'=>array('Company.domain_name' => $subdomain)));
+	  $companyId = $company['Company']['id'];
+	}
+	else
+	{
+	  if($this->Session->check('companyId') )
+	  {
+	    $companyId = $this->Session->read('companyId');
+	  }
+	  else
+	  {
+	    $company = $this->Company->find('first');
+	    if(isset($company['Company']['id']))
+	    {
+		  $companyId = $company['Company']['id'];
+	    }
+	  }
+	}
       }
-    }
-
     
     return $companyId;
   }
