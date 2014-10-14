@@ -21,7 +21,5 @@ foreach($actions as $action => $name)
 </div>
 <div>
   App version :
-  <?php
-      echo @file_get_contents(APP.'Version.txt');
-    ?>
+  <a href="https://github.com/mehdilauters/bakeryManager/commit/<?php echo @file_get_contents(APP.'Version.txt'); ?>" ><?php echo @file_get_contents(APP.'Version.txt'); ?></a>
 </div>
