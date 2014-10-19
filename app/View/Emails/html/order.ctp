@@ -39,3 +39,5 @@
 	  <div>
 		  <p>Arrêtée à la somme de <b><?php echo round($total['total']['TTC'],2); ?>€</b></p>
 	  </div>
+</center>
+</div>

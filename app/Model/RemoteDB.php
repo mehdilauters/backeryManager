@@ -100,11 +100,14 @@ class RemoteDB extends AppModel {
 				$aro = new Aro();
 				$aroObject = $aro->findByForeignKey($user['User']['id']);
 				$aroObject['Aro']['alias'] = $user['User']['name'];
-				$aro->save($aroObject);
+				if($aroObject['Aro']['alias'] != NULL)
+				{
+				  $aro->save($aroObject);
+				}
 				if($user['User']['name'] == 'demo')
 				{
 				      $aro->create();
-				      $aro->save(array('alias' => $user['User']['name'], 'parent_id' => 3));
+				      $aro->save(array('foreign_key'=>$user['User']['id'],'model'=>'User', 'alias' => $user['User']['name'], 'parent_id' => 3));
 				}
 			}
 		}

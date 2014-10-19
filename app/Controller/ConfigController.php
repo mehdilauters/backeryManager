@@ -135,7 +135,8 @@ truncate acos;
     if ($this->request->is('post')) {
 	$mail = array(
 				'email' => $this->request->data['User']['email'],
-				'subject' => 'TestMail '.date('d/m/Y')
+				'subject' => 'TestMail '.date('d/m/Y'),
+				'view' => 'test'
 				);
 	$this->sendMail($mail);
     }

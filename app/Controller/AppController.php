@@ -196,7 +196,7 @@ class AppController extends Controller {
 	}
 	
 	$normalAddr = '';
-	if( Configure::read('Settings.demo.active') )
+	if( Configure::read('Settings.demo.active') && ! Configure::read('Settings.email.debug.status') )
 	{
 	     if($this->Session->check('demoEmail'))
 	     {

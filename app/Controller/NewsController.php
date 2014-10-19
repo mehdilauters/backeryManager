@@ -50,8 +50,8 @@ class NewsController extends AppController {
 		$dateStart = new DateTime('yesterday');
 		$dateStart->setTime(23,59);
 
-		$dateEnd = new DateTime('tomorrow');
-		$dateEnd->setTime(0,0);
+		$dateEnd = new DateTime('today');
+		$dateEnd->setTime(23,59);
 		//Import controller
 		App::import('Controller', 'FullCalendar.events');
 		$eventsController = new EventsController();

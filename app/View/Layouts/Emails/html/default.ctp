@@ -21,15 +21,28 @@
 <head>
 <?php $path = APP.'webroot/css/generalEmail.css';
 	$css = '<style>'.file_get_contents($path).'</style>';
-	echo $css;
+	echo str_replace('WEBROOT', $this->Html->url('/', true), $css);
  ?>
 
 
 	<title><?php echo $title_for_layout;?></title>
 </head>
 <body>
-	<?php echo $this->fetch('content');?>
+  <div id="container" >
+    <header>
+<!--	  <div id="logo">
+		  <h1>
+			  <a href="<?php echo $this->webroot ?>">Boulangerie</a>
+		  </h1>
+		  <?php if(isset($company['Company'])) { echo $company['Company']['title']; } ?>
+	  </div>-->
+    </header>
+	  <?php echo $this->fetch('content');?>
 
-	<div id="footer" ><a href="<?php echo $this->Html->url('/', true); ?>" ><?php echo $this->Html->url('/', true); ?></a></div>
+	  <div id="footer" >
+		<span>Editée le <?php echo date('d/m/Y H:i'); ?></span><br/>
+		<a href="<?php echo $this->Html->url('/', true); ?>" ><?php echo $this->Html->url('/', true); ?></a>
+	  </div>
+  </div>
 </body>
 </html>

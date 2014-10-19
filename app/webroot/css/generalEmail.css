@@ -1,3 +1,54 @@
+
+html, body{
+/*   background-color: #fdda9e; */
+  margin:0;
+/*   color: white; */
+}
+#container{
+  margin:10%;
+  margin-top:0px;
+  margin-bottom:2%;
+/*   background-image:url("WEBROOTimg/designV2/wood.jpg"); */
+  background-repeat:y-repeat;
+}
+
+
+header {
+/*     background-image: url("WEBROOTimg/designV2/header.png"); */
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+/*     height: 300px; */
+    margin: 0 -20px;
+    padding: 0;
+}
+
+#logo h1{
+  margin: 0px;
+  margin-bottom:5px;
+  font-size: 22px;
+}
+
+#logo
+{
+    width:210px;
+    height:105px;
+float:right;
+margin-right:10%;
+/*     margin-top:150px; */
+    /*background: #fdda9e; */
+/*     background-image:url("WEBROOTimg/designV2/pannel.png"); */
+    background-size: contain;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-repeat:no-repeat; 
+    padding-top:40px;
+    font-size: 15px;
+    color:#5e380c;
+    text-align: center
+}
+
 .order.email table.header {
  width:100%;   
 }
@@ -15,4 +66,9 @@ table.table td, table.table th{
     border:1px black solid;
     text-align:center;
     min-width:20%;
+}
+
+#footer
+{
+ font-size:0.6em; 
 }
