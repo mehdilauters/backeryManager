@@ -384,32 +384,39 @@ public function getUserTokens($userId = NULL)
     $companyId = NULL;
 
 // debug($this->request->params);
-
-    $subdomain = explode('.', $_SERVER['HTTP_HOST']);
-    if(count($subdomain) != 1)
+    $companyCount = $this->Company->find('count');
+    if($companyCount == 1)
     {
-      //     debug($subdomain);
-      $subdomain = array_shift($subdomain);
-      $this->Company->contain();
-      $company = $this->Company->find('first', array('conditions'=>array('Company.domain_name' => $subdomain)));
+      $company = $this->Company->find('first');
       $companyId = $company['Company']['id'];
     }
     else
     {
-      if($this->Session->check('companyId') )
-      {
-	$companyId = $this->Session->read('companyId');
-      }
-      else
-      {
-	$company = $this->Company->find('first');
-	if(isset($company['Company']['id']))
+	$subdomain = explode('.', $_SERVER['HTTP_HOST']);
+	if(count($subdomain) != 1)
 	{
-	      $companyId = $company['Company']['id'];
+	  //     debug($subdomain);
+	  $subdomain = array_shift($subdomain);
+	  $this->Company->contain();
+	  $company = $this->Company->find('first', array('conditions'=>array('Company.domain_name' => $subdomain)));
+	  $companyId = $company['Company']['id'];
+	}
+	else
+	{
+	  if($this->Session->check('companyId') )
+	  {
+	    $companyId = $this->Session->read('companyId');
+	  }
+	  else
+	  {
+	    $company = $this->Company->find('first');
+	    if(isset($company['Company']['id']))
+	    {
+		  $companyId = $company['Company']['id'];
+	    }
+	  }
 	}
       }
-    }
-
     
     return $companyId;
   }
