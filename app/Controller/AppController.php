@@ -169,7 +169,8 @@ class AppController extends Controller {
 							'data' => array(),
 							'subject' => '',
 							'message' => 'Hello World',
-							'attachment' => NULL
+							'attachment' => NULL,
+							'layout' => 'default',
 					);
 					
 	$config = array_merge($configDefault, $config);
@@ -225,7 +226,7 @@ class AppController extends Controller {
     $email->from(array(Configure::read('Settings.email.from.email') => Configure::read('email.from.name')))
 	->sender(Configure::read('Settings.email.from.email'), Configure::read('email.from.name'))
         ->to($emailAddr)
-        ->template($config['view'], 'default')
+        ->template($config['view'], $config['layout'])
         ->viewVars($config['data'])
         ->subject($config['subject']);
 
@@ -235,7 +236,13 @@ class AppController extends Controller {
 	{
 	  $emailAddr = implode(', ', $emailAddr);
 	}
-	$this->log('Email to '.$emailAddr.' : '.$config['subject'].', attachment: '.$config['attachment'], 'email');
+	
+	$attachment = 'none';
+	if(is_array($config['attachment']))
+	{
+	  $attachment = join(', ', array_keys($config['attachment']));
+	}
+	$this->log('Email to '.$emailAddr.' : '.$config['subject'].', attachment: '.$attachment, 'email');
 	$this->Session->setFlash('Email to '.$emailAddr.$normalAddr.' : '.$config['subject'],'flash/ok');
   }
   

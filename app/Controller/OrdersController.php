@@ -121,7 +121,11 @@ class OrdersController extends AppController {
 		$order = $this->Order->findById($id);
 		$order['Order']['status'] = 'emailed';
 		$this->Order->save($order);
-		$this->redirect('/orders/view/'.$id);
+	      if (!empty($this->request->params['requested']))
+	      {
+		return;
+	      }
+		return $this->redirect('/orders/view/'.$id);
 	}
 	
 /**

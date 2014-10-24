@@ -27,6 +27,10 @@ class ResultsController extends AppController {
         $dateStart = $this->request->data['dateStart'];
       }
     }
+    else
+    {
+      $dateStart = str_replace('-','/',$dateStart);
+    }
 
     if($dateEnd == NULL)
     {    
@@ -37,7 +41,10 @@ class ResultsController extends AppController {
         $dateEnd = $this->request->data['dateEnd'];
       }
     }
-
+    else
+    {
+      $dateEnd = str_replace('-','/',$dateEnd);
+    }
 
     $this->Result->contain();
     $this->Result->contain('Shop','ResultsEntry');

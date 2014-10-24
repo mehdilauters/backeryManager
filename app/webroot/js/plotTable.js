@@ -276,7 +276,7 @@ function curveDisplay(chartId, curveId, status)
     
     );
 	
-	html = '<div id="controlChart_'+chartId+'" ><div class="alert alert-info">Cochez/décochez les cases ci-dessous pour afficher/masquer la courbe souhaitée</div><ul class="controlChart">';
+	html = '<div id="controlChart_'+chartId+'" ><div class="alert alert-info">Clic gauche pour zoomer, clic droit pour dézoomer<br/>Cochez/décochez les cases ci-dessous pour afficher/masquer la courbe souhaitée</div><ul class="controlChart">';
 	var found = false;
 	var i = 0;
 	for(var x in window[chartVarName].series)
