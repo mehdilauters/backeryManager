@@ -53,6 +53,10 @@
 	Router::connect('/produits/:action/*', array('controller' => 'products')); 
 	Router::connect('/produits', array('controller' => 'products')); 
 
+
+// to add company selection by URL
+// 	Router::connect('/:company/', array('controller' => 'pages', 'action' => 'display', 'home'));
+
 	
 /**
  * Load the CakePHP default routes. Only remove this if you do not want to use

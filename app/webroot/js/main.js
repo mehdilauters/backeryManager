@@ -1,4 +1,16 @@
+function areCookiesEnabled()
+{
+  if (navigator.cookieEnabled) return true;
 
+  // set and read cookie
+  document.cookie = "cookietest=1";
+  var ret = document.cookie.indexOf("cookietest=") != -1;
+
+  // delete cookie
+  document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+
+  return ret;
+}
 
     function imageUpdate()
     {
@@ -30,7 +42,7 @@ $(document).ready(function(){
       }, 3500);  
     
     $(".datetimepicker").datetimepicker();
-  $('.spinner').spinner();
+//   $('.spinner').spinner();
   
     $(".fancybox").fancybox(
         {
@@ -63,5 +75,8 @@ $(document).ready(function(){
 	});
 	imageUpdate();
     
-    
+    if(!areCookiesEnabled())
+    {
+     $('#cookiesError').show();
+    }
   }); 

@@ -1,19 +1,85 @@
 <div class="companies form">
-<?php echo $this->Form->create('Company'); ?>
-	<fieldset>
-		<legend><?php echo __('Add Company'); ?></legend>
+<?php echo $this->Form->create('Company', array('class'=>'form-horizontal')); ?>
+
 	<?php
-		echo $this->Form->input('rib',array('options'=>$media));
-		echo $this->Form->input('name');
-		echo $this->Form->input('address');
-		echo $this->Form->input('phone');
-		echo $this->Form->input('capital');
-		echo $this->Form->input('siret');
-		echo $this->Form->input('title');
-		echo $this->Form->input('email');
-		echo $this->Form->input('order_legals_mentions', array('class'=>'textEditor'));
+		echo $this->Form->input('rib',array('options'=>$media, 
+					'label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('name', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('address', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('phone', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('capital', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('siret', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('title', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('domainName', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('email', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('order_legals_mentions', array('class'=>'textEditor form-control', 'label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  ));
 	?>
-	</fieldset>
+
+<script>
+
+$(document).ready(function() {
+    $('#CompanyDomainName').keypress(function(event) {
+
+      if(event.key.match("[A-Za-z0-9\-]"))
+      {
+	return true;
+      }
+      return false;
+    });
+});
+
+
+
+</script>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">

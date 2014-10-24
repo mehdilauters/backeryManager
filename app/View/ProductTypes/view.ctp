@@ -5,7 +5,6 @@ if($tokens['isAdmin'])
 	echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('interactive'=>false, 'shopComparative'=>true))); 
 }
 	?>
-<h2><?php  echo $productType['ProductType']['name']; ?></h2>
   <?php echo $this->element('ProductTypes/Preview', array('productType'=>$productType)); ?>
 </div>
 <div class="actions">
@@ -23,8 +22,9 @@ if($tokens['isAdmin'])
   </ul>
 <?php endif ?>
 </div>
+<div class="clear" ></div>
 <div class="related">
-  <h3><?php echo __('Produits'); ?></h3>
+  <h3><?php echo __('Produits associés'); ?></h3>
   <?php if (!empty($productType['Product'])): ?>
   <ul id="productList">
   <?php

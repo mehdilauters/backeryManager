@@ -316,9 +316,16 @@ public function getUserTokens($userId = NULL)
   }
   if($this->Auth->loggedIn())
   {
-      $tokens['member'] = $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'memberActions');
-      $tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
-      $tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
+      try
+      {
+	$tokens['member'] = $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'memberActions');
+	$tokens['isRoot']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'rootActions');
+	$tokens['isAdmin']= $this->Acl->check(array('model' => 'User', 'foreign_key'=>$userId), 'administratorActions');
+      }
+      catch(Exception $e)
+      {
+	$this->log('ACL error '.$e, 'debug');
+      }
   }
 // debug($tokens);
   return $tokens;
@@ -375,16 +382,31 @@ public function getUserTokens($userId = NULL)
   public function getCompanyId()
   {
     $companyId = NULL;
-    if($this->Session->check('companyId') )
+
+// debug($this->request->params);
+
+    $subdomain = explode('.', $_SERVER['HTTP_HOST']);
+    if(count($subdomain) != 1)
     {
-      $companyId = $this->Session->read('companyId');
+      //     debug($subdomain);
+      $subdomain = array_shift($subdomain);
+      $this->Company->contain();
+      $company = $this->Company->find('first', array('conditions'=>array('Company.domain_name' => $subdomain)));
+      $companyId = $company['Company']['id'];
     }
     else
     {
-      $company = $this->Company->find('first');
-      if(isset($company['Company']['id']))
+      if($this->Session->check('companyId') )
       {
-	    $companyId = $company['Company']['id'];
+	$companyId = $this->Session->read('companyId');
+      }
+      else
+      {
+	$company = $this->Company->find('first');
+	if(isset($company['Company']['id']))
+	{
+	      $companyId = $company['Company']['id'];
+	}
       }
     }
 

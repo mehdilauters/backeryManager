@@ -499,6 +499,18 @@ add
 
 alter table orders drop order_legals_mentions;
 
+
+
+
+
+
+alter table companies add
+  `domain_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
+add  
+`order_legals_mentions` text CHARACTER SET utf8 COLLATE utf8_bin;
+
+alter table drop order_legals_mentions;
+
 SET FOREIGN_KEY_CHECKS = 1;
 ';	
 		$db = ConnectionManager::getDataSource('default');

@@ -8,13 +8,28 @@
   </div>
 <?php endif; ?>
 
-<?php echo $this->Form->create('User'); ?>
+<?php echo $this->Form->create('User', array('class'=>'form-horizontal')); ?>
 	<fieldset>
 		<legend><?php echo __('Identifiants'); ?></legend>
 	<?php
-		echo $this->Form->input('email');
-		echo $this->Form->input('password');
-		echo $this->Form->input('remember', array('type'=>'checkbox'));
+		echo $this->Form->input('email', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('password', array('label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
+		echo $this->Form->input('remember', array('type'=>'checkbox', 'label'=>array('class'=>'col-sm-3 control-label'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Connexion')); ?>

@@ -64,7 +64,7 @@ echo $this->Html->css(
            array('inline' => false)
   );
 ?>
-<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>
+<!-- <script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script> -->
 <?php
     echo $this->Html->script('jquery.ui.datepicker-fr.js');
     echo $this->Html->css('fancy/jquery.fancybox');
@@ -113,17 +113,14 @@ echo $this->Html->css(
   	
   	<div class="row">
 		<div class="col-md-9"> <!--  colonne de gauche  -->
+			<div id="cookiesError" class="alert alert-danger" style="display:none; ">Attention, les cookies sont désactivés sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div>
+			<noscript><div id="cookiesError" class="alert alert-danger" >Attention, javascript est désactivé sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div></noscript>
 			<h2><?php echo $title_for_layout ?></h2>
-			
 			<?php 
 				echo $this->Session->flash();
-				//echo $this->Session->flash('flash/ok');
-				//echo $this->Session->flash('flash/warning');
-				//echo $this->Session->flash('flash/fail');
 				echo $this->Session->flash('auth');
 				if(count($news) != 0) :
     			?>
-    			
     			<h3>Les news</h3>
 			    <ul id="newsList">
 			    	<?php foreach($news as $new): ?>

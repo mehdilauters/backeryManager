@@ -270,7 +270,6 @@ create table if not exists orders (
   `created` datetime DEFAULT NULL,
   `user_id` int(10) NOT NULL,
   `status` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin not null ,
-  `legals_mentions` text CHARACTER SET utf8 COLLATE utf8_bin,
   `delivery_date` datetime,
   `comment` text CHARACTER SET utf8 COLLATE utf8_bin,
   `discount` float(3) default 0 ,
@@ -302,10 +301,12 @@ create table if not exists companies (
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `address` text CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
+  `domain_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
   `event_type_id` int(10) NOT NULL ,
   `phone` int not null ,
   `capital` int not null ,
   `siret` bigint(20) not null ,
+  `legals_mentions` text CHARACTER SET utf8 COLLATE utf8_bin,
   PRIMARY KEY (`id`),
   KEY `fk_companies_media` (`rib`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
@@ -366,4 +367,3 @@ ALTER TABLE `results_entries`
 
 ALTER TABLE `results`
   ADD CONSTRAINT `fk_results_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`);
-

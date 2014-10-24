@@ -242,26 +242,10 @@ end
 def addPhoto(driver, photo)
     puts "addPhoto #{photo.to_s}"
   goto(driver, BaseUrl + "photos/add")
-
-    
-    
     name = driver.find_element(:id => "PhotoName")
     driver.action.send_keys(name, photo['name']).perform
     
-#     wait.until { driver.find_element(:id => "PhotoUpload") }
       driver.find_element(:id => "PhotoUpload").send_keys(photo['path'])
-#       return
-#     path = driver.attach_file( "PhotoUpload", photo['path'])
-#       puts photo['path']
-#       puts "#################"
-#     driver.action.send_keys(path, photo['path']).perform
-#     
-#     
-#     driver.switchToWindow()
-#             .sendKeys(
-#                     photo['path']);
-#     
-    
 #     description = driver.find_element(:id => "PhotoDescription")
 #     driver.action.send_keys(description, photo['description']).perform
       driver.execute_script "tinyMCE.activeEditor.setContent('Replace with your text')"
@@ -351,8 +335,7 @@ def addOrder(driver, order)
   driver.find_element(:id => "OrderShopId").send_keys(order['shop'])
   driver.find_element(:id => "OrderUserId").send_keys(order['user'])
   driver.find_element(:id => "OrderDeliveryDate").send_keys(order['dueDate'])
-  driver.find_element(:id => "OrderComment").send_keys(order['comment'])
-  
+  driver.execute_script "tinyMCE.activeEditor.setContent('#{order['comment']}')"
   driver.find_element(:css => "#OrderAddForm > .submit > input").click;
 end
 
@@ -408,7 +391,7 @@ def addItem(driver, item)
   driver.find_element(:id => "OrderedItemCreated").clear
   driver.find_element(:id => "OrderedItemCreated").send_keys(item['date'])
   driver.find_element(:id => "OrderedItemQuantity").send_keys(item['quantity'])
-  driver.find_element(:id => "OrderedItemComment").send_keys(item['comment'])
+  driver.execute_script "tinyMCE.activeEditor.setContent('#{item['comment']}')"
   driver.find_element(:css => "#OrderedItemAddForm > .submit > input").click;
   
 end

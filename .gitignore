@@ -11,5 +11,5 @@ upload.*
 *~
 .DS_Store
 /tags
-app/View/Elements/tracker.ctp
-app/Config/boulangerie.php
+/app/View/Elements/tracker.ctp
+/app/Config/boulangerie.php

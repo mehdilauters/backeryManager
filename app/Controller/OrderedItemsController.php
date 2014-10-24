@@ -99,9 +99,9 @@ class OrderedItemsController extends AppController {
 			throw new NotFoundException(__('Invalid ordered item'));
 		}
 		$options = array('conditions' => array('OrderedItem.' . $this->OrderedItem->primaryKey => $id));
-		$this->OrderedItem->contain('Order.Shop');
-		$order = $this->OrderedItem->find('first', $options);
-		if ($order['Order']['Shop']['company_id'] != $this->getCompanyId()) {
+		$this->OrderedItem->contain('Order.Shop', 'Order.User');
+		$orderedItem = $this->OrderedItem->find('first', $options);
+		if ($orderedItem['Order']['Shop']['company_id'] != $this->getCompanyId()) {
 		    throw new NotFoundException(__('Invalid item for this company'));
 			}
 		if ($this->request->is('post') || $this->request->is('put')) {
@@ -118,7 +118,7 @@ class OrderedItemsController extends AppController {
 			}
 		} else {
 			
-			$this->request->data = $order;
+			$this->request->data = $orderedItem;
 		}
 		$orders = $this->OrderedItem->Order->find('list');
 		$products = $this->OrderedItem->Product->find('list');
