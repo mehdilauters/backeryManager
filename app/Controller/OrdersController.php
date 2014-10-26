@@ -9,6 +9,7 @@ class OrdersController extends AppController {
 	var $uses = array('Order', 'Company');
 
   var $administratorActions = array('*');
+  var $memberActions = array('index', 'view');
 
 /**
  * index method
@@ -17,7 +18,12 @@ class OrdersController extends AppController {
  */
 	public function index($status = 'reserved' ) {
 	    $conditions = array('Shop.company_id' => $this->getCompanyId());
-
+	  // limit to current user if not admin
+	  $tokens = $this->getUserTokens();
+	  if(!$tokens['isAdmin'])
+	  {
+	    $conditions['user_id'] = $this->Auth->user('id');
+	  }
 
 	    if(isset($this->request->data['Order']['statusSelect']))
 	    {

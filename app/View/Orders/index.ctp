@@ -27,8 +27,10 @@
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('status'); ?></th>
 			<th><?php echo $this->Paginator->sort('delivery_date'); ?></th>
-			<th><?php echo $this->Paginator->sort('discount'); ?></th>
-			<th><?php echo $this->Paginator->sort('comment'); ?></th>
+			<?php if($tokens['isAdmin']) : ?>
+			  <th><?php echo $this->Paginator->sort('discount'); ?></th>
+			  <th><?php echo $this->Paginator->sort('comment'); ?></th>
+			<?php endif; ?>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($orders as $order): ?>
@@ -60,11 +62,13 @@
 			}
 		
 		?>&nbsp;</td>
-		<td><?php if($order['User']['discount'] != 0 )
-		{
-		  echo h($order['User']['discount'].'%'); 
-		}?>&nbsp;</td>
-		<td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
+		<?php if($tokens['isAdmin']) : ?>
+		  <td><?php if($order['User']['discount'] != 0 )
+		  {
+		    echo h($order['User']['discount'].'%'); 
+		  }?>&nbsp;</td>
+		  <td><?php echo h($order['Order']['comment']); ?>&nbsp;</td>
+		<?php endif; ?>
 		<td class="actions">
 			<?php
 			  $emailText = 'Voulez vous vraiment envoyer un email à '.$order['User']['email'].'?';
@@ -75,10 +79,12 @@
 
  ?>
 			<?php echo $this->Html->link($this->Html->image('icons/application-pdf.png', array('id'=>'pdf_'.$order['Order']['id'],'class'=>'icon','alt' => __('imprimer'))), array('action' => 'view', $order['Order']['id'].'.pdf'),  array('escape' => false, 'title'=>'imprimer' )); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/document-preview.png', array('id'=>'view_'.$order['Order']['id'],'class'=>'icon','alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$order['Order']['id'],'class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
-			<?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\''.$emailText.'\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
-			<?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$order['Order']['id'],'class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
+			<?php if($tokens['isAdmin']) : ?>
+			  <?php echo $this->Html->link($this->Html->image('icons/document-preview.png', array('id'=>'view_'.$order['Order']['id'],'class'=>'icon','alt' => __('voir'))), array('action' => 'view', $order['Order']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
+			  <?php echo $this->Html->link($this->Html->image('icons/mail-unread-new.png', array('id'=>'email_'.$order['Order']['id'],'class'=>'icon','alt' => __('Email'), 'onClick="return confirm(\''.$emailText.'\');"')), array('action' => 'email', $order['Order']['id']),  array('escape' => false, 'title'=>'Email')); ?>
+			  <?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$order['Order']['id'],'class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $order['Order']['id']),  array('escape' => false, 'title'=>'editer')); ?>
+			  <?php echo $this->Form->postLink($this->Html->image('icons/edit-delete.png', array('id'=>'delete_'.$order['Order']['id'],'class'=>'icon','alt' => __('supprimer'))), array('action' => 'delete', $order['Order']['id']) , array('escape' => false, 'title'=>'supprimer'), __('Are you sure you want to delete # %s?', $order['Order']['id'])); ?>
+			<?php endif; ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -98,12 +104,14 @@
 	</div>
 </div>
 <div class="actions">
+     <?php if($tokens['isAdmin']) : ?>
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Nouvelle facturation'), array('action' => 'add'), array('id'=>'newOrder')); ?></li>
 		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
 	</ul>
+     <?php endif; ?>
 </div>
 <script>
   introSteps = [
@@ -125,25 +133,27 @@
                 intro: "téléchargez le PDF pour impression",
 				position: 'top'
               },
-              {
-                element: '#view_<?php echo $orders[0]['Order']['id'] ?>',
-                intro: "Visualisez la",
-				position: 'top'
-              },
-              {
-                element: '#edit_<?php echo $orders[0]['Order']['id'] ?>',
-                intro: "Editez la",
-				position: 'top'
-              },
-			  {
-                element: '#email_<?php echo $orders[0]['Order']['id'] ?>',
-                intro: "Ou envoyez la directement par email au client concerné",
-				position: 'top'
-              },
-			  {
-                element: '#newOrder',
-                intro: "Cliquez maintenant ici pour créer une nouvelle commande",
-				position: 'top'
-              },
+	      <?php if($tokens['isAdmin']) : ?>
+		{
+		  element: '#view_<?php echo $orders[0]['Order']['id'] ?>',
+		  intro: "Visualisez la",
+				  position: 'top'
+		},
+		{
+		  element: '#edit_<?php echo $orders[0]['Order']['id'] ?>',
+		  intro: "Editez la",
+				  position: 'top'
+		},
+			    {
+		  element: '#email_<?php echo $orders[0]['Order']['id'] ?>',
+		  intro: "Ou envoyez la directement par email au client concerné",
+				  position: 'top'
+		},
+			    {
+		  element: '#newOrder',
+		  intro: "Cliquez maintenant ici pour créer une nouvelle commande",
+				  position: 'top'
+		},
+	      <?php endif; ?>
             ];
 </script>

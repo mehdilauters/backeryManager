@@ -46,5 +46,10 @@ foreach($menu as $title => $subMenu)
 	    <?php endif ?>
 	</ul>
       </li>
+    <?php elseif($tokens['member']): ?>
+      <li id="menuMember" > Espace membre
+	<ul>
+	  <li><a href="<?php echo $this->webroot ?>orders">Mes factures</a></li>
+	</ul>
     <?php endif ?>
   </ul>
