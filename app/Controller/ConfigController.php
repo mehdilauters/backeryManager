@@ -511,6 +511,13 @@ add
 
 alter table drop order_legals_mentions;
 
+
+alter table events add
+  `internal` tinyint(1) NOT NULL DEFAULT \'0\';
+
+alter table shops add
+  `event_type_closed_id` int(10);
+
 SET FOREIGN_KEY_CHECKS = 1;
 ';	
 		$db = ConnectionManager::getDataSource('default');

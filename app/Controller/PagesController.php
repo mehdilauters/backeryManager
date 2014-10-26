@@ -77,6 +77,7 @@ class PagesController extends AppController {
     $shops = $this->Shop->find('all', array('conditions'=>array('company_id'=> $this->getCompanyId())));
     foreach ($shops as $id=>$shop)
     {
+      $shops[$id]['EventTypeClosed']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shops[$id]['EventTypeClosed']['id'].'/'.time().'/'.(time() + 60*60*24*7*2));
       $shops[$id]['EventType']['Event'] = $this->requestAction(array(	'plugin'=>'full_calendar',
 							'controller'=>'events',
 							'action'=>'feed'
@@ -89,7 +90,7 @@ class PagesController extends AppController {
 										)
 								)
 										    );
-      $shops[$id]['Shop']['isOpened'] = $this->requestAction(array('controller'=>'shops', 'action'=>'isOpened'), array( 'pass'=>array($shops[$id])));
+      $shops[$id]['Shop']['isOpened'] = $this->requestAction('/shops/isOpened', array( 'pass'=>array($shops[$id])));
     }
 
     $this->set('shops', $shops);

@@ -104,7 +104,15 @@ class Shop extends AppModel {
       'conditions' => '',
       'fields' => '',
       'order' => '',
-	  'dependent'=> true,
+      'dependent'=> true,
+    ),
+    'EventTypeClosed' => array(
+      'className' => 'FullCalendar.EventType',
+      'foreignKey' => 'event_type_closed_id',
+      'conditions' => '',
+      'fields' => '',
+      'order' => '',
+      'dependent'=> true,
     ),
     'Company' => array(
       'className' => 'Company',

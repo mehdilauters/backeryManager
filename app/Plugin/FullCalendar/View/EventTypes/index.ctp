@@ -15,7 +15,6 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('name');?></th>
-            <th><?php echo $this->Paginator->sort('color');?></th>
 			<th class="actions"></th>
 	</tr>
 	<?php
@@ -28,7 +27,6 @@
 	?>
 	<tr<?php echo $class;?>>
 		<td><?php echo $eventType['EventType']['name']; ?>&nbsp;</td>
-        <td><?php echo $eventType['EventType']['color']; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('plugin' => 'full_calendar', 'action' => 'view', $eventType['EventType']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit', true), array('plugin' => 'full_calendar', 'action' => 'edit', $eventType['EventType']['id'])); ?>
@@ -47,7 +45,6 @@
 <div class="actions">
 	<ul>
 		<li><?php echo $this->Html->link(__('New Event Type', true), array('plugin' => 'full_calendar', 'action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('Manage Events', true), array('plugin' => 'full_calendar', 'controller' => 'events', 'action' => 'index')); ?></li>
         <li><li><?php echo $this->Html->link(__('View Calendar', true), array('plugin' => 'full_calendar', 'controller' => 'full_calendar')); ?></li>
 	</ul>
 </div>

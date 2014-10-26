@@ -179,33 +179,42 @@ public function isToday($event)
 }
 
 
-  public function getTimeTable($events)
+  public function getTimeTable($events, $closedEvents)
   {
     $days = array();
     $i = 0;
     foreach ($events['Event'] as $event)
 	{
-		if( date('G',strtotime($event['end'])) < Configure::read('Settings.midday') )
-		{
-			$key = 'morning';
-		}
-		else
-		{
-			$key = 'afternoon';
-		}
-		$day = mktime(0, 0, 0, date("m",strtotime($event['start'] ))  , date("d",strtotime($event['start'] )), date("Y",strtotime($event['start'] )));
-		$days[$day][$key] = $event;
-		}
-		ksort($days);
+	    foreach ($closedEvents['Event'] as $closedEvent)
+	    {
+	      if(!($event['start'] < $closedEvent['end'] && $event['end'] > $closedEvent['start']))
+	      {
+		  if(!$event['internal'])
+		  {
+		      if( date('G',strtotime($event['end'])) < Configure::read('Settings.midday') )
+		      {
+			      $key = 'morning';
+		      }
+		      else
+		      {
+			      $key = 'afternoon';
+		      }
+		      $day = mktime(0, 0, 0, date("m",strtotime($event['start'] ))  , date("d",strtotime($event['start'] )), date("Y",strtotime($event['start'] )));
+		      $days[$day][$key] = $event;
+		  }
+	      }
+	    }
+      }
+      ksort($days);
 
     return $days;
   }
 
-  public function getNextOpenClose($events)
+  public function getNextOpenClose($events, $closedEvents)
   {
       $nextOpened = 0;
       $nextClose = 0;
-      $days = $this->getTimeTable($events);
+      $days = $this->getTimeTable($events, $closedEvents);
       foreach($days as $dayId => $timeTable)
       {
 	if($dayId >= mktime(0, 0, 0, date("m")  , date("d"), date("Y")))

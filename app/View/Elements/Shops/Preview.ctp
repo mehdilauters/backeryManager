@@ -4,7 +4,7 @@
   <a href="<?php echo $this->webroot.'magasins/details/'.$shop['Shop']['id'].$this->MyHtml->getLinkTitle($shop['Shop']['name']); ?>" alt="<?php echo($shop['Shop']['name']); ?>" ><?php echo($shop['Shop']['name']); ?></a></h3>
 <div class="isOpened">
     <?php
-      $nextDates = $this->Dates->getNextOpenClose($shop['EventType']);
+      $nextDates = $this->Dates->getNextOpenClose($shop['EventType'], $shop['EventTypeClosed']);
       if($shop['Shop']['isOpened'])
       {?>
 	<span id="shopStatus_<?php echo $shop['Shop']['id'] ?>" class="shopOpened label label-success">ouvert jusqu'à <?php echo date('G:i',$nextDates['nextClose']) ?></span>
@@ -34,13 +34,13 @@
 
 echo $this->MyHtml->getPhoneNumberText($shop['Shop']['phone']); ?></div>
 	<div id="timetable_<?php echo $shop['Shop']['id'] ?>" >
-		<?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
+		<?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType'], 'eventTypeClosed'=>$shop['EventTypeClosed']));  ?>
 	</div>
     <?php if($tokens['isAdmin']) : ?>
       <ul>
 	<li><?php echo $this->Html->link($this->Html->image('icons/preferences-system-time.png', array('id'=>'timeEdit_'.$shop['Shop']['id'],'class'=>'icon','alt' => __('Editer horaires'))), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id']),  array('escape' => false, 'title'=>'Editer horaires')); ?></li>
 	<li>
-	<li><?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'shopEdit_'.$shop['Shop']['id'],'class'=>'icon','alt' => __('Editer'))), array('controller'=>'shops', 'action' => 'edit', $shop['Shop']['id']),  array('escape' => false, 'title'=>'Editer horaires')); ?></li>
+	<li><?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'shopEdit_'.$shop['Shop']['id'],'class'=>'icon','alt' => __('Editer'))), array('controller'=>'shops', 'action' => 'edit', $shop['Shop']['id']),  array('escape' => false, 'title'=>'Editer le magasin')); ?></li>
 	<li>
       </ul>
   <?php endif ?>

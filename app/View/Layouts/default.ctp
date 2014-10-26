@@ -43,7 +43,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		'jquery-1.9.1.min',
 		'jquery-ui-1.10.1.custom.min',
         'fullcalendar.min',
-        'jquery.qtip-1.0.0-rc3.min',
+//         'jquery.qtip-1.0.0-rc3.min',
     	'jquery.fancybox.pack',
    		'TableFilter/tablefilter.js',
 		'bootstrap.min',

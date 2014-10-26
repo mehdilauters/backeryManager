@@ -17,18 +17,6 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
-		echo $this->Form->input('color', 
-					array('options' => array(
-						'Blue' => 'Blue',
-						'Red' => 'Red',
-						'Pink' => 'Pink',
-						'Purple' => 'Purple',
-						'Orange' => 'Orange',
-						'Green' => 'Green',
-						'Gray' => 'Gray',
-						'Black' => 'Black',
-						'Brown' => 'Brown'
-					)));
 
 	?>
 	</fieldset>

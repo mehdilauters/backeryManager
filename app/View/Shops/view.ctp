@@ -23,7 +23,7 @@ if($tokens['isAdmin'])
   <div class="slate slateShop slateShopView cursorHand"  onClick="toggleMap();">
 <div class="isOpened">
     <?php
-      $nextDates = $this->Dates->getNextOpenClose($shop['EventType']);
+      $nextDates = $this->Dates->getNextOpenClose($shop['EventType'],$shop['EventTypeClosed']);
       if($isOpened)
       {?>
 	<span class="shopOpened label label-success">ouverte jusqu'à <?php echo date('G:i',$nextDates['nextClose']) ?></span>
@@ -57,17 +57,17 @@ if($tokens['isAdmin'])
 </p>
   <hr/>
 
-  <?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType']));  ?>
+  <?php echo $this->element('Shops/Timetable', array('eventType'=>$shop['EventType'], 'eventTypeClosed'=>$shop['EventTypeClosed']));  ?>
 
 </div>
 <div class="actions">
   <ul>
   <?php if($tokens['isAdmin']) : ?>
-	<li><?php echo $this->Html->link(__('Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>
+    <li><?php echo $this->Html->link(__('Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>
+    <li><?php echo $this->Html->link(__('Fermetures', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventTypeClosed']['id'])); ?></li>
     <li><?php echo $this->Html->link(__('Edit Shop'), array('action' => 'edit', $shop['Shop']['id'])); ?> </li>
     <li><?php echo $this->Form->postLink(__('Delete Shop'), array('action' => 'delete', $shop['Shop']['id']), null, __('Are you sure you want to delete # %s?', $shop['Shop']['id'])); ?> </li>
     <li><?php echo $this->Html->link(__('New Shop'), array('action' => 'add')); ?> </li>
-    <li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
   <?php endif ?>
   </ul>
 </div>

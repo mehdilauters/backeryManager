@@ -35,7 +35,7 @@ class ShopsController extends AppController {
     
     $options = array('conditions' => array('Shop.' . $this->Shop->primaryKey => $id));
     $this->Shop->contain();
-    $this->Shop->contain('Media.Photo', 'EventType');
+    $this->Shop->contain('Media.Photo', 'EventType', 'EventTypeClosed');
     $shop = $this->Shop->find('first', $options);
 
     if ($shop['Shop']['company_id'] != $this->getCompanyId()) {
@@ -58,7 +58,8 @@ class ShopsController extends AppController {
 							  // ,array('return')
 									      // );
 										  
-	$shop['EventType']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shop['EventType']['id'].'/'.time().'/'.(time() + 60*60*24*7*2));
+    $shop['EventType']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shop['EventType']['id'].'/'.time().'/'.(time() + 60*60*24*7*2));
+    $shop['EventTypeClosed']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shop['EventTypeClosed']['id'].'/'.time().'/'.(time() + 60*60*24*7*2));
     $this->set('isOpened', $this->isOpened($shop));
     $this->set('shop', $shop);
 	
@@ -109,10 +110,18 @@ class ShopsController extends AppController {
 	  }
 
       if ($this->Shop->save($this->request->data)) {
+		// time schedule
 		$this->EventType->create();
 		$eventType = array( 'EventType' =>array( 'name' => $this->request->data['Shop']['name']));
 		$this->EventType->save($eventType);
-		$this->request->data['Shop']['event_type_id'] = $this->EventType->id;
+		$this->request->data['Shop']['event_type_id'] = $this->EventType->id;		
+
+		// closed events
+		$this->EventType->create();
+		$eventType = array( 'EventType' =>array( 'name' => $this->request->data['Shop']['name'].'_closed'));
+		$this->EventType->save($eventType);
+		$this->request->data['Shop']['event_type_closed_id'] = $this->EventType->id;
+
 		if ($this->Shop->save($this->request->data)) {
 			        $this->Session->setFlash(__('The shop has been saved'),'flash/ok');
 					$this->redirect('/');

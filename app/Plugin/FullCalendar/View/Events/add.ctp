@@ -56,7 +56,7 @@
 
 function recursiveChange()
 {
-    if( $(this).val() == '' )
+    if( $("#EventRecursive").val() == '' )
     {
       $('#EventRecursiveStart').prop('disabled', true);
       $('#EventRecursiveEnd').prop('disabled', true);
@@ -65,12 +65,33 @@ function recursiveChange()
     {
       $('#EventRecursiveStart').prop('disabled', false);
       $('#EventRecursiveEnd').prop('disabled', false);
+      $('#EventRecursiveEnd').attr('required', 'required');
+      $('#EventRecursiveStart').attr('required', 'required');
     }
 }
 
+
+function allDayChange()
+{
+  if($('#EventAllDay').is(':checked'))
+  {
+    $('#EventEnd').prop('disabled', true);
+    $('#EventEnd').val($('#EventStart').val());
+  }
+  else
+  {
+    $('#EventEnd').prop('disabled', false);
+  }
+}
   $(document).ready(function(){
     $("#EventRecursive").change(recursiveChange);
     recursiveChange();
+
+    $("#EventAllDay").change(allDayChange);
+    $(".datetimepicker").change(allDayChange);
+    allDayChange();
+
+    
   });
 
 </script>

@@ -41,7 +41,9 @@
 </div>
 <div class="actions">
 	<ul>
-		<li><?php echo $this->Html->link(__('Edit Event', true), array('plugin' => 'full_calendar', 'action' => 'edit', $event['Event']['id'])); ?> </li>
+		<?php if( ! $event['Event']['internal']): ?>
+		  <li><?php echo $this->Html->link(__('Edit Event', true), array('plugin' => 'full_calendar', 'action' => 'edit', $event['Event']['id'])); ?> </li>
+		<?php endif; ?>
 		<li><?php echo $this->Html->link(__('Delete Event', true), array('plugin' => 'full_calendar', 'action' => 'delete', $event['Event']['id']), null, sprintf(__('Are you sure you want to delete this %s event?', true), $event['EventType']['name'])); ?> </li>
 		<li><?php echo $this->Html->link(__('Manage Events', true), array('plugin' => 'full_calendar', 'action' => 'index')); ?> </li>
 		<li><li><?php echo $this->Html->link(__('View Calendar', true), array('plugin' => 'full_calendar', 'controller' => 'full_calendar')); ?></li>

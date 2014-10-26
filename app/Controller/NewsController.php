@@ -47,8 +47,8 @@ class NewsController extends AppController {
 
 	if( count($eventType) != 0)
 	{
-		$dateStart = new DateTime('yesterday');
-		$dateStart->setTime(23,59);
+		$dateStart = new DateTime('today');
+		$dateStart->setTime(0,0);
 
 		$dateEnd = new DateTime('today');
 		$dateEnd->setTime(23,59);

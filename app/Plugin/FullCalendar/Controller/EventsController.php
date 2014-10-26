@@ -92,11 +92,7 @@ class EventsController extends FullCalendarAppController {
 			    {
 				$startDate = $this->viewDateToDateTime($this->data['Event']['start']);
 			    }
-			    $endDate = $this->viewDateToDateTime($this->data['Event']['end'] . ' 23:59');
-			    if( !$endDate )
-			    {
-			      $endDate = $this->viewDateToDateTime($this->data['Event']['end']);
-			    }
+			    $endDate = $this->viewDateToDateTime($this->data['Event']['start'] . ' 23:59');
 			  }
 			  else
 			  {
@@ -154,7 +150,6 @@ class EventsController extends FullCalendarAppController {
 		if (empty($this->data)) {
 			$this->data = $this->Event->read(null, $id);
 		}
-
 		$this->set('eventTypes', $this->Event->EventType->find('list'));
 	}
 
@@ -176,7 +171,7 @@ class EventsController extends FullCalendarAppController {
         // The feed action is called from "webroot/js/ready.js" to get the list of events (JSON)
 	function feed($idType = null, $start = null, $end = null) {
 		$this->layout = "ajax";
-		$vars = $this->request['named'];
+		$vars = @$this->request->query;
 		if($start == null)
 		{
 		  $start = $vars['start'];
@@ -211,6 +206,7 @@ class EventsController extends FullCalendarAppController {
 			}
 			$data[] = array(
 					'id' => $event['Event']['id'],
+					'internal'=>$event['Event']['internal'],
 					'title'=>$event['Event']['title'],
 					'start'=>$event['Event']['start'],
 					'end' => $endEvent,
@@ -285,6 +281,7 @@ class EventsController extends FullCalendarAppController {
 						$event['Event']['end'] = date('Y-m-d H:i:s', $newDateStop);
 						$data[] = array(
 							'id' => $event['Event']['id'].$newDateStart,
+							'internal'=>$event['Event']['internal'],
 							'title'=>$event['Event']['title'],
 							'start'=>$event['Event']['start'],
 							'end' => $event['Event']['end'],
@@ -325,6 +322,7 @@ class EventsController extends FullCalendarAppController {
 						$event['Event']['end'] = date('Y-m-d H:i:s', $newDateStop);
 						$data[] = array(
 							'id' => $event['Event']['id'].$newDateStart,
+							'internal'=>$event['Event']['internal'],
 							'title'=>$event['Event']['title'],
 							'start'=>$event['Event']['start'],
 							'end' => $event['Event']['end'],
@@ -365,7 +363,7 @@ class EventsController extends FullCalendarAppController {
 						$event['Event']['end'] = date('Y-m-d H:i:s', $newDateStop);
 						$data[] = array(
 							'id' => $event['Event']['id'].$newDateStart,
-							'title'=>$event['Event']['title'],
+							'internal'=>$event['Event']['internal'],							'title'=>$event['Event']['title'],
 							'start'=>$event['Event']['start'],
 							'end' => $event['Event']['end'],
 							'allDay' => $allday,
@@ -404,6 +402,7 @@ class EventsController extends FullCalendarAppController {
 						$event['Event']['end'] = date('Y-m-d H:i:s', $newDateStop);
 						$data[] = array(
 							'id' => $event['Event']['id'].$newDateStart,
+							'internal'=>$event['Event']['internal'],
 							'title'=>$event['Event']['title'],
 							'start'=>$event['Event']['start'],
 							'end' => $event['Event']['end'],
