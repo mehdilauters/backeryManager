@@ -185,24 +185,43 @@ public function isToday($event)
     $i = 0;
     foreach ($events['Event'] as $event)
 	{
-	    foreach ($closedEvents['Event'] as $closedEvent)
+	    if( count($closedEvents['Event']) != 0 )
 	    {
-	      if(!($event['start'] < $closedEvent['end'] && $event['end'] > $closedEvent['start']))
+	      foreach ($closedEvents['Event'] as $closedEvent)
 	      {
-		  if(!$event['internal'])
-		  {
-		      if( date('G',strtotime($event['end'])) < Configure::read('Settings.midday') )
-		      {
-			      $key = 'morning';
-		      }
-		      else
-		      {
-			      $key = 'afternoon';
-		      }
-		      $day = mktime(0, 0, 0, date("m",strtotime($event['start'] ))  , date("d",strtotime($event['start'] )), date("Y",strtotime($event['start'] )));
-		      $days[$day][$key] = $event;
-		  }
+		if(!($event['start'] < $closedEvent['end'] && $event['end'] > $closedEvent['start']))
+		{
+		    if(!$event['internal'])
+		    {
+			if( date('G',strtotime($event['end'])) < Configure::read('Settings.midday') )
+			{
+				$key = 'morning';
+			}
+			else
+			{
+				$key = 'afternoon';
+			}
+			$day = mktime(0, 0, 0, date("m",strtotime($event['start'] ))  , date("d",strtotime($event['start'] )), date("Y",strtotime($event['start'] )));
+			$days[$day][$key] = $event;
+		    }
+		}
 	      }
+	    }
+	     else
+	    {
+	      if(!$event['internal'])
+		    {
+			if( date('G',strtotime($event['end'])) < Configure::read('Settings.midday') )
+			{
+				$key = 'morning';
+			}
+			else
+			{
+				$key = 'afternoon';
+			}
+			$day = mktime(0, 0, 0, date("m",strtotime($event['start'] ))  , date("d",strtotime($event['start'] )), date("Y",strtotime($event['start'] )));
+			$days[$day][$key] = $event;
+		    }
 	    }
       }
       ksort($days);

@@ -566,6 +566,13 @@ public function results()
       );
     if($product['saleId'] != '')
     {
+      $tmpRes = $this->Sale->findById($product['saleId']);
+      if($tmpRes['Shop']['company_id'] != $this->getCompanyId())
+      {
+	$this->log("Security check failed");
+	$error ++;
+	continue;
+      }
       $data['Sale']['id'] = $product['saleId'];
     }
     else

@@ -478,6 +478,7 @@ $datas = compact('group','results', 'resultsEntries', 'dateStart', 'dateEnd', 's
 
 public function getData($dateStart = '', $dateEnd = '')
 {
+
   if($dateStart == '')
   {
     $dateStart = date('01/m/Y');
@@ -495,8 +496,8 @@ public function getData($dateStart = '', $dateEnd = '')
   {
     $dateEnd = $this->Functions->viewDateToDateTime($dateEnd);
   }
-  
-  if($dateEnd < $dateStart)
+
+  if($dateEnd < $dateStart || !$dateStart || !$dateEnd)
   {
     throw new NotFoundException(__('Invalid dates '.$dateStart.'===='.$dateEnd));
   }
@@ -592,7 +593,7 @@ public function getData($dateStart = '', $dateEnd = '')
     {
        $date = $this->request->data['date'];
     }
-
+    $initDate = $date;
 
     if ($this->request->is('post') && !isset($this->request->data['dateSelect'])) {
 
@@ -829,6 +830,13 @@ public function getData($dateStart = '', $dateEnd = '')
 	  if($resultEntry['resultEntryId'] != '')
 	  {
 	    $resultEntryData['ResultsEntry']['id'] = $resultEntry['resultEntryId'];
+	    $tmpRes = $this->ResultsEntry->findById($resultEntry['resultEntryId']);
+	    if($tmpRes['Shop']['company_id'] != $this->getCompanyId())
+	    {
+	      $errors ++;
+	      $this->log("Security check failed");
+	      continue;
+	    }
 	  }
 	      if (!$this->ResultsEntry->save($resultEntryData)) {
 	      $errors ++;  
@@ -840,7 +848,7 @@ public function getData($dateStart = '', $dateEnd = '')
 
       if ($errors == 0 ) {
         $this->Session->setFlash(__('The result has been saved'),'flash/ok');
-        $this->redirect(array('action' => 'add'));
+//         $this->redirect(array('action' => 'add'));
       } else {
         $this->Session->setFlash(__('The result could not be saved. Please, try again.'),'flash/fail');
       }
@@ -848,7 +856,7 @@ public function getData($dateStart = '', $dateEnd = '')
     }
     $shops = $this->Result->Shop->find('list', array('conditions' => array('Shop.company_id' => $this->getCompanyId())));
     $productTypes = $this->ProductType->find('list', array('conditions' => array('ProductType.company_id' => $this->getCompanyId())));
-    $data = $this->getData($date, $date);
+    $data = $this->getData($initDate, $initDate);
     $this->set(compact('shops','productTypes', 'date', 'data'));
   }
 
