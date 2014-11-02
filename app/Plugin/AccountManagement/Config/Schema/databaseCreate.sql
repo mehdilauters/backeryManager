@@ -19,8 +19,7 @@ create table if not exists account_entries (
   `created` datetime NOT NULL,
   `date` datetime NOT NULL,
   `name` varchar(255) not null,
-  `credit` float(10),
-  `debit` float(10),
+  `value` float(10),
   PRIMARY KEY (`id`),
   KEY `fk_account_entries_account` (`account_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
