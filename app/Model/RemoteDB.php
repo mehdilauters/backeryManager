@@ -113,7 +113,7 @@ class RemoteDB extends AppModel {
 				{
 				  $aro = $this->Acl->Aro;
 				  $aroData = array('alias' => $this->data['User']['name'],
-				  'parent_id' => 3,
+				  'parent_id' => 2,
 				  'model' => 'User',
 				  'foreign_key' => $this->data['User']['id'],
 				  );

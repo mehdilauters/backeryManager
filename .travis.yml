@@ -40,7 +40,7 @@ before_script:
 #   - pear install --alldeps cakephp/CakePHP_CodeSniffer
   - phpenv rehash
   - set +H
-  - cp app/Config/boulangerie.php.default app/Config/database.php
+  - cp app/Config/boulangerie.php.default app/Config/boulangerie.php
   - echo "<?php
     class DATABASE_CONFIG {
     public \$default = array(
