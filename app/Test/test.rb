@@ -206,7 +206,7 @@ def login(driver, user)
   logingSubmit.click
   
     wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-  wait.until { driver.find_element(:css => "body") }
+  wait.until { driver.find_element(:css => "#logout") }
   
 end
 
