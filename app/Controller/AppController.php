@@ -252,7 +252,13 @@ class AppController extends Controller {
     
 //    $this->backupDb();
 //     $this->exportExcel();
-      $this->theme = 'Company'.$this->getCompanyId();
+      try
+      {
+	$this->theme = 'Company'.$this->getCompanyId();
+      }
+      catch (Exception $e)
+      {
+      }
 
   
 	if($this->Auth->user())
@@ -298,9 +304,14 @@ class AppController extends Controller {
     $news = $newsController->getNews();
 //     $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
     $this->set('news',$news);
-	
+      try
+      {
 	$company = $this->Company->find('first',array('conditions'=>array('Company.id'=>$this->getCompanyId())));
 	$this->set('company',$company);
+      }
+      catch (Exception $e)
+      {
+      }
 	
   }
   
@@ -519,9 +530,13 @@ public function getFunctionText($coefficients)
 		$this->Auth->allow($this->publicActions);
 	}
 	
-	
-	$this->Cookie->name= Configure::read('Settings.Cookie.Name').'_'.$this->getCompanyId();
-	
+	try
+	{
+	  $this->Cookie->name= Configure::read('Settings.Cookie.Name').'_'.$this->getCompanyId();
+	}
+	catch (Exception $e)
+	{
+	}
 	
 	
 	if(!$this->Auth->loggedIn())
