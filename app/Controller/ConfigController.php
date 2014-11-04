@@ -61,6 +61,12 @@ truncate acos;
 */
 
     $aro = $this->Acl->Aro;
+
+    $count = $aro->find('count');
+    if( $count != 0 )
+    {
+      throw new ForbiddenException('acl already exists');
+    }
     $groups = array();
     $groups[] = array('alias' => 'Members');
     $groups[] = array('alias' => 'Administrators', 'parent_id' => 1);

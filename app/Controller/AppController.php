@@ -382,7 +382,7 @@ public function getUserTokens($userId = NULL)
   public function getCompanyId()
   {
     $companyId = NULL;
-
+    $name = '';
 // debug($this->request->params);
     $companyCount = $this->Company->find('count');
     if($companyCount == 1)
@@ -397,9 +397,13 @@ public function getUserTokens($userId = NULL)
 	{
 	  //     debug($subdomain);
 	  $subdomain = array_shift($subdomain);
+	  $name = $subdomain;
 	  $this->Company->contain();
 	  $company = $this->Company->find('first', array('conditions'=>array('Company.domain_name' => $subdomain)));
-	  $companyId = $company['Company']['id'];
+	  if(isset($company['Company']['id']))
+	  {
+	    $companyId = $company['Company']['id'];
+	  }
 	}
 	else
 	{
@@ -417,7 +421,10 @@ public function getUserTokens($userId = NULL)
 	  }
 	}
       }
-    
+    if( $companyId == NULL )
+    {
+      throw new NotFoundException('Company '.$name. 'does not exists');
+    }
     return $companyId;
   }
 
