@@ -478,7 +478,6 @@ end
   end
 
 if write
-  logingLink = driver.find_element(:css => "#login > a");
   goto(driver, BaseUrl + "config/initAcl")
   addUser(driver, rootUser);
   login(driver, rootUser);
