@@ -431,7 +431,7 @@ public function getUserTokens($userId = NULL)
 	    }
 	    else
 	    {
-	      $companyId = -1;
+	      return NULL;
 	    }
 	  }
 	}
