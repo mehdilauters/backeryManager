@@ -8,6 +8,7 @@ App::uses('AppController', 'Controller');
 class PhotosController extends AppController {
 
   var $publicActions = array('download');
+  var $memberActions = array('*');
   var $administratorActions = array('*');
 
 
