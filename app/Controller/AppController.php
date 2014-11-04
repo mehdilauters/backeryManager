@@ -429,6 +429,10 @@ public function getUserTokens($userId = NULL)
 	    {
 		  $companyId = $company['Company']['id'];
 	    }
+	    else
+	    {
+	      $companyId = -1;
+	    }
 	  }
 	}
       }
