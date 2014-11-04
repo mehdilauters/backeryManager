@@ -472,8 +472,6 @@ def closeIntro(driver)
     end
 end
 
-goto(driver, BaseUrl)
-
 
   if rootUser == {}
     rootUser = Root
@@ -512,7 +510,7 @@ if write
   selectFirstOrder(driver)
   logout(driver)
 end
-
+  goto(driver, BaseUrl)
   login(driver, rootUser);
   goto(driver, BaseUrl + "users")
   goto(driver, BaseUrl + "users/add")
