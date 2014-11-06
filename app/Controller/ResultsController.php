@@ -856,7 +856,8 @@ public function getData($dateStart = '', $dateEnd = '')
     }
     $shops = $this->Result->Shop->find('list', array('conditions' => array('Shop.company_id' => $this->getCompanyId())));
     $productTypes = $this->ProductType->find('list', array('conditions' => array('ProductType.company_id' => $this->getCompanyId())));
-    $data = $this->getData($initDate, $initDate);
+    $date = $initDate;
+    $data = $this->getData($date, $date);
     $this->set(compact('shops','productTypes', 'date', 'data'));
   }
 

@@ -61,4 +61,5 @@ script:
   - sh -c "ruby app/Test/test.rb w"
 
 notifications:
-  email: false
+  email:
+    - mehdilauters@gmail.com

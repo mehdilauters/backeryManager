@@ -173,7 +173,7 @@
 	    <?php if(isset($data['entries'])): ?>
 	      introSteps.push(
               {
-                element: '#result_shop_<?php /* php3 compatibility */ echo $entries = array_keys($data['entries']); $entries[0] ?>',
+                element: '#result_shop_<?php /* php3 compatibility */ $entries = array_keys($data['entries']); echo $entries[0] ?>',
                 intro: "Pour chaque magasin",
 		position: 'right'
               },

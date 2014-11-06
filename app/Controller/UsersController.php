@@ -94,7 +94,15 @@ class UsersController extends AppController {
 				$aro->create();
 				$aro->save($aroData);
 				$this->Session->setFlash(__('The user has been saved'),'flash/ok');
-				$this->redirect(array('action' => 'index'));
+				$tokens = $this->getUserTokens();
+				if($tokens['isRoot'] || $tokens['isAdmin'])
+				{
+				  $this->redirect(array('action' => 'index'));
+				}
+				else
+				{
+				    $this->redirect('/');
+				}
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'),'flash/fail');
 			}

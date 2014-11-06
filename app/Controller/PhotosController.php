@@ -229,11 +229,17 @@ class PhotosController extends AppController {
         }
         $this->request->data['Photo']['path'] = $imgName;
 	$this->request->data['Photo']['user_id'] = $this->Auth->user('id');
-
 	$this->Photo->create();
 	if ( $this->Photo->save($this->request->data)) {
 	  $this->Session->setFlash(__('The photo has been saved'),'flash/ok');
-	  $this->redirect(array('action' => 'index'));
+	  if( $this->getCompanyId() != NULL )
+	  {
+	    $this->redirect(array('action' => 'index'));
+	  }
+	  else
+	  {
+	    $this->redirect('/');
+	  }
 	} else {
 	  $this->Photo->deleteFile();
 	  $this->Session->setFlash(__('The photo could not be saved. Please, try again.'),'flash/fail');

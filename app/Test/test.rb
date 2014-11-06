@@ -48,9 +48,13 @@ CompanyUser  = {'email' => 'companyManager@lauters.fr',
 		'password' => 'companyManager',
 		'name' => 'companyManager'}
 
-Photo = {'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
+Photos = [{'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
 	 'name' => 'ribTest',
-         'description' => 'ribTest photo'}
+         'description' => 'ribTest photo'},
+         {'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
+	 'name' => 'shoop',
+         'description' => ''}
+         ]
 Company = { 'name' => 'testCompany',
             'address' => '57 rue Lakanal',
             'phone' => '0687363854',
@@ -63,13 +67,13 @@ Shops = [{ 'name' => 'testShop',
             'address' => '57 rue Lakanal',
             'phone' => '0687363854',
             'description' => 'testShop',
-	    'media' => 'ribtest'
+	    'media' => 'shoop'
 	   },
         { 'name' => 'testShop2',
             'address' => '55 rue Lakanal',
             'phone' => '0687443854',
             'description' => '1testShop',
-	    'media' => 'ribtest'
+	    'media' => 'shoop'
 	   }
         ]
 
@@ -80,7 +84,7 @@ ProductTypes = [
    'tva' => '5.5',
    'customerDisplay' => true,
    'description' => 'ProductTypeTest Description',
-   'media' => 'ribtest'
+   'media' => 'shoop'
    },
   {
    'name' => 'ProductTypeTest 1',
@@ -163,14 +167,10 @@ OrderItems = [
 
 driver = Selenium::WebDriver.for :firefox
 
-
-def goto(driver, url, raise = true)
-  puts url
-  driver.navigate.to url
+def checkEror(driver, raise = true)
+  puts driver.title
   wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
   wait.until { driver.find_element(:css => "body") }
-
-  puts driver.title
   if driver.title.match /Error/
     puts driver.page_source
     raise "Error"
@@ -186,6 +186,13 @@ def goto(driver, url, raise = true)
   end
 end
 
+def goto(driver, url, raise = true)
+  puts url
+  driver.navigate.to url
+  checkEror(driver, raise)
+  
+end
+
 
 def login(driver, user)
   puts "login #{user.to_s}"
@@ -195,6 +202,7 @@ def login(driver, user)
   logingLink = driver.find_element(:css => "#login > a");
   logingLink.click
 
+  checkEror(driver)
 
   wait.until { driver.find_element(:id => "UserEmail") }
   email = driver.find_element(:id => "UserEmail")
@@ -217,6 +225,7 @@ def logout(driver)
 
   logoutLink = driver.find_element(:css => "#logout > a");
   logoutLink.click
+  checkEror(driver)
 end
 
 def addUser(driver, user)
@@ -235,8 +244,7 @@ def addUser(driver, user)
     
   addSubmit = driver.find_element(:css => "#UserAddForm > .submit > input");
   addSubmit.click    
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-  wait.until { driver.find_element(:css => "body") }
+  checkEror(driver)
 end
 
 def addPhoto(driver, photo)
@@ -251,7 +259,8 @@ def addPhoto(driver, photo)
       driver.execute_script "tinyMCE.activeEditor.setContent('Replace with your text')"
     
   addSubmit = driver.find_element(:css => "#PhotoAddForm > .submit > input");
-  addSubmit.click    
+  addSubmit.click
+  checkEror(driver)
 end
 
 
@@ -269,6 +278,7 @@ def addCompany(driver, company)
     driver.find_element(:id => "CompanyTitle").send_keys(company['title'])
     
     driver.find_element(:css => "#CompanyAddForm > .submit > input").click;
+    checkEror(driver)
 end
 
 def addProductType(driver, productType)
@@ -284,6 +294,8 @@ def addProductType(driver, productType)
     driver.find_element(:id => "ProductTypeCustomerDisplay").click
   end
     driver.find_element(:css => "#ProductTypeAddForm > .submit > input").click;
+    
+    checkEror(driver)
 end
 
 def addProduct(driver, product)
@@ -315,6 +327,8 @@ def addProduct(driver, product)
   end
   
     driver.find_element(:css => "#ProductAddForm > .submit > input").click;
+    
+    checkEror(driver)
 end
 
 
@@ -327,6 +341,7 @@ def addShop(driver, shop)
     driver.find_element(:id => "ShopMediaId").send_keys(shop['media'])
   driver.execute_script "tinyMCE.activeEditor.setContent('#{shop['description']}')"
   driver.find_element(:css => "#ShopAddForm > .submit > input").click;
+  checkEror(driver)
 end
 
 def addOrder(driver, order)
@@ -337,6 +352,7 @@ def addOrder(driver, order)
   driver.find_element(:id => "OrderDeliveryDate").send_keys(order['dueDate'])
   driver.execute_script "tinyMCE.activeEditor.setContent('#{order['comment']}')"
   driver.find_element(:css => "#OrderAddForm > .submit > input").click;
+  checkEror(driver)
 end
 
 
@@ -394,6 +410,8 @@ def addItem(driver, item)
   driver.execute_script "tinyMCE.activeEditor.setContent('#{item['comment']}')"
   driver.find_element(:css => "#OrderedItemAddForm > .submit > input").click;
   
+  checkEror(driver)
+  
 end
 
 
@@ -423,6 +441,8 @@ def addSales(driver, dte)
            i += 1
             }
   driver.find_element(:css => "#salesAdd input[type=submit]").click
+  
+  checkEror(driver)
 end
 
 def addResult(driver, dte)
@@ -462,6 +482,8 @@ def addResult(driver, dte)
   
   
   driver.find_element(:css => "#resultsAdd input[type=submit]").click
+  
+  checkEror(driver)
 end
 
 def closeIntro(driver)
@@ -481,12 +503,12 @@ if write
   goto(driver, BaseUrl + "config/initAcl")
   addUser(driver, rootUser);
   login(driver, rootUser);
-  addPhoto(driver, Photo);
+  addPhoto(driver, Photos[0]);
   addCompany(driver, Company)
   addUser(driver, CompanyUser);
   logout(driver)
   login(driver, CompanyUser);
-  addPhoto(driver, Photo);
+  addPhoto(driver, Photos[1]);
   addShop(driver, Shops[0])
   addShop(driver, Shops[1])
   addProductType(driver, ProductTypes[0])

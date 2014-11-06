@@ -59,6 +59,10 @@ class FunctionsComponent extends Component{
     {
     	$dateTime = DateTime::createFromFormat ( 'd/m/'.$year.' H:i' , $dateString.' 00:00' );
     }
+    if(!$dateTime)
+    {
+      debug($dateString);
+    }
     return  $dateTime;
   }
 
