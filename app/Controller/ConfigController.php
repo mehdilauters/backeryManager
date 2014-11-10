@@ -38,7 +38,9 @@ class ConfigController extends AppController {
       'phpInfo' => 'phpInfo',
       'console' => 'console',
       'noSSL' => 'noSSL',
-      'importDb' => 'import db'
+      'importDb' => 'import db',
+      'getLogs/debug' => 'get debug logs',
+      'getLogs/error' => 'get error logs',
     );
     $this->set('actions', $actions);
 	
@@ -592,6 +594,22 @@ function dbBackup($demo = true, $download = false, $tables = '*') {
       }
   }
 
+  public function getLogs($type)
+  {
+    $file = TMP.'logs/'.$type.'.log';
+    $this->viewClass = 'Media';
+    $params = array(
+        'id'        => basename($file),
+        'name'      => basename($file),
+        'extension' => 'log',
+        'mimeType'  => array(
+        'text/plain'),
+        'download' => true,
+        'path'      => dirname($file).DS,
+        'cache' => true
+    );
+    $this->set($params);
+  }
   
 }
   

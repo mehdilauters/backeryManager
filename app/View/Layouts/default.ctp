@@ -24,6 +24,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<?php if(isset($company['Company'])) { echo $company['Company']['title']; } echo ' | '. $title_for_layout ?>" />
   <?php echo $this->element('tracker'); ?>
   <?php echo $this->Html->charset(); ?>
   <title>
@@ -31,7 +32,9 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     <?php echo $title_for_layout; ?>
   </title>
   <?php
-    echo $this->Html->meta('icon');
+    $id = '';
+  if(isset($company['Company'])) { $id = '_'.$company['Company']['id']; }
+    echo $this->Html->meta('favicon.ico', '/favicon'.$id.'.ico', array('type' => 'icon'));
 	echo $this->html->meta('rss', '/produits.rss', array('title' => "Produits du jour"));
 	echo $this->html->meta('rss', '/news.rss', array('title' => "news"));
 
