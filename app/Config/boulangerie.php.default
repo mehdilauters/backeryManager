@@ -1,7 +1,7 @@
 <?php
 /**
 * setup:
-*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl
+*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl courier-pop courier-imap postfix
 *    optional
 *	apt-get install ruby
 *       gem install selenium

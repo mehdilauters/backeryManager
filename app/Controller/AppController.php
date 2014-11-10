@@ -438,7 +438,7 @@ public function getUserTokens($userId = NULL)
       }
     if( $companyId == NULL )
     {
-      throw new NotFoundException('Company '.$name. 'does not exists');
+      throw new NotFoundException('Company '.$name. ' does not exists');
     }
     return $companyId;
   }
