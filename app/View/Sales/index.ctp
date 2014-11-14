@@ -1,68 +1,23 @@
 <div class="sales index">
-  <h2><?php echo __('Sales'); ?></h2>
-  <table cellpadding="0" cellspacing="0">
-  <tr>
-      <th><?php echo $this->Paginator->sort('date'); ?></th>
-      <th><?php echo $this->Paginator->sort('product_id'); ?></th>
-      <th><?php echo $this->Paginator->sort('shop_id'); ?></th>
-      <th><?php echo $this->Paginator->sort('produced'); ?></th>
-      <th><?php echo $this->Paginator->sort('sold'); ?></th>
-      <th><?php echo $this->Paginator->sort('Lost'); ?></th>
-      <th class="actions"><?php echo __('Actions'); ?></th>
-  </tr>
-  <?php foreach ($sales as $sale): ?>
-  <tr>
-    <td>
-         <?php echo $this->Time->format('d/m/Y',$sale['Sale']['date']); ?>
-    </td>
-    <td>
-      <?php echo $this->element('Medias/Medias/Preview', array('media'=>$sale['Product'], 'config'=>array('name'=>false, 'description'=>false))); ?>
-      <?php echo $this->Html->link($sale['Product']['name'], array('controller' => 'products', 'action' => 'view', $sale['Product']['id'])); ?>
-    </td>
-    <td>
-      <?php echo $this->element('Medias/Medias/Preview', array('media'=>$sale['Shop'], 'config'=>array('name'=>false, 'description'=>false))); ?>
-      <?php echo $this->Html->link($sale['Shop']['name'], array('controller' => 'shops', 'action' => 'view', $sale['Shop']['id'])); ?>
-    </td>
-    <td><?php echo h($sale['Sale']['produced']); ?>&nbsp;</td>
-    <td><?php echo h($sale['Sale']['sold']); ?>&nbsp;</td>
-    <?php
-       $class = 'lostProducts';
-       if($sale['Sale']['produced'] <= 0 )
-       {
-          $class = 'notLostProducts';    
-       }
-   ?>
-    <td class="<?php echo $class ?>"><?php echo h($sale['Sale']['lost'] ); ?>&nbsp;</td>
-    <td><?php echo h($sale['Sale']['comment']); ?>&nbsp;</td>
-    <td class="actions">
-      <?php echo $this->Html->link(__('View'), array('action' => 'view', $sale['Sale']['id'])); ?>
-      <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $sale['Sale']['id'])); ?>
-      <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $sale['Sale']['id']), null, __('Are you sure you want to delete # %s?', $sale['Sale']['id'])); ?>
-    </td>
-  </tr>
-<?php endforeach; ?>
-  </table>
-  <p>
-  <?php
-  echo $this->Paginator->counter(array(
-  'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-  ));
-  ?>  </p>
-  <div class="paging">
-  <?php
-    echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-    echo $this->Paginator->numbers(array('separator' => ''));
-    echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-  ?>
-  </div>
-</div>
-<div class="actions">
-  <h3><?php echo __('Actions'); ?></h3>
+  <h2><?php echo __('Sommaire'); ?></h2>
   <ul>
-    <li><?php echo $this->Html->link(__('New Sale'), array('action' => 'add')); ?></li>
-    <li><?php echo $this->Html->link(__('List Products'), array('controller' => 'products', 'action' => 'index')); ?> </li>
-    <li><?php echo $this->Html->link(__('New Product'), array('controller' => 'products', 'action' => 'add')); ?> </li>
-    <li><?php echo $this->Html->link(__('List Shops'), array('controller' => 'shops', 'action' => 'index')); ?> </li>
-    <li><?php echo $this->Html->link(__('New Shop'), array('controller' => 'shops', 'action' => 'add')); ?> </li>
+    <li id="dailyProductionLink" >
+	<div id="" class="alert alert-info">
+	  <p>Saisie journalières des données de production</p>
+	  <a href="<?php echo $this->webroot ?>sales/add" ><?php echo $this->Html->image('icons/go-jump-today.png', array('alt' => '')); ?>Saisie</a>
+	</div>
+    </li>
+    <li>
+      <div id="" class="alert alert-info">
+	<p>Visualisation des données, jour par jour</p>
+	<a href="<?php echo $this->webroot ?>sales/view" ><?php echo $this->Html->image('icons/system-search.png', array('alt' => '')); ?>Visualisation</a>
+      </div>
+    </li>
+    <li>
+      <div id="" class="alert alert-info">
+	<p>Visualisation des statistiques (par mois/jour/année, groupés par magasins/produits)/<p>
+	<a href="<?php echo $this->webroot ?>sales/stats" ><?php echo $this->Html->image('icons/view-statistics.png', array('alt' => '')); ?>Statistiques</a>
+      </div>
+    </li>
   </ul>
 </div>

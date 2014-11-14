@@ -1,3 +1,4 @@
+<h2>Statistiques</h2>
 <div class="alert alert-info">Ici sont disponible les données saisies sur <a href="<?php echo $this->webroot ?>sales/add" >cette page</a></div>
 <?php echo $this->Form->create('Sales'); ?>
 	  <fieldset id="groupFieldset" class="alert alert-info">

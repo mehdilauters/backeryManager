@@ -187,8 +187,8 @@ if(!$slideshowInserted && count($products) != 0)
 		<?php endif; ?>
 	      <?php if($tokens['isAdmin']) : ?>
 	      introSteps.push({
-		element: '#dailyProductionLink',
-                intro: 'Vous pourrez ensuite vous rendre sur la page de saisie journalière des ventes',
+		element: '#sales',
+                intro: 'Vous pourrez ensuite vous rendre sur la page de gestion de la production',
 		position: 'left'
               });
 	      <?php endif; ?>

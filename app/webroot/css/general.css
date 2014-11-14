@@ -617,3 +617,7 @@ td.actions img.icon {
 .cols_checklist_item{
    color:black;
 }
+
+.alert-info a{
+  color:blue;
+}

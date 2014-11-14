@@ -1,7 +1,7 @@
 <?php
 /**
 * setup:
-*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl courier-pop courier-imap postfix
+*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl courier-pop courier-imap postfix postfix-mysql roundcube
 *    optional
 *	apt-get install ruby
 *       gem install selenium
@@ -12,6 +12,8 @@
 * AllowOverride All
 * service apache2 restart
 *
+* https://workaround.org/ispmail/lenny/postfix-database-mappings
+* http://dannorth.net/2007/09/09/virtual-mailboxes-with-courier-imap-and-postfix/
 */  
 
 

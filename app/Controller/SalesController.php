@@ -19,8 +19,7 @@ class SalesController extends AppController {
  * @return void
  */
   public function index() {
-    $this->Sale->contain('Product.Media.Photo', 'Shop.Media.Photo');
-    $this->set('sales', $this->paginate());
+
   }
 
   
@@ -68,7 +67,6 @@ class SalesController extends AppController {
 
 
     public function stats($conditions = array(), $group = array()) {
-    $this->set('title_for_layout', 'Statistiques de ventes/production');
     $groupBy = array();
     if (empty($this->request->params['requested'])) {
       $dateStart = new DateTime();
@@ -361,17 +359,23 @@ $dateEnd = $dateEnd->format('d/m/Y');
  * @param string $id
  * @return void
  */
-  public function view($id = null) {
-    if (!$this->Sale->exists($id)) {
-      throw new NotFoundException(__('Invalid sale'));
+  public function view() {
+    $date = date('d/m/Y');
+    if(isset($this->request->data['date']))
+    {
+      $date = $this->request->data['date'];
     }
-    $options = array('conditions' => array('Sale.' . $this->Sale->primaryKey => $id));
-    $sale = $this->Sale->find('first', $options);
-    //debug($sale);
-	$this->set(array(
-            'sale' => $sale,
-            '_serialize' => array('sale')
-        ));
+
+    $dateSql = $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s');
+    $sales = $this->Sale->find('all', array('conditions' => array(
+							  'Sale.date' => $dateSql,
+							  'Shop.company_id'=>$this->getCompanyId()
+							 )));
+//     $this->Sale->Product->contain(array('ProductType'=>array(),'Sale'=>array('conditions'=>'Sale.date = \''.$date.'\''), 'Media.Photo'=>array()));
+
+    $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id', 'conditions'=>array('Product.production_display', 'ProductType.company_id'=>$this->getCompanyId())));
+    $shops = $this->Sale->Shop->find('all',array('conditions'=>array('Shop.company_id'=>$this->getCompanyId())));
+    $this->set(compact('date','products', 'shops', 'sales'));
   }
 
 
@@ -381,11 +385,11 @@ public function results()
     $dateEnd = date('d/m/Y');
     if(isset($this->request->data['dateStart']))
     {
-  $dateStart = $this->request->data['dateStart'];
+      $dateStart = $this->request->data['dateStart'];
     }
     if(isset($this->request->data['dateEnd']))
     {
-  $dateEnd = $this->request->data['dateEnd'];
+      $dateEnd = $this->request->data['dateEnd'];
     }
     
     App::uses('CakeTime', 'Utility');
@@ -681,23 +685,40 @@ public function results()
  * @param string $id
  * @return void
  */
-  public function delete($id = null) {
-//     $this->Sale->id = $id;
-//     if (!$this->Sale->exists()) {
-//       throw new NotFoundException(__('Invalid sale'));
-//     }
-//     $this->request->onlyAllow('post', 'delete');
-//     if ($this->Sale->delete()) {
-//       $this->Session->setFlash(__('Sale deleted'),'flash/ok');
-//       $this->redirect(array('action' => 'index'));
-//     }
-//     $this->Session->setFlash(__('Sale was not deleted'),'flash/fail');
-//     $this->redirect(array('action' => 'index'));
+  public function delete() {
+    $this->request->onlyAllow('post', 'delete');
+    $date = $this->request->data['date'];
+
+    $dateSql = $this->Functions->viewDateToDateTime($date)->format('Y-m-d H:i:s');
+    $sales = $this->Sale->find('all', array('conditions' => array(
+							  'Sale.date' => $dateSql,
+							  'Shop.company_id'=>$this->getCompanyId()
+							 )));
+
+    $nok = 0;
+    foreach($sales as $sale)
+    {
+      if(! $this->Sale->delete($sale['Sale']['id']) )
+      {
+	 $nok ++;
+      }
+    }
+    
+    if($nok == 0)
+    {
+      $this->Session->setFlash(__('Sale was deleted'),'flash/ok');      
+    }
+    else
+    {
+      $this->Session->setFlash(__('Sales was not deleted ('.$nok.')'),'flash/fail');
+    }
+    $this->redirect('view');
   }
 
 
 public function beforeFilter() {
 	parent::beforeFilter();
+	$this->set('title_for_layout', 'Production');
         // $this->Security->requirePost('stats');
     }
 

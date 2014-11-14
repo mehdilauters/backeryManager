@@ -414,6 +414,11 @@ def addItem(driver, item)
   
 end
 
+def deleteFisrtSale(driver)
+  puts "deleteSales"
+  goto(driver, BaseUrl + "sales/view")
+  driver.find_element(:css => "#deleteSale input[type=submit]").click
+end
 
 def addSales(driver, dte)
     puts "addSales"
@@ -520,7 +525,9 @@ if write
     addSales(driver,dte)
     addResult(driver, dte)
     }
+  goto(driver, BaseUrl + "sales")
   goto(driver, BaseUrl + "sales/stats")
+  deleteFisrtSale(driver)
   goto(driver, BaseUrl + "results/stats")
 
   addOrder(driver, Orders[0])
@@ -546,6 +553,7 @@ end
   goto(driver, BaseUrl + "sales")
   goto(driver, BaseUrl + "sales/add")
   goto(driver, BaseUrl + "sales/stats")
+  goto(driver, BaseUrl + "sales/view")
   
   goto(driver, BaseUrl + "results/")
   goto(driver, BaseUrl + "results/add")

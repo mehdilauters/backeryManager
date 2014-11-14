@@ -258,17 +258,18 @@ class UsersController extends AppController {
 					      )));
 		
 			$authRes = $this->Auth->login($user['User']); //TODO correct message if wrong user/pwd
-			//TODO with auth scope??
-			$tokens = $this->getUserTokens();
-			if(!$tokens['isRoot'] && $this->Auth->user('company_id') != $this->getCompanyId())
-			{
-			      $this->Session->setFlash(
-					__('Invalid company for login'),
-					'flash/fail'
-				);
-			    $this->logout();
-			}
 			if ($authRes) {
+				//TODO with auth scope??
+				$tokens = $this->getUserTokens();
+				if(!$tokens['isRoot'] && $this->Auth->user('company_id') != $this->getCompanyId())
+				{
+				      $this->Session->setFlash(
+						__('Invalid company for login'),
+						'flash/fail'
+					);
+				    $this->logout('/users/login');
+				}
+
 				$cookieValue = array(
 						'id' => $this->Auth->user('id'),
 						'key' => AuthComponent::password(AuthComponent::password($this->data['User']['password']).$this->Auth->user('id'))
@@ -290,13 +291,17 @@ class UsersController extends AppController {
 		}
 	}
 
-	public function logout() {
+	public function logout($url = Null) {
 		if( Configure::read('Settings.demo.active') )
 		{
 			$this->Cookie->write('demoLogout', true, true, '10 weeks');
 		}
 		$this->Cookie->delete('bakeryManagerUser');
-		$this->redirect($this->Auth->logout());
+		if( $url == NULL )
+		{
+		  $url = $this->Auth->logout();
+		}
+		$this->redirect($url);
 	}	
 	
 

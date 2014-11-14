@@ -1,4 +1,5 @@
 <div class="sales form">
+<h2>Saisie</h2>
 <div id="excelImport" class="alert alert-info">
   <p>
     Téléchargez le fichier suivant, <a href="<?php echo $this->webroot ?>sales/add.xls" >Ventes.xls</a> remplissez le, enregistrez le et enfin importez le directement sur le site. Il permet de gérer les données de ventes même sans connexion internet</p>
