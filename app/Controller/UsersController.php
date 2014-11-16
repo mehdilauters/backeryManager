@@ -261,7 +261,7 @@ class UsersController extends AppController {
 			if ($authRes) {
 				//TODO with auth scope??
 				$tokens = $this->getUserTokens();
-				if(!$tokens['isRoot'] && $this->Auth->user('company_id') != $this->getCompanyId())
+				if(!$this->Auth->user('company_id') != $this->getCompanyId())
 				{
 				      $this->Session->setFlash(
 						__('Invalid company for login'),
