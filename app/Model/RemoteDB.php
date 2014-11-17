@@ -111,7 +111,7 @@ class RemoteDB extends AppModel {
 				}
 				if($user['User']['name'] == "demo")
 				{
-				  $aro = $this->Acl->Aro;
+				  $aro = new Aro();
 				  $aroData = array('alias' => $this->data['User']['name'],
 				  'parent_id' => 2,
 				  'model' => 'User',
