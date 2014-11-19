@@ -250,6 +250,7 @@ class PhotosController extends AppController {
        $ok = false;
        $this->log('Could not upload photo','debug');
        $this->Photo->invalidateField('upload','Erreur lors de l\'upload du fichier');
+       $this->Session->setFlash(__('The photo could not be uploaded. Please, try again.'),'flash/fail');
       }
     }
     else

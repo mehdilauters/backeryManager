@@ -1,5 +1,6 @@
 # tests
 # import
+# mysql -u USER -pPWD -Ddatabae < app/Config/Schema/databaseCreate.sql && ruby ./app/Test/test.rb w HOST bakeryManager/
 # http://mehdi/bakeryManager/config/initAcl
 # http://mehdi/bakeryManager/users/add
 # http://mehdi/bakeryManager/photos/add # rib
@@ -44,9 +45,15 @@ require "selenium-client"
 Root = {'email' => 'root@lauters.fr',
 		'password' => 'root',
 		'name' => 'root'}
-CompanyUser  = {'email' => 'companyManager@lauters.fr',
-		'password' => 'companyManager',
-		'name' => 'companyManager'}
+CompanyManagers  = [
+                {'email' => 'companyManager1@lauters.fr',
+		'password' => 'companyManager1',
+		'name' => 'companyManager1'},
+                  {'email' => 'companyManager2@lauters.fr',
+                'password' => 'companyManager2',
+                'name' => 'companyManager2'},
+              ]
+
 
 Photos = [{'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
 	 'name' => 'ribTest',
@@ -55,14 +62,26 @@ Photos = [{'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
 	 'name' => 'shoop',
          'description' => ''}
          ]
-Company = { 'name' => 'testCompany',
-            'address' => '57 rue Lakanal',
-            'phone' => '0687363854',
-            'capital' => '7000',
-            'siret' => '976456899',
-            'title' => 'testCompany',
-            'email' => 'company@lauters.fr',
-	   }
+Companies = [
+              { 'name' => 'testCompany1',
+                'domain_name' => 'testCompany1.fr',
+              'address' => '57 rue Lakanal',
+              'phone' => '0687363854',
+              'capital' => '7000',
+              'siret' => '976456899',
+              'title' => 'testCompany',
+              'email' => 'company@lauters.fr',
+            },
+              { 'name' => 'testCompany2',
+                'domain_name' => 'testCompany2.fr',
+              'address' => '57 rue Lakanal',
+              'phone' => '0687363854',
+              'capital' => '7000',
+              'siret' => '976456899',
+              'title' => 'testCompany',
+              'email' => 'company@lauters.fr',
+            }
+            ]
 Shops = [{ 'name' => 'testShop',
             'address' => '57 rue Lakanal',
             'phone' => '0687363854',
@@ -137,7 +156,6 @@ Dates = [
 Orders = [
   {
    'shop' => Shops[0]['name'],
-   'user' => CompanyUser['name'],
    'dueDate' => '13/08/2014',
    'comment' => 'nazdar'
    },
@@ -169,29 +187,57 @@ OrderItems = [
 
 driver = Selenium::WebDriver.for :firefox
 
-def checkEror(driver, raise = true)
-  puts driver.title
+def waitUntil(elt)
   wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-  wait.until { driver.find_element(:css => "body") }
+  begin
+    wait.until { elt }
+  rescue
+    puts "Error waiting #{elt}"
+    puts driver.page_source
+    raise 'waitError'
+  end
+end
+
+def checkError(driver, raiseError = true)
+  puts driver.title
+  waitUntil ( driver.find_element(:css => "body") )
   if driver.title.match /Error/
     puts driver.page_source
     raise "Error"
   end
   
+
+  authError = true
   begin
     driver.find_element(:css => ".authError")
    rescue
-     return
+     authError = false
   end
-  if raise
+  if raiseError && authError
     raise "authError"
   end
+  
+    flashError = true
+    flashElt = false
+  begin
+    flashElt = driver.find_element(:css => ".flashError")
+   rescue
+     flashError = false
+  end
+  if flashError
+    puts flashElt.text
+    if raiseError
+      raise "flashError"
+    end
+  end
+  return
 end
 
 def goto(driver, url, raise = true)
   puts url
   driver.navigate.to url
-  checkEror(driver, raise)
+  sleep(1)
+  checkError(driver, raise)
   
 end
 
@@ -204,7 +250,7 @@ def login(driver, user)
   logingLink = driver.find_element(:css => "#login > a");
   logingLink.click
 
-  checkEror(driver)
+  checkError(driver)
 
   wait.until { driver.find_element(:id => "UserEmail") }
   email = driver.find_element(:id => "UserEmail")
@@ -227,7 +273,7 @@ def logout(driver)
 
   logoutLink = driver.find_element(:css => "#logout > a");
   logoutLink.click
-  checkEror(driver)
+  checkError(driver)
 end
 
 def addUser(driver, user)
@@ -246,7 +292,7 @@ def addUser(driver, user)
     
   addSubmit = driver.find_element(:css => "#UserAddForm > .submit > input");
   addSubmit.click    
-  checkEror(driver)
+  checkError(driver)
 end
 
 def addPhoto(driver, photo)
@@ -255,6 +301,9 @@ def addPhoto(driver, photo)
     name = driver.find_element(:id => "PhotoName")
     driver.action.send_keys(name, photo['name']).perform
     
+    if(!File.file?(photo['path']))
+       raise 'File to upload not found'
+    end
       driver.find_element(:id => "PhotoUpload").send_keys(photo['path'])
 #     description = driver.find_element(:id => "PhotoDescription")
 #     driver.action.send_keys(description, photo['description']).perform
@@ -262,7 +311,7 @@ def addPhoto(driver, photo)
     
   addSubmit = driver.find_element(:css => "#PhotoAddForm > .submit > input");
   addSubmit.click
-  checkEror(driver)
+  checkError(driver)
 end
 
 
@@ -272,6 +321,7 @@ def addCompany(driver, company)
     
     
     driver.find_element(:id => "CompanyEmail").send_keys(company['email'])
+    driver.find_element(:id => "CompanyDomainName").send_keys(company['domain_name'])
     driver.find_element(:id => "CompanyAddress").send_keys(company['address'])
     driver.find_element(:id => "CompanyName").send_keys(company['name'])
     driver.find_element(:id => "CompanyPhone").send_keys(company['phone'])
@@ -280,7 +330,7 @@ def addCompany(driver, company)
     driver.find_element(:id => "CompanyTitle").send_keys(company['title'])
     
     driver.find_element(:css => "#CompanyAddForm > .submit > input").click;
-    checkEror(driver)
+    checkError(driver)
 end
 
 def addProductType(driver, productType)
@@ -297,7 +347,7 @@ def addProductType(driver, productType)
   end
     driver.find_element(:css => "#ProductTypeAddForm > .submit > input").click;
     
-    checkEror(driver)
+    checkError(driver)
 end
 
 def addProduct(driver, product)
@@ -330,7 +380,7 @@ def addProduct(driver, product)
   
     driver.find_element(:css => "#ProductAddForm > .submit > input").click;
     
-    checkEror(driver)
+    checkError(driver)
 end
 
 
@@ -343,7 +393,7 @@ def addShop(driver, shop)
     driver.find_element(:id => "ShopMediaId").send_keys(shop['media'])
   driver.execute_script "tinyMCE.activeEditor.setContent('#{shop['description']}')"
   driver.find_element(:css => "#ShopAddForm > .submit > input").click;
-  checkEror(driver)
+  checkError(driver)
 end
 
 def addOrder(driver, order)
@@ -354,7 +404,7 @@ def addOrder(driver, order)
   driver.find_element(:id => "OrderDeliveryDate").send_keys(order['dueDate'])
   driver.execute_script "tinyMCE.activeEditor.setContent('#{order['comment']}')"
   driver.find_element(:css => "#OrderAddForm > .submit > input").click;
-  checkEror(driver)
+  checkError(driver)
 end
 
 
@@ -412,7 +462,7 @@ def addItem(driver, item)
   driver.execute_script "tinyMCE.activeEditor.setContent('#{item['comment']}')"
   driver.find_element(:css => "#OrderedItemAddForm > .submit > input").click;
   
-  checkEror(driver)
+  checkError(driver)
   
 end
 
@@ -449,7 +499,7 @@ def addSales(driver, dte)
             }
   driver.find_element(:css => "#salesAdd input[type=submit]").click
   
-  checkEror(driver)
+  checkError(driver)
 end
 
 def addResult(driver, dte)
@@ -490,7 +540,7 @@ def addResult(driver, dte)
   
   driver.find_element(:css => "#resultsAdd input[type=submit]").click
   
-  checkEror(driver)
+  checkError(driver)
 end
 
 def closeIntro(driver)
@@ -509,36 +559,41 @@ end
 if write
   goto(driver, BaseUrl + "config/initAcl")
   addUser(driver, rootUser);
-  login(driver, rootUser);
-  addPhoto(driver, Photos[0]);
-  addCompany(driver, Company)
-  addUser(driver, CompanyUser);
-  logout(driver)
-  login(driver, CompanyUser);
-  addPhoto(driver, Photos[1]);
-  addShop(driver, Shops[0])
-  addShop(driver, Shops[1])
-  addProductType(driver, ProductTypes[0])
-  addProductType(driver, ProductTypes[1])
-  addProduct(driver, Products[0])
-  addProduct(driver, Products[1])
-  Dates.each{
-    |dte|
-    addSales(driver,dte)
-    addResult(driver, dte)
-    }
-  goto(driver, BaseUrl + "sales")
-  goto(driver, BaseUrl + "sales/stats")
-  deleteFisrtSale(driver)
-  goto(driver, BaseUrl + "results/stats")
-
-  addOrder(driver, Orders[0])
-  selectFirstOrder(driver)
-  addItem(driver, OrderItems[0])
-  selectFirstOrder(driver)
-  addItem(driver, OrderItems[1])
-  selectFirstOrder(driver)
-  logout(driver)
+#   Companies.each_with_index { |company,companyId|
+    companyId = 0
+    company = Companies[companyId]
+    login(driver, rootUser);
+    addPhoto(driver, Photos[0]);
+    addCompany(driver, company)
+    addUser(driver, CompanyManagers[companyId]);
+    logout(driver)
+    login(driver, CompanyManagers[companyId]);
+#     goto(driver, BaseUrl + "config/setCompany/#{companyId}")
+    addPhoto(driver, Photos[1]);
+    addShop(driver, Shops[0])
+    addShop(driver, Shops[1])
+    addProductType(driver, ProductTypes[0])
+    addProductType(driver, ProductTypes[1])
+    addProduct(driver, Products[0])
+    addProduct(driver, Products[1])
+    Dates.each{
+      |dte|
+      addSales(driver,dte)
+      addResult(driver, dte)
+      }
+    goto(driver, BaseUrl + "sales")
+    goto(driver, BaseUrl + "sales/stats")
+    deleteFisrtSale(driver)
+    goto(driver, BaseUrl + "results/stats")
+    Orders[0]['user'] = CompanyManagers[companyId]['name'],
+    addOrder(driver, Orders[0])
+    selectFirstOrder(driver)
+    addItem(driver, OrderItems[0])
+    selectFirstOrder(driver)
+    addItem(driver, OrderItems[1])
+    selectFirstOrder(driver)
+    logout(driver)
+#   }
 end
   goto(driver, BaseUrl)
   login(driver, rootUser);

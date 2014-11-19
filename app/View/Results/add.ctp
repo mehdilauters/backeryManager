@@ -124,7 +124,7 @@ function checkTotals()
 				var val = parseFloat($(this).val());
 				if( !isNaN(val))
 				{
-					data[idShop]['totalPrice'] += val;
+					data[idShop]['totalPrice'] += Math.round(val  * 100) / 100 ;
 					$(this).closest('tr').removeClass('invalid');
 					$(this).closest('tr').removeClass('valid');
 					$(this).closest('tr').removeClass('notSet');
