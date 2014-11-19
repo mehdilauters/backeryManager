@@ -149,6 +149,8 @@ function checkTotals()
 			});
 	      	data[idShop]['totalCategories'] = Math.round(data[idShop]['totalCategories'] * 100) / 100;
 		data[idShop]['totalShopCategory'] = Math.round(data[idShop]['totalShopCategory'] * 100) / 100;
+                data[idShop]['totalPrice'] = Math.round(data[idShop]['totalPrice'] * 100) / 100;
+
 	});
 	
 
