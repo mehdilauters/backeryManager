@@ -187,10 +187,10 @@ OrderItems = [
 
 driver = Selenium::WebDriver.for :firefox
 
-def waitUntil(elt)
+def waitUntil(&elt)
   wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
   begin
-    wait.until { elt }
+    wait.until { elt.call }
   rescue
     puts "Error waiting #{elt}"
     puts driver.page_source
@@ -200,7 +200,7 @@ end
 
 def checkError(driver, raiseError = true)
   puts driver.title
-  waitUntil ( driver.find_element(:css => "body") )
+  waitUntil { driver.find_element(:css => "body") }
   if driver.title.match /Error/
     puts driver.page_source
     raise "Error"
@@ -244,15 +244,14 @@ end
 
 def login(driver, user)
   puts "login #{user.to_s}"
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-  wait.until { driver.find_element(:id => "login") }
+  waitUntil { driver.find_element(:id => "login") }
 
   logingLink = driver.find_element(:css => "#login > a");
   logingLink.click
 
   checkError(driver)
 
-  wait.until { driver.find_element(:id => "UserEmail") }
+  waitUntil { driver.find_element(:id => "UserEmail") }
   email = driver.find_element(:id => "UserEmail")
   driver.action.send_keys(email, user['email']).perform
   
@@ -261,15 +260,13 @@ def login(driver, user)
   logingSubmit = driver.find_element(:css => "#UserLoginForm > .submit > input");
   logingSubmit.click
   
-    wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-  wait.until { driver.find_element(:css => "#logout") }
+  waitUntil { driver.find_element(:css => "#logout") }
   
 end
 
 def logout(driver)
   puts "logout"
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
-  wait.until { driver.find_element(:id => "logout") }
+  waitUntil { driver.find_element(:id => "logout") }
 
   logoutLink = driver.find_element(:css => "#logout > a");
   logoutLink.click
@@ -450,9 +447,8 @@ end
 def addItem(driver, item)
   puts "AddItem #{item.to_s}"
   
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60) # seconds
   driver.find_element(:css => ".addItem > a").click;
-  wait.until { driver.find_element(:css => "#OrderedItemProductId") }
+  waitUntil { driver.find_element(:css => "#OrderedItemProductId") }
   
   
   driver.find_element(:id => "OrderedItemProductId").send_keys(item['product'])
