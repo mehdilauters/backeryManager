@@ -47,18 +47,26 @@
 					 'div'=>'form-group',
 					  'class'=>'form-control'
 					  ));
-		echo $this->Form->input('domainName', array('label'=>array('class'=>'col-sm-3 control-label'),
-					  'between' => '<div class="col-sm-5" >',
-					  'after' => '</div>',
-					 'div'=>'form-group',
-					  'class'=>'form-control'
-					  ));
-		echo $this->Form->input('email', array('label'=>array('class'=>'col-sm-3 control-label'),
-					  'between' => '<div class="col-sm-5" >',
-					  'after' => '</div>',
-					 'div'=>'form-group',
-					  'class'=>'form-control'
-					  ));
+                if($tokens['isAdmin'])
+                {
+                  echo $this->Form->input('domain_name', array('label'=>array('class'=>'col-sm-3 control-label'),
+                                            'between' => '<div class="col-sm-5" >',
+                                            'after' => '</div>',
+                                          'div'=>'form-group',
+                                            'class'=>'form-control'
+                                            ));
+                }
+                $result = preg_match('/^(\w+)@(\w+)\..*$/',$this->request->data['Company']['email'], $matches);
+                // internal email
+                if($matches[2] != $this->request->data['Company']['domain_name']  || $tokens['isAdmin'])
+                {
+                  echo $this->Form->input('email', array('label'=>array('class'=>'col-sm-3 control-label'),
+                                            'between' => '<div class="col-sm-5" >',
+                                            'after' => '</div>',
+                                          'div'=>'form-group',
+                                            'class'=>'form-control'
+                                            ));
+                }
 		echo $this->Form->input('order_legals_mentions', array('class'=>'textEditor form-control', 'label'=>array('class'=>'col-sm-3 control-label'),
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',

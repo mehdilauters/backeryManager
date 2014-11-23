@@ -45,7 +45,7 @@
 					 'div'=>'form-group',
 					  'class'=>'form-control'
 					  ));
-		echo $this->Form->input('domainName', array('label'=>array('class'=>'col-sm-3 control-label'),
+		echo $this->Form->input('domain_name', array('label'=>array('class'=>'col-sm-3 control-label'),
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',
 					 'div'=>'form-group',

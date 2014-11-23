@@ -497,11 +497,17 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 
 
-alter table events add
-  `internal` tinyint(1) NOT NULL DEFAULT \'0\';
+create table if not exists emails (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `company_id` int(10) NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  PRIMARY KEY (`id`),
+  KEY `fk_emails_companies` (`company_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
-alter table shops add
-  `event_type_closed_id` int(10);
+ ALTER TABLE `emails`
+  ADD CONSTRAINT `fk_emails_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
 
 SET FOREIGN_KEY_CHECKS = 1;
 ';	

@@ -105,6 +105,19 @@ class Company extends AppModel {
 	  'finderQuery' => '',
 	  'counterQuery' => ''
 	),
+        'Email' => array(
+          'className' => 'Email',
+          'foreignKey' => 'company_id',
+          'dependent' => false,
+          'conditions' => '',
+          'fields' => '',
+          'order' => '',
+          'limit' => '',
+          'offset' => '',
+          'exclusive' => '',
+          'finderQuery' => '',
+          'counterQuery' => ''
+        ),
       );
 
 

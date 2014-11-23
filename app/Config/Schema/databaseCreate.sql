@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS `orders`;
 
 
 DROP TABLE IF EXISTS `companies`;
+DROP TABLE IF EXISTS `emails`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -314,13 +315,29 @@ create table if not exists companies (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 
+create table if not exists emails (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `company_id` int(10) NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  password varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
+
+  PRIMARY KEY (`id`),
+  KEY `fk_emails_companies` (`company_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+
 ALTER TABLE `medias`
   ADD CONSTRAINT `fk_medias_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `companies`
   ADD CONSTRAINT `fk_companies_media` FOREIGN KEY (`rib`) REFERENCES `medias` (`id`),
-  ADD CONSTRAINT `fk_companies_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`);
+  ADD CONSTRAINT `fk_companies_eventTypes` FOREIGN KEY (`event_type_id`) REFERENCES `event_types` (`id`),
+  ADD CONSTRAINT `u_companies_domain_name` UNIQUE (`domain_name`); 
 
+ ALTER TABLE `emails`
+  ADD CONSTRAINT `fk_emails_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
+  
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),
   ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
