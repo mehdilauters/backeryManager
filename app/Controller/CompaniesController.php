@@ -61,7 +61,7 @@ var $publicActions = array('view');
                                 {
                                   $email = array('Email'=>array());
                                   $email['Email']['company_id'] = $this->Company->getInsertID();
-                                  $email['Email']['password'] = $this->Auth->user('password');
+                                  $email['Email']['password'] = 'encrypt('.$matches[1].')';
                                   $email['Email']['email'] = $matches[1];
                                   $email['Email']['title'] = $matches[1];
 //                                   maildirmake
@@ -77,7 +77,7 @@ var $publicActions = array('view');
                                 {
                                   $this->Session->setFlash(__('The company has been saved'),'flash/ok');
                                 }
-//                              return $this->redirect(array('action' => 'index'));
+                             return $this->redirect(array('action' => 'index'));
                         } else {
 				$this->Session->setFlash(__('The company could not be saved. Please, try again.'),'flash/fail');
 			}

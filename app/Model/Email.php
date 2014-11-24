@@ -75,8 +75,10 @@ class Email extends AppModel {
         {
           if($created)
           {
-            $mailbox = $this->data['Email']['company_id'].'_'.$this->data['Email']['email'];
-            $fullPath = Configure::read('Settings.Emails.path').$mailbox;
+            $maildir = Configure::read('Settings.Emails.path').$this->data['Email']['company_id'];
+            mkdir($maildir);
+            $mailbox = $this->data['Email']['company_id'].'/'.$this->data['Email']['email'];
+            $fullPath = $maildir.$mailbox;
             $command = 'maildirmake '.$fullPath;
             system($command);
             if(!is_dir($fullPath))

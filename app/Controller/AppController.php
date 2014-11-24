@@ -396,10 +396,17 @@ public function getUserTokens($userId = NULL)
     $name = '';
 // debug($this->request->params);
     $companyCount = $this->Company->find('count');
-    if($companyCount == 1)
+    if($companyCount == 1 || $companyCount == 0)
     {
-      $company = $this->Company->find('first');
-      $companyId = $company['Company']['id'];
+	if($companyCount == 1)
+	{
+	      $company = $this->Company->find('first');
+	      $companyId = $company['Company']['id'];
+	}
+	else
+	{
+          return NULL;
+	}
     }
     else
     {
