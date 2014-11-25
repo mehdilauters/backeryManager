@@ -6,7 +6,7 @@
 			<th><?php echo $this->Paginator->sort('company_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('email'); ?></th>
 			<th><?php echo $this->Paginator->sort('title'); ?></th>
-			<th><?php echo $this->Paginator->sort('password'); ?></th>
+			<th><?php echo $this->Paginator->sort('mailbox_exists'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($emails as $email): ?>
@@ -17,7 +17,18 @@
 		</td>
 		<td><?php echo h($email['Email']['email']); ?>&nbsp;</td>
 		<td><?php echo h($email['Email']['title']); ?>&nbsp;</td>
-		<td><?php echo h($email['Email']['password']); ?>&nbsp;</td>
+		<td>
+		<?php
+                  if($email['Email']['mailbox_exists'])
+                  {
+                    echo $this->Html->image('icons/dialog-ok-apply.png', array('class'=>'icon','alt' => __('oui')));
+                  }
+                  else
+                  {
+                    echo $this->Html->image('icons/edit-delete.png', array('class'=>'icon','alt' => __('non')));
+                  }
+		?>
+		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $email['Email']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $email['Email']['id'])); ?>

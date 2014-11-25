@@ -49,6 +49,7 @@ class EmailsController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Email->create();
+			$this->request->data['Email']['password'] = 'encrypt('.$this->request->data['Email']['password'].')';
 			if ($this->Email->save($this->request->data)) {
 				$this->Session->setFlash(__('The email has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -72,6 +73,10 @@ class EmailsController extends AppController {
 			throw new NotFoundException(__('Invalid email'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+                        if( $this->request->data['Email']['password'] != '')
+                        {
+                          $this->request->data['Email']['password'] = 'encrypt('.$this->request->data['Email']['password'].')';
+                        }
 			if ($this->Email->save($this->request->data)) {
 				$this->Session->setFlash(__('The email has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -82,6 +87,7 @@ class EmailsController extends AppController {
 			$options = array('conditions' => array('Email.' . $this->Email->primaryKey => $id));
 			$this->request->data = $this->Email->find('first', $options);
 		}
+		$this->request->data['Email']['password'] = '';
 		$companies = $this->Email->Company->find('list');
 		$this->set(compact('companies'));
 	}

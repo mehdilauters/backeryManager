@@ -69,28 +69,77 @@ class Email extends AppModel {
 		)
 	);
 
-	
-	
-        public function afterSave($created, $options = array())
-        {
-          if($created)
-          {
-            $maildir = Configure::read('Settings.Emails.path').$this->data['Email']['company_id'];
-            mkdir($maildir);
-            $mailbox = $this->data['Email']['company_id'].'/'.$this->data['Email']['email'];
-            $fullPath = $maildir.$mailbox;
-            $command = 'maildirmake '.$fullPath;
-            system($command);
-            if(!is_dir($fullPath))
+	public function getMailboxPath($data = NULL)
+	{
+            if($data == NULL)
             {
-              debug("could not create email directory");
-              debug($command);
-              return false;
+              $data = $this->data;
+            }
+            $maildir = Configure::read('Settings.Emails.path').$data[$this->alias]['company_id'].'/'.$data[$this->alias]['email'];;
+            return $maildir;
+	}
+	
+        public function beforeSave($options = array())
+        {
+            App::uses('Folder', 'Utility');
+
+            $maildir = Configure::read('Settings.Emails.path').$this->data[$this->alias]['company_id'];
+            if(!is_dir($maildir))
+            {
+              $f = new Folder();
+              if(!$f->create(Configure::read('Settings.Emails.path').$this->data[$this->alias]['company_id']))
+              {
+                debug("could not create root email directory");
+                return false;
+              }
+            }
+            
+            $tmp = $this->findById($this->id);
+            if(count($tmp) == 0 )
+            { // create
+              $command = 'maildirmake '.$this->getMailboxPath();
+              system($command);
+              if(!is_dir($this->getMailboxPath()))
+              {
+                debug("could not create email directory");
+                debug($command);
+                return false;
+              }
+            }
+            else
+            {
+            debug($tmp);
+            debug($this->data);
+              if( $this->getMailboxPath($tmp) != $this->getMailboxPath($this->data))
+              { // move
+                $from = $this->getMailboxPath($tmp);
+                $to = $this->getMailboxPath($this->data);
+                debug('move from '.$from.' to '.$to);
+                $folder = new Folder($from);
+                return $folder->move($to);
+              }
+            }
+        }
+        
+        public function afterFind($results, $primary = false)
+        {
+          $results = parent::afterFind($results, $primary);
+          foreach($results as $id => $data)
+          {
+            if(isset($data[$this->alias]))
+            {
+              $results[$id][$this->alias]['mailbox_exists'] = is_dir($this->getMailboxPath($data));
             }
           }
-          else
-          {
-            debug("Warning: email rename not implemented");
-          }
+          return $results;
+        }
+        
+        public function beforeDelete($cascade = true) {
+          $data = $this->findById($this->id);
+          debug($this->getMailboxPath($data));
+//           return false;
+          App::uses('Folder', 'Utility');
+          $folder = new Folder($this->getMailboxPath($data));
+          return $folder->delete();
         }
 }

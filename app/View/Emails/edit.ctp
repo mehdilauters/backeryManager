@@ -5,7 +5,7 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('company_id');
-// 		echo $this->Form->input('email', array('type'=>'text'));
+		echo $this->Form->input('email', array('type'=>'text'));
 		echo $this->Form->input('title');
 		echo $this->Form->input('password');
 	?>

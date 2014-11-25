@@ -336,7 +336,8 @@ ALTER TABLE `companies`
   ADD CONSTRAINT `u_companies_domain_name` UNIQUE (`domain_name`); 
 
  ALTER TABLE `emails`
-  ADD CONSTRAINT `fk_emails_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
+  ADD CONSTRAINT `fk_emails_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`),
+  ADD CONSTRAINT `u_emails_companies` UNIQUE (`email`,`company_id`);
   
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_orders_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`),

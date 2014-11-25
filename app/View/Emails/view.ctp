@@ -21,11 +21,6 @@
 			<?php echo h($email['Email']['title']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Password'); ?></dt>
-		<dd>
-			<?php echo h($email['Email']['password']); ?>
-			&nbsp;
-		</dd>
 	</dl>
 </div>
 <div class="actions">
