@@ -465,6 +465,7 @@ end
 def deleteFisrtSale(driver)
   puts "deleteSales"
   goto(driver, BaseUrl + "sales/view")
+  waitUntil{ driver.find_element(:css => "#deleteSale input[type=submit]") }
   driver.find_element(:css => "#deleteSale input[type=submit]").click
 end
 
