@@ -97,7 +97,7 @@ class Email extends AppModel {
             $tmp = $this->findById($this->id);
             if(count($tmp) == 0 )
             { // create
-              $command = 'maildirmake '.$this->getMailboxPath();
+              $command = Configure::read('Settings.Emails.maildirmake').' '.$this->getMailboxPath();
               system($command);
               if(!is_dir($this->getMailboxPath()))
               {

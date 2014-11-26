@@ -31,6 +31,9 @@ sudo a2enmod rewrite
 sudo a2enmod actions
 sudo service apache2 restart
 
+
+sudo apt-get install courier-pop courier-imap postfix postfix-mysql roundcube courier-authlib-mysql
+
 # Configure custom domain
 echo "127.0.0.1 mydomain.local" | sudo tee --append /etc/hosts
 

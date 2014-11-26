@@ -21,7 +21,7 @@
 		<?php
                   if($email['Email']['mailbox_exists'])
                   {
-                    echo $this->Html->image('icons/dialog-ok-apply.png', array('class'=>'icon','alt' => __('oui')));
+                    echo $this->Html->image('icons/dialog-ok-apply.png', array('class'=>'icon ok','alt' => __('oui')));
                   }
                   else
                   {

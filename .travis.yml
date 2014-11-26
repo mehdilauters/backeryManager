@@ -31,6 +31,8 @@ before_script:
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -D cakephp_test < app/Config/Schema/databaseCreate.sql; fi"
   - gem install selenium-webdriver
   - chmod -R 777 ./app/tmp
+  - sudo mkdir /var/mail/vhost
+  - sudo chmod -R 777 /var/mail/vhost
 #   - echo "var net = require('net');
 #     var server = net.createServer();
 #     server.listen(80, 'localhost');
@@ -51,10 +53,15 @@ before_script:
       'persistent' => false,
     );
     }" > app/Config/database.php
+  - cp app/Config/email.php.default app/Config/email.php
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
-  - curl -s http://localhost/ && sudo cat /var/log/apache2/error.log
+  - curl -s http://localhost/ ; sudo cat /var/log/apache2/error.log
+  - sudo ./lib/Cake/Console/cake Email
+  - sudo service courier-authdaemon restart
+  - sudo postfix stop
+  - sudo postfix start
 
 
 script:

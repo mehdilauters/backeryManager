@@ -86,6 +86,9 @@ Configure::write('Settings.Excel', array(
 	
 Configure::write('Settings.Emails', array(
   'path' => '/var/mail/vhost/',
+  'uid' =>  5000,
+  'gid' => 5000,
+  'maildirmake' => 'mkdir',
 
 ));
 	

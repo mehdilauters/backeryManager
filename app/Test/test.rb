@@ -54,6 +54,12 @@ CompanyManagers  = [
                 'name' => 'companyManager2'},
               ]
 
+Users  = [
+                {'email' => 'toto@testCompany1.fr',
+                'password' => 'toto',
+                'name' => 'toto'},
+              ]
+
 
 Photos = [{'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
 	 'name' => 'ribTest',
@@ -70,7 +76,7 @@ Companies = [
               'capital' => '7000',
               'siret' => '976456899',
               'title' => 'testCompany',
-              'email' => 'company@lauters.fr',
+              'email' => 'company@testCompany1.fr',
             },
               { 'name' => 'testCompany2',
                 'domain_name' => 'testCompany2.fr',
@@ -96,6 +102,14 @@ Shops = [{ 'name' => 'testShop',
 	   }
         ]
 
+Emails = [
+    {
+     'company' => 'testCompany1',
+     'email' => 'toto',
+     'title' => 'test email',
+     'password' => 'toto'
+     },
+  ]
 
 ProductTypes = [
   {
@@ -157,7 +171,8 @@ Orders = [
   {
    'shop' => Shops[0]['name'],
    'dueDate' => '13/08/2014',
-   'comment' => 'nazdar'
+   'comment' => 'nazdar',
+   'user' => 'toto',
    },
   
   ]
@@ -193,7 +208,6 @@ def waitUntil(&elt)
     wait.until { elt.call }
   rescue
     puts "Error waiting #{elt}"
-    puts driver.page_source
     raise 'waitError'
   end
 end
@@ -414,6 +428,10 @@ def selectFirstOrder(driver)
     driver.find_element(:css => "#ordersIndexTable .actions a[title=Voir]").attribute("href")
       )
   
+  goto(driver,BaseUrl + "orders")
+  goto(driver,
+    driver.find_element(:css => "#ordersIndexTable .actions a[title=Email]").attribute("href")
+      )
 end
 
 
@@ -540,6 +558,22 @@ def addResult(driver, dte)
   checkError(driver)
 end
 
+def detectChart(driver)
+  waitUntil { driver.find_element(:css => ".jqplot-target") }
+end
+
+def createEmail(driver, email)
+  goto(driver,BaseUrl + "emails/add")
+  print "add email #{email}"
+  driver.find_element(:id => "EmailCompanyId").send_keys(email['company'])
+  driver.find_element(:id => "EmailEmail").send_keys(email['email'])
+  driver.find_element(:id => "EmailTitle").send_keys(email['title'])
+  driver.find_element(:id => "EmailPassword").send_keys(email['password'])
+  driver.find_element(:css => "#EmailAddForm input[type=submit]").click
+  checkError(driver)
+  waitUntil { driver.find_element(:css => "img.ok") }
+end
+
 def closeIntro(driver)
     puts "closeIntro"
     begin
@@ -553,75 +587,85 @@ end
     rootUser = Root
   end
 
-if write
-  goto(driver, BaseUrl + "config/initAcl")
-  addUser(driver, rootUser);
-#   Companies.each_with_index { |company,companyId|
-    companyId = 0
-    company = Companies[companyId]
+begin
+  
+  if write
+    goto(driver, BaseUrl + "config/initAcl")
+    addUser(driver, rootUser);
+  #   Companies.each_with_index { |company,companyId|
+      companyId = 0
+      company = Companies[companyId]
+      login(driver, rootUser);
+      addPhoto(driver, Photos[0]);
+      addCompany(driver, company)
+      addUser(driver, CompanyManagers[companyId]);
+      createEmail(driver, Emails[0])
+      logout(driver)
+      login(driver, CompanyManagers[companyId]);
+      addUser(driver, Users[0]);
+  #     goto(driver, BaseUrl + "config/setCompany/#{companyId}")
+      addPhoto(driver, Photos[1]);
+      addShop(driver, Shops[0])
+      addShop(driver, Shops[1])
+      addProductType(driver, ProductTypes[0])
+      addProductType(driver, ProductTypes[1])
+      addProduct(driver, Products[0])
+      addProduct(driver, Products[1])
+      Dates.each{
+        |dte|
+        addSales(driver,dte)
+        addResult(driver, dte)
+        }
+      goto(driver, BaseUrl + "sales")
+      goto(driver, BaseUrl + "sales/stats")
+      deleteFisrtSale(driver)
+      goto(driver, BaseUrl + "results/stats")
+      goto(driver, BaseUrl)
+      detectChart(driver)
+      addOrder(driver, Orders[0])
+      selectFirstOrder(driver)
+      addItem(driver, OrderItems[0])
+      selectFirstOrder(driver)
+      addItem(driver, OrderItems[1])
+      selectFirstOrder(driver)
+      logout(driver)
+  #   }
+  end
+    goto(driver, BaseUrl)
     login(driver, rootUser);
-    addPhoto(driver, Photos[0]);
-    addCompany(driver, company)
-    addUser(driver, CompanyManagers[companyId]);
-    logout(driver)
-    login(driver, CompanyManagers[companyId]);
-#     goto(driver, BaseUrl + "config/setCompany/#{companyId}")
-    addPhoto(driver, Photos[1]);
-    addShop(driver, Shops[0])
-    addShop(driver, Shops[1])
-    addProductType(driver, ProductTypes[0])
-    addProductType(driver, ProductTypes[1])
-    addProduct(driver, Products[0])
-    addProduct(driver, Products[1])
-    Dates.each{
-      |dte|
-      addSales(driver,dte)
-      addResult(driver, dte)
-      }
+    goto(driver, BaseUrl + "users")
+    goto(driver, BaseUrl + "users/add")
+    goto(driver, BaseUrl + "shops/add")
+    
+    goto(driver, BaseUrl + "productTypes")
+    goto(driver, BaseUrl + "productTypes/add")
+    
+    goto(driver, BaseUrl + "products")
+    goto(driver, BaseUrl + "products/add")
+    
     goto(driver, BaseUrl + "sales")
+    goto(driver, BaseUrl + "sales/add")
     goto(driver, BaseUrl + "sales/stats")
-    deleteFisrtSale(driver)
+    goto(driver, BaseUrl + "sales/view")
+    
+    goto(driver, BaseUrl + "results/")
+    goto(driver, BaseUrl + "results/add")
     goto(driver, BaseUrl + "results/stats")
-    Orders[0]['user'] = CompanyManagers[companyId]['name'],
-    addOrder(driver, Orders[0])
+    
+    goto(driver, BaseUrl + "photos/")
+    goto(driver, BaseUrl + "photos/add")
+    
+    goto(driver, BaseUrl + "orders")
+    goto(driver, BaseUrl + "orders/add")
+    
     selectFirstOrder(driver)
-    addItem(driver, OrderItems[0])
-    selectFirstOrder(driver)
-    addItem(driver, OrderItems[1])
-    selectFirstOrder(driver)
-    logout(driver)
-#   }
+    selectFirstShop(driver)
+    selectFirstProduct(driver)
+    detectChart(driver)
+  
+rescue Exception => e
+  puts "##### ERROR #####"
+  puts driver.page_source
+  raise e
 end
-  goto(driver, BaseUrl)
-  login(driver, rootUser);
-  goto(driver, BaseUrl + "users")
-  goto(driver, BaseUrl + "users/add")
-  goto(driver, BaseUrl + "shops/add")
-  
-  goto(driver, BaseUrl + "productTypes")
-  goto(driver, BaseUrl + "productTypes/add")
-  
-  goto(driver, BaseUrl + "products")
-  goto(driver, BaseUrl + "products/add")
-  
-  goto(driver, BaseUrl + "sales")
-  goto(driver, BaseUrl + "sales/add")
-  goto(driver, BaseUrl + "sales/stats")
-  goto(driver, BaseUrl + "sales/view")
-  
-  goto(driver, BaseUrl + "results/")
-  goto(driver, BaseUrl + "results/add")
-  goto(driver, BaseUrl + "results/stats")
-  
-  goto(driver, BaseUrl + "photos/")
-  goto(driver, BaseUrl + "photos/add")
-  
-  goto(driver, BaseUrl + "orders")
-  goto(driver, BaseUrl + "orders/add")
-  
-  selectFirstOrder(driver)
-  selectFirstShop(driver)
-  selectFirstProduct(driver)
-  
-
 
