@@ -35,7 +35,7 @@ App::uses('CakeEmail', 'Network/Email');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	var $uses=array('User', 'EventType', 'Company');
+	var $uses=array('User', 'EventType', 'Company', 'ImapEmail');
 	public $helpers = array('Text','Rss', 'Html', 'MyHtml');
 	  
 	  var $publicActions = array('exportExcel', 'backupDb', 'getCompanyId');
@@ -294,7 +294,8 @@ class AppController extends Controller {
 
      // debug($this->Auth->user('isRoot'));
 
-    $this->set('tokens', $this->getUserTokens());
+    $tokens = $this->getUserTokens();
+    $this->set('tokens', $tokens);
 
     //Import controller
     App::import('Controller', 'News');
@@ -304,14 +305,30 @@ class AppController extends Controller {
     $news = $newsController->getNews();
 //     $news =  $this->requestAction(array('plugin'=>'', 'controller'=>'news', 'action'=>'getNews' ));
     $this->set('news',$news);
+    $emails = array();
       try
       {
 	$company = $this->Company->find('first',array('conditions'=>array('Company.id'=>$this->getCompanyId())));
 	$this->set('company',$company);
+	$now = new DateTime();
+	if( $tokens['isAdmin'] )
+	{
+          if( ! $this->Session->check('company.emails.lastCheck') || ($this->Session->check('company.emails.lastCheck') && $this->Session->read('company.emails.lastCheck')->diff($now)->i > 1 ))
+          {
+            $emails = $this->ImapEmail->find('all'/*,array('conditions'=>array('mailbox'=>'INBOX'))*/);
+            $this->Session->write('company.emails.lastCheck',new DateTime());
+            $this->Session->write('company.emails.data',$emails);
+          }
+          else
+          {
+            $emails = $this->Session->read('company.emails.data');
+          }
+        }
       }
       catch (Exception $e)
       {
       }
+      $this->set('receivedEmails', $emails);
 	
   }
   

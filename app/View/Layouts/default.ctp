@@ -122,6 +122,16 @@ echo $this->Html->css(
 			<?php 
 				echo $this->Session->flash();
 				echo $this->Session->flash('auth');
+				if(count($receivedEmails) != 0) :
+				?>
+				<h3>Emails</h3>
+				<ul id="emailPreview">
+                                  <?php foreach($receivedEmails as $email): ?>
+                                    <li><?php echo $this->element('Emails/Preview', array('email'=>$email)); ?></li>
+                                  <?php endforeach; ?>
+                                </ul>
+                                <?php
+                                endif;
 				if(count($news) != 0) :
     			?>
     			<h3>Les news</h3>

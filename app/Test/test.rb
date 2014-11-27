@@ -174,7 +174,12 @@ Orders = [
    'comment' => 'nazdar',
    'user' => 'toto',
    },
-  
+  {
+   'shop' => Shops[1]['name'],
+   'dueDate' => '15/08/2014',
+   'comment' => 'nazdar #2',
+   'user' => 'toto',
+   },  
   ]
 
 OrderItems = [
@@ -419,7 +424,7 @@ def addOrder(driver, order)
 end
 
 
-def selectFirstOrder(driver)
+def selectFirstOrder(driver, email = false)
   puts "selectFirstOrder"
   
   goto(driver,BaseUrl + "orders")
@@ -428,10 +433,12 @@ def selectFirstOrder(driver)
     driver.find_element(:css => "#ordersIndexTable .actions a[title=Voir]").attribute("href")
       )
   
-  goto(driver,BaseUrl + "orders")
-  goto(driver,
-    driver.find_element(:css => "#ordersIndexTable .actions a[title=Email]").attribute("href")
-      )
+  if email
+    goto(driver,BaseUrl + "orders")
+    goto(driver,
+      driver.find_element(:css => "#ordersIndexTable .actions a[title=Email]").attribute("href")
+        )
+  end
 end
 
 
@@ -587,7 +594,7 @@ end
     rootUser = Root
   end
 
-begin
+# begin
   
   if write
     goto(driver, BaseUrl + "config/initAcl")
@@ -627,7 +634,10 @@ begin
       addItem(driver, OrderItems[0])
       selectFirstOrder(driver)
       addItem(driver, OrderItems[1])
-      selectFirstOrder(driver)
+      selectFirstOrder(driver, true)
+      waitUntil { driver.find_element(:css => "#emailPreview") }
+      
+      addOrder(driver, Orders[1])
       logout(driver)
   #   }
   end
@@ -663,9 +673,10 @@ begin
     selectFirstProduct(driver)
     detectChart(driver)
   
-rescue Exception => e
-  puts "##### ERROR #####"
-  puts driver.page_source
-  raise e
-end
+# rescue Exception => e
+#   puts "##### ERROR #####"
+#   puts driver.page_source
+#   puts e.backtrace
+#   raise e
+# end
 

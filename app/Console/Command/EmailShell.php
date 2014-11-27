@@ -14,9 +14,11 @@ public function getOptionParser() {
     public function main() {
     
     App::uses('File', 'Utility');
-    
+    App::uses('Folder', 'Utility');
         $ds = $this->Email->getDatasource();
-        
+
+$dir = new Folder(Configure::read('Settings.Emails.path'), true, 0755);
+
 $authmysqlrc = '# /etc/courier/authmysqlrc
 MYSQL_SERVER            '.$ds->config['host'].'
 MYSQL_USERNAME          '.$ds->config['login'].'
