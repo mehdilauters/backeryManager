@@ -121,6 +121,11 @@ class Company extends AppModel {
       );
 
 
+  public function beforeSave($options = array())
+  {
+    $encrypted = Security::rijndael($this->data[$this->alias]['imap_password'], Configure::read('Security.cipherSeed'), 'encrypt');
+    $this->data[$this->alias]['imap_password'] = $encrypted;
+  }
 
   public function afterFind($results, $primary = false)
     {
@@ -134,6 +139,8 @@ class Company extends AppModel {
 	    
 	    $results[$id]['Company']['phone'] = '0'.$results[$id]['Company']['phone'];
 	  }
+	  $decrypted = Security::rijndael($results[$id]['Company']['imap_password'], Configure::read('Security.cipherSeed'), 'decrypt');
+	  $results[$id]['Company']['imap_password'] = $decrypted;
 	}
       }
       return $results;

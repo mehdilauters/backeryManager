@@ -531,7 +531,10 @@ class ImapSource extends DataSource
             debug($this->config['username']);
             debug($this->config['password']);
                 $this->Stream = imap_open($this->_connectionString, $this->config['username'], $this->config['password']);
-                $this->thread = imap_thread($this->Stream);
+                if( $this->Stream != false)
+                {
+                  $this->thread = imap_thread($this->Stream);
+                }
             }
 
             if (!$this->thread) {
@@ -607,6 +610,7 @@ class ImapSource extends DataSource
         if ($this->config['error_handler'] === 'php') {
             trigger_error($str, E_USER_ERROR);
         }
+        $this->log($str);
 
         return false;
     }

@@ -67,11 +67,27 @@
                                             'class'=>'form-control'
                                             ));
                 }
-		echo $this->Form->input('order_legals_mentions', array('class'=>'textEditor form-control', 'label'=>array('class'=>'col-sm-3 control-label'),
+		echo $this->Form->input('legals_mentions', array('class'=>'textEditor form-control', 'label'=>array('class'=>'col-sm-3 control-label'),
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',
 					 'div'=>'form-group',
 					  ));
+					  
+                echo $this->Form->input('imap_server', array('class'=>'textEditor form-control', 'label'=>array('class'=>'col-sm-3 control-label'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          ));
+                echo $this->Form->input('imap_username', array('class'=>'textEditor form-control', 'label'=>array('class'=>'col-sm-3 control-label'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          ));
+                echo $this->Form->input('imap_password', array('class'=>'textEditor form-control', 'label'=>array('class'=>'col-sm-3 control-label'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          ));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

@@ -196,7 +196,7 @@ Configure::write('Routing.prefixes', array('admin'));
     /**
      * A random numeric string (digits only) used to encrypt/decrypt strings.
      */
-    Configure::write('Security.cipherSeed', '76859302311353542496749683645');
+    Configure::write('Security.cipherSeed', '12376859302311353542496749683645');
 
     /**
      * Apply timestamps with the last modified time to static assets (js, css, images).

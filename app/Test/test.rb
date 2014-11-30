@@ -635,7 +635,7 @@ end
       selectFirstOrder(driver)
       addItem(driver, OrderItems[1])
       selectFirstOrder(driver, true)
-      waitUntil { driver.find_element(:css => "#emailPreview") }
+#       waitUntil { driver.find_element(:css => "#emailPreview") }
       
       addOrder(driver, Orders[1])
       logout(driver)

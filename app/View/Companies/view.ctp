@@ -49,9 +49,20 @@
 		</dd>
 		<dt><?php echo __('Mentions legales factures'); ?></dt>
 		<dd>
-			<?php echo $company['Company']['order_legals_mentions']; ?>
+			<?php echo $company['Company']['legals_mentions']; ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Imap server'); ?></dt>
+                <dd>
+                        <?php echo $company['Company']['imap_server']; ?>
+                        &nbsp;
+                </dd>
+                <dt><?php echo __('imap username'); ?></dt>
+                <dd>
+                        <?php echo $company['Company']['imap_username']; ?>
+                        &nbsp;
+                </dd>
+
 	</dl>
 </div>
 <div class="actions">

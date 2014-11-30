@@ -310,6 +310,9 @@ create table if not exists companies (
   `capital` int not null ,
   `siret` bigint(20) not null ,
   `legals_mentions` text CHARACTER SET utf8 COLLATE utf8_bin,
+  `imap_server` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `imap_username` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  `imap_password` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   PRIMARY KEY (`id`),
   KEY `fk_companies_media` (`rib`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;

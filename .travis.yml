@@ -52,14 +52,6 @@ before_script:
       'login' => 'travis',
       'persistent' => false,
     );
-        public \$imap = array(
-        'datasource' => 'ImapSource',
-        'server' => 'localhost',
-        'username' => 'toto@testCompany1.fr',
-        'password' => 'toto',
-        'encoding' => 'UTF-8',
-        'error_handler' => 'php',
-    );
     }" > app/Config/database.php
   - cp app/Config/email.php.default app/Config/email.php
   - "export DISPLAY=:99.0"

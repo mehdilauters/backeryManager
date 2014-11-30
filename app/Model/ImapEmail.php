@@ -4,7 +4,6 @@ App::uses('AppModel', 'Model');
 class ImapEmail extends AppModel
 {
     // Important:
-    public $useDbConfig = 'imap';
     public $useTable = false;
 
     // Whatever:

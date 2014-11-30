@@ -313,13 +313,48 @@ class AppController extends Controller {
 	$now = new DateTime();
 	if( $tokens['isAdmin'] )
 	{
-          if( ! $this->Session->check('company.emails.lastCheck') || ($this->Session->check('company.emails.lastCheck') && $this->Session->read('company.emails.lastCheck')->diff($now)->i > 1 ))
+          if(
+            $company['Company']['imap_server'] != ''
+            &&
+            ( ! $this->Session->check('company.emails.lastCheck') || ($this->Session->check('company.emails.lastCheck') && $this->Session->read('company.emails.lastCheck')->diff($now)->i > 1 ) )
+            )
           {
-            $emails = $this->ImapEmail->find('all'/*,array('conditions'=>array('mailbox'=>'INBOX'))*/);
+            $imapSource = array(
+                'datasource' => 'ImapSource',
+                'server' => $company['Company']['imap_server'],
+                'username' => $company['Company']['imap_username'],
+                'password' => $company['Company']['imap_password'],
+        //         'port' => 'IMAPServerPort',
+        //         'ssl' => true,
+                'encoding' => 'UTF-8',
+                'error_handler' => false,
+        //         'connect' => 'INBOX'
+                'auto_mark_as' => array(
+        //             'Seen',
+                    // 'Answered',
+                    // 'Flagged',
+                    // 'Deleted',
+                    // 'Draft',
+                ),
+            );
+            
+             ClassRegistry::init('ConnectionManager');
+
+            $nds = 'imap_' .$company['Company']['id'];
+            if($ds = ConnectionManager::create($nds, $imapSource)) 
+            {
+              $this->ImapEmail->setDatasource($nds);
+              $emails = $this->ImapEmail->find('all',array('conditions'=>array('seen'=>false)));
+            }
+
+            if($emails == false)
+            {
+              $emails = array();
+            }
             $this->Session->write('company.emails.lastCheck',new DateTime());
             $this->Session->write('company.emails.data',$emails);
           }
-          else
+//           else
           {
             $emails = $this->Session->read('company.emails.data');
           }

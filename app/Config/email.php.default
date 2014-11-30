@@ -42,7 +42,7 @@
  */
 class EmailConfig {
 
-	public $default = array(
+	public $default___ = array(
 		'transport' => 'Mail',
 		'from' => 'you@localhost',
 		'charset' => 'utf-8',
@@ -50,7 +50,7 @@ class EmailConfig {
 		'emailFormat' => 'html',
 	);
 
-	public $smtp = array(
+	public $default = array(
 		'transport' => 'Smtp',
 		'from' => array('site@localhost' => 'My Site'),
 		'host' => 'localhost',
@@ -60,6 +60,7 @@ class EmailConfig {
 		'password' => 'secret',
 		'client' => null,
 		'log' => false,
+		'emailFormat' => 'html',
 		//'charset' => 'utf-8',
 		//'headerCharset' => 'utf-8',
 	);

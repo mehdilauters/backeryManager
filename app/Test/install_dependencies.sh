@@ -29,6 +29,7 @@ cat /etc/apache2/sites-available/default
 
 sudo a2enmod rewrite
 sudo a2enmod actions
+sudo php5enmod mcrypt
 sudo service apache2 restart
 
 

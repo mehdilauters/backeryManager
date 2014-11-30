@@ -509,6 +509,12 @@ create table if not exists emails (
  ALTER TABLE `emails`
   ADD CONSTRAINT `fk_emails_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
 
+  
+  alter table companies
+    add `imap_server` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  add `imap_username` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
+  add `imap_password` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ;
+  
 SET FOREIGN_KEY_CHECKS = 1;
 ';	
 		$db = ConnectionManager::getDataSource('default');
