@@ -15,6 +15,7 @@ class AccountsController extends AccountManagementAppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
+	var $administratorActions = array('*');
 
 /**
  * index method
@@ -23,7 +24,13 @@ class AccountsController extends AccountManagementAppController {
  */
 	public function index() {
 		$this->Account->recursive = 0;
-		$this->set('accounts', $this->Paginator->paginate());
+		$tokens = $this->getUserTokens();
+		$conditions = array();
+		if( ! $tokens['isRoot'] )
+		{
+                  $conditions = array('Account.company_id' => $this->getCompanyId());
+		}
+		$this->set('accounts', $this->Paginator->paginate($conditions));
 	}
 
 /**
@@ -38,6 +45,11 @@ class AccountsController extends AccountManagementAppController {
 			throw new NotFoundException(__('Invalid account'));
 		}
 		$options = array('conditions' => array('Account.' . $this->Account->primaryKey => $id));
+                $tokens = $this->getUserTokens();
+                if( ! $tokens['isRoot'] )
+                {
+                  $options['conditions']['Account.company_id'] = $this->getCompanyId();
+                }
 		$this->set('account', $this->Account->find('first', $options));
 	}
 
@@ -49,6 +61,12 @@ class AccountsController extends AccountManagementAppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Account->create();
+                        $tokens = $this->getUserTokens();
+                        $conditions = array();
+                        if( ! $tokens['isRoot'] )
+                        {
+                          $this->request->data['company_id'] = $this->getCompanyId();
+                        }
 			if ($this->Account->save($this->request->data)) {
 				$this->Session->setFlash(__('The account has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -56,6 +74,8 @@ class AccountsController extends AccountManagementAppController {
 				$this->Session->setFlash(__('The account could not be saved. Please, try again.'));
 			}
 		}
+		$companies = $this->Account->Company->find('list');
+		$this->set(compact('companies'));
 	}
 
 /**
@@ -70,6 +90,11 @@ class AccountsController extends AccountManagementAppController {
 			throw new NotFoundException(__('Invalid account'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+                        $tokens = $this->getUserTokens();
+                        if( ! $tokens['isRoot'] )
+                        {
+                          $this->request->data['company_id'] = $this->getCompanyId();
+                        }
 			if ($this->Account->save($this->request->data)) {
 				$this->Session->setFlash(__('The account has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -95,6 +120,14 @@ class AccountsController extends AccountManagementAppController {
 			throw new NotFoundException(__('Invalid account'));
 		}
 		$this->request->onlyAllow('post', 'delete');
+		
+                $tokens = $this->getUserTokens();
+                $account = $this->Account->findById($id);
+                if( ! $tokens['isRoot'] && $account['Account']['company_id'] != $this->getCompanyId() )
+                {
+                  throw new NotFoundException(__('Invalid account for this company'));
+                }
+		
 		if ($this->Account->delete()) {
 			$this->Session->setFlash(__('The account has been deleted.'));
 		} else {

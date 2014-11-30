@@ -15,16 +15,8 @@ class AccountEntriesController extends AccountManagementAppController {
  * @var array
  */
 	public $components = array('Paginator', 'Session');
+        var $administratorActions = array('*');
 
-/**
- * index method
- *
- * @return void
- */
-	public function index() {
-		$this->AccountEntry->recursive = 0;
-		$this->set('accountEntries', $this->Paginator->paginate());
-	}
 
 /**
  * view method
@@ -53,7 +45,7 @@ class AccountEntriesController extends AccountManagementAppController {
 			$this->request->data['AccountEntry']['date'] = $this->Functions->viewDateToDateTime($this->request->data['AccountEntry']['date'])->format('Y-m-d H:i:s');
 			if ($this->AccountEntry->save($this->request->data)) {
 				$this->Session->setFlash(__('The account entry has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
 			} else {
 				$this->Session->setFlash(__('The account entry could not be saved. Please, try again.'));
 			}
@@ -82,7 +74,7 @@ class AccountEntriesController extends AccountManagementAppController {
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->AccountEntry->save($this->request->data)) {
 				$this->Session->setFlash(__('The account entry has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
 			} else {
 				$this->Session->setFlash(__('The account entry could not be saved. Please, try again.'));
 			}
@@ -112,5 +104,5 @@ class AccountEntriesController extends AccountManagementAppController {
 		} else {
 			$this->Session->setFlash(__('The account entry could not be deleted. Please, try again.'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
 	}}

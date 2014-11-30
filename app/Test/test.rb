@@ -198,6 +198,25 @@ OrderItems = [
   
   ]
 
+Accounts = [
+  {
+   'name' => 'testAccount',
+   }
+  ]
+
+AccountsEntries = [
+  {
+   'date' => '30/11/2014',
+   'name' => 'testEntrie0',
+   'value' => -100
+   },
+   {
+    'date' => '29/11/2014',
+   'name' => 'testEntrie1',
+   'value' => +100
+   }
+  ]
+
 # Sales = [
 #     {	
 #       'date' => '10/08/2014'
@@ -494,6 +513,27 @@ def deleteFisrtSale(driver)
   driver.find_element(:css => "#deleteSale input[type=submit]").click
 end
 
+def addAccount(driver, account)
+  puts "addAccount #{account}"
+  goto(driver,BaseUrl + "account_management/accounts/add")
+  closeIntro(driver)
+  driver.find_element(:css => "#AccountName").clear()
+  driver.find_element(:css => "#AccountName").send_keys(account['name'])
+  driver.find_element(:css => "#AccountAddForm input[type=submit]").click
+end
+
+def addAccountEntry(driver, accountEntry)
+  puts "addAccountEntry #{accountEntry}"
+  goto(driver,BaseUrl + "account_management/account_entries/add/1")
+  closeIntro(driver)
+  driver.find_element(:css => "#AccountEntryDate").clear()
+  driver.find_element(:css => "#AccountEntryDate").send_keys(accountEntry['date'])
+  driver.find_element(:css => "#AccountEntryName").send_keys(accountEntry['name'])
+  driver.find_element(:css => "#AccountEntryAddForm input[type=submit]").click
+end
+
+
+
 def addSales(driver, dte)
     puts "addSales"
     goto(driver,BaseUrl + "sales/add")
@@ -638,6 +678,11 @@ end
 #       waitUntil { driver.find_element(:css => "#emailPreview") }
       
       addOrder(driver, Orders[1])
+      
+      addAccount(driver, Accounts[0])
+      AccountsEntries.each{|entry|
+             addAccountEntry(driver, entry)
+      }
       logout(driver)
   #   }
   end

@@ -1,9 +1,10 @@
 <div class="accounts index">
 	<h2><?php echo __('Accounts'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
+	<table cellpadding="0" cellspacing="0" class="table" >
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
+                        <th><?php echo $this->Paginator->sort('company'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
@@ -11,6 +12,7 @@
 	<tr>
 		<td><?php echo h($account['Account']['id']); ?>&nbsp;</td>
 		<td><?php echo h($account['Account']['created']); ?>&nbsp;</td>
+		<td><a href="<?php echo $this->webroot ?>companies/view/<?php echo $account['Company']['id'] ?>" ><?php echo h($account['Company']['name']); ?></a>&nbsp;</td>
 		<td><?php echo h($account['Account']['name']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $account['Account']['id'])); ?>
@@ -38,7 +40,5 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Account'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Account Entries'), array('controller' => 'account_entries', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Account Entry'), array('controller' => 'account_entries', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

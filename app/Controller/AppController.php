@@ -344,7 +344,7 @@ class AppController extends Controller {
             if($ds = ConnectionManager::create($nds, $imapSource)) 
             {
               $this->ImapEmail->setDatasource($nds);
-              $emails = $this->ImapEmail->find('all',array('conditions'=>array('seen'=>false)));
+//               $emails = $this->ImapEmail->find('all',array('conditions'=>array('seen'=>false)));
             }
 
             if($emails == false)

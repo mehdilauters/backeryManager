@@ -4,6 +4,10 @@
 		<legend><?php echo __('Add Account'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
+		if($tokens['isRoot'])
+		{
+                  echo $this->Form->input('company_id');
+                }
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
@@ -13,7 +17,5 @@
 	<ul>
 
 		<li><?php echo $this->Html->link(__('List Accounts'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Account Entries'), array('controller' => 'account_entries', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Account Entry'), array('controller' => 'account_entries', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

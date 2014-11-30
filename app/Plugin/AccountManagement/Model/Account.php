@@ -43,7 +43,7 @@ class Account extends AccountManagementAppModel {
 		'AccountEntry' => array(
 			'className' => 'AccountEntry',
 			'foreignKey' => 'account_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -55,4 +55,13 @@ class Account extends AccountManagementAppModel {
 		)
 	);
 
+      public $belongsTo = array(
+        'Company' => array(
+          'className' => 'Company',
+          'foreignKey' => 'company_id',
+          'conditions' => '',
+          'fields' => '',
+          'order' => ''
+      ),
+    );
 }

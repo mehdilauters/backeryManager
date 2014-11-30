@@ -5,6 +5,10 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
+                if($tokens['isRoot'])
+                {
+                  echo $this->Form->input('company_id');
+                }
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
