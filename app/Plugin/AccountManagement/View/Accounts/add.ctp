@@ -1,7 +1,7 @@
 <div class="accounts form">
 <?php echo $this->Form->create('Account'); ?>
 	<fieldset>
-		<legend><?php echo __('Add Account'); ?></legend>
+		<legend><?php echo __('Ajouter un compte'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
 		if($tokens['isRoot'])
@@ -16,6 +16,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
-		<li><?php echo $this->Html->link(__('List Accounts'), array('action' => 'index')); ?></li>
+		<li><?php echo $this->Html->link(__('Liste des comptes'), array('action' => 'index')); ?></li>
 	</ul>
 </div>

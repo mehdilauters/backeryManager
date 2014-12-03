@@ -29,6 +29,14 @@ class AccountEntry extends AccountManagementAppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'notempty' => array(
+                                'rule' => array('notempty'),
+                                'message' => 'account_id must be set',
+                                //'allowEmpty' => false,
+                                //'required' => false,
+                                //'last' => false, // Stop validation after this rule
+                                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+                        ),
 		),
 		'name' => array(
 			'notEmpty' => array(
@@ -40,22 +48,12 @@ class AccountEntry extends AccountManagementAppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'credit' => array(
+		'value' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
-				'allowEmpty' => true,
-				'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'debit' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				'allowEmpty' => true,
-				'required' => false,
+				'allowEmpty' => false,
+				'required' => true,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),

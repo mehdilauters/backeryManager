@@ -522,13 +522,27 @@ def addAccount(driver, account)
   driver.find_element(:css => "#AccountAddForm input[type=submit]").click
 end
 
+def selectFirstAccount(driver)
+  puts "selectFirstAccount"
+  goto(driver,BaseUrl + "account_management/")
+  
+  goto(driver,
+    driver.find_element(:css => "a.view").attribute("href")
+  )
+  
+end
+
 def addAccountEntry(driver, accountEntry)
   puts "addAccountEntry #{accountEntry}"
-  goto(driver,BaseUrl + "account_management/account_entries/add/1")
+    goto(driver,
+    driver.find_element(:css => "#addEntry").attribute("href")
+  )
+    
   closeIntro(driver)
   driver.find_element(:css => "#AccountEntryDate").clear()
   driver.find_element(:css => "#AccountEntryDate").send_keys(accountEntry['date'])
   driver.find_element(:css => "#AccountEntryName").send_keys(accountEntry['name'])
+  driver.find_element(:css => "#AccountEntryValue").send_keys(accountEntry['value'])
   driver.find_element(:css => "#AccountEntryAddForm input[type=submit]").click
 end
 
@@ -680,6 +694,7 @@ end
       addOrder(driver, Orders[1])
       
       addAccount(driver, Accounts[0])
+      selectFirstAccount(driver)
       AccountsEntries.each{|entry|
              addAccountEntry(driver, entry)
       }

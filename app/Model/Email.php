@@ -87,9 +87,9 @@ class Email extends AppModel {
             if(!is_dir($maildir))
             {
               $f = new Folder();
-              if(!$f->create(Configure::read('Settings.Emails.path').$this->data[$this->alias]['company_id']))
+              if(!$f->create($maildir))
               {
-                debug("could not create root email directory");
+                debug("could not create root email directory $maildir");
                 return false;
               }
             }
@@ -108,8 +108,6 @@ class Email extends AppModel {
             }
             else
             {
-            debug($tmp);
-            debug($this->data);
               if( $this->getMailboxPath($tmp) != $this->getMailboxPath($this->data))
               { // move
                 $from = $this->getMailboxPath($tmp);

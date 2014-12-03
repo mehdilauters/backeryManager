@@ -21,14 +21,14 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('Edit Account'), array('action' => 'edit', $account['Account']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Account'), array('action' => 'delete', $account['Account']['id']), null, __('Are you sure you want to delete # %s?', $account['Account']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Accounts'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Account Entry'), array('controller' => 'account_entries', 'action' => 'add', $account['Account']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Editer'), array('action' => 'edit', $account['Account']['id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $account['Account']['id']), null, __('Are you sure you want to delete # %s?', $account['Account']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Liste des comptes'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('Nouvelle entrée'), array('controller' => 'account_entries', 'action' => 'add', $account['Account']['id'])); ?> </li>
 	</ul>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Account Entries'); ?></h3>
+	<h3><?php echo __('Entrées'); ?></h3>
 	<?php if (!empty($account['AccountEntry'])): ?>
 	<table id="account_entries" cellpadding = "0" cellspacing = "0" class="table table-striped" >
 	<tr>
@@ -57,7 +57,7 @@
 
 	<div class="actions">
 		<ul>
-			<li><?php echo $this->Html->link(__('New Account Entry'), array('controller' => 'account_entries', 'action' => 'add', $account['Account']['id'])); ?> </li>
+			<li><?php echo $this->Html->link(__('Nouvelle entrée'), array('controller' => 'account_entries', 'action' => 'add', $account['Account']['id']),array('id'=>'addEntry')); ?> </li>
 		</ul>
 	</div>
 </div>

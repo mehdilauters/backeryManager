@@ -65,7 +65,7 @@ class AccountsController extends AccountManagementAppController {
                         $conditions = array();
                         if( ! $tokens['isRoot'] )
                         {
-                          $this->request->data['company_id'] = $this->getCompanyId();
+                          $this->request->data['Account']['company_id'] = $this->getCompanyId();
                         }
 			if ($this->Account->save($this->request->data)) {
 				$this->Session->setFlash(__('The account has been saved.'));
@@ -93,7 +93,7 @@ class AccountsController extends AccountManagementAppController {
                         $tokens = $this->getUserTokens();
                         if( ! $tokens['isRoot'] )
                         {
-                          $this->request->data['company_id'] = $this->getCompanyId();
+                          $this->request->data['Account']['company_id'] = $this->getCompanyId();
                         }
 			if ($this->Account->save($this->request->data)) {
 				$this->Session->setFlash(__('The account has been saved.'));

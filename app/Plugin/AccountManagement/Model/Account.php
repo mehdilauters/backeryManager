@@ -30,6 +30,24 @@ class Account extends AccountManagementAppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+                'company_id' => array(
+                        'numeric' => array(
+                                'rule' => array('numeric'),
+                                'message' => 'company_id must be numeric',
+                                //'allowEmpty' => false,
+                                //'required' => false,
+                                //'last' => false, // Stop validation after this rule
+                                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+                        ),
+                        'notempty' => array(
+                                'rule' => array('notempty'),
+                                'message' => 'company_id must be set',
+                                //'allowEmpty' => false,
+                                //'required' => false,
+                                //'last' => false, // Stop validation after this rule
+                                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+                        ),
+                ),
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

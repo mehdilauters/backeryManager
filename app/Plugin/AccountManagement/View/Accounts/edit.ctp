@@ -1,7 +1,7 @@
 <div class="accounts form">
 <?php echo $this->Form->create('Account'); ?>
 	<fieldset>
-		<legend><?php echo __('Edit Account'); ?></legend>
+		<legend><?php echo __('Editer compte'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
@@ -17,9 +17,8 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Account.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('Account.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Accounts'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Account Entries'), array('controller' => 'account_entries', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Account Entry'), array('controller' => 'account_entries', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $this->Form->value('Account.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('Account.id'))); ?></li>
+		<li><?php echo $this->Html->link(__('Liste des comtes'), array('action' => 'index')); ?></li>
+		<li><?php echo $this->Html->link(__('Nouvelle entrée'), array('controller' => 'account_entries', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

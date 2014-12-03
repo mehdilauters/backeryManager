@@ -15,9 +15,9 @@
 		<td><a href="<?php echo $this->webroot ?>companies/view/<?php echo $account['Company']['id'] ?>" ><?php echo h($account['Company']['name']); ?></a>&nbsp;</td>
 		<td><?php echo h($account['Account']['name']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $account['Account']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $account['Account']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $account['Account']['id']), null, __('Are you sure you want to delete # %s?', $account['Account']['id'])); ?>
+			<?php echo $this->Html->link(__('Afficher'), array('action' => 'view', $account['Account']['id']), array('class'=>'view')); ?>
+			<?php echo $this->Html->link(__('Editer'), array('action' => 'edit', $account['Account']['id'])); ?>
+			<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $account['Account']['id']), null, __('Are you sure you want to delete # %s?', $account['Account']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -39,6 +39,6 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('New Account'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('Créer compte'), array('action' => 'add')); ?></li>
 	</ul>
 </div>
