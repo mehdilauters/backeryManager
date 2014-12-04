@@ -25,7 +25,34 @@ a:visited{
 
 .container{
   background-image:url("../img/designV2/wood.jpg");
-  background-repeat:y-repeat;
+/*   background-repeat:repeat-y; */
+}
+
+.rope{
+  background-image:url("../img/designV2/rope_title.png");
+  background-repeat:repeat-x;
+  margin:5%;
+  width:90%;
+  height:20px;
+}
+.rope::before {
+    content: '';
+    float:left;
+    width:8px;
+    height:15px;
+    margin-left:-3px;
+    background-image:url("../img/designV2/rope_left.png");
+    background-repeat:no-repeat;
+}
+
+.rope::after {
+    content: '';
+    float:right;
+    width:8px;
+    height:15px;
+    margin-right:-3px;
+    background-image:url("../img/designV2/rope_right.png");
+    background-repeat:no-repeat;
 }
 
 header{

@@ -119,6 +119,7 @@ echo $this->Html->css(
 			<div id="cookiesError" class="alert alert-danger" style="display:none; ">Attention, les cookies sont désactivés sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div>
 			<noscript><div id="cookiesError" class="alert alert-danger" >Attention, javascript est désactivé sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div></noscript>
 			<h2><?php echo $title_for_layout ?></h2>
+			<div class="rope" ></div>
 			<?php 
 				echo $this->Session->flash();
 				echo $this->Session->flash('auth');

@@ -55,6 +55,7 @@ if(isset($eventType['Event']) && count($eventType['Event']) != 0)
   <ul id="shopPreviewList">
     <?php foreach($shops as $shop) { ?>
     <li class="shop">
+    <div class="rope" ></div>
      <?php   echo $this->element('Shops/Preview', array('shop'=>$shop)); ?>
     </li>
     <?php
