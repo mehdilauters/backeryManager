@@ -649,6 +649,10 @@ td.actions img.icon {
   color:blue;
 }
 
-.negative{
+.negative, .negative input{
  color:red; 
+}
+
+button{
+ color:black; 
 }

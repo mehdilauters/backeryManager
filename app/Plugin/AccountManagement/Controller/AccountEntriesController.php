@@ -44,6 +44,11 @@ class AccountEntriesController extends AccountManagementAppController {
 			$this->request->data['AccountEntry']['account_id'] = $idAccount;
 			$this->request->data['AccountEntry']['date'] = $this->Functions->viewDateToDateTime($this->request->data['AccountEntry']['date'])->format('Y-m-d H:i:s');
 			if ($this->AccountEntry->save($this->request->data)) {
+                                if ($this->request->is('ajax'))
+                                {
+                                  echo json_encode( array('id'=>$this->AccountEntry->getInsertID()));
+                                  return;
+                                }
 				$this->Session->setFlash(__('The account entry has been saved.'));
 				return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
 			} else {
@@ -67,16 +72,27 @@ class AccountEntriesController extends AccountManagementAppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null, $idAccount=null) {
 		if (!$this->AccountEntry->exists($id)) {
 			throw new NotFoundException(__('Invalid account entry'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+                        $this->request->data['AccountEntry']['date'] = $this->Functions->viewDateToDateTime($this->request->data['AccountEntry']['date'])->format('Y-m-d H:i:s');
 			if ($this->AccountEntry->save($this->request->data)) {
 				$this->Session->setFlash(__('The account entry has been saved.'));
+                                if ($this->request->is('ajax'))
+                                {
+                                  echo json_encode( array('status'=>true));
+                                  return;
+                                }
 				return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
 			} else {
 				$this->Session->setFlash(__('The account entry could not be saved. Please, try again.'));
+				if ($this->request->is('ajax'))
+                                {
+                                  echo json_encode( array('status'=>false));
+                                  return;
+                                }
 			}
 		} else {
 			$options = array('conditions' => array('AccountEntry.' . $this->AccountEntry->primaryKey => $id));
@@ -93,16 +109,23 @@ class AccountEntriesController extends AccountManagementAppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $idAccount=null) {
 		$this->AccountEntry->id = $id;
 		if (!$this->AccountEntry->exists()) {
 			throw new NotFoundException(__('Invalid account entry'));
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->AccountEntry->delete()) {
+                         $ok = true;
 			$this->Session->setFlash(__('The account entry has been deleted.'));
 		} else {
+                        $ok = false;
 			$this->Session->setFlash(__('The account entry could not be deleted. Please, try again.'));
 		}
+                if ($this->request->is('ajax'))
+                {
+                  echo json_encode( array('status'=>$ok));
+                  return;
+                }
 		return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
 	}}

@@ -48,6 +48,7 @@ class FunctionsComponent extends Component{
   
   function viewDateToDateTime($dateString, $fullYear = true)
   {
+    $dateString = trim($dateString);
     $year = 'y';
     if($fullYear)
     {

@@ -38,6 +38,16 @@ class AccountEntry extends AccountManagementAppModel {
                                 //'on' => 'create', // Limit validation to 'create' or 'update' operations
                         ),
 		),
+		   'date' => array(
+                    'datetime' => array(
+                      'rule' => array('datetime'),
+                      'message' => 'datetime not valid',
+                      'allowEmpty' => false,
+                      'required' => true,
+                      //'last' => false, // Stop validation after this rule
+                      //'on' => 'create', // Limit validation to 'create' or 'update' operations
+                    ),
+                  ),
 		'name' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
