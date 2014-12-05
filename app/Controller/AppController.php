@@ -296,6 +296,11 @@ class AppController extends Controller {
 
     $tokens = $this->getUserTokens();
     $this->set('tokens', $tokens);
+    if($this->Auth->user() && $this->Auth->user('company_id') != $this->getCompanyId() && !$tokens['isRoot'])
+    {
+      $this->Session->setFlash('This is not your company, logout','flash/fail');
+      return $this->requestAction(array('plugin'=>'', 'controller'=>'users', 'action'=>'logout' ));      
+    }
 
     //Import controller
     App::import('Controller', 'News');
@@ -311,7 +316,7 @@ class AppController extends Controller {
 	$company = $this->Company->find('first',array('conditions'=>array('Company.id'=>$this->getCompanyId())));
 	$this->set('company',$company);
 	$now = new DateTime();
-	if( $tokens['isAdmin'] )
+	if( $tokens['isAdmin'] && isset($company['Company']))
 	{
           if(
             $company['Company']['imap_server'] != ''
@@ -446,6 +451,11 @@ public function getUserTokens($userId = NULL)
   {
     $companyId = NULL;
     $name = '';
+    if(is_file(TMP.'companyId'))
+    {
+      $companyId = file_get_contents(TMP.'companyId');
+      return $companyId;
+    }
 // debug($this->request->params);
     $companyCount = $this->Company->find('count');
     if($companyCount == 1 || $companyCount == 0)

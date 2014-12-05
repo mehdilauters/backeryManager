@@ -82,7 +82,7 @@ class AccountEntriesController extends AccountManagementAppController {
 				$this->Session->setFlash(__('The account entry has been saved.'));
                                 if ($this->request->is('ajax'))
                                 {
-                                  echo json_encode( array('status'=>true));
+                                  echo json_encode( array('id'=>$id));
                                   return;
                                 }
 				return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
@@ -90,7 +90,7 @@ class AccountEntriesController extends AccountManagementAppController {
 				$this->Session->setFlash(__('The account entry could not be saved. Please, try again.'));
 				if ($this->request->is('ajax'))
                                 {
-                                  echo json_encode( array('status'=>false));
+                                  echo -1;
                                   return;
                                 }
 			}

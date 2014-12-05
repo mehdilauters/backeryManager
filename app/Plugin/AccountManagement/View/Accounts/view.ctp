@@ -51,10 +51,10 @@
 		</tr>
 	<?php endforeach; ?>
 	<tr class="" rel="" >
-           <td><input type="text" class="datepicker" /></td>
-           <td><input type="text" class=""/>
-           <td><input type="text" class="spinner changeValue"/>
-           <td><button type="button" class="saveButton" >Valider </button></td>
+           <td class="AccountEntryDate" ><input type="text" class="datepicker" /></td>
+           <td class="AccountEntryName" ><input type="text" class=""/>
+           <td class="AccountEntryValue" ><input type="text" class="spinner changeValue"/>
+           <td class="actions" ><button type="button" class="saveButton" >Valider </button></td>
 	</tr>
 	</table>
 	<span id="total" ></span>
@@ -86,33 +86,67 @@
     $('#total').html(total);
   }
   
-  function save(row)
+  function rowDataValid(_data)
   {
-    //           vals
-          dte = row.find('input:eq(0)').val();
-          name = row.find('input:eq(1)').val();
-          value = row.find('input:eq(2)').val();
-          
-          if(dte == "" || name == "" || value == "")
-          {
-            return false;
+    return !(_data.AccountEntry.date == "" || _data.AccountEntry.name == "" || _data.AccountEntry.value == "");
+  }
+  
+  function getRowData(row)
+  {
+      _data = false;
+      var id = -1;
+      if(row.attr('rel') != "")
+      {
+        id = row.attr('rel');
+      }
+      
+      if(row.find('input[type="text"]').length == 0)
+      {
+        _data = {
+        AccountEntry :{
+              id: id,
+              date: row.find('td:eq(0)').text(),
+              name: row.find('td:eq(1)').text(),
+              value: row.find('td:eq(2)').text(),
           }
-          
+        }
+      }
+      else
+      {
+        if(row.find('td').length != 0)
+        {
           _data = {
             AccountEntry :{
-                  date: dte,
-                  name: name,
-                  value: value
+                  id: id,
+                  date: row.find('input:eq(0)').val(),
+                  name: row.find('input:eq(1)').val(),
+                  value: row.find('input:eq(2)').val(),
               }
             }
-            controller = 'add/<?php echo $account['Account']['id'] ?>';
-            var id = -1;
-              if(row.attr('rel') != "")
-              {
-                _data.AccountEntry.id = row.attr('rel');
-                id = row.attr('rel');
-                controller='edit/'+id;
-              }
+          }
+      }
+      return _data;
+  }
+  
+  function save(row)
+  {
+    
+      controller = 'add/<?php echo $account['Account']['id'] ?>';
+      var _data = getRowData(row);
+      
+      if(!rowDataValid(_data))
+      {
+        return false;
+      }
+      
+      if(_data.AccountEntry.id != -1)
+      {
+        controller='edit/'+_data.AccountEntry.id;
+      }
+      else
+      {
+        delete _data.AccountEntry.id;
+      }
           var ret = true;
           jQuery.ajax({
               type: 'POST',
@@ -123,17 +157,7 @@
               dataType: 'json',
               success: function (data) {
                   row.removeClass("alert alert-danger");
-                  if(id==-1)
-                  {
-                    id = data.id;
-                  }
-                  else
-                  {
-                    if(!data.status)
-                    {
-                      row.addClass("alert alert-danger");
-                    }
-                  }
+                  _data.AccountEntry.id = data.id;
               },
               error: function (jqXHR, textStatus, errorThrown) {
                   console.log(textStatus);
@@ -145,22 +169,54 @@
           
           if(ret)
           {
-            newHtml = '<td>'+dte+'</td><td>'+name+'</td><td>'+value+'</td><td class="actions" ><a href="" class="edit" >Editer</a><a class="delete" href="" >Supprimer</a></td>';
-            row.html(newHtml);
-            row.attr('rel', id);
+            inputToTd(row);
+            row.attr('rel', _data.AccountEntry.id);
           }
           return ret;
+  }
+  
+  function inputToTd(row)
+  {
+  
+    _data = getRowData(row);
+    if(!rowDataValid(_data))
+    {
+      if(_data == false)
+      {
+        console.log('invalid');
+      }
+      else
+      {
+        return false;
+      }
+    }
+    newHtml = '<td class="AccountEntryDate" >'+_data.AccountEntry.date+'</td><td class="AccountEntryName" >'+_data.AccountEntry.name+'</td><td class="AccountEntryValue" >'+_data.AccountEntry.value+'</td><td class="actions" ><a href="" class="edit" >Editer</a><a class="delete" href="" >Supprimer</a></td>';
+    row.html(newHtml);
+    updateDom();
+  }
+  
+  function tdToInput(row)
+  {
+    _data = getRowData(row);
+    html='<td class="AccountEntryDate" ><input type="text" class="datepicker" value="'+_data.AccountEntry.date+'" /></td><td class="AccountEntryName"><input type="text" value="'+_data.AccountEntry.name+'" class=""/><td class="AccountEntryValue" ><input value="'+_data.AccountEntry.value+'" type="text" class="spinner changeValue"/><td class="actions" ><button type="button" class="saveButton" >Valider </button></td>';
+    row.html(html);
+    updateDom();
   }
   
   function updateDom()
   {
     $( ".datepicker" ).datepicker();
     totals();
-    $('#account_entries input').off('keypress').keypress(function(e){
+    $('#account_entries input').off('keypress').keypress(function(e){;
           if(e.which == 13) {
           row = $(this).closest('tr');
           row.find('button').trigger('click');
       }
+      
+//       if(e.which == 0) {
+//           row = $(this).closest('tr');
+//           inputToTd(row);
+//       }
     });
     $(".changeValue").off("click").keyup(function(){
           if($(this).val() < 0)
@@ -173,32 +229,35 @@
           }
         });
         
-        $(".changeButton").off("click").click(function(){
-          row = $(this).closest('tr');
-          save(row);
-          updateDom();
-        });
-        
-        
         $(".saveButton").off("click").click(function(){
           row = $(this).closest('tr');
-          html='<tr rel="" ><td><input type="text" class="datepicker" value="" /></td><td><input type="text" value="" class=""/><td><input value="" type="text" class="spinner changeValue"/><td><button type="button" class="saveButton" >Valider </button></td></tr>';
-          if(save(row))
+          
+          ok = save(row);
+          if(row.closest('table').find('tr').length -1 == row.index()) // last line (save)
           {
-            row.closest('table').append(html);
+            if(ok)
+            {
+              
+              newRow = $('<tr rel="">');
+              row.closest('table').append(newRow);
+              tdToInput(newRow);
+              newRow.find('input[type="text"]').val('');
+            }    
           }
-          updateDom();
+          else
+          {
+            
+          }
+          
+          if(ok)
+          {
+            inputToTd(row);
+          }
         });
         
         $("#account_entries a.edit").off("click").click(function(){
             row = $(this).closest('tr');
-            dte = row.find('td:eq(0)').text();
-            name = row.find('td:eq(1)').text();
-            value = row.find('td:eq(2)').text();
-            
-            html='<td><input type="text" class="datepicker" value="'+dte+'" /></td><td><input type="text" value="'+name+'" class=""/><td><input value="'+value+'" type="text" class="spinner changeValue"/><td><button type="button" class="changeButton" >Valider </button></td>';
-            row.html(html);
-            updateDom();
+            tdToInput(row);
           return false;
           });
           
@@ -229,7 +288,8 @@
             if(ret)
             {
               row.fadeOut();
-              updateDom();
+              row.delete();
+              totals();
             }
             return false;
           });

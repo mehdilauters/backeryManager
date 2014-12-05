@@ -532,18 +532,26 @@ def selectFirstAccount(driver)
   
 end
 
-def addAccountEntry(driver, accountEntry)
+def addAccountEntry(driver, accountEntry, js = true)
   puts "addAccountEntry #{accountEntry}"
-    goto(driver,
-    driver.find_element(:css => "#addEntry").attribute("href")
-  )
     
   closeIntro(driver)
-  driver.find_element(:css => "#AccountEntryDate").clear()
-  driver.find_element(:css => "#AccountEntryDate").send_keys(accountEntry['date'])
-  driver.find_element(:css => "#AccountEntryName").send_keys(accountEntry['name'])
-  driver.find_element(:css => "#AccountEntryValue").send_keys(accountEntry['value'])
-  driver.find_element(:css => "#AccountEntryAddForm input[type=submit]").click
+  if(js)
+    driver.find_element(:css => "td.AccountEntryDate input").clear()
+    driver.find_element(:css => "td.AccountEntryDate input").send_keys(accountEntry['date'])
+    driver.find_element(:css => "td.AccountEntryName input").send_keys(accountEntry['name'])
+    driver.find_element(:css => "td.AccountEntryValue input").send_keys(accountEntry['value'])
+    driver.find_element(:css => ".saveButton").click
+  else
+    goto(driver,
+      driver.find_element(:css => "#addEntry").attribute("href")
+    )
+    driver.find_element(:css => "#AccountEntryDate").clear()
+    driver.find_element(:css => "#AccountEntryDate").send_keys(accountEntry['date'])
+    driver.find_element(:css => "#AccountEntryName").send_keys(accountEntry['name'])
+    driver.find_element(:css => "#AccountEntryValue").send_keys(accountEntry['value'])
+    driver.find_element(:css => "#AccountEntryAddForm input[type=submit]").click
+  end
 end
 
 
@@ -643,26 +651,60 @@ def closeIntro(driver)
     end
 end
 
+def setCompany(driver, id)
+  puts "=============== change to company #{id} =============="
+  f = File.new('app/tmp/companyId', 'w')
+  f.write(id)
+  f.close
+end
+
+def testAccountPlugin(driver)
+  addAccount(driver, Accounts[0])
+      selectFirstAccount(driver)
+      total = 0
+      js = false
+      AccountsEntries.each{|entry|
+             total += entry['value']
+             addAccountEntry(driver, entry, js)
+             js = true
+      }
+      (0..10).each{|i|
+              v = 100*i
+             addAccountEntry(driver, {'date'=>AccountsEntries[0]['date'],
+                                      'name' => "test_#{i}",
+                                      'value'=> v})
+             total += v
+                   }
+      jsTotal = driver.find_element(:css => "#total").text().to_i
+      if(jsTotal != total || jsTotal == AccountsEntries[0]['value'])
+        raise "totals are differents or not expected #{jsTotal} / #{total}"
+      end
+end
+
 
   if rootUser == {}
     rootUser = Root
   end
 
 # begin
-  
   if write
     goto(driver, BaseUrl + "config/initAcl")
     addUser(driver, rootUser);
-  #   Companies.each_with_index { |company,companyId|
-      companyId = 0
+     Companies.each_with_index { |company,companyId|
       company = Companies[companyId]
       login(driver, rootUser);
       addPhoto(driver, Photos[0]);
       addCompany(driver, company)
+      setCompany(driver, companyId+1)
       addUser(driver, CompanyManagers[companyId]);
       createEmail(driver, Emails[0])
       logout(driver)
       login(driver, CompanyManagers[companyId]);
+      
+      testAccountPlugin(driver)
+      
+      
+      
       addUser(driver, Users[0]);
   #     goto(driver, BaseUrl + "config/setCompany/#{companyId}")
       addPhoto(driver, Photos[1]);
@@ -672,6 +714,7 @@ end
       addProductType(driver, ProductTypes[1])
       addProduct(driver, Products[0])
       addProduct(driver, Products[1])
+      
       Dates.each{
         |dte|
         addSales(driver,dte)
@@ -692,14 +735,8 @@ end
 #       waitUntil { driver.find_element(:css => "#emailPreview") }
       
       addOrder(driver, Orders[1])
-      
-      addAccount(driver, Accounts[0])
-      selectFirstAccount(driver)
-      AccountsEntries.each{|entry|
-             addAccountEntry(driver, entry)
-      }
       logout(driver)
-  #   }
+    }
   end
     goto(driver, BaseUrl)
     login(driver, rootUser);
