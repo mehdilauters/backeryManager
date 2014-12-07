@@ -5,7 +5,9 @@
 	<?php
 		echo $this->Form->input('date', array('type'=> 'text', 'class' => 'datepicker', 'value' => $date));
 		echo $this->Form->input('name');
+		echo $this->Form->input('comment');
 		echo $this->Form->input('value');
+		echo $this->Form->input('checked');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

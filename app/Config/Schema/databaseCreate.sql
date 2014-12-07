@@ -348,7 +348,9 @@ create table if not exists account_entries (
   `created` datetime NOT NULL,
   `date` datetime NOT NULL,
   `name` varchar(255) not null,
+  `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null ,
   `value` float(10),
+  `checked` boolean default False,
   PRIMARY KEY (`id`),
   KEY `fk_account_entries_account` (`account_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;

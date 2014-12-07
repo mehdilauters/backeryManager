@@ -16,6 +16,7 @@ class AccountsController extends AccountManagementAppController {
  */
 	public $components = array('Paginator', 'Session');
 	var $administratorActions = array('*');
+	var $uses = array('AccountManagement.Account','AccountManagement.AccountEntry');
 
 /**
  * index method
@@ -51,6 +52,7 @@ class AccountsController extends AccountManagementAppController {
                   $options['conditions']['Account.company_id'] = $this->getCompanyId();
                 }
 		$this->set('account', $this->Account->find('first', $options));
+		$this->set('total', $this->getTotal($id));
 	}
 
 /**
@@ -134,4 +136,19 @@ class AccountsController extends AccountManagementAppController {
 			$this->Session->setFlash(__('The account could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
-	}}
+	}
+	
+	
+	
+        public function getTotal($idAccount)
+        {
+          $total = $this->AccountEntry->find('first', 
+            array('conditions'=> array('account_id'=>$idAccount),
+              'fields' => array('SUM(value) as `total`')
+              )
+            );
+            return $total[0]['total'];
+        }
+	
+	}
+	

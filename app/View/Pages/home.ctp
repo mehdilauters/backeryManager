@@ -13,6 +13,7 @@ if($tokens['isAdmin'])
 {	?>
 	<div id="globalResults" >
 		<?php echo $this->element('Results/stats/results', array('results'=>$results, 'config'=>array('interactive'=>false))); ?>
+		<div class="rope" ></div>
 	</div>
 	<?php
 }
@@ -55,8 +56,8 @@ if(isset($eventType['Event']) && count($eventType['Event']) != 0)
   <ul id="shopPreviewList">
     <?php foreach($shops as $shop) { ?>
     <li class="shop">
-    <div class="rope" ></div>
      <?php   echo $this->element('Shops/Preview', array('shop'=>$shop)); ?>
+     <div class="rope" ></div>
     </li>
     <?php
 if(!$slideshowInserted && count($products) != 0)
@@ -75,6 +76,7 @@ if(!$slideshowInserted && count($products) != 0)
 			$text = 'Nos Produits';
 		}
 	  ?>
+	  <div class="rope" ></div>
 	  <h3><?php echo $text ?></h3>
       <div id="slideshow" class="slideshow" >
 	<ul class="slides" id="homeSlideshow">

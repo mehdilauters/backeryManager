@@ -5,9 +5,11 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('account_id');
-		echo $this->Form->input('date');
+		echo $this->Form->input('date', array('type'=> 'text', 'class' => 'datepicker'));
 		echo $this->Form->input('name');
+		echo $this->Form->input('comment');
 		echo $this->Form->input('value');
+		echo $this->Form->input('checked');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
