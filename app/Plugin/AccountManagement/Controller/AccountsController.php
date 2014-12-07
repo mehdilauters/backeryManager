@@ -31,7 +31,12 @@ class AccountsController extends AccountManagementAppController {
 		{
                   $conditions = array('Account.company_id' => $this->getCompanyId());
 		}
-		$this->set('accounts', $this->Paginator->paginate($conditions));
+		$paginate = $this->Paginator->paginate($conditions);
+		foreach($paginate as &$account)
+		{
+                  $account['Account']['total'] = $this->getTotal($account['Account']['id']);
+		}
+		$this->set('accounts', $paginate);
 	}
 
 /**
@@ -51,8 +56,29 @@ class AccountsController extends AccountManagementAppController {
                 {
                   $options['conditions']['Account.company_id'] = $this->getCompanyId();
                 }
+                $ds = new DateTime();
+                $ds->modify('-31 day');
+                $dateStart = $ds->format('d/m/Y');
+                $de = new DateTime();
+                $dateEnd = $de->format('d/m/Y');
+                if ($this->request->is('post')) {
+                  $dateStart = $this->request->data['dateStart'];
+                  $dateEnd = $this->request->data['dateEnd'];
+                  $ds = $this->Functions->viewDateToDateTime($dateStart);
+                  $de = $this->Functions->viewDateToDateTime($dateEnd);
+                  if($de < $ds)
+                  {
+                    $this->Session->setFlash(__('Dates invalides'),'flash/fail');
+                    $this->redirect(array('action' => 'view', $id));
+                  }
+                }
+                App::uses('CakeTime', 'Utility');
+                $dateSelect = CakeTime::daysAsSql($ds->format('Y-m-d H:i:s'),$de->format('Y-m-d H:i:s'), 'AccountEntry.date');
+                
+                $this->Account->contain(array('AccountEntry'=>array('conditions'=>$dateSelect)));
 		$this->set('account', $this->Account->find('first', $options));
 		$this->set('total', $this->getTotal($id));
+		$this->set(compact('dateStart', 'dateEnd'));
 	}
 
 /**

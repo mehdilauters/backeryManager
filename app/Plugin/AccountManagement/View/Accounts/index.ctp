@@ -6,14 +6,16 @@
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
                         <th><?php echo $this->Paginator->sort('company'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('Total'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	<?php foreach ($accounts as $account): ?>
+	<?php foreach ($accounts as $account):?>
 	<tr>
 		<td><?php echo h($account['Account']['id']); ?>&nbsp;</td>
 		<td><?php echo h($account['Account']['created']); ?>&nbsp;</td>
 		<td><a href="<?php echo $this->webroot ?>companies/view/<?php echo $account['Company']['id'] ?>" ><?php echo h($account['Company']['name']); ?></a>&nbsp;</td>
 		<td><?php echo h($account['Account']['name']); ?>&nbsp;</td>
+		<td><?php echo h($account['Account']['total']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Afficher'), array('action' => 'view', $account['Account']['id']), array('class'=>'view')); ?>
 			<?php echo $this->Html->link(__('Editer'), array('action' => 'edit', $account['Account']['id'])); ?>

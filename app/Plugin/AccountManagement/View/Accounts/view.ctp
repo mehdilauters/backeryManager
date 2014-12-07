@@ -29,6 +29,11 @@
 </div>
 <div class="related">
 	<h3><?php echo __('Entrées'); ?></h3>
+	  <form id="AccountEntriesDateSelect" method="POST" >
+            <label>Début</label><input type="text" name="dateStart" id="dateStart" value="<?php echo $dateStart ?>" class="datepicker" />
+            <label>Fin</label><input type="text" name="dateEnd" id="dateEnd" value="<?php echo $dateEnd ?>" class="datepicker" />
+            <input type="submit" name="dateSelect" id="dateSelect" value="" class="dateSearch" />
+          </form>
 	<?php if (!empty($account['AccountEntry'])): ?>
 	<table id="account_entries" cellpadding = "0" cellspacing = "0" class="table table-striped" >
 	<tr>
@@ -49,8 +54,8 @@
 			<td class="accountEntryValue" ><?php echo $accountEntry['value']; ?></td>
 			<td class="AccountEntryChecked" ><?php if($accountEntry['checked']) echo 'x'; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'account_entries', 'action' => 'edit', $accountEntry['id']), array("class"=>"edit")); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'account_entries', 'action' => 'delete', $accountEntry['id']), array('class'=>'delete'), __('Are you sure you want to delete # %s?', $accountEntry['id'])); ?>
+				<?php echo $this->Html->link(__('Editer'), array('controller' => 'account_entries', 'action' => 'edit', $accountEntry['id']), array("class"=>"edit")); ?>
+				<?php echo $this->Form->postLink(__('Supprimer'), array('controller' => 'account_entries', 'action' => 'delete', $accountEntry['id']), array('class'=>'delete'), __('Are you sure you want to delete # %s?', $accountEntry['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
