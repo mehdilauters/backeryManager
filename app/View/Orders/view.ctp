@@ -70,7 +70,7 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
 	<?php endif; ?>
 
 	<p id="legalMentions">
-		<?php echo $company['Company']['order_legals_mentions']; ?>
+		<?php echo $company['Company']['legals_mentions']; ?>
 	</p>
 
 <div class="related">

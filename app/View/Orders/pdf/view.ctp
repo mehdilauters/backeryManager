@@ -51,7 +51,7 @@
 	  <?php endif; ?>
 </center>
 	<p id="legalMentions">
-		<?php echo $company['Company']['order_legals_mentions']; ?>
+		<?php echo $company['Company']['legals_mentions']; ?>
 	</p>
 </div>
 <?php 

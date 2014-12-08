@@ -66,6 +66,9 @@ before_script:
 
 script:
   - sh -c "ruby app/Test/test.rb w"
+
+after_script:
+  - sudo cat ./app/tmp/logs/*.log
   
 after_failure:
   - sudo cat /var/log/mail.*

@@ -539,7 +539,9 @@ def addAccountEntry(driver, accountEntry, js = true)
   if(js)
     driver.find_element(:css => "td.AccountEntryDate input").clear()
     driver.find_element(:css => "td.AccountEntryDate input").send_keys(accountEntry['date'])
+    driver.find_element(:css => "td.AccountEntryName input").clear()
     driver.find_element(:css => "td.AccountEntryName input").send_keys(accountEntry['name'])
+    driver.find_element(:css => "td.AccountEntryValue input").clear()
     driver.find_element(:css => "td.AccountEntryValue input").send_keys(accountEntry['value'])
     driver.find_element(:css => ".saveButton").click
   else
@@ -554,6 +556,18 @@ def addAccountEntry(driver, accountEntry, js = true)
   end
 end
 
+def editFirstAccountEntry(driver, accountEntry)
+  puts "editFirstAccountEntry #{accountEntry}"
+  driver.find_element(:css => "a.edit").click
+  addAccountEntry(driver, accountEntry)
+  
+end
+
+
+def deleteFisrtAccountEntry(driver)
+  puts "deleteFisrtAccountEntry"
+  driver.find_element(:css => "a.delete").click
+end
 
 
 def addSales(driver, dte)
@@ -654,6 +668,7 @@ end
 def setCompany(driver, id)
   puts "=============== change to company #{id} =============="
   f = File.new('app/tmp/companyId', 'w')
+  f.chmod(0777)
   f.write(id)
   f.close
 end
@@ -678,6 +693,23 @@ def testAccountPlugin(driver)
       jsTotal = driver.find_element(:css => "#total").text().to_i
       if(jsTotal != total || jsTotal == AccountsEntries[0]['value'])
         raise "totals are differents or not expected #{jsTotal} / #{total}"
+      end
+      
+      
+      editFirstAccountEntry(driver,AccountsEntries[1])
+      total -= AccountsEntries[0]['value']
+      total += AccountsEntries[1]['value']
+      jsTotal = driver.find_element(:css => "#total").text().to_i
+      if(jsTotal != total || jsTotal == AccountsEntries[0]['value'])
+        raise "totals are differents or not expected after edition #{jsTotal} / #{total}"
+      end
+      
+      
+      deleteFisrtAccountEntry(driver)
+      total -= AccountsEntries[1]['value']
+      jsTotal = driver.find_element(:css => "#total").text().to_i
+      if(jsTotal != total || jsTotal == AccountsEntries[0]['value'])
+        raise "totals are differents or not expected after deletion #{jsTotal} / #{total}"
       end
 end
 

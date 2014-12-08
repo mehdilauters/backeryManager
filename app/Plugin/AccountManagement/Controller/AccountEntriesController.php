@@ -50,13 +50,20 @@ class AccountEntriesController extends AccountManagementAppController {
 			if ($this->AccountEntry->save($this->request->data)) {
                                 if ($this->request->is('ajax'))
                                 {
-                                  echo json_encode( array('id'=>$this->AccountEntry->getInsertID(), 'total'=>$this->getTotal($idAccount)));
-                                  return;
+                                  $results = array('id'=>$this->AccountEntry->getInsertID(), 'total'=>$this->getTotal($idAccount),'status'=>true);
+                                  $this->set(compact('results'));
+                                  $this->set('_serialize', array('results'));
                                 }
-				$this->Session->setFlash(__('The account entry has been saved.'));
-				return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
+                                else
+                                {
+                                  $this->Session->setFlash(__('The account entry has been saved.'));
+                                  return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
+                                }
 			} else {
 				$this->Session->setFlash(__('The account entry could not be saved. Please, try again.'));
+				  $results = array('status'=>false);
+                                  $this->set(compact('results'));
+                                  $this->set('_serialize', array('results'));
 			}
 		}
 		$accounts = $this->AccountEntry->Account->find('list');
@@ -92,16 +99,21 @@ class AccountEntriesController extends AccountManagementAppController {
 				$this->Session->setFlash(__('The account entry has been saved.'));
                                 if ($this->request->is('ajax'))
                                 {
-                                  echo json_encode( array('id'=>$id, 'total'=>$this->getTotal($idAccount)));
-                                  return;
+                                  $results = array('id'=>$id, 'total'=>$this->getTotal($idAccount),'status'=>true);
+                                  $this->set(compact('results'));
+                                  $this->set('_serialize', array('results'));
                                 }
- 				return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
+                                else
+                                {
+                                  return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
+                                }
 			} else {
 				$this->Session->setFlash(__('The account entry could not be saved. Please, try again.'));
 				if ($this->request->is('ajax'))
                                 {
-                                  echo -1;
-                                  return;
+                                  $results = array('id'=>$id, 'status'=>false);
+                                  $this->set(compact('results'));
+                                  $this->set('_serialize', array('results'));
                                 }
 			}
 		} else {
@@ -143,8 +155,12 @@ class AccountEntriesController extends AccountManagementAppController {
 		}
                 if ($this->request->is('ajax'))
                 {
-                  echo json_encode( array('status'=>$ok, 'total'=>$this->getTotal($idAccount)));
-                  return;
+                  $results = array('total'=>$this->getTotal($idAccount),'status'=>$ok);
+                  $this->set(compact('results'));
+                  $this->set('_serialize', array('results'));
                 }
-		return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
+                else
+                {
+                  return $this->redirect(array('controller'=>'accounts', 'action' => 'view', $idAccount));
+                }
 	}}

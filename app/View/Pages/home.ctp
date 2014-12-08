@@ -76,7 +76,6 @@ if(!$slideshowInserted && count($products) != 0)
 			$text = 'Nos Produits';
 		}
 	  ?>
-	  <div class="rope" ></div>
 	  <h3><?php echo $text ?></h3>
       <div id="slideshow" class="slideshow" >
 	<ul class="slides" id="homeSlideshow">
@@ -89,6 +88,7 @@ if(!$slideshowInserted && count($products) != 0)
 	  <?php } ?>
 	</ul>
     </div>
+          <div class="rope" ></div>
     </center>
    </li>
 <?php

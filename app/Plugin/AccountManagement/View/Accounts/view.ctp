@@ -154,15 +154,24 @@
           var ret = true;
           jQuery.ajax({
               type: 'POST',
-              url: '<?php echo $this->webroot ?>account_management/account_entries/'+controller,
+              url: '<?php echo $this->webroot ?>account_management/account_entries/'+controller+'.json',
               async:false,
               accepts: 'application/json',
               data: _data,
               dataType: 'json',
               success: function (data) {
-                  row.removeClass("alert alert-danger");
-                  _data.AccountEntry.id = data.id;
-                  $('#total').html(data.total);
+              
+                  if(data.results.status)
+                  {
+                    row.removeClass("alert alert-danger");
+                    _data.AccountEntry.id = data.results.id;
+                    $('#total').html(data.results.total);
+                  }
+                  else
+                  {
+                    row.addClass("alert alert-danger");
+                    ret =  false;
+                  }
               },
               error: function (jqXHR, textStatus, errorThrown) {
                   console.log(textStatus);
@@ -281,16 +290,16 @@
             var ret = true;
             jQuery.ajax({
                 type: 'POST',
-                url: '<?php echo $this->webroot ?>account_management/account_entries/delete/'+row.attr('rel'),
+                url: '<?php echo $this->webroot ?>account_management/account_entries/delete/'+row.attr('rel')+'.json',
                 async:false,
                 accepts: 'application/json',
                 dataType: 'json',
                 success: function (data) {
-                    if(!data.status)
+                    if(!data.results.status)
                     {
                       row.addClass("alert alert-danger");
                     }
-                    $('#total').html(data.total);
+                    $('#total').html(data.results.total);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus);
@@ -303,7 +312,7 @@
             if(ret)
             {
               row.fadeOut();
-              row.delete();
+//               row.delete();
             }
             return false;
           });

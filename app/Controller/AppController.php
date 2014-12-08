@@ -575,10 +575,6 @@ public function getFunctionText($coefficients)
 
     $this->Auth->flash['element'] = 'flash/auth';
     $this->RequestHandler->addInputType('json', array('json_decode', true));
-    if ($this->request->is('ajax'))
-    {
-      $this->autoRender = false;
-      }
 // if(!($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'autologin'))
 
 	  // $user = $this->User->find('first',array('conditions'=>array('User.email' => 'mehdilauters@gmail.com')));
