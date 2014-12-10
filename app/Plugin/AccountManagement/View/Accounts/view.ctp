@@ -44,8 +44,19 @@
 		<th><?php echo __('Checked'); ?></th>
 		<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	<?php foreach ($account['AccountEntry'] as $accountEntry): ?>
-		<tr class="<?php if($accountEntry['value'] <0 ) echo 'negative' ?>" rel="<?php echo $accountEntry['id'] ?>" >
+	<?php foreach ($account['AccountEntry'] as $accountEntry): 
+                $checkedClass = "";
+                $signClass='negative';
+                if($accountEntry['value'] >0 )
+                {
+                  $signClass = 'positive'; 
+                }
+                if($accountEntry['checked'])
+                {
+                 $checkedClass = "checked";
+                }
+                ?>
+		<tr class="<?php echo $signClass.' '.$checkedClass; ?>" rel="<?php echo $accountEntry['id'] ?>" >
 			<td><?php 
 			  $date = new DateTime($accountEntry['date']);
 			  echo h($date->format('d/m/Y')); ?></td>
@@ -60,11 +71,11 @@
 		</tr>
 	<?php endforeach; ?>
 	<tr class="" rel="" >
-           <td class="AccountEntryDate" ><input type="text" class="datepicker" /></td>
-           <td class="AccountEntryName" ><input type="text" class=""/>
-           <td class="AccountEntryComment" ><input type="text" class=""/>
-           <td class="AccountEntryValue" ><input type="text" class="spinner changeValue"/>
-           <td class="AccountEntryChecked" ><input type="checkbox" />
+           <td class="AccountEntryDate" ><input type="text" class="datepicker" name="AccountEntryDate" /></td>
+           <td class="AccountEntryName" ><input type="text" class="" name="AccountEntryName" />
+           <td class="AccountEntryComment" ><input type="text" class="" name="AccountEntryComment" />
+           <td class="AccountEntryValue" ><input type="text" class="spinner changeValue" name="AccountEntryValue" />
+           <td class="AccountEntryChecked" ><input type="checkbox" name="AccountEntryChecked" />
            <td class="actions" ><button type="button" class="saveButton" >Valider </button></td>
 	</tr>
 	<tr>
@@ -222,7 +233,7 @@
     {
       checked = 'checked="checked"'
     }
-    html='<td class="AccountEntryDate" ><input type="text" class="datepicker" value="'+_data.AccountEntry.date+'" /></td><td class="AccountEntryName"><input type="text" value="'+_data.AccountEntry.name+'" class=""/></td><td class="AccountEntryComment"><input type="text" value="'+_data.AccountEntry.comment+'" class=""/></td><td class="AccountEntryValue" ><input value="'+_data.AccountEntry.value+'" type="text" class="spinner changeValue"/></td><td class="AccountEntryChecked"><input value="true" '+checked+' type="checkbox" class=""/><td class="actions" ><button type="button" class="saveButton" >Valider </button></td>';
+    html='<td class="AccountEntryDate" ><input type="text" class="datepicker" value="'+_data.AccountEntry.date+'" /></td><td class="AccountEntryName" name="AccountEntryName" ><input type="text" value="'+_data.AccountEntry.name+'" class=""/></td><td class="AccountEntryComment"><input type="text" value="'+_data.AccountEntry.comment+'" class=""/></td><td class="AccountEntryValue" ><input value="'+_data.AccountEntry.value+'" type="text" class="spinner changeValue"/></td><td class="AccountEntryChecked"><input value="true" '+checked+' type="checkbox" class="" name="AccountEntryChecked" /><td class="actions" ><button type="button" class="saveButton" >Valider </button></td>';
     row.html(html);
     updateDom();
   }
@@ -242,13 +253,19 @@
 //       }
     });
     $(".changeValue").off("click").keyup(function(){
+          row = $(this).closest('tr');
+          data = getRowData(row);
+    
+    
           if($(this).val() < 0)
           {
-            $(this).closest('tr').addClass("negative");
+            row.addClass("negative");
+            row.removeClass("positive");
           }
           else
           {
-            $(this).closest('tr').removeClass("negative");
+            row.removeClass("negative");
+            row.addClass("positive");
           }
         });
         
@@ -315,6 +332,21 @@
 //               row.delete();
             }
             return false;
+          });
+          
+          
+          
+          $('input[name="AccountEntryChecked"]').change(function(){
+            row = $(this).closest('tr');
+            data = getRowData(row);
+            if(data.AccountEntry.checked)
+            {
+              row.addClass("checked");
+            }
+            else
+            {
+              row.removeClass("checked");
+            }
           });
   }
 

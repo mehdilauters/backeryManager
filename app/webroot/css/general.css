@@ -649,8 +649,17 @@ td.actions img.icon {
   color:blue;
 }
 
-.negative, .negative input{
- color:red; 
+.negative:not(.alert), .negative:not(.alert) input{
+ background-color:rgba(255, 0, 0, 0.4);
+}
+
+.positive:not(.alert), .positive:not(.alert) input{
+ background-color:rgba(0, 255, 0, 0.4);
+}
+
+.checked:not(.alert), .checked:not(.alert) input{
+ color:#E6FF00;
+ font-weight:bold;
 }
 
 button{
