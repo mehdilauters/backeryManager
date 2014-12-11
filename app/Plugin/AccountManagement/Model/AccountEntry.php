@@ -79,11 +79,71 @@ class AccountEntry extends AccountManagementAppModel {
  */
 	public $belongsTo = array(
 		'Account' => array(
-			'className' => 'Account',
+			'className' => 'AccountManagement.Account',
 			'foreignKey' => 'account_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		)
 	);
+	
+	public function currentTotal($list)
+	{
+          $current_total = false;
+          foreach($list as &$item)
+          {
+                  if($current_total == false)
+                  {
+                    $this->contain();
+                    $tmp = $this->find('all',
+                                              array(
+                                              'order' => 'AccountEntry.date, AccountEntry.created',
+                                              'conditions' => array('AccountEntry.account_id' => $item['account_id'],
+                                                                    'AccountEntry.date <= "'.$item['date'].'"',
+                                                                    'AccountEntry.created <= "'.$item['created'].'"',
+                                                                    ),
+                                              'fields' => array('SUM(AccountEntry.value) as `current_total`', 
+                                                                )
+                                              ));
+                        $current_total = $tmp[0][0]['current_total'];
+                    }
+                    else
+                    {
+                      $current_total += $item['value'];
+                    }
+                    $item['current_total'] = $current_total;
+          }
+          return $list;
+	}
+	
+	public function afterFind($results, $primary = false)
+        {
+          $results = parent::afterFind($results, $primary);
+          $current_total = false;
+          foreach($results as $id => $data)
+          {
+            if(isset($data[$this->alias]))
+            {
+                  if($current_total == false)
+                  {
+                    $this->contain();
+                    $tmp = $this->find('all',
+                                              array(
+                                              'conditions' => array('AccountEntry.account_id' => $data[$this->alias]['account_id'],
+                                                                    'AccountEntry.date < "'.$data[$this->alias]['date'].'"',
+                                                                    ),
+                                              'fields' => array('SUM(AccountEntry.value) as `current_total`', 
+                                                                )
+                                              ));
+                        $current_total = $tmp[0][0]['current_total'];
+                    }
+                    else
+                    {
+                      $current_total += $results[$id][$this->alias]['value'];
+                    }
+              $results[$id][$this->alias]['current_total'] = $current_total;
+            }
+          }
+          return $results;
+        }
 }

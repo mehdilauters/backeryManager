@@ -35,22 +35,34 @@
             <input type="submit" name="dateSelect" id="dateSelect" value="" class="dateSearch" />
           </form>
 	<?php if (!empty($account['AccountEntry'])): ?>
-	<table id="account_entries" cellpadding = "0" cellspacing = "0" class="table table-striped" >
+	<table id="account_entries" cellpadding = "0" cellspacing = "0" class="table" >
 	<tr>
 		<th><?php echo __('Date'); ?></th>
 		<th><?php echo __('Name'); ?></th>
 		<th><?php echo __('Comment'); ?></th>
 		<th><?php echo __('Value'); ?></th>
 		<th><?php echo __('Checked'); ?></th>
+		<th><?php echo __('Current Total'); ?></th>
 		<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	<?php foreach ($account['AccountEntry'] as $accountEntry): 
                 $checkedClass = "";
                 $signClass='negative';
-                if($accountEntry['value'] >0 )
+                if($accountEntry['current_total'] >=0 )
                 {
                   $signClass = 'positive'; 
                 }
+                
+                $valueSignClass='negative';
+                if($accountEntry['value'] >=0 )
+                {
+                  $valueSignClass = 'positive'; 
+                }
+                if($signClass == $valueSignClass)
+                {
+                  $valueSignClass = '';
+                }
+                
                 if($accountEntry['checked'])
                 {
                  $checkedClass = "checked";
@@ -62,8 +74,9 @@
 			  echo h($date->format('d/m/Y')); ?></td>
 			<td><?php echo $accountEntry['name']; ?></td>
 			<td><?php echo $accountEntry['comment']; ?></td>
-			<td class="accountEntryValue" ><?php echo $accountEntry['value']; ?></td>
+			<td class="accountEntryValue <?php echo $valueSignClass ?>" ><?php echo round($accountEntry['value'],2); ?></td>
 			<td class="AccountEntryChecked" ><?php if($accountEntry['checked']) echo 'x'; ?></td>
+			<td class="AccountEntryCurrentTotal" ><?php echo round($accountEntry['current_total'],2); ?></td>
 			<td class="actions">
 				<?php echo $this->Html->link(__('Editer'), array('controller' => 'account_entries', 'action' => 'edit', $accountEntry['id']), array("class"=>"edit")); ?>
 				<?php echo $this->Form->postLink(__('Supprimer'), array('controller' => 'account_entries', 'action' => 'delete', $accountEntry['id']), array('class'=>'delete'), __('Are you sure you want to delete # %s?', $accountEntry['id'])); ?>
@@ -72,18 +85,27 @@
 	<?php endforeach; ?>
 	<tr class="" rel="" >
            <td class="AccountEntryDate" ><input type="text" class="datepicker" name="AccountEntryDate" /></td>
-           <td class="AccountEntryName" ><input type="text" class="" name="AccountEntryName" />
-           <td class="AccountEntryComment" ><input type="text" class="" name="AccountEntryComment" />
-           <td class="AccountEntryValue" ><input type="text" class="spinner changeValue" name="AccountEntryValue" />
-           <td class="AccountEntryChecked" ><input type="checkbox" name="AccountEntryChecked" />
+           <td class="AccountEntryName" ><input type="text" class="" name="AccountEntryName" /></td>
+           <td class="AccountEntryComment" ><input type="text" class="" name="AccountEntryComment" /></td>
+           <td class="AccountEntryValue" ><input type="text" class="spinner changeValue" name="AccountEntryValue" /></td>
+           <td class="AccountEntryChecked" ><input type="checkbox" name="AccountEntryChecked" /></td>
+           <td class="AccountEntryChecked" ></td>
            <td class="actions" ><button type="button" class="saveButton" >Valider </button></td>
 	</tr>
-	<tr>
+	<?php
+          $signClass='negative';
+          if($total >=0 )
+          {
+            $signClass = 'positive'; 
+          }
+	?>
+	<tr class="<?php echo $signClass ?>" >
           <td>Total</td>
           <td></td>
           <td></td>
-          <td id="total" ><?php echo $total ?></td>
           <td></td>
+          <td></td>
+          <td id="total" ><?php echo round($total,2) ?></td>
           <td></td>
 	</tr>
 	</table>
@@ -121,6 +143,7 @@
               comment: row.find('td:eq(2)').text(),
               value: row.find('td:eq(3)').text(),
               checked: row.find('td:eq(4)').text() == 'x',
+              current_total: row.find('td:eq(5)').text(),
           }
         }
       }
@@ -135,7 +158,8 @@
                   name: row.find('input:eq(1)').val(),
                   comment: row.find('input:eq(2)').val(),
                   value: row.find('input:eq(3)').val(),
-                  checked: row.find('input:eq(4)').prop('checked')
+                  checked: row.find('input:eq(4)').prop('checked'),
+                  current_total: parseFloat(row.prev().find('td:eq(5)').text()) + parseFloat(row.find('input:eq(3)').val()),
               }
             }
           }
@@ -176,7 +200,7 @@
                   {
                     row.removeClass("alert alert-danger");
                     _data.AccountEntry.id = data.results.id;
-                    $('#total').html(data.results.total);
+                    $('#total').html(Math.round(data.results.total  * 100) / 100);
                   }
                   else
                   {
@@ -220,7 +244,14 @@
     {
       checked='x';
     }
-    newHtml = '<td class="AccountEntryDate" >'+_data.AccountEntry.date+'</td><td class="AccountEntryName" >'+_data.AccountEntry.name+'</td><td class="AccountEntryComment" >'+_data.AccountEntry.comment+'</td><td class="AccountEntryValue" >'+_data.AccountEntry.value+'</td><td class="AccountEntryChecked" >'+checked+'</td><td class="actions" ><a href="" class="edit" >Editer</a><a class="delete" href="" >Supprimer</a></td>';
+    
+    signClass = 'positive';
+    if(_data.AccountEntry.value < 0)
+    {
+      signClass = 'negative';
+    }
+    
+    newHtml = '<td class="AccountEntryDate" >'+_data.AccountEntry.date+'</td><td class="AccountEntryName" >'+_data.AccountEntry.name+'</td><td class="AccountEntryComment" >'+_data.AccountEntry.comment+'</td><td class="AccountEntryValue '+signClass+'" >'+_data.AccountEntry.value+'</td><td class="AccountEntryChecked" >'+checked+'</td><td class="AccountEntryCurrentTotal" >'+_data.AccountEntry.current_total+'</td><td class="actions" ><a href="" class="edit" >Editer</a><a class="delete" href="" >Supprimer</a></td>';
     row.html(newHtml);
     updateDom();
   }
@@ -233,7 +264,7 @@
     {
       checked = 'checked="checked"'
     }
-    html='<td class="AccountEntryDate" ><input type="text" class="datepicker" value="'+_data.AccountEntry.date+'" /></td><td class="AccountEntryName" name="AccountEntryName" ><input type="text" value="'+_data.AccountEntry.name+'" class=""/></td><td class="AccountEntryComment"><input type="text" value="'+_data.AccountEntry.comment+'" class=""/></td><td class="AccountEntryValue" ><input value="'+_data.AccountEntry.value+'" type="text" class="spinner changeValue"/></td><td class="AccountEntryChecked"><input value="true" '+checked+' type="checkbox" class="" name="AccountEntryChecked" /><td class="actions" ><button type="button" class="saveButton" >Valider </button></td>';
+    html='<td class="AccountEntryDate" ><input type="text" class="datepicker" value="'+_data.AccountEntry.date+'" /></td><td class="AccountEntryName" ><input type="text" value="'+_data.AccountEntry.name+'" class="" name="AccountEntryName" /></td><td class="AccountEntryComment"><input type="text" value="'+_data.AccountEntry.comment+'" class=""/></td><td class="AccountEntryValue" ><input value="'+_data.AccountEntry.value+'" type="text" class="spinner changeValue"/></td><td class="AccountEntryChecked"><input value="true" '+checked+' type="checkbox" class="" name="AccountEntryChecked" /><td class="AccountEntryCurrentTotal"></td><td class="actions" ><button type="button" class="saveButton" >Valider </button></td>';
     row.html(html);
     updateDom();
   }
@@ -257,15 +288,26 @@
           data = getRowData(row);
     
     
-          if($(this).val() < 0)
+          if(parseFloat($(this).val()) < 0)
+          {
+            $(this).closest('td').addClass("negative");
+            $(this).closest('td').removeClass("positive");
+          }
+          else
+          {
+            $(this).closest('td').removeClass("negative");
+            $(this).closest('td').addClass("positive");
+          }
+          
+          if(data.AccountEntry.current_total < 0)
           {
             row.addClass("negative");
             row.removeClass("positive");
           }
           else
           {
-            row.removeClass("negative");
             row.addClass("positive");
+            row.removeClass("negative");
           }
         });
         
@@ -348,6 +390,54 @@
               row.removeClass("checked");
             }
           });
+          
+          
+          
+          $('input[name="AccountEntryName"]').autocomplete({
+                  source: function( request, response ) {
+                  $.ajax({
+                    url: webroot + "account_management/account_entries/nameList.json",
+                    type:'POST',
+                    accepts: 'application/json',
+                    dataType: 'json',
+                    data: {
+                      data: {
+                        query:request.term,
+                        account_id:<?php echo $account['Account']['id']; ?>
+                        }
+                    },
+                  success: function( data ) {
+                    response( data );
+                    }
+                  });
+                  },
+                  minLength: 3,
+                  select: function( event, ui ) {
+                      
+//                       log( ui.item ?
+//                       "Selected: " + ui.item.label :
+//                       "Nothing selected, input was " + this.value);
+                      },
+                  open: function() {
+                    $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+                  },
+                  close: function() {
+                    $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                  }
+                });
+                
+                
+                totalRow = $('#total').closest('tr');
+                    if(parseFloat($('#total').text()) < 0)
+                    {
+                      totalRow.removeClass('positive');
+                      totalRow.addClass('negative');
+                    }
+                    else
+                    {
+                      totalRow.addClass('positive');
+                      totalRow.removeClass('negative');                    
+                    }
   }
 
   $(document).ready(function(){

@@ -27,11 +27,12 @@ class AccountsController extends AccountManagementAppController {
 		$this->Account->recursive = 0;
 		$tokens = $this->getUserTokens();
 		$conditions = array();
-		if( ! $tokens['isRoot'] )
+// 		if( ! $tokens['isRoot'] )
 		{
                   $conditions = array('Account.company_id' => $this->getCompanyId());
 		}
 		$paginate = $this->Paginator->paginate($conditions);
+
 		foreach($paginate as &$account)
 		{
                   $account['Account']['total'] = $this->getTotal($account['Account']['id']);
@@ -75,8 +76,10 @@ class AccountsController extends AccountManagementAppController {
                 App::uses('CakeTime', 'Utility');
                 $dateSelect = CakeTime::daysAsSql($ds->format('Y-m-d H:i:s'),$de->format('Y-m-d H:i:s'), 'AccountEntry.date');
                 
-                $this->Account->contain(array('AccountEntry'=>array('conditions'=>$dateSelect)));
-		$this->set('account', $this->Account->find('first', $options));
+                $this->Account->contain(array('AccountEntry'=>array('conditions'=>$dateSelect, 'order' => 'AccountEntry.date, AccountEntry.created')));
+                $account = $this->Account->find('first', $options);
+                $account['AccountEntry'] = $this->AccountEntry->currentTotal($account['AccountEntry']);
+		$this->set('account', $account);
 		$this->set('total', $this->getTotal($id));
 		$this->set(compact('dateStart', 'dateEnd'));
 	}

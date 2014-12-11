@@ -59,7 +59,7 @@ class Account extends AccountManagementAppModel {
  */
 	public $hasMany = array(
 		'AccountEntry' => array(
-			'className' => 'AccountEntry',
+			'className' => 'AccountManagement.AccountEntry',
 			'foreignKey' => 'account_id',
 			'dependent' => true,
 			'conditions' => '',
