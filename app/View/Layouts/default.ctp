@@ -28,7 +28,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
   <?php echo $this->element('tracker'); ?>
   <?php echo $this->Html->charset(); ?>
   <title>
-    Boulangerie <?php if(isset($company['Company'])) { echo $company['Company']['title']; } ?> | 
+    Boulangerie <?php if(isset($company['Company'])) { echo $company['Company']['title']; } ?> |
     <?php echo $title_for_layout; ?>
   </title>
   <?php
@@ -39,7 +39,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	echo $this->html->meta('rss', '/news.rss', array('title' => "news"));
 
     //echo $this->Html->css('cake.generic');
-    
+
 
 	echo $this->Html->script(
     array(
@@ -77,8 +77,8 @@ echo $this->Html->css(
     echo $this->fetch('meta');
     echo $this->fetch('css');
     echo $this->fetch('script');
-	
-	
+
+
   ?>
   <script>
 	var webroot = "<?php echo $this->Html->url('/'); ?>";
@@ -88,6 +88,7 @@ echo $this->Html->css(
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.cursor.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.highlighter.min.js" type="text/javascript"></script>
+<script language="javascript" src="<?php echo $this->webroot ?>js/jqplot/plugins/jqplot.canvasOverlay.min.js" type="text/javascript"></script>
 <script language="javascript" src="<?php echo $this->webroot ?>js/plotTable.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->webroot ?>js/jqplot/jquery.jqplot.css" />
 <?php    echo $this->Html->css('general'); ?>
@@ -111,16 +112,16 @@ echo $this->Html->css(
 				</div>
 	  	</div>
   	</header>
-  	
+
   	<!--  contents -->
-  	
+
   	<div class="row">
 		<div class="col-md-9"> <!--  colonne de gauche  -->
 			<div id="cookiesError" class="alert alert-danger" style="display:none; ">Attention, les cookies sont désactivés sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div>
 			<noscript><div id="cookiesError" class="alert alert-danger" >Attention, javascript est désactivé sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div></noscript>
 			<h2><?php echo $title_for_layout ?></h2>
 			<div class="rope" ></div>
-			<?php 
+			<?php
 				echo $this->Session->flash();
 				echo $this->Session->flash('auth');
 				if(count($receivedEmails) != 0) :
@@ -148,9 +149,9 @@ echo $this->Html->css(
 		  	<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
 		</div>
   	</div>
- 
-    
-    
+
+
+
   	<div id="footer" >
 	<div>Credits : <a href="http://www.lauters.fr" >Mehdi Lauters</a> 2014</div>
 	<div>BackeryManager released under GPL licence  <a href="https://github.com/mehdilauters/backeryManager" >https://github.com/mehdilauters/backeryManager</a></div>
@@ -163,7 +164,7 @@ echo $this->Html->css(
 </div>
   	</div>
   </div>
-  <?php //echo $this->element('sql_dump'); 
+  <?php //echo $this->element('sql_dump');
   echo $this->Html->script('main');
 echo $this->Html->script(
     array(
@@ -190,7 +191,7 @@ tinymce.init({
 
           intro.start();
       }
- 
+
  $( document ).ready( function (){
 	<?php if($introAutostart): ?>
 	  if( introSteps.length != 0 )
@@ -199,9 +200,9 @@ tinymce.init({
 	  }
 	<?php endif; ?>
  });
- 
- 
+
+
 </script>
-	
+
 </body>
 </html>

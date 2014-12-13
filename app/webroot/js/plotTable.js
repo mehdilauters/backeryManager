@@ -1,3 +1,7 @@
+function calculateYears(minDate, maxDate) { 
+  return maxDate.getFullYear() - minDate.getFullYear();
+}
+
 function isValidDate(d) {
 	if ( Object.prototype.toString.call(d) !== "[object Date]" )
 	  return false;
@@ -75,7 +79,8 @@ function curveDisplay(chartId, curveId, status)
 	data['plotData'] = {};
 	data['labels'] = {};
 	data['display'] = {};
-	
+	minDate = new Date();
+        maxDate = new Date();
 	interactive = $('#'+tableId).css('display') !== 'none';
 	
     row=0;
@@ -89,6 +94,15 @@ function curveDisplay(chartId, curveId, status)
           
           if( isValidDate(dte) )
           {
+            if(dte < minDate)
+            {
+              minDate = dte;
+            }
+            
+            if(dte > maxDate)
+            {
+              maxDate = dte;
+            }
             //key = dte.getFullYear() + '-' + dte.getMonth() + '-' + dte.getDate();
 			// for each item with the curve classe
 			$(item).find('td').each(function( index ) {
@@ -192,7 +206,28 @@ function curveDisplay(chartId, curveId, status)
 	$('#'+chartId+'Container').hide();
       return false;
     }
+    nbYears = calculateYears(minDate,maxDate);
     
+    vertical_lines = [];
+    
+    for(i=0; i< nbYears+1; i++)
+    {
+      vertical_lines.push(
+            {
+                                verticalLine:
+                                {
+                                    name:'test'+i,
+                                    x : new Date((minDate.getFullYear()+i)+'-01-01').getTime(),
+                                    lineWidth: 5,
+                                    color: 'rgba(255, 0, 0,0.45)',
+                                    shadow: false,
+                                    lineCap : 'butt'
+                                }
+                            }   
+        
+      );
+    }
+
     
 //     console.log(plotData);
     window[chartVarName] = jQuery.jqplot (chartId, plotData,
@@ -244,33 +279,7 @@ function curveDisplay(chartId, curveId, status)
       },
 	   canvasOverlay: {
                 show: true,
-                objects:
-
-                        [
-                            {
-                                verticalLine:
-                                {
-									name:'test',
-                                    x : new Date('2014-01-05').getTime(),
-                                    //stop : [new Date('2014-01-06').getTime(),1],
-                                    lineWidth: 5,
-                                    color: 'rgba(255, 0, 0,0.45)',
-                                    shadow: false,
-                                    lineCap : 'butt'
-                                }
-                            },                                    
-                        /*    {
-                                line:
-                                {
-                                    start : [new Date('2014-01-12').getTime(),20],                                                
-                                    stop : [new Date('2014-01-12').getTime(),20],                                                
-                                    lineWidth: 1000,
-                                    color: 'rgba(255, 0, 0,0.45)',
-                                    shadow: false,
-                                    lineCap : 'butt'
-                                }
-                            }*/
-                        ]
+                objects: vertical_lines                  
             } 
     }
     
