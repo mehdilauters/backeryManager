@@ -99,18 +99,16 @@ class AccountEntry extends AccountManagementAppModel {
                                               array(
                                               'order' => 'AccountEntry.date, AccountEntry.created',
                                               'conditions' => array('AccountEntry.account_id' => $item['account_id'],
-                                                                    'AccountEntry.date <= "'.$item['date'].'"',
-                                                                    'AccountEntry.created <= "'.$item['created'].'"',
+                                                                    'AccountEntry.date < "'.$item['date'].'"',
                                                                     ),
                                               'fields' => array('SUM(AccountEntry.value) as `current_total`', 
                                                                 )
                                               ));
                         $current_total = $tmp[0][0]['current_total'];
                     }
-                    else
-                    {
-                      $current_total += $item['value'];
-                    }
+
+                    $current_total += $item['value'];
+
                     $item['current_total'] = $current_total;
           }
           return $list;

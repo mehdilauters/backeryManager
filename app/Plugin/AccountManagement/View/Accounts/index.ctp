@@ -9,13 +9,21 @@
 			<th><?php echo $this->Paginator->sort('Total'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	<?php foreach ($accounts as $account):?>
-	<tr>
+	<?php foreach ($accounts as $account):
+	
+	$signClass='negative';
+        if($account['Account']['total'] >=0 )
+        {
+          $signClass = 'positive'; 
+        }
+	
+	?>
+	<tr class="<?php echo $signClass ?>" >
 		<td><?php echo h($account['Account']['id']); ?>&nbsp;</td>
 		<td><?php echo h($account['Account']['created']); ?>&nbsp;</td>
 		<td><a href="<?php echo $this->webroot ?>companies/view/<?php echo $account['Company']['id'] ?>" ><?php echo h($account['Company']['name']); ?></a>&nbsp;</td>
 		<td><?php echo h($account['Account']['name']); ?>&nbsp;</td>
-		<td><?php echo h($account['Account']['total']); ?>&nbsp;</td>
+		<td><?php echo h(round($account['Account']['total'],2)); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Afficher'), array('action' => 'view', $account['Account']['id']), array('class'=>'view')); ?>
 			<?php echo $this->Html->link(__('Editer'), array('action' => 'edit', $account['Account']['id'])); ?>

@@ -61,6 +61,7 @@ class AccountsController extends AccountManagementAppController {
                 $ds->modify('-31 day');
                 $dateStart = $ds->format('d/m/Y');
                 $de = new DateTime();
+                $de->modify('+31 day');
                 $dateEnd = $de->format('d/m/Y');
                 if ($this->request->is('post')) {
                   $dateStart = $this->request->data['dateStart'];
