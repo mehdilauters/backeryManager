@@ -589,14 +589,6 @@ td.actions img.icon {
   width:16;
 }
 
-.demoWarning {
-  color:red;
-}
-
-.demoWarning > div.title{
-  font-size: 2em; 
-}
-
 #resultShops li{
 	border: 2px solid;
 }

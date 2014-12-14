@@ -98,9 +98,6 @@ echo $this->Html->css(
   	<header>
 	  	<div class="row">
 			  <div class="col-md-8">
-			  <?php if(Configure::read('Settings.demo.active')) { ?>
-			      <div class="demoWarning" ><div class="title" >Attention, ceci est une version de démonstration</div>Les adresses, numéros de téléphones, et noms d'utilisateurs sont volontairement faux. Les données de ventes et de gestion sont des simulations, et peuvent donc amener à des incohérences.</div>
-			  <?php } ?>
 			  </div>
 			  <div class="col-md-4">
 					<div id="logo">
@@ -121,6 +118,9 @@ echo $this->Html->css(
 			<noscript><div id="cookiesError" class="alert alert-danger" >Attention, javascript est désactivé sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div></noscript>
 			<h2><?php echo $title_for_layout ?></h2>
 			<div class="rope" ></div>
+			<?php if(Configure::read('Settings.demo.active')) { ?>
+                              <div class="alert alert-danger" ><div class="title" >Attention, ceci est une version de démonstration</div>Les adresses, numéros de téléphones, et noms d'utilisateurs sont volontairement faux. Les données de ventes et de gestion sont des simulations, et peuvent donc amener à des incohérences.</div>
+                          <?php } ?>
 			<?php
 				echo $this->Session->flash();
 				echo $this->Session->flash('auth');
