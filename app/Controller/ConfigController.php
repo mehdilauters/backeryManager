@@ -349,8 +349,8 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 		// add demo user
 		$sql .= 'insert into '.$tablePrefix.'users (email, name, password, company_id) values (\''.Configure::read('Settings.demo.User.email').'\', \'demo\', \''.AuthComponent::password(Configure::read('demo.User.password'))."', ".$this->getCompanyId().");\n";
 		
-		$sql .='update '.$tablePrefix.'accounts set name=concat("compte ", id)'."\n";
-		$sql .='update '.$tablePrefix.'account_entries set name=concat("operation ", id), comment=concat("virement ",(1000+id)) value=(value/max(value)*100);'."\n";
+		$sql .='update '.$tablePrefix.'accounts set name=concat("compte ", id);'."\n";
+		$sql .='update '.$tablePrefix.'account_entries set name=concat("operation ", id), comment=concat("virement ",(1000+id)), value=(value/100 * sin(id));'."\n";
 		
 		return $sql;
 	}
