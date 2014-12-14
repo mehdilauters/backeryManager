@@ -641,6 +641,10 @@ td.actions img.icon {
   color:blue;
 }
 
+.alert-danger a{
+  color:red;
+}
+
 .negative:not(.alert), .negative:not(.alert) input{
  background-color:rgba(255, 0, 0, 0.4);
 }
