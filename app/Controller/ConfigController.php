@@ -13,6 +13,7 @@ class ConfigController extends AppController {
   
   var $publicActions = array('upgradeDbStructure','deleteSession'/*,'dbBackup'*/, 'setDebug'/*, 'demoBaseSql', 'emailTest'*/, 'noSSL', 'initAcl' );
   var $memberActions = array();
+  var $administratorActions = array('importDb');
   
 /**
  * index method

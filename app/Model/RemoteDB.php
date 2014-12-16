@@ -83,6 +83,7 @@ class RemoteDB extends AppModel {
 		App::uses('ConnectionManager', 'Model'); 
 		$db = ConnectionManager::getDataSource('default');
 		file_put_contents(TMP.'tmp.sql', $sql);
+
 		$res = $db->execute($sql);
 		debug($res);
 		
@@ -98,31 +99,25 @@ class RemoteDB extends AppModel {
 				$user['User']['password'] = AuthComponent::password($user['User']['name']);
 				$userModel->save($user);
 				$aro = new Aro();
+				
+				
 				$aroObject = $aro->findByForeignKey($user['User']['id']);
 				$aroObject['Aro']['alias'] = $user['User']['name'];
-				if($aroObject['Aro']['alias'] != NULL)
-				{
-				  $aro->save($aroObject);
-				}
-				if($user['User']['name'] == 'demo')
-				{
-				      $aro->create();
-				      $aro->save(array('foreign_key'=>$user['User']['id'],'model'=>'User', 'alias' => $user['User']['name'], 'parent_id' => 3));
-				}
 				if($user['User']['name'] == "demo")
 				{
-				  $aro = new Aro();
-				  $aroData = array('alias' => $user['User']['name'],
+				  $aroObject = array('Aro'=>array('alias' => $user['User']['name'],
 				  'parent_id' => 2,
 				  'model' => 'User',
 				  'foreign_key' => $user['User']['id'],
-				  );
-				  $aro->create();
-				  $aro->save($aroData);
+				  ));
 				}
+				
+				if($aroObject['Aro']['alias'] != NULL)
+                                {
+                                  $aro->save($aroObject);
+                                }
 			}
 		}
-		
 		return $res;
 	    }
 		
