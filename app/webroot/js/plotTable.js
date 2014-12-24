@@ -128,22 +128,18 @@ function curveDisplay(chartId, curveId, status)
 									data['labels'][y] = htmlLabel;
 								}
 							}
-							if(data['plotData'][y][dte] == undefined)
-							{
-								data['plotData'][y][dte] = 0;
-							}
-							
-							data['display'][y] = !($(this).hasClass('noDisplay'));
-							
-							
 							tmpData = parseFloat($(this).html());
-							if(isNaN(tmpData))
-							{
-							  tmpData = 0;
-// 							  console.log(y + " " + dte + "==> " +parseFloat($(this).html()));
-// 							  console.log($(this).html());
-							}
-							data['plotData'][y][dte] += tmpData;
+                                                        if(!isNaN(tmpData))
+                                                        {
+                                                          if(data['plotData'][y][dte] == undefined)
+                                                          {
+                                                                  data['plotData'][y][dte] = 0;
+                                                          }
+                                                          
+                                                          data['display'][y] = !($(this).hasClass('noDisplay'));
+
+                                                          data['plotData'][y][dte] += tmpData;
+                                                        }
 						}
 					} // foreach classes
 				}

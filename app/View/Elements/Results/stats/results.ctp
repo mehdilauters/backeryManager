@@ -204,7 +204,7 @@ if($yearCompare)
 					} ?>
 				  </td>
 				<td class="approxColumn shop noDisplay <?php echo $noCompareCurve?>totalApprox <?php echo $noCompareCurve?>ShopApprox<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0; } ?>" ><?php echo round($result[0]['approximation'],2); ?></td>
-			  <td class="rowTotal <?php echo $noCompareCurve?>total <?php echo $compareCurve?>shop_<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>_year_<?php echo $date->format('Y'); ?> <?php echo $noCompareCurve?>Shop<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>"><?php echo round($total,2) ?></td>
+			  <td class="rowTotal <?php echo $noCompareCurve?>total <?php echo $compareCurve?>shop_<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>_year_<?php echo $date->format('Y'); ?> <?php echo $noCompareCurve?>Shop<?php if($fields['shop']) { echo  $result['Shop']['id']; } else {echo 0;} ?>"><?php if($total != '') echo round($total,2) ?></td>
 			  <td class="cash"><?php if($total != 0){ echo round($result[0]['cash'] / $total *100, 2); } ?></td>
 			  <td class="check"><?php if($total != 0){ echo round($result[0]['check'] / $total *100, 2); } ?></td>
 			  <td class="card"><?php if($total != 0){ echo round($result[0]['card'] / $total *100, 2); } ?></td>

@@ -318,50 +318,79 @@ class AppController extends Controller {
 	$now = new DateTime();
 	if( $tokens['isAdmin'] && isset($company['Company']))
 	{
-          if(
-            $company['Company']['imap_server'] != ''
-            &&
-            ( ! $this->Session->check('company.emails.lastCheck') || ($this->Session->check('company.emails.lastCheck') && $this->Session->read('company.emails.lastCheck')->diff($now)->i > 1 ) )
-            )
-          {
-            $imapSource = array(
-                'datasource' => 'ImapSource',
-                'server' => $company['Company']['imap_server'],
-                'username' => $company['Company']['imap_username'],
-                'password' => $company['Company']['imap_password'],
-        //         'port' => 'IMAPServerPort',
-        //         'ssl' => true,
-                'encoding' => 'UTF-8',
-                'error_handler' => false,
-        //         'connect' => 'INBOX'
-                'auto_mark_as' => array(
-        //             'Seen',
-                    // 'Answered',
-                    // 'Flagged',
-                    // 'Deleted',
-                    // 'Draft',
-                ),
-            );
-            
-             ClassRegistry::init('ConnectionManager');
-
-            $nds = 'imap_' .$company['Company']['id'];
-            if($ds = ConnectionManager::create($nds, $imapSource)) 
+	if(! Configure::read('Settings.demo.active') )
+	{
+            if(
+              $company['Company']['imap_server'] != ''
+              &&
+              ( ! $this->Session->check('company.emails.lastCheck') || ($this->Session->check('company.emails.lastCheck') && $this->Session->read('company.emails.lastCheck')->diff($now)->i > 1 ) )
+              )
             {
-              $this->ImapEmail->setDatasource($nds);
-//               $emails = $this->ImapEmail->find('all',array('conditions'=>array('seen'=>false)));
-            }
+              $imapSource = array(
+                  'datasource' => 'ImapSource',
+                  'server' => $company['Company']['imap_server'],
+                  'username' => $company['Company']['imap_username'],
+                  'password' => $company['Company']['imap_password'],
+          //         'port' => 'IMAPServerPort',
+          //         'ssl' => true,
+                  'encoding' => 'UTF-8',
+                  'error_handler' => false,
+          //         'connect' => 'INBOX'
+                  'auto_mark_as' => array(
+          //             'Seen',
+                      // 'Answered',
+                      // 'Flagged',
+                      // 'Deleted',
+                      // 'Draft',
+                  ),
+              );
+              
+              ClassRegistry::init('ConnectionManager');
 
-            if($emails == false)
-            {
-              $emails = array();
+              $nds = 'imap_' .$company['Company']['id'];
+              if($ds = ConnectionManager::create($nds, $imapSource)) 
+              {
+                $this->ImapEmail->setDatasource($nds);
+  //               $emails = $this->ImapEmail->find('all',array('conditions'=>array('seen'=>false)));
+              }
+
+              if($emails == false)
+              {
+                $emails = array();
+              }
+              $this->Session->write('company.emails.lastCheck',new DateTime());
+              $this->Session->write('company.emails.data',$emails);
             }
-            $this->Session->write('company.emails.lastCheck',new DateTime());
-            $this->Session->write('company.emails.data',$emails);
+            else
+            {
+              $emails = $this->Session->read('company.emails.data');
+            }
           }
-//           else
+          else
           {
-            $emails = $this->Session->read('company.emails.data');
+            $emails=array(
+              array(
+                'ImapEmail' => array(
+                  'id' => '',
+                  'subject' => 'Devis',
+                  'from' => 'bob@lauters.fr'
+                  ),
+                ),
+              array(
+                'ImapEmail' => array(
+                  'id' => '',
+                  'subject' => 'Remerciements',
+                  'from' => 'jose@lauters.fr'
+                  ),
+                ),
+              array(
+                'ImapEmail' => array(
+                  'id' => 'Prise de contact',
+                  'subject' => 'Test',
+                  'from' => 'odile@lauters.fr'
+                  ),
+                )
+              );
           }
         }
       }

@@ -279,9 +279,10 @@ class ResultsController extends AppController {
 	
 	// extrapolate to future
 	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
+	$maxX /= $nbDaysByInterval;
 	for($i = 0; $i < $maxX; $i++)
 	{
-		$res = array(
+		$resApp = array(
 			0 => array(
 						'cash' => '',
 						'check' => '',
@@ -304,12 +305,12 @@ class ResultsController extends AppController {
 			  $dateDiff = $initDate[$shopId]->diff($lastDate);
 			  $x = $dateDiff->days / $nbDaysByInterval;
 			  $y = $regressions[$shopId]->interpolate($approximation[$shopId],$x);
-			  $res[0]['approximation'] = $y;
-			  $res['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
-			  $res['Result']['shop_id']  = $shopId;
-			  $res['Shop']['id'] = $shopId;
-			  $res['Shop']['name'] = 'tmp_'.$shopId;
-			  $results[] = $res;
+			  $resApp[0]['approximation'] = $y;
+			  $resApp['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
+			  $resApp['Result']['shop_id']  = $shopId;
+			  $resApp['Shop']['id'] = $shopId;
+			  $resApp['Shop']['name'] = 'tmp_'.$shopId;
+			  $results[] = $resApp;
 			}
 		}		
 	}
@@ -400,10 +401,9 @@ class ResultsController extends AppController {
 	
 	
 	// extrapolate to future
-	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
 	for($i = 0; $i < $maxX; $i++)
 	{
-		$resEntry = array(
+		$resEntryApp = array(
 			0 => array(
 						'result' => '',
 						'approximation' => 0,
@@ -430,12 +430,12 @@ class ResultsController extends AppController {
 				 $dateDiff = $initDate[$ProductTypeId][$shopId]->diff($lastDate);
 				 $x = $dateDiff->days / $nbDaysByInterval;
 				 $y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$ProductTypeId][$shopId],$x);
-				 $resEntry[0]['approximation'] = $y;
-				 $resEntry['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
-				 $resEntry['Result']['shop_id']  = $ProductTypeId;
-				 $resEntry['Shop']['id'] = $shopId;
-				 $resEntry['Shop']['name'] = 'tmp_'.$shopId;
-				$resultsEntries[] = $resEntry;
+				 $resEntryApp[0]['approximation'] = $y;
+				 $resEntryApp['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
+				 $resEntryApp['Result']['shop_id']  = $ProductTypeId;
+				 $resEntryApp['Shop']['id'] = $shopId;
+				 $resEntryApp['Shop']['name'] = 'tmp_'.$shopId;
+				$resultsEntries[] = $resEntryApp;
 			}
 		}	
 	}

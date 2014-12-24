@@ -282,9 +282,10 @@ class SalesController extends AppController {
 	}	
  // extrapolate to future
 	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
+	$maxX /= $nbDaysByInterval;
 	for($i = 0; $i < $maxX; $i++)
 	{
-		$res = array(
+		$resApp = array(
 			0 => array(
 						'produced' => '',
 						'lost' => '',
@@ -321,13 +322,13 @@ class SalesController extends AppController {
 			  {
 				  $y =0;
 			  }
-			  $res[0][$name.'Approximation'] = $y;
+			  $resApp[0][$name.'Approximation'] = $y;
 		      }
-		      $res['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
-		      $res['Sale']['product_id']  = $productId;
-		      $res['Product']['id']  = $productId;
-		      $res['Sale']['shop_id'] = $shopId;
-		      $sales[] = $res;
+		      $resApp['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
+		      $resApp['Sale']['product_id']  = $productId;
+		      $resApp['Product']['id']  = $productId;
+		      $resApp['Sale']['shop_id'] = $shopId;
+		      $sales[] = $resApp;
 		    }
 		}
 	}

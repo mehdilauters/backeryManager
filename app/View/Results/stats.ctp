@@ -5,7 +5,7 @@
 // 	$group = array('time' => '', 'shop'=>'', 'productType'=>'');
 	$conditions = array('shop'=>'', 'productType'=>'');
   ?>
-  
+
 <?php echo $this->Form->create('Results'); ?>
 	  <fieldset id="groupFieldset" class="alert alert-info">
 		<legend>Grouper par</legend>
@@ -22,7 +22,7 @@
 									'type'=>'checkbox')); ?>
 		<?php echo $this->Form->input('group.productType', array(	'label' => 'Type de produit (second graph)',
 									'type'=>'checkbox')); ?>
-		
+
 
 	</fieldset>
 	<fieldset id="filterFieldset" class="alert alert-info">
@@ -32,7 +32,7 @@
 	      <?php echo $this->Form->input('conditions.productType', array('label'=>'Type de produit (second graph)', 'options'=>(array(''=>'') + $results['productTypes']))); ?>
 	    <?php echo $this->Form->input('conditions.dateStart', array('label'=>'Début', 'class'=>'datepicker')); ?>
 	    <?php echo $this->Form->input('conditions.dateEnd', array('label'=>'Fin', 'class'=>'datepicker')); ?>
-	
+
 	</fieldset>
 
 <fieldset id="approxFieldset" class="alert alert-info">
@@ -56,12 +56,13 @@
 
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<?php 
+<?php
 if(count($results['results']) != 0)
 {
 echo $this->element('Results/stats/results', array('results'=>$results)); ?>
 <a name="resultsEntries" ></a>
-<?php   echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$results, 'config'=>array('shopComparative'=>true))); 
+<?php
+echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$results, 'config'=>array('shopComparative'=>true)));
 }
 else
 { ?>
@@ -70,11 +71,11 @@ else
 }
 
 ?>
-</div> 
+</div>
 
 <script>
   introSteps = [
-              { 
+              {
                 intro: 'Ici, vous pouvez visualiser, comparer, analyser le <b>chiffre d\'affaire</b> de votre entreprise,<br/>en affichant les données par jour, par mois, par an..., magasin par magasin, catégorie de produits par catégorie, ou au contraire de manière plus synthetiques comme par example, tous magasins et/ou toutes les catégories produits confondus'
               },
               {
