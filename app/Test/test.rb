@@ -268,6 +268,8 @@ def checkError(driver, raiseError = true)
       raise "flashError"
     end
   end
+  
+  driver.execute_script("window.confirm = function(msg){return true;};");
   return
 end
 
@@ -506,7 +508,7 @@ def addItem(driver, item)
   
 end
 
-def deleteFisrtSale(driver)
+def deleteFirstSale(driver)
   puts "deleteSales"
   goto(driver, BaseUrl + "sales/view")
   waitUntil{ driver.find_element(:css => "#deleteSale input[type=submit]") }
@@ -564,8 +566,9 @@ def editFirstAccountEntry(driver, accountEntry)
 end
 
 
-def deleteFisrtAccountEntry(driver)
-  puts "deleteFisrtAccountEntry"
+def deleteFirstAccountEntry(driver)
+  puts "deleteFirstAccountEntry"
+  checkError(driver)
   driver.find_element(:css => "a.delete").click
 end
 
@@ -705,7 +708,7 @@ def testAccountPlugin(driver)
       end
       
       
-      deleteFisrtAccountEntry(driver)
+      deleteFirstAccountEntry(driver)
       total -= AccountsEntries[1]['value']
       jsTotal = driver.find_element(:css => "#total").text().to_i
       if(jsTotal != total || jsTotal == AccountsEntries[0]['value'])
@@ -754,7 +757,7 @@ end
         }
       goto(driver, BaseUrl + "sales")
       goto(driver, BaseUrl + "sales/stats")
-      deleteFisrtSale(driver)
+      deleteFirstSale(driver)
       goto(driver, BaseUrl + "results/stats")
       goto(driver, BaseUrl)
       detectChart(driver)

@@ -276,44 +276,46 @@ class ResultsController extends AppController {
 		}
 		$lastDate = $curDate;
 	}
-	
-	// extrapolate to future
-	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
-	$maxX /= $nbDaysByInterval;
-	for($i = 0; $i < $maxX; $i++)
+	if(count($results)!=0)
 	{
-		$resApp = array(
-			0 => array(
-						'cash' => '',
-						'check' => '',
-						'card' => '',
-						'total' => '',
-						'approximation' => 0,
-						),
-			'Result' => array(
-							'date' => '',
-							'comment' => 'Approximation',
-							'shop_id' => ''
-							),
-			'Shop' => array()
-			);
-		$lastDate->modify('+'.($nbDaysByInterval).' day');
-		foreach($regressions as $shopId => $regression)
-		{
-			if(isset($initDate[$shopId])) // may not be set if it was the last res (for => nb-1)
-			{
-			  $dateDiff = $initDate[$shopId]->diff($lastDate);
-			  $x = $dateDiff->days / $nbDaysByInterval;
-			  $y = $regressions[$shopId]->interpolate($approximation[$shopId],$x);
-			  $resApp[0]['approximation'] = $y;
-			  $resApp['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
-			  $resApp['Result']['shop_id']  = $shopId;
-			  $resApp['Shop']['id'] = $shopId;
-			  $resApp['Shop']['name'] = 'tmp_'.$shopId;
-			  $results[] = $resApp;
-			}
-		}		
-	}
+          // extrapolate to future
+          $maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
+          $maxX /= $nbDaysByInterval;
+          for($i = 0; $i < $maxX; $i++)
+          {
+                  $resApp = array(
+                          0 => array(
+                                                  'cash' => '',
+                                                  'check' => '',
+                                                  'card' => '',
+                                                  'total' => '',
+                                                  'approximation' => 0,
+                                                  ),
+                          'Result' => array(
+                                                          'date' => '',
+                                                          'comment' => 'Approximation',
+                                                          'shop_id' => ''
+                                                          ),
+                          'Shop' => array()
+                          );
+                  $lastDate->modify('+'.($nbDaysByInterval).' day');
+                  foreach($regressions as $shopId => $regression)
+                  {
+                          if(isset($initDate[$shopId])) // may not be set if it was the last res (for => nb-1)
+                          {
+                            $dateDiff = $initDate[$shopId]->diff($lastDate);
+                            $x = $dateDiff->days / $nbDaysByInterval;
+                            $y = $regressions[$shopId]->interpolate($approximation[$shopId],$x);
+                            $resApp[0]['approximation'] = $y;
+                            $resApp['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
+                            $resApp['Result']['shop_id']  = $shopId;
+                            $resApp['Shop']['id'] = $shopId;
+                            $resApp['Shop']['name'] = 'tmp_'.$shopId;
+                            $results[] = $resApp;
+                          }
+                  }		
+          }
+      }
     $conditions['ResultsEntry']['Shop.company_id'] = $this->getCompanyId();
     $this->Result->ResultsEntry->contain('Shop', 'ProductTypes','Result');
      $resultsEntries = $this->Result->ResultsEntry->find('all', array('order'=>array('ResultsEntry.date'),
@@ -401,45 +403,47 @@ class ResultsController extends AppController {
 	
 	
 	// extrapolate to future
-	for($i = 0; $i < $maxX; $i++)
-	{
-		$resEntryApp = array(
-			0 => array(
-						'result' => '',
-						'approximation' => 0,
-						),
-			'ResultsEntry' => array(
-							'date' => '',
-							'comment' => 'Approximation',
-							'shop_id' => ''
-							),
-			'Shop' => array(
-						'id' => '',
-						'name'=>'',
-							),
-			'ProductTypes' => array(
-						'id' => '',
-						'name'=>'',
-							)
-			);
-		$lastDate->modify('+'.($nbDaysByInterval).' day');
-		foreach($regressions as $ProductTypeId => $regression)
-		{
-			foreach($regression as $shopId => $regressionProductType)
-			{
-				 $dateDiff = $initDate[$ProductTypeId][$shopId]->diff($lastDate);
-				 $x = $dateDiff->days / $nbDaysByInterval;
-				 $y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$ProductTypeId][$shopId],$x);
-				 $resEntryApp[0]['approximation'] = $y;
-				 $resEntryApp['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
-				 $resEntryApp['Result']['shop_id']  = $ProductTypeId;
-				 $resEntryApp['Shop']['id'] = $shopId;
-				 $resEntryApp['Shop']['name'] = 'tmp_'.$shopId;
-				$resultsEntries[] = $resEntryApp;
-			}
-		}	
-	}
-	 
+        if(count($resultsEntries)!=0)
+        {
+          for($i = 0; $i < $maxX; $i++)
+          {
+                  $resEntryApp = array(
+                          0 => array(
+                                                  'result' => '',
+                                                  'approximation' => 0,
+                                                  ),
+                          'ResultsEntry' => array(
+                                                          'date' => '',
+                                                          'comment' => 'Approximation',
+                                                          'shop_id' => ''
+                                                          ),
+                          'Shop' => array(
+                                                  'id' => '',
+                                                  'name'=>'',
+                                                          ),
+                          'ProductTypes' => array(
+                                                  'id' => '',
+                                                  'name'=>'',
+                                                          )
+                          );
+                  $lastDate->modify('+'.($nbDaysByInterval).' day');
+                  foreach($regressions as $ProductTypeId => $regression)
+                  {
+                          foreach($regression as $shopId => $regressionProductType)
+                          {
+                                  $dateDiff = $initDate[$ProductTypeId][$shopId]->diff($lastDate);
+                                  $x = $dateDiff->days / $nbDaysByInterval;
+                                  $y = $regressions[$ProductTypeId][$shopId]->interpolate($approximation[$ProductTypeId][$shopId],$x);
+                                  $resEntryApp[0]['approximation'] = $y;
+                                  $resEntryApp['Result']['date']  = $lastDate->format('Y-m-d H:i:s');
+                                  $resEntryApp['Result']['shop_id']  = $ProductTypeId;
+                                  $resEntryApp['Shop']['id'] = $shopId;
+                                  $resEntryApp['Shop']['name'] = 'tmp_'.$shopId;
+                                  $resultsEntries[] = $resEntryApp;
+                          }
+                  }	
+          }
+        }
 	 
 	// $products = Set::combine($products, '{n}.Product.id', '{n}');
     $shops = $this->Result->Shop->find('list', array('conditions' => array('Shop.company_id' => $this->getCompanyId())));
