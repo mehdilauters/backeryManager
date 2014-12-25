@@ -344,6 +344,10 @@
           });
           
           $("#account_entries a.delete").attr('onclick','').off("click").click(function(){
+            if(!confirm("Voulez vous vraiment supprimer cet enregistrement?"))
+            {
+              return false;
+            }
             row = $(this).closest('tr');
             
             var ret = true;

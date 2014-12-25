@@ -385,8 +385,8 @@ class AppController extends Controller {
                 ),
               array(
                 'ImapEmail' => array(
-                  'id' => 'Prise de contact',
-                  'subject' => 'Test',
+                  'id' => '',
+                  'subject' => 'Prise de contact',
                   'from' => 'odile@lauters.fr'
                   ),
                 )

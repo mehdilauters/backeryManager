@@ -279,8 +279,9 @@ class SalesController extends AppController {
 			$res[0][$name.'Approximation'] = $y;
 		}
 		$lastDate = $curDate;
-	}	
- // extrapolate to future
+	}
+
+        // extrapolate to future
 	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
 	$maxX /= $nbDaysByInterval;
 	for($i = 0; $i < $maxX; $i++)
