@@ -398,6 +398,8 @@ class AppController extends Controller {
       {
       }
       $this->set('receivedEmails', $emails);
+      
+      $this->set('isMobile', $this->RequestHandler->isMobile());
 	
   }
   

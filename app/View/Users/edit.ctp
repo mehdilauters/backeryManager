@@ -3,6 +3,7 @@
 	<fieldset>
 		<legend><?php echo __('Edit User'); ?></legend>
 	<?php
+                echo $this->Form->input('id');
 		echo $this->Form->input('media_id', array('label'=>array('class'=>'col-sm-3 control-label'),
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',

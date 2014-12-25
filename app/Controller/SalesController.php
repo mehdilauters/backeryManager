@@ -282,58 +282,60 @@ class SalesController extends AppController {
 	}
 
         // extrapolate to future
-	$maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
-	$maxX /= $nbDaysByInterval;
-	for($i = 0; $i < $maxX; $i++)
-	{
-		$resApp = array(
-			0 => array(
-						'produced' => '',
-						'lost' => '',
-						'sold' => '',
-						'totalPrice' => '',
-						'totalLost' => '',
-						'producedApproximation' => 0,
-						'lostApproximation' => 0,
-						'soldApproximation' => 0,
-						'totalPriceApproximation' => 0,
-						'totalLostApproximation' => 0
-						),
-			'Sale' => array(
-							'date' => '',
-							'comment' => 'Approximation',
-							'shop_id' => ''
-							),
-			'Product' => array(
-					'id' => '',
-					'ProductType' => array()
-					)
-			);
-		$lastDate->modify('+'.($nbDaysByInterval).' day');
-		foreach($regressions as $productId => $regressionsData)
-		{
-		    foreach($regressions[$productId] as $shopId => $regressionData1)
-		    {
-		      $dateDiff = $initDate[$productId][$shopId]->diff($lastDate);
-		      $x = $dateDiff->days / $nbDaysByInterval;
-		      foreach($regressions[$productId][$shopId] as $name => $regression)
-		      {
-			$y = $regressions[$productId][$shopId][$name]->interpolate($approximations[$productId][$shopId][$name],$x);
-			  if($y < 0)
-			  {
-				  $y =0;
-			  }
-			  $resApp[0][$name.'Approximation'] = $y;
-		      }
-		      $resApp['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
-		      $resApp['Sale']['product_id']  = $productId;
-		      $resApp['Product']['id']  = $productId;
-		      $resApp['Sale']['shop_id'] = $shopId;
-		      $sales[] = $resApp;
-		    }
-		}
-	}
- 
+        if(count($sales)!=0)
+        {
+          $maxX = Configure::read('Settings.Approximation.nbProjectionsPoint');
+          $maxX /= $nbDaysByInterval;
+          for($i = 0; $i < $maxX; $i++)
+          {
+                  $resApp = array(
+                          0 => array(
+                                                  'produced' => '',
+                                                  'lost' => '',
+                                                  'sold' => '',
+                                                  'totalPrice' => '',
+                                                  'totalLost' => '',
+                                                  'producedApproximation' => 0,
+                                                  'lostApproximation' => 0,
+                                                  'soldApproximation' => 0,
+                                                  'totalPriceApproximation' => 0,
+                                                  'totalLostApproximation' => 0
+                                                  ),
+                          'Sale' => array(
+                                                          'date' => '',
+                                                          'comment' => 'Approximation',
+                                                          'shop_id' => ''
+                                                          ),
+                          'Product' => array(
+                                          'id' => '',
+                                          'ProductType' => array()
+                                          )
+                          );
+                  $lastDate->modify('+'.($nbDaysByInterval).' day');
+                  foreach($regressions as $productId => $regressionsData)
+                  {
+                      foreach($regressions[$productId] as $shopId => $regressionData1)
+                      {
+                        $dateDiff = $initDate[$productId][$shopId]->diff($lastDate);
+                        $x = $dateDiff->days / $nbDaysByInterval;
+                        foreach($regressions[$productId][$shopId] as $name => $regression)
+                        {
+                          $y = $regressions[$productId][$shopId][$name]->interpolate($approximations[$productId][$shopId][$name],$x);
+                            if($y < 0)
+                            {
+                                    $y =0;
+                            }
+                            $resApp[0][$name.'Approximation'] = $y;
+                        }
+                        $resApp['Sale']['date']  = $lastDate->format('Y-m-d H:i:s');
+                        $resApp['Sale']['product_id']  = $productId;
+                        $resApp['Product']['id']  = $productId;
+                        $resApp['Sale']['shop_id'] = $shopId;
+                        $sales[] = $resApp;
+                      }
+                  }
+          }
+    }
 
     $this->Sale->Product->contain('ProductType');
     $products = $this->Sale->Product->find('all', array('conditions'=>array('ProductType.company_id'=>$this->getCompanyId())));

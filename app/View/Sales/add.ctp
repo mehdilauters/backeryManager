@@ -64,7 +64,7 @@ foreach($products as $product)
                   }
             ?>
             <input id="saleId_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" type="hidden" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][saleId]" size="10" value="<?php echo $saleId;  ?>"  />
-            <input id="produced_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" autocomplete="off" class="watch spinner" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][produced]" size="10" value="<?php echo $produced; ?>" />
+            <input id="produced_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>" autocomplete="off" class="watch" type="number" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][produced]" size="10" value="<?php echo $produced; ?>" />
           </li>
         <?php } ?>
       </ul>
@@ -83,7 +83,7 @@ foreach($products as $product)
                     }
                   }
             ?>
-            <input id="lost_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>"  autocomplete="off"  class="watch spinner" type="text" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][lost]" size="10" value="<?php echo $lost; ?>"  />
+            <input id="lost_<?php echo $shop['Shop']['id'].'_'.$product['Product']['id'] ?>"  autocomplete="off"  class="watch" type="number" name="Sale[<?php echo $shop['Shop']['id']?>][<?php echo $product['Product']['id']?>][lost]" size="10" value="<?php echo $lost; ?>"  />
  </li>
         <?php } ?>
       </ul>

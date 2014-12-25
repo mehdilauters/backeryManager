@@ -52,19 +52,19 @@ echo $this->Form->end(__('Submit'));
 					<td>
 		    <label>Especes</label>
 				</td><td>
-			<input id="resultShop_<?php echo $shopId ?>_cash" autocomplete="off"  type="text" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
+			<input id="resultShop_<?php echo $shopId ?>_cash" autocomplete="off"  type="number" name="Result[<?php echo $shopId; ?>][cash]" value="<?php echo $cash ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
 				</tr>
 				<tr>
 					<td>
 		    <label>Cheques</label>
 				</td><td>	
-			<input id="resultShop_<?php echo $shopId ?>_check" autocomplete="off"  type="text" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
+			<input id="resultShop_<?php echo $shopId ?>_check" autocomplete="off"  type="number" name="Result[<?php echo $shopId; ?>][check]" value="<?php echo $check ?>" size="10" class="totalShop resultShop_<?php echo $shopId ?>" />€
 				</tr>
 				<tr>
 					<td>
 			<label>Carte Bleue</label>
 					</td><td>	
-			<input id="resultShop_<?php echo $shopId ?>_card" autocomplete="off"  type="text" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="spinner totalShop resultShop_<?php echo $shopId ?>" />€
+			<input id="resultShop_<?php echo $shopId ?>_card" autocomplete="off"  type="number" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="totalShop resultShop_<?php echo $shopId ?>" />€
 				</tr>
 				<tr>
 					<td>
@@ -95,7 +95,7 @@ echo $this->Form->end(__('Submit'));
       ?>
 	<tr>
 	  <td><?php echo $typeName ?></td>
-	  <td><input type="text"  autocomplete="off" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" size="10" class="spinner totalShopCategory" />€
+	  <td><input type="number"  autocomplete="off" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][result]"  value="<?php echo $result ?>" size="10" class="totalShopCategory" />€
 	  <input type="hidden" name="Result[<?php echo $shopId ?>][productTypes][<?php echo $typeId ?>][resultEntryId]"  value="<?php echo $resultEntryId ?>" />
 	</td>
 	</tr>

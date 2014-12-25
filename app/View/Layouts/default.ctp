@@ -143,7 +143,9 @@ echo $this->Html->css(
 				<?php endforeach;?>
 		    </ul>
 		    <?php endif; ?>
+		    <div id="gotoTop" onclick="return gotoTop()" class="alert alert-info" ><a href="#" onclick="return gotoTop()" >Haut</a></div>
 		    <?php echo $this->fetch('content'); ?>
+		    <div id="gotoBottom" onclick="return gotoBottom()" class="alert alert-info" ><a href="#" onclick="return gotoBottom()" >Bas</a></div>
 		</div>
 		<div class="col-md-3" id="mainMenu" >  <!--  colonne de droite  -->
 		  	<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
@@ -192,8 +194,47 @@ tinymce.init({
           intro.start();
       }
 
+function gotoTop()
+{
+  $('html, body').animate({ scrollTop: 0 }, "slow");
+  return false;
+}
+
+function gotoBottom()
+{
+  $('html, body').animate({ scrollTop: $('body').height() }, "slow");
+  return false;
+}
+
  $( document ).ready( function (){
-	<?php if($introAutostart): ?>
+
+        <?php if($isMobile): ?>
+          var bodyHeigh = $('body').height();
+          var win = $(window).height();
+
+          if (bodyHeigh > win ) {
+              $(window).bind("scroll", function (event)
+              {
+                  if($(window).scrollTop()<100)
+                  {
+                    $('#gotoBottom').show();
+                    $('#gotoTop').hide();
+                  }
+                  else
+                  {
+                    $('#gotoBottom').show();
+                    $('#gotoTop').show();
+                  }
+
+                  if($(window).scrollTop()> bodyHeigh - win -100 )
+                  {
+  //                   $('#gotoTop').show();
+                    $('#gotoBottom').hide();
+                  }
+              });
+          }
+	<?php endif;
+          if($introAutostart): ?>
 	  if( introSteps.length != 0 )
 	  {
 		  startIntro();

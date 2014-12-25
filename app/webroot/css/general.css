@@ -3,12 +3,12 @@ body{
   height:100%;
   margin:0;
   padding:0;
-  background: #fdda9e; 
+  background: #fdda9e;
   color : white;
 }
 
 a{
-  color : yellow;  
+  color : yellow;
   text-decoration:none;
 }
 
@@ -18,7 +18,7 @@ a:hover{
 }
 
 a:visited{
-  color : orange;  
+  color : orange;
 }
 
 
@@ -63,12 +63,12 @@ header{
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  
-  background-position:bottom; 
-  
+
+  background-position:bottom;
+
    /* background-color:green; */
 
-   height:300px; 
+   height:300px;
    margin:0 -20px;
    padding:0px;
 }
@@ -85,7 +85,7 @@ header{
     -webkit-background-size: contain;
     -moz-background-size: contain;
     -o-background-size: contain;
-    background-repeat:no-repeat; 
+    background-repeat:no-repeat;
     padding-top:40px;
     font-size: 15px;
     color:#5e380c;
@@ -113,7 +113,7 @@ li{
 
 #menu > li{
   color:white;
-  
+
 }
 
 #menu > li > ul > li{
@@ -134,7 +134,7 @@ li{
     -webkit-background-size: contain;
     -moz-background-size: contain;
     -o-background-size: contain;
-    background-repeat:no-repeat; 
+    background-repeat:no-repeat;
     padding-top:50px;
     font-size: 0.8em;
 }
@@ -173,11 +173,11 @@ li .shop{
 
 
 .valid{
- color: green; 
+ color: green;
 }
 
 .notSet{
- color: orange; 
+ color: orange;
 }
 
 .invalid{
@@ -186,7 +186,7 @@ li .shop{
 
 
 #salesAdd input{
-  
+
 }
 
 .subtotal{
@@ -257,7 +257,7 @@ li .shop{
 }
 
 .clear{
- clear:both; 
+ clear:both;
 }
 
 
@@ -277,7 +277,7 @@ li .shop{
     /*float:left;*/
     margin:2%;
     margin-right:5%;
-    
+
     text-align:center;
 }
 
@@ -300,7 +300,7 @@ li .shop{
 
 .imageShopView
 {
- max-width:80%; 
+ max-width:80%;
  margin-left: 10%;
 
 }
@@ -331,7 +331,7 @@ li .shop{
 
 .productPreview .slate, .productTypePreview .slate
 {
- margin-top:5%; 
+ margin-top:5%;
 }
 
 
@@ -342,12 +342,12 @@ li .shop{
 
 
 #productTypesList li{
- list-style:none;   
+ list-style:none;
 }
 
 #productList li{
   /*float:left;*/
-  
+
 }
 
 #productList li .details{
@@ -358,41 +358,41 @@ li .shop{
 .slideshow{
    vertical-align:middle;
    text-align:center;
-   width: 400px;  
-   height: 300px;  
-   overflow: hidden;  
+   width: 400px;
+   height: 300px;
+   overflow: hidden;
    border: 3px solid #F2F2F2;
    margin-top:2%;
    margin-bottom:2%;
 }
 
 .slideshow img{
- border-radius: 0px 
+ border-radius: 0px
 }
 
-.slideshow ul {  
-   height: 300px;  
+.slideshow ul {
+   height: 300px;
    width: 800px;
-   padding:0; margin:0;  
-   list-style: none;  
-}  
+   padding:0; margin:0;
+   list-style: none;
+}
 
-.slideshow li {  
-   float: left;  
-}  
+.slideshow li {
+   float: left;
+}
 
-.slideshow li:hover .slide-title{  
+.slideshow li:hover .slide-title{
    opacity:1;
-}  
+}
 
-.slide-title{  
+.slide-title{
   position:relative;
   top:-70px;
   margin-left:20%;
   color:white;
   max-width:50%;
   opacity:0.5;
-}  
+}
 
 table tr.legend th{
   background-color:gray;
@@ -418,8 +418,8 @@ table tr.legend th{
 }
 
 #salesAdd li{
-     padding:0; margin:0;  
-   list-style: none;  
+     padding:0; margin:0;
+   list-style: none;
 }
 
 #salesAdd > table {
@@ -439,7 +439,7 @@ table tr.legend th{
 
 .search{
      /*background-color:transparent;*/
- background-image:url("../img/icons/system-search_1.png"); 
+ background-image:url("../img/icons/system-search_1.png");
   /*  padding: 0 0 0 10px;*/
   cursor: pointer;
   width:48px;
@@ -449,7 +449,7 @@ table tr.legend th{
 
 .save{
     background-color:transparent;
- background-image:url("../img/icons/document-save.png"); 
+ background-image:url("../img/icons/document-save.png");
   /*  padding: 0 0 0 10px;*/
   cursor: pointer;
   width:48px;
@@ -459,21 +459,21 @@ table tr.legend th{
 
 .dateSearch{
     background-color:transparent;
- background-image:url("../img/icons/view-calendar-upcoming-days.png"); 
+ background-image:url("../img/icons/view-calendar-upcoming-days.png");
   /*  padding: 0 0 0 10px;*/
   cursor: pointer;
   width:48px;
   height:48px;
-  border:0;  
+  border:0;
 }
 
 .spreadsheet{
   background-color:transparent;
-  background-image:url("../img/icons/application-vnd.oasis.opendocument.spreadsheet-template.png"); 
+  background-image:url("../img/icons/application-vnd.oasis.opendocument.spreadsheet-template.png");
   cursor: pointer;
   width:48px;
   height:48px;
-  border:0;  
+  border:0;
 }
 
 #statValues tr:hover{
@@ -528,7 +528,7 @@ img.rounded{
 	cursor:pointer;
 }
 #productTypesList .productTypePreview:hover{
-	background-color : rgba(255, 154, 0, 0.2);	
+	background-color : rgba(255, 154, 0, 0.2);
 }
 
 
@@ -565,7 +565,7 @@ input, select, textarea{
 }
 
 
-.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th 
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th
 {
 	background-color : rgba(255, 154, 0, 0.2);
 }
@@ -580,7 +580,7 @@ legend {
 }
 
 .ui-datepicker-calendar th {
- color:black; 
+ color:black;
 }
 
 
@@ -616,12 +616,12 @@ td.actions img.icon {
 .introjs-helperNumberLayer
 {
   height:2.2em;
-  width:2.2em; 
+  width:2.2em;
 }
 
 .introjs-helperLayer
 {
- background-color: rgba(255, 255, 255, 0.3); 
+ background-color: rgba(255, 255, 255, 0.3);
 }
 
 .orderTotal{
@@ -630,7 +630,7 @@ td.actions img.icon {
 }
 
 .approxColumn{
- color:gray; 
+ color:gray;
 }
 
 .cols_checklist_item{
@@ -659,5 +659,29 @@ td.actions img.icon {
 }
 
 button{
- color:black; 
+ color:black;
 }
+
+#gotoTop, #gotoBottom {
+  width:40%;
+  position: fixed;
+  display:none;
+  left: 0;
+  z-index: 999;
+  text-align:center;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-top:0px;
+  margin-bottom:0px;
+  cursor:pointer;
+  background-color:#33CCFF;
+}
+
+#gotoTop {
+  top: 0;
+}
+
+#gotoBottom {
+  bottom: 0;
+}
+
