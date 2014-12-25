@@ -581,13 +581,13 @@ def addSales(driver, dte)
     driver.find_element(:css => "#dateSelectValue").send_keys(dte)
     driver.find_element(:css => "#dateSelect").click
   i = 0
-  elts = driver.find_elements(:css => "li.produced input[type=text]")
+  elts = driver.find_elements(:css => "li.produced input[type=number]")
   elts.each{|e|
             e.send_keys(i * 2)
            i += 1
             }
   i = 0
-  elts = driver.find_elements(:css => "li.lost input[type=text]")
+  elts = driver.find_elements(:css => "li.lost input[type=number]")
   elts.each{|e|
             e.send_keys(i)
            i += 1
@@ -617,7 +617,7 @@ def addResult(driver, dte)
       r = 140 + chopId*10
       i = 0
       val = 0
-      elts = ec.find_elements(:css => ".paymentResults input[type=text]")
+      elts = ec.find_elements(:css => ".paymentResults input[type=number]")
       elts.each{|e|
                val = u0 + i * r
 		e.send_keys(val)
@@ -626,7 +626,7 @@ def addResult(driver, dte)
                       
 	j = 0
                       
-	  elts = ec.find_elements(:css => ".productTypesResults input[type=text]")
+	  elts = ec.find_elements(:css => ".productTypesResults input[type=number]")
 	  sum = (i)*(u0+val)/2
                       
                       
