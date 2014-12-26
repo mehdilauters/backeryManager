@@ -143,9 +143,9 @@ echo $this->Html->css(
 				<?php endforeach;?>
 		    </ul>
 		    <?php endif; ?>
-		    <div id="gotoTop" onclick="return gotoTop()" class="alert alert-info" ><a href="#" onclick="return gotoTop()" >Haut</a></div>
+		    <div id="gotoTop" onclick="return gotoTop()" class="gotoScroll alert alert-info" ><a href="#" onclick="return gotoTop()" >Haut</a></div>
 		    <?php echo $this->fetch('content'); ?>
-		    <div id="gotoBottom" onclick="return gotoBottom()" class="alert alert-info" ><a href="#" onclick="return gotoBottom()" >Bas</a></div>
+		    <div id="gotoBottom" onclick="return gotoBottom()" class="gotoScroll alert alert-info" ><a href="#" onclick="return gotoBottom()" >Bas</a></div>
 		</div>
 		<div class="col-md-3" id="mainMenu" >  <!--  colonne de droite  -->
 		  	<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
@@ -206,6 +206,12 @@ function gotoBottom()
   return false;
 }
 
+function hideScrollControls()
+{
+  $('.gotoScroll').hide('fast')
+}
+
+var timeout;
  $( document ).ready( function (){
         $('.table > tbody').each(function (){
         header = $(this).closest('.table').find('thead');
@@ -227,22 +233,34 @@ function gotoBottom()
           if (bodyHeigh > win ) {
               $(window).bind("scroll", function (event)
               {
+                clearTimeout(timeout);
                   if($(window).scrollTop()<100)
                   {
-                    $('#gotoBottom').show();
-                    $('#gotoTop').hide();
+                    if($(window).scrollTop()> bodyHeigh - win -100 )
+                    {
+                        $('#gotoBottom').hide('fast');
+                    }
+                    else
+                    {
+                      $('#gotoBottom').show('fast');
+                    }
+                    $('#gotoTop').hide('fast');
                   }
                   else
                   {
-                    $('#gotoBottom').show();
-                    $('#gotoTop').show();
+                    if($(window).scrollTop()> bodyHeigh - win -100 )
+                    {
+                        $('#gotoBottom').hide('fast');
+                    }
+                    else
+                    {
+                      $('#gotoBottom').show('fast');
+                    }
+
+                    $('#gotoTop').show('fast');
                   }
 
-                  if($(window).scrollTop()> bodyHeigh - win -100 )
-                  {
-  //                   $('#gotoTop').show();
-                    $('#gotoBottom').hide();
-                  }
+                  timeout = setTimeout(hideScrollControls, 2000);
               });
           }
 	<?php endif;
