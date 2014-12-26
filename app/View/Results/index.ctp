@@ -21,6 +21,7 @@
   ?>
     <li class="shop" id="result_shop_<?php echo $shopId ?>" > <h3><?php echo $shops[$shopId] ?></h3>
       <table class="shop table table-striped" >
+      <thead>
   <tr class="legend" >
     <th class="date" >Date</th>
     <th class="rowTotal" >Total</th>
@@ -32,6 +33,8 @@
     <?php endforeach ?>
     <th class="comment" >Commentaire</th>
   </tr>
+  </thead>
+  <tbody>
   <?php 
   
 	$total['cash'] = 0;
@@ -115,6 +118,7 @@
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult"><?php if(isset($shopData['total'][$typeId])) { echo round($shopData['total'][$typeId],2); } ?></td>
       <?php endforeach ?>
+      <td></td>
     </tr>
       </table>
     </li>
@@ -143,6 +147,7 @@
         <td class="productTypeResult" ><?php if(isset($data['total'][$typeId])) { echo round($data['total'][$typeId],2); } ?></td>
       <?php endforeach ?>
     </tr>
+    </tbody>
       </table>
     </li>
 </ul>

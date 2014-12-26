@@ -207,7 +207,19 @@ function gotoBottom()
 }
 
  $( document ).ready( function (){
+        $('.table > tbody').each(function (){
+        header = $(this).closest('.table').find('thead');
 
+        var i = 1;
+        var tbody = $(this);
+        tbody.css('max-height',$(window).height()-header.height());
+        tbody.find('tr:first td').each(function() {
+         th = header.find('th:nth-child('+i+')');
+         $(this).width(th.width());
+         i++;
+        });
+
+        });
         <?php if($isMobile): ?>
           var bodyHeigh = $('body').height();
           var win = $(window).height();
