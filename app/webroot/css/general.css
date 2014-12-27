@@ -582,7 +582,7 @@ input, select, textarea{
  padding-bottom: 8px;
 }
 
-.table > tbody {
+/*.table > tbody {
  height:100%;
  overflow:auto;
 }
@@ -590,7 +590,7 @@ input, select, textarea{
 .table tbody, .table thead
 {
     display: block;
-}
+}*/
 
 legend {
 	color:gray;
