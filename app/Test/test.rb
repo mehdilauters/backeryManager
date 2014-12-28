@@ -490,21 +490,41 @@ end
 
 
   
-def addItem(driver, item)
+def addItem(driver, item, js = false)
   puts "AddItem #{item.to_s}"
+  if(! js)
+    
+    driver.find_element(:css => ".addItem > a").click;
+    waitUntil { driver.find_element(:css => "#OrderedItemProductId") }
+    
+    
+    driver.find_element(:id => "OrderedItemProductId").send_keys(item['product'])
+    driver.find_element(:id => "OrderedItemCreated").clear
+    driver.find_element(:id => "OrderedItemCreated").send_keys(item['date'])
+    driver.find_element(:id => "OrderedItemQuantity").send_keys(item['quantity'])
+    driver.execute_script "tinyMCE.activeEditor.setContent('#{item['comment']}')"
+    driver.find_element(:css => "#OrderedItemAddForm > .submit > input").click;
   
-  driver.find_element(:css => ".addItem > a").click;
-  waitUntil { driver.find_element(:css => "#OrderedItemProductId") }
-  
-  
-  driver.find_element(:id => "OrderedItemProductId").send_keys(item['product'])
-  driver.find_element(:id => "OrderedItemCreated").clear
-  driver.find_element(:id => "OrderedItemCreated").send_keys(item['date'])
-  driver.find_element(:id => "OrderedItemQuantity").send_keys(item['quantity'])
-  driver.execute_script "tinyMCE.activeEditor.setContent('#{item['comment']}')"
-  driver.find_element(:css => "#OrderedItemAddForm > .submit > input").click;
-  
-  checkError(driver)
+    checkError(driver)
+  else
+    waitUntil { driver.find_element(:css => "#orderedItemsTable") }
+    driver.find_element(:css => 'select[name="OrderedItemProductId"]').send_keys(item['product'])
+    driver.find_element(:css => 'input[name="OrderedItemCreated"]').send_keys(item['date'])
+    driver.find_element(:css => 'input[name="OrderedItemQuantity"]').send_keys(item['quantity'])
+    driver.find_element(:css => 'textarea[name="OrderedItemComment"]').send_keys(item['comment'])
+    driver.find_element(:css => '.saveButton').click
+    
+    error = true
+    begin
+      driver.find_element(:css => "#orderedItemsTable  .alert-danger")
+    rescue
+       error = false
+    end
+    
+    if error
+      raise "error js add orderedItem"
+    end
+  end
   
 end
 
@@ -546,6 +566,18 @@ def addAccountEntry(driver, accountEntry, js = true)
     driver.find_element(:css => "td.AccountEntryValue input").clear()
     driver.find_element(:css => "td.AccountEntryValue input").send_keys(accountEntry['value'])
     driver.find_element(:css => ".saveButton").click
+    
+    error = true
+    begin
+      driver.find_element(:css => "#account_entries .alert-danger")
+    rescue
+       error = false
+    end
+    
+    if error
+      raise "error js addAccountEntry"
+    end
+    
   else
     goto(driver,
       driver.find_element(:css => "#addEntry").attribute("href")
@@ -750,6 +782,21 @@ end
       addProduct(driver, Products[0])
       addProduct(driver, Products[1])
       
+      addOrder(driver, Orders[0])
+      selectFirstOrder(driver)
+      addItem(driver, OrderItems[0])
+      (0..10).each{|i|
+                  item = OrderItems[0]
+                  item['quantity'] = i*100
+                  addItem(driver, item, true)
+                  }
+      selectFirstOrder(driver)
+      addItem(driver, OrderItems[1])
+      selectFirstOrder(driver, true)
+#       waitUntil { driver.find_element(:css => "#emailPreview") }
+      
+      addOrder(driver, Orders[1])
+                               
       Dates.each{
         |dte|
         addSales(driver,dte)
@@ -761,15 +808,6 @@ end
       goto(driver, BaseUrl + "results/stats")
       goto(driver, BaseUrl)
       detectChart(driver)
-      addOrder(driver, Orders[0])
-      selectFirstOrder(driver)
-      addItem(driver, OrderItems[0])
-      selectFirstOrder(driver)
-      addItem(driver, OrderItems[1])
-      selectFirstOrder(driver, true)
-#       waitUntil { driver.find_element(:css => "#emailPreview") }
-      
-      addOrder(driver, Orders[1])
       logout(driver)
     }
   end

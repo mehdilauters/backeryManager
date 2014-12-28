@@ -582,6 +582,10 @@ input, select, textarea{
  padding-bottom: 8px;
 }
 
+.table th, .table td{
+ text-align:center;
+}
+
 /*.table > tbody {
  height:100%;
  overflow:auto;
@@ -703,3 +707,6 @@ button{
   bottom: 0;
 }
 
+td.OrderedItemQuantity {
+ font-weight:bold;
+}

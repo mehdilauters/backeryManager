@@ -103,6 +103,8 @@ class OrdersController extends AppController {
 		$this->set('order', $order);
 		$this->set('total', $total);
 		
+		$products = $this->Order->OrderedItem->Product->find('list');
+		$this->set('products', $products);
 
 	}
 

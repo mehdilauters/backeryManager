@@ -60,11 +60,6 @@ echo $this->element('Sales/stats', array('sales'=>$sales));
               { 
                 intro: 'Ici, vous pouvez visualiser, comparer, analyser les ventes de votre entreprise,<br/>en affichant les données par jour, par mois, par an..., magasin par magasin, produit par produit, ou au contraire de manière plus synthetiques comme par example, tous magasins et/ou tout produits confondus'
               },
-	      {
-                element: '#dailyProductionLink',
-                intro: "Les données disponibles sont celles ayant été saisies sur cette page",
-		position: 'left'
-              },
               {
                 element: '#groupFieldset',
                 intro: "Sélectionnez ici la manière dont vous voulez grouper les données",
@@ -72,7 +67,7 @@ echo $this->element('Sales/stats', array('sales'=>$sales));
               },
               {
                 element: '#filterFieldset',
-                intro: "Dans cette zone, vous pouvez filtrez les résultats: les données ne coresspondant pas aux critères ne seront pas prises en compte",
+                intro: "Dans cette zone, vous pouvez filtrer les résultats: les données ne coresspondant pas aux critères ne seront pas prises en compte",
 		position: 'right'
               },
               {

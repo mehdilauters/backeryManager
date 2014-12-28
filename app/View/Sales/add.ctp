@@ -252,11 +252,6 @@ function checkInputs(interactive)
 				position: 'top'
               },
 	      {
-                element: '#salesStats',
-                intro: "Des statistiques sur ces données seront ensuite disponibles sur cette page",
-				position: 'left'
-              },
-	      {
                 element: '#excelImport',
                 intro: "Afin de prévoir les coupures internet, veuillez télécharger le fichier Excel ci-contre. Lorsqu'une coupure d'internet survient, remplissez le simplement, et ce, même pendant plusieurs jours. Importez le ensuite directement sur le site lorsque l'accès à internet est rétabli. Toutes vos données seront ainsi automatiquement ajoutées",
 		position: 'right'

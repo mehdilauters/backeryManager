@@ -140,6 +140,14 @@ if(!$slideshowInserted && count($products) != 0)
                 intro: "A tout moment, retrouvez cette aide en cliquant ici",
                 position: 'left'
               });
+            <?php if(count($receivedEmails) != 0) : ?>
+              introSteps.push(
+              {
+                element: '#emailsPreview',
+                intro: 'D\'un coup d\'oeil, vérifiez les mails que vous avez reçu',
+                position: 'right'
+              });
+            <?php endif; ?>
 	    <?php if($tokens['isAdmin']) : ?>
               introSteps.push(
 	      {

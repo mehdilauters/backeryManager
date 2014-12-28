@@ -74,10 +74,28 @@ class OrderedItemsController extends AppController {
 
 
 			if ($this->OrderedItem->save($this->request->data)) {
-				$this->Session->setFlash(__('The ordered item has been saved'),'flash/ok');
-				$this->redirect(array('controller'=>'orders','action' => 'view', $orderId));
+                            if ($this->request->is('ajax'))
+                            {
+                              $results = array('id'=>$this->OrderedItem->getInsertID(),'status'=>true);
+                              $this->set(compact('results'));
+                              $this->set('_serialize', array('results'));
+                            }
+                            else
+                            {
+                              $this->Session->setFlash(__('The ordered item has been saved'),'flash/ok');
+                              $this->redirect(array('controller'=>'orders','action' => 'view', $orderId));
+                            }
 			} else {
-				$this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'),'flash/fail');
+				if ($this->request->is('ajax'))
+				{
+                                  $results = array('status'=>false);
+                                  $this->set(compact('results'));
+                                  $this->set('_serialize', array('results'));
+                                }
+                                else
+                                {
+                                  $this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'),'flash/fail');
+                                }
 			}
 		}
 		$this->set('orderId', $orderId);
@@ -111,10 +129,29 @@ class OrderedItemsController extends AppController {
 				$this->request->data['OrderedItem']['created'] = $date->format('Y-m-d H:i:s');	
 			}
 			if ($this->OrderedItem->save($this->request->data)) {
-				$this->Session->setFlash(__('The ordered item has been saved'),'flash/ok');
-				$this->redirect(array('action' => 'index'));
+				if ($this->request->is('ajax'))
+                                {
+				
+                                  $results = array('status'=>true);
+                                  $this->set(compact('results'));
+                                  $this->set('_serialize', array('results'));
+                                }
+                                else
+                                {
+                                  $this->Session->setFlash(__('The ordered item has been saved'),'flash/ok');
+                                  $this->redirect(array('action' => 'index'));
+                                }
 			} else {
-				$this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'));
+                                if ($this->request->is('ajax'))
+                                {
+                                  $results = array('status'=>false);
+                                  $this->set(compact('results'));
+                                  $this->set('_serialize', array('results'));
+                                }
+                                else
+                                {
+                                  $this->Session->setFlash(__('The ordered item could not be saved. Please, try again.'));
+                                }
 			}
 		} else {
 			

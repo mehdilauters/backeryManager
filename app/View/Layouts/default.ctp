@@ -127,7 +127,7 @@ echo $this->Html->css(
 				if(count($receivedEmails) != 0) :
 				?>
 				<h3>Emails</h3>
-				<ul id="emailPreview">
+				<ul id="emailsPreview">
                                   <?php foreach($receivedEmails as $email): ?>
                                     <li><?php echo $this->element('Emails/Preview', array('email'=>$email)); ?></li>
                                   <?php endforeach; ?>
