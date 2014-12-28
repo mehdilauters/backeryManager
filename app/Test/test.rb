@@ -69,7 +69,7 @@ Photos = [{'path' => "#{Dir.pwd}/app/Test/data/shop.jpg",
          'description' => ''}
          ]
 Companies = [
-              { 'name' => 'testCompany1',
+              { 'name' => 'testCompany1\'"',
                 'domain_name' => 'testCompany1.fr',
               'address' => '57 rue Lakanal',
               'phone' => '0687363854',
@@ -88,7 +88,7 @@ Companies = [
               'email' => 'company@lauters.fr',
             }
             ]
-Shops = [{ 'name' => 'testShop',
+Shops = [{ 'name' => 'testShop \'"',
             'address' => '57 rue Lakanal',
             'phone' => '0687363854',
             'description' => 'testShop',
@@ -113,7 +113,7 @@ Emails = [
 
 ProductTypes = [
   {
-   'name' => 'ProductTypeTest',
+   'name' => 'ProductTypeTest \'"',
    'tva' => '5.5',
    'customerDisplay' => true,
    'description' => 'ProductTypeTest Description',
@@ -131,7 +131,7 @@ ProductTypes = [
 
 Products = [
   {
-   'name' => 'ProductTest',
+   'name' => 'ProductTest \'"',
    'productType' => 'ProductTypeTest',
    'customerDisplay' => true,
    'description' => 'ProductTest Description',

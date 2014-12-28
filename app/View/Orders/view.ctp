@@ -166,7 +166,7 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
     var options = '<?php
     foreach($products as $productId=>$product)
     {
-      echo '<option value="'.$productId.'" >'.$product.'</options>';
+      echo '<option value="'.$productId.'" >'.str_replace(array('\''), array('\\\''), $product).'</options>';
     }
     ?>'
     html='<td class="OrderedItemProductId" ><select name="OrderedItemProductId" type="text" value="'+_data.OrderedItem.productId+'" >'+options+'</select></td><td class="OrderedItemCreated" ><input name="OrderedItemCreated" type="text" value="'+_data.OrderedItem.created+'" class="datepicker" name="" /></td><td>-</td><td>-</td><td>-</td><td>-</td><td class="OrderedItemQuantity"><input name="OrderedItemQuantity" type="number" value="'+_data.OrderedItem.quantity+'" class=""/></td><td>-</td><td class="OrderedItemComment" ><textarea name="OrderedItemComment">'+_data.OrderedItem.comment+' </textarea></td><td class="actions" ><button type="button" class="saveButton" >Valider </button></td>';
