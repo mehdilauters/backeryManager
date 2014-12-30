@@ -79,4 +79,42 @@ $(document).ready(function(){
     {
      $('#cookiesError').show();
     }
+    
+    
+    
+            $('.uniqueUserWatch').keyup(function(){
+            name = $('#UserName').val();
+            email = $('#UserEmail').val();
+            id = $('#UserId').val();
+            jQuery.ajax({
+              type: 'POST',
+              url: webroot + 'users/isUnique.json',
+//               async:false,
+              accepts: 'application/json',
+              data: {User:{
+                        name: name,
+                        email: email,
+                        id:id,
+                      }},
+              dataType: 'json',
+              success: function (data) {
+
+                  if(data.results.unique)
+                  {
+                    $('.uniqueUserWatch').removeClass("error");
+                  }
+                  else
+                  {
+                    $('.uniqueUserWatch').addClass("error");
+                    ret =  false;
+                  }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                  console.log(textStatus);
+                  $('.uniqueUserWatch').addClass("error");
+                  ret =  false;
+              }
+          });
+        });
+    
   }); 

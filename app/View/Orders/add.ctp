@@ -13,8 +13,50 @@
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',
 					 'div'=>'form-group',
-					  'class'=>'form-control'
+					  'class'=>'form-control',
+					  'required'=>false,
 					  ));
+?>
+<fieldset id="userAddFieldset" class="alert alert-info" > <legend>Compte inexistant</legend>
+<?php
+              echo $this->Form->input('User.name', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Nom'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          'class'=>'form-control uniqueUserWatch',
+                                          'required' => false,
+                                          ));
+                echo $this->Form->input('User.email', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Email'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          'class'=>'form-control uniqueUserWatch',
+                                          'required' => false,
+                                          ));
+                echo $this->Form->input('User.address', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Adresse'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          'class'=>'form-control',
+                                          'required' => false,
+                                          ));
+                echo $this->Form->input('User.phone', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Téléphonel'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          'class'=>'form-control',
+                                          'required' => false,
+                                          ));
+                echo $this->Form->input('User.discount', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Discount'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          'class'=>'form-control',
+                                          'required' => false,
+                                          ));
+?>
+</fieldset>
+<?php
 		//echo $this->Form->input('status',array('options'=>array('reserved'=>'réservée','available'=>'disponible','waiting'=>'en attente', 'paid'=>'payée')));
 		echo $this->Form->input('delivery_date', array('type'=>'text',
 					    'label'=>array(
@@ -47,7 +89,7 @@
 </div>
 <script>
   introSteps = [
-              { 
+              {
                 intro: 'Cette page permet de créer une nouvelle commande.<br/> Par la suite, les produits demandés par le client seront donc rattaché à cette facture'
               },
               {
@@ -81,5 +123,25 @@
 				position: 'top'
               },
             ];
+function updateDom()
+{
+  userId = $('#OrderUserId').val();
+  if( userId.length == 0 )
+    {
+      $('#userAddFieldset').show();
+    }
+    else
+    {
+      $('#userAddFieldset').hide();
+    }
+
+}
+$( document ).ready( function (){
+  $('#OrderUserId').change(function (){
+    updateDom();
+    });
+
+    updateDom();
+});
 </script>
 

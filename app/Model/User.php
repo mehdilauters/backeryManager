@@ -53,15 +53,7 @@ class User extends AppModel {
       'email' => array(
         'rule' => array('email'),
         'message' => 'User::email must be email',
-        //'allowEmpty' => false,
-        //'required' => false,
-        //'last' => false, // Stop validation after this rule
-        //'on' => 'create', // Limit validation to 'create' or 'update' operations
-      ),
-      'notempty' => array(
-        'rule' => array('notempty'),
-        'message' => 'User::email must be notempty',
-        //'allowEmpty' => false,
+        'allowEmpty' => true,
         //'required' => false,
         //'last' => false, // Stop validation after this rule
         //'on' => 'create', // Limit validation to 'create' or 'update' operations
@@ -71,15 +63,7 @@ class User extends AppModel {
       'alphanumeric' => array(
         'rule' => array('alphanumeric'),
         'message' => 'User::password must be alphanumeric',
-        //'allowEmpty' => false,
-        //'required' => false,
-        //'last' => false, // Stop validation after this rule
-        //'on' => 'create', // Limit validation to 'create' or 'update' operations
-      ),
-      'notempty' => array(
-        'rule' => array('notempty'),
-        'message' => 'User::password must be notempty',
-        //'allowEmpty' => false,
+        'allowEmpty' => true,
         //'required' => false,
         //'last' => false, // Stop validation after this rule
         //'on' => 'create', // Limit validation to 'create' or 'update' operations

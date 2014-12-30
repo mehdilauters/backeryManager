@@ -710,3 +710,7 @@ button{
 td.OrderedItemQuantity {
  font-weight:bold;
 }
+
+.error{
+ color:red;
+}

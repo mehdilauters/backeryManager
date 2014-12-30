@@ -19,7 +19,12 @@ class UsersController extends AppController {
 	public function index() {
 		//TODO isRoot replacement
 		$this->User->recursive = 0;
-		$this->set('users', $this->paginate(array('User.company_id'=>$this->getCompanyId())));
+		$users = $this->paginate(array('User.company_id'=>$this->getCompanyId()));
+		foreach($users as &$user)
+		{
+                  $user['User']['tokens'] = $this->getUserTokens($user['User']['id']);
+                }
+		$this->set('users', $users);
 	}
 
 /**
@@ -60,11 +65,10 @@ class UsersController extends AppController {
 			$this->User->create();
 			$this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
 			$this->request->data['User']['company_id'] = $this->getCompanyId();
-
-			$count = $this->User->find('count', array('conditions' => array('User.company_id' => $this->getCompanyId(), 'User.email' => $this->request->data['User']['email'] ))); 
-			if($count != 0)
+			if(!$this->isUnique())
 			{
-			    throw new NotFoundException(__('User already exists'));
+			    $this->Session->setFlash(__('User already exists.'),'flash/fail');
+			    $this->redirect(array('action' => 'add'));
 			}
 
 			if ($this->User->save($this->request->data)) {
@@ -135,6 +139,13 @@ class UsersController extends AppController {
 				throw new NotFoundException(__('Invalid Media for this company'));
 			    }
 			}
+			
+			if(!$this->isUnique())
+                        {
+                            $this->Session->setFlash(__('User already exists.'),'flash/fail');
+                            $this->redirect(array('action' => 'add'));
+                        }
+			
 			if( $this->request->data['User']['password'] != '' )
 			{
 			  $this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
@@ -253,7 +264,7 @@ class UsersController extends AppController {
 		
 		 $user = $this->User->find('first', array('conditions'=>array(
 					    'User.password' => AuthComponent::password($this->data['User']['password']),
-					    'User.email' => $this->data['User']['email'],
+					    'User.email = '.$this->data['User']['email'].' AND User.email not null',
 					    'User.company_id' => $this->getCompanyId()
 					      )));
 		
@@ -294,7 +305,7 @@ class UsersController extends AppController {
 	public function logout($url = Null) {
 		if( Configure::read('Settings.demo.active') )
 		{
-			$this->Cookie->write('demoLogout', true, true, '10 weeks');
+			$this->Cookie->write('demoLogout', true, true, 0);
 		}
 		$this->Cookie->delete('bakeryManagerUser');
 		if( $url == NULL )
@@ -367,6 +378,33 @@ class UsersController extends AppController {
 		}
 	}
 
+  public function isUnique()
+  {
+    if ($this->request->is('post') || $this->request->is('put')) {
+        $conditions = array(
+              'User.company_id' => $this->getCompanyId(),
+              'User.email' => $this->request->data['User']['email'],
+              'User.name' => $this->request->data['User']['name'],
+              );
+        if(isset($this->request->data['User']['id']) && $this->request->data['User']['id'] != '')
+        {
+          $conditions['User.id'] = $this->request->data['User']['id'];
+        }
+        $unique = $this->User->find('count', array(
+            'conditions' => $conditions,
+          ));
+       $unique = $unique == 0;
+      if($this->request->is('ajax'))
+      {
+        $results = array('unique' => $unique);
+        $this->set(compact('results'));
+        $this->set('_serialize', array('results'));
+      }
+      return $unique;
+    }
+    return false;
+  }
+	
    public function beforeFilter()
   {
       parent::beforeFilter();

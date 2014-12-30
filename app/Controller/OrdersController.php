@@ -147,16 +147,26 @@ class OrdersController extends AppController {
 			
 
 			$shop = $this->Order->Shop->findById($this->request->data['Order']['shop_id']);
-			$user = $this->Order->User->findById($this->request->data['Order']['user_id']);
+			$discount = '';
+			if($this->request->data['Order']['user_id'] != '')
+			{
+                          $user = $this->Order->User->findById($this->request->data['Order']['user_id']);
+                          if($user['User']['company_id'] != $this->getCompanyId() )
+                          {
+                            throw new NotFoundException(__('Invalid user for this company'));
+                          }
+                          $discount = $user['User']['discount'];
+                          unset($this->request->data['User']);
+                        }
+                        else
+                        {
+                          $discount = $this->request->data['User']['discount'];
+                        }
 			if($shop['Shop']['company_id'] != $this->getCompanyId() )
 			{
 			  throw new NotFoundException(__('Invalid shop for this company'));
 			}
 
-			if($user['User']['company_id'] != $this->getCompanyId() )
-			{
-			  throw new NotFoundException(__('Invalid user for this company'));
-			}
 
 			$this->Order->create();
 			$this->request->data['Order']['status'] = 'reserved';
@@ -165,8 +175,14 @@ class OrdersController extends AppController {
 			{
 				$this->request->data['Order']['delivery_date'] = $delivery->format('Y-m-d H:i:s');	
 			}
-			$user = $this->Order->User->findById($this->request->data['Order']['user_id']);
-			$this->request->data['Order']['discount'] = $user['User']['discount'];
+			$this->request->data['Order']['discount'] = $discount;
+			if($this->request->data['Order']['user_id'] == '')
+                        {
+                          $this->request->data['User']['company_id'] = $this->getCompanyId();
+                          $this->request->data['User']['regular'] = false;
+                          $this->Order->User->save($this->request->data);
+                          $this->request->data['Order']['user_id'] = $this->Order->User->getInsertID();
+                        }
 			
 			if ($this->Order->save($this->request->data)) {
 				$this->Session->setFlash(__('The order has been saved'),'flash/ok');
@@ -177,6 +193,7 @@ class OrdersController extends AppController {
 		}
 		$shops = $this->Order->Shop->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
 		$users = $this->Order->User->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
+		$users = array(''=>'-') + $users;
 		$this->set(compact('shops', 'users'));
 	}
 
@@ -199,22 +216,40 @@ class OrdersController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 		
 			$shop = $this->Order->Shop->findById($this->request->data['Order']['shop_id']);
-			$user = $this->Order->User->findById($this->request->data['Order']['user_id']);
 			if($shop['Shop']['company_id'] != $this->getCompanyId() )
 			{
 			  throw new NotFoundException(__('Invalid shop for this company'));
 			}
+                        
+                        if($this->request->data['Order']['user_id'] != '')
+                        {
+                          $user = $this->Order->User->findById($this->request->data['Order']['user_id']);
+                          if($user['User']['company_id'] != $this->getCompanyId() )
+                          {
+                            throw new NotFoundException(__('Invalid user for this company'));
+                          }
+                          unset($this->request->data['User']);
+                        }
+                        else
+                        {
 
-			if($user['User']['company_id'] != $this->getCompanyId() )
-			{
-			  throw new NotFoundException(__('Invalid user for this company'));
-			}
+                        }
 
 			$delivery = $this->Functions->viewDateToDateTime($this->request->data['Order']['delivery_date']);
 			if($delivery != false )
 			{
 				$this->request->data['Order']['delivery_date'] = $delivery->format('Y-m-d H:i:s');	
 			}
+			
+                        if($this->request->data['Order']['user_id'] == '')
+                        {
+                          $this->request->data['User']['discount'] = $this->request->data['Order']['discount'];
+                          $this->request->data['User']['company_id'] = $this->getCompanyId();
+                          $this->request->data['User']['regular'] = false;
+                          $this->Order->User->save($this->request->data);
+                          $this->request->data['Order']['user_id'] = $this->Order->User->getInsertID();
+                        }
+			
 			if ($this->Order->save($this->request->data)) {
 				$this->Session->setFlash(__('The order has been saved'),'flash/ok');
 				$this->redirect(array('action' => 'index'));
@@ -227,6 +262,7 @@ class OrdersController extends AppController {
 		}
 		$shops = $this->Order->Shop->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
 		$users = $this->Order->User->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
+		$users = array(''=>'-') + $users;
 		$this->set(compact('shops', 'users'));
 	}
 

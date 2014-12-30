@@ -116,9 +116,10 @@ create table if not exists users (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   media_id int(10), 
   `company_id` int(10),
-  email varchar(255) CHARACTER SET utf8 COLLATE utf8_bin not null,
+  email varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   password varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
   name varchar(255) CHARACTER SET utf8 COLLATE utf8_bin,
+  `regular` boolean default TRUE,
   `rib_on_orders` boolean default TRUE,
   `autostart_help` boolean default TRUE,
   `created` datetime DEFAULT NULL,
@@ -383,7 +384,8 @@ ALTER TABLE `videos`
   
 ALTER TABLE `users`
   ADD CONSTRAINT `fk_users_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),
-  ADD CONSTRAINT `fk_users_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
+  ADD CONSTRAINT `fk_users_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`),
+  ADD CONSTRAINT `u_users_email_name` UNIQUE (`email`, `name`); 
   
 ALTER TABLE `product_types`
   ADD CONSTRAINT `fk_producttypes_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),

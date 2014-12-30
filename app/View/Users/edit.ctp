@@ -14,19 +14,21 @@
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',
 					 'div'=>'form-group',
-					  'class'=>'form-control'
+					  'class'=>'form-control uniqueUserWatch',
+                                          'required'=>true,
 					  ));
 		echo $this->Form->input('password', array('value'=>'', 'required'=>false,'label'=>array('class'=>'col-sm-3 control-label'),
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',
 					 'div'=>'form-group',
-					  'class'=>'form-control'
+					  'class'=>'form-control',
+                                          'required'=>true,
 					  ));
 		echo $this->Form->input('name', array('label'=>array('class'=>'col-sm-3 control-label'),
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',
 					 'div'=>'form-group',
-					  'class'=>'form-control'
+					  'class'=>'form-control uniqueUserWatch'
 					  ));
 		echo $this->Form->input('address', array('label'=>array('class'=>'col-sm-3 control-label'),
 					  'between' => '<div class="col-sm-5" >',

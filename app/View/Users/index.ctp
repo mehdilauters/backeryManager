@@ -8,7 +8,8 @@
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('rib_on_orders'); ?></th>
 			<th><?php echo $this->Paginator->sort('discount'); ?></th>
-			<th>isAdmin</th>
+			<th>Role</th>
+			<th>Régulier</th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
@@ -20,20 +21,21 @@
 		</td>-->
 		<td><a href="mailto:<?php echo $user['User']['email']; ?>" ><?php echo $user['User']['email']; ?></a>&nbsp;</td>
 		<td><?php echo h($user['User']['name']); ?>&nbsp;</td>
-		<td id="userRib_<?php echo $user['User']['id'] ?>"><?php 
+		<td id="userRib_<?php echo $user['User']['id'] ?>"><?php
 		      if($user['User']['rib_on_orders'])
 		      {
 			echo $this->Html->image('icons/dialog-ok-apply.png', array('id'=>'orderRibCheck_'.$user['User']['id'],'class'=>'icon','alt' => __('oui')));
 		      }
 		?>
-		<td id="userDiscount_<?php echo $user['User']['id'] ?>"><?php 
+		<td id="userDiscount_<?php echo $user['User']['id'] ?>"><?php
 		if($user['User']['discount'] != 0 )
 		{
-		  echo h($user['User']['discount'].'%'); 
+		  echo h($user['User']['discount'].'%');
 		}?>
 		  &nbsp;</td>
-		<td id="userRoot_<?php echo $user['User']['id'] ?>"><?php 
-				if($tokens['isAdmin'])
+		<td id="userRole_<?php echo $user['User']['id'] ?>"><?php
+
+				if($user['User']['tokens']['isAdmin'])
 				{
 					echo $this->Html->image('icons/dialog-ok-apply.png', array('id'=>'rootCheck_'.$user['User']['id'],'class'=>'icon','alt' => __('oui')));
 // 					echo $this->Form->postLink($this->Html->image('icons/list-remove-user.png', array('id'=>'rootRemove_'.$user['User']['id'],'class'=>'icon','alt' => __('Retirer'))), array('action' => 'setIsAdmin', $user['User']['id'],false) , array('escape' => false, 'title'=>'Retirer'), __('Voulez vous retirer les droits d\'administrateur à # %s?', $user['User']['id']));
@@ -44,13 +46,22 @@
 				}
 			?>
 		</td>
-		<td><?php 
+		<td id="userRegular_<?php echo $user['User']['id'] ?>">
+		<?php
+                                if(!$user['User']['regular'])
+                                {
+                                        echo $this->Html->image('icons/edit-delete.png', array('id'=>'rootCheck_'.$user['User']['id'],'class'=>'icon','alt' => __('oui')));
+//                                      echo $this->Form->postLink($this->Html->image('icons/list-remove-user.png', array('id'=>'rootRemove_'.$user['User']['id'],'class'=>'icon','alt' => __('Retirer'))), array('action' => 'setIsAdmin', $user['User']['id'],false) , array('escape' => false, 'title'=>'Retirer'), __('Voulez vous retirer les droits d\'administrateur à # %s?', $user['User']['id']));
+                                }
+		?>
+		</td>
+		<td><?php
 		$date = new DateTime($user['User']['created']);
 		echo $date->format('d/m/Y H:i'); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link($this->Html->image('icons/document-preview.png', array('id'=>'view_'.$user['User']['id'],'class'=>'icon','alt' => __('voir'))), array('action' => 'view', $user['User']['id']),  array('escape' => false, 'title'=>'Voir')); ?>
 			<?php echo $this->Html->link($this->Html->image('icons/document-edit.png', array('id'=>'edit_'.$user['User']['id'],'class'=>'icon','alt' => __('Edition'))), array('action' => 'edit', $user['User']['id']),  array('escape' => false, 'title'=>'editer')); ?>
-			<?php 
+			<?php
 			  if($user['User']['id'] != AuthComponent::user('id') )
 			  {
 			    $rootText = '';
@@ -89,7 +100,7 @@
 </div>
 <script>
   introSteps = [
-              { 
+              {
                 intro: 'Cette page présente tous les utilisateurs inscrits sur le site, qu\'ils soient clients, ou internes. Vous ne pouvez créer des factures que pour les clients inscrits'
               },
               {
