@@ -264,7 +264,7 @@ class UsersController extends AppController {
 		
 		 $user = $this->User->find('first', array('conditions'=>array(
 					    'User.password' => AuthComponent::password($this->data['User']['password']),
-					    'User.email = '.$this->data['User']['email'].' AND User.email not null',
+					    'User.email = "'.$this->data['User']['email'].'" AND User.email is not null',
 					    'User.company_id' => $this->getCompanyId()
 					      )));
 		

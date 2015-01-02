@@ -501,7 +501,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 ALTER TABLE `users` modify column email varchar(255) CHARACTER SET utf8 COLLATE utf8_bin;  
 ALTER TABLE `users` add `regular` boolean default TRUE;
-ALTER TABLE `users` ADD CONSTRAINT `u_users_email_name` UNIQUE (`email`, `name`); 
+ALTER TABLE `users` ADD CONSTRAINT `u_users_email_name_company` UNIQUE (`company_id`, `email`, `name`); 
   
 SET FOREIGN_KEY_CHECKS = 1;
 ';	

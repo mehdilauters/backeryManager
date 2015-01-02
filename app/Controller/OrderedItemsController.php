@@ -181,12 +181,34 @@ class OrderedItemsController extends AppController {
 		if ($order['Order']['Shop']['company_id'] != $this->getCompanyId()) {
 		    throw new NotFoundException(__('Invalid item for this company'));
 			}
+                $ok = true;
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->OrderedItem->delete()) {
-			$this->Session->setFlash(__('Ordered item deleted'),'flash/ok');
-			$this->redirect(array('action' => 'index'));
+
 		}
-		$this->Session->setFlash(__('Ordered item was not deleted'),'flash/ok');
-		$this->redirect(array('action' => 'index'));
+		else
+		{
+                  $ok = false;
+		}
+		
+		if ($this->request->is('ajax'))
+                {
+                  $results = array('status'=>$ok);
+                  $this->set(compact('results'));
+                  $this->set('_serialize', array('results'));
+                }
+                else
+		{
+                  if($ok)
+                  {
+                      $this->Session->setFlash(__('Ordered item deleted'),'flash/ok');
+                      $this->redirect(array('action' => 'index'));                  
+                  }
+                  else
+                  {
+                    $this->Session->setFlash(__('Ordered item was not deleted'),'flash/ok');
+                    $this->redirect(array('action' => 'index'));
+                  }
+                }
 	}
 }

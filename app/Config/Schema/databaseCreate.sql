@@ -385,7 +385,7 @@ ALTER TABLE `videos`
 ALTER TABLE `users`
   ADD CONSTRAINT `fk_users_medias` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),
   ADD CONSTRAINT `fk_users_companies` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`),
-  ADD CONSTRAINT `u_users_email_name` UNIQUE (`email`, `name`); 
+  ADD CONSTRAINT `u_users_email_name_company` UNIQUE (`company_id`, `email`, `name`); 
   
 ALTER TABLE `product_types`
   ADD CONSTRAINT `fk_producttypes_media` FOREIGN KEY (`media_id`) REFERENCES `medias` (`id`),

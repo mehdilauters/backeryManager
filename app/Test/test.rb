@@ -179,7 +179,13 @@ Orders = [
    'dueDate' => '15/08/2014',
    'comment' => 'nazdar #2',
    'user' => 'toto',
-   },  
+   },
+  {
+   'shop' => Shops[1]['name'],
+   'dueDate' => '15/08/2014',
+   'comment' => 'nazdar #2',
+   'user' => 'tatatata',
+   },
   ]
 
 OrderItems = [
@@ -206,12 +212,12 @@ Accounts = [
 
 AccountsEntries = [
   {
-   'date' => '30/11/2014',
+   'date' => "#{time.strftime('%d/%m/%Y')}",
    'name' => 'testEntrie0',
    'value' => -100
    },
    {
-    'date' => '29/11/2014',
+    'date' => "#{time.strftime('%d/%m/%Y')}",
    'name' => 'testEntrie1',
    'value' => +100
    }
@@ -437,7 +443,19 @@ def addOrder(driver, order)
   puts "addOrder #{order.to_s}"
   goto(driver,BaseUrl + "orders/add")
   driver.find_element(:id => "OrderShopId").send_keys(order['shop'])
-  driver.find_element(:id => "OrderUserId").send_keys(order['user'])
+
+  userFound = false
+  driver.find_element(:id => "OrderUserId").find_elements( :tag_name => "option" ).find do |option|
+    if option.text == order['user']
+      userFound = true
+      option.click
+    end
+  end
+  if not userFound
+    driver.find_element(:id => "OrderUserId").send_keys('-')
+    driver.find_element(:id => "UserName").send_keys(order['user'])
+  end
+  
   driver.find_element(:id => "OrderDeliveryDate").send_keys(order['dueDate'])
   driver.execute_script "tinyMCE.activeEditor.setContent('#{order['comment']}')"
   driver.find_element(:css => "#OrderAddForm > .submit > input").click;
@@ -795,7 +813,8 @@ end
       selectFirstOrder(driver, true)
 #       waitUntil { driver.find_element(:css => "#emailPreview") }
       
-      addOrder(driver, Orders[1])
+      addOrder(driver, Orders[1] )
+      addOrder(driver, Orders[2] )
                                
       Dates.each{
         |dte|

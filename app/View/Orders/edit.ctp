@@ -63,6 +63,13 @@
                                           'class'=>'form-control',
                                           'required' => false,
                                           ));
+                echo $this->Form->input('User.regular', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Client régulier'),
+                                          'between' => '<div class="col-sm-5" >',
+                                          'after' => '</div>',
+                                         'div'=>'form-group',
+                                          'class'=>'form-control',
+                                          'required' => false,
+                                          ));
 ?>
 </fieldset>
 <?php

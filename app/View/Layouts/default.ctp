@@ -116,7 +116,7 @@ echo $this->Html->css(
 		<div class="col-md-9"> <!--  colonne de gauche  -->
 			<div id="cookiesError" class="alert alert-danger" style="display:none; ">Attention, les cookies sont désactivés sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div>
 			<noscript><div id="cookiesError" class="alert alert-danger" >Attention, javascript est désactivé sur votre ordinateur. Cela peut entrainer un mauvais fonctionnement du site.</div></noscript>
-			<h2><?php echo $title_for_layout ?></h2>
+			<h2><a href="<?php echo $this->webroot.$this->params['controller'] ?>" ><?php echo $title_for_layout ?></a></h2>
 			<div class="rope" ></div>
 			<?php if(Configure::read('Settings.demo.active')) { ?>
                               <div class="alert alert-danger" ><div class="title" >Attention, ceci est une version de démonstration</div>Les adresses, numéros de téléphones, et noms d'utilisateurs sont volontairement faux. Les données de ventes et de gestion sont des simulations, et peuvent donc amener à des incohérences.</div>

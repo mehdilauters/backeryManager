@@ -278,8 +278,31 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
         return false;
       }
       row = $(this).closest('tr');
-      row.fadeOut();
-      disablePrices();
+      var ret = true;
+      jQuery.ajax({
+          type: 'POST',
+          url: '<?php echo $this->webroot ?>ordered_items/delete/'+row.attr('rel')+'.json',
+          async:false,
+          accepts: 'application/json',
+          dataType: 'json',
+          success: function (data) {
+              if(!data.results.status)
+              {
+                row.addClass("alert alert-danger");
+              }
+              $('#total').html(data.results.total);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus);
+              row.addClass("alert alert-danger");
+              ret =  false;
+          }
+      });
+      if(ret)
+      {
+        row.fadeOut();
+        disablePrices();
+      }
       return false;
       }
       );
