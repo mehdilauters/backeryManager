@@ -45,36 +45,36 @@
 		<th><?php echo __('Current Total'); ?></th>
 		<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	<?php foreach ($account['AccountEntry'] as $accountEntry): 
+	<?php foreach ($account['AccountEntry'] as $accountEntry):
                 $checkedClass = "";
                 $signClass='negative';
                 if($accountEntry['current_total'] >=0 )
                 {
-                  $signClass = 'positive'; 
+                  $signClass = 'positive';
                 }
-                
+
                 $valueSignClass='negative';
                 if($accountEntry['value'] >=0 )
                 {
-                  $valueSignClass = 'positive'; 
+                  $valueSignClass = 'positive';
                 }
                 if($signClass == $valueSignClass)
                 {
                   $valueSignClass = '';
                 }
-                
+
                 if($accountEntry['checked'])
                 {
                  $checkedClass = "checked";
                 }
                 ?>
-		<tr class="<?php echo $signClass.' '.$checkedClass; ?>" rel="<?php echo $accountEntry['id'] ?>" >
-			<td><?php 
+		<tr id="accountEntrie_<?php echo $accountEntry['id'] ?>" class="<?php echo $signClass.' '.$checkedClass; ?>" rel="<?php echo $accountEntry['id'] ?>" >
+			<td><?php
 			  $date = new DateTime($accountEntry['date']);
 			  echo h($date->format('d/m/Y')); ?></td>
 			<td><?php echo $accountEntry['name']; ?></td>
 			<td><?php echo $accountEntry['comment']; ?></td>
-			<td class="accountEntryValue <?php echo $valueSignClass ?>" ><?php echo round($accountEntry['value'],2); ?></td>
+			<td id="value_<?php echo $accountEntry['id'] ?>" class="accountEntryValue <?php echo $valueSignClass ?>" ><?php echo round($accountEntry['value'],2); ?></td>
 			<td class="AccountEntryChecked" ><?php if($accountEntry['checked']) echo 'x'; ?></td>
 			<td class="AccountEntryCurrentTotal" ><?php echo round($accountEntry['current_total'],2); ?></td>
 			<td class="actions">
@@ -83,7 +83,7 @@
 			</td>
 		</tr>
 	<?php endforeach; ?>
-	<tr class="" rel="" >
+	<tr id="newAccountEntrie" class="" rel="" >
            <td class="AccountEntryDate" ><input type="text" class="datepicker" name="AccountEntryDate" /></td>
            <td class="AccountEntryName" ><input type="text" class="" name="AccountEntryName" /></td>
            <td class="AccountEntryComment" ><input type="text" class="" name="AccountEntryComment" /></td>
@@ -96,7 +96,7 @@
           $signClass='negative';
           if($total >=0 )
           {
-            $signClass = 'positive'; 
+            $signClass = 'positive';
           }
 	?>
 	<tr class="<?php echo $signClass ?>" >
@@ -118,12 +118,12 @@
 	</div>
 </div>
 <script>
-  
+
   function rowDataValid(_data)
   {
     return !(_data.AccountEntry.date == "" || _data.AccountEntry.name == "" || _data.AccountEntry.value == "");
   }
-  
+
   function getRowData(row)
   {
       _data = false;
@@ -132,7 +132,7 @@
       {
         id = row.attr('rel');
       }
-      
+
       if(row.find('input[type="text"]').length == 0)
       {
         _data = {
@@ -166,18 +166,18 @@
       }
       return _data;
   }
-  
+
   function save(row)
   {
-    
+
       controller = 'add/<?php echo $account['Account']['id'] ?>';
       var _data = getRowData(row);
-      
+
       if(!rowDataValid(_data))
       {
         return false;
       }
-      
+
       if(_data.AccountEntry.id != -1)
       {
         controller='edit/'+_data.AccountEntry.id;
@@ -195,7 +195,7 @@
               data: _data,
               dataType: 'json',
               success: function (data) {
-              
+
                   if(data.results.status)
                   {
                     row.removeClass("alert alert-danger");
@@ -214,8 +214,8 @@
                   ret =  false;
               }
           });
-          
-          
+
+
           if(ret)
           {
             inputToTd(row);
@@ -223,10 +223,10 @@
           }
           return ret;
   }
-  
+
   function inputToTd(row)
   {
-  
+
     _data = getRowData(row);
     if(!rowDataValid(_data))
     {
@@ -244,18 +244,18 @@
     {
       checked='x';
     }
-    
+
     signClass = 'positive';
     if(_data.AccountEntry.value < 0)
     {
       signClass = 'negative';
     }
-    
+
     newHtml = '<td class="AccountEntryDate" >'+_data.AccountEntry.date+'</td><td class="AccountEntryName" >'+_data.AccountEntry.name+'</td><td class="AccountEntryComment" >'+_data.AccountEntry.comment+'</td><td class="AccountEntryValue '+signClass+'" >'+_data.AccountEntry.value+'</td><td class="AccountEntryChecked" >'+checked+'</td><td class="AccountEntryCurrentTotal" >'+_data.AccountEntry.current_total+'</td><td class="actions" ><a href="" class="edit" >Editer</a><a class="delete" href="" >Supprimer</a></td>';
     row.html(newHtml);
     updateDom();
   }
-  
+
   function tdToInput(row)
   {
     _data = getRowData(row);
@@ -268,7 +268,7 @@
     row.html(html);
     updateDom();
   }
-  
+
   function updateDom()
   {
     $( ".datepicker" ).datepicker();
@@ -277,7 +277,7 @@
           row = $(this).closest('tr');
           row.find('button').trigger('click');
       }
-      
+
 //       if(e.which == 0) {
 //           row = $(this).closest('tr');
 //           inputToTd(row);
@@ -286,8 +286,8 @@
     $(".changeValue").off("click").keyup(function(){
           row = $(this).closest('tr');
           data = getRowData(row);
-    
-    
+
+
           if(parseFloat($(this).val()) < 0)
           {
             $(this).closest('td').addClass("negative");
@@ -298,7 +298,7 @@
             $(this).closest('td').removeClass("negative");
             $(this).closest('td').addClass("positive");
           }
-          
+
           if(data.AccountEntry.current_total < 0)
           {
             row.addClass("negative");
@@ -310,46 +310,46 @@
             row.removeClass("negative");
           }
         });
-        
+
         $(".saveButton").off("click").click(function(){
           row = $(this).closest('tr');
-          
+
           ok = save(row);
           if(row.closest('table').find('tr').length -2 == row.index()) // before last line (save)
           {
             if(ok)
             {
-              
+
               newRow = $('<tr rel="">');
               row.after(newRow);
               tdToInput(newRow);
               newRow.find('input[type="text"]').val('');
-            }    
+            }
           }
           else
           {
-            
+
           }
-          
+
           if(ok)
           {
             inputToTd(row);
           }
         });
-        
+
         $("#account_entries a.edit").off("click").click(function(){
             row = $(this).closest('tr');
             tdToInput(row);
           return false;
           });
-          
+
           $("#account_entries a.delete").attr('onclick','').off("click").click(function(){
             if(!confirm("Voulez vous vraiment supprimer cet enregistrement?"))
             {
               return false;
             }
             row = $(this).closest('tr');
-            
+
             var ret = true;
             jQuery.ajax({
                 type: 'POST',
@@ -370,8 +370,8 @@
                     ret =  false;
                 }
             });
-          
-            
+
+
             if(ret)
             {
               row.fadeOut();
@@ -379,9 +379,9 @@
             }
             return false;
           });
-          
-          
-          
+
+
+
           $('input[name="AccountEntryChecked"]').change(function(){
             row = $(this).closest('tr');
             data = getRowData(row);
@@ -394,9 +394,9 @@
               row.removeClass("checked");
             }
           });
-          
-          
-          
+
+
+
           $('input[name="AccountEntryName"]').autocomplete({
                   source: function( request, response ) {
                   $.ajax({
@@ -417,7 +417,7 @@
                   },
                   minLength: 3,
                   select: function( event, ui ) {
-                      
+
 //                       log( ui.item ?
 //                       "Selected: " + ui.item.label :
 //                       "Nothing selected, input was " + this.value);
@@ -429,8 +429,8 @@
                     $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
                   }
                 });
-                
-                
+
+
                 totalRow = $('#total').closest('tr');
                     if(parseFloat($('#total').text()) < 0)
                     {
@@ -440,20 +440,52 @@
                     else
                     {
                       totalRow.addClass('positive');
-                      totalRow.removeClass('negative');                    
+                      totalRow.removeClass('negative');
                     }
   }
 
   $(document).ready(function(){
       updateDom();
-  
+
       var tfConfig1 = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
               rows_counter:true,
               on_after_refresh_counter: function(o,i){  }
               };
               tf = new TF('account_entries', tfConfig1); tf.AddGrid();
-        
-        
+
+
   });
+
+   introSteps = [
+              {
+                intro: 'Retrouvez sur cette page l\'historique complet de votre compte, et enregistrez de nouvelles opérations.'
+              },
+              {
+                element: '#AccountEntriesDateSelect',
+                intro: "Filtrez ici la période dont les opérations vous intéressent.",
+                position: 'top'
+              },
+              {
+                element: '#account_entries',
+                intro: "Vous pouvez filtrer ici les opérations  affichées en fonction de vos critère. Par exemple, dont le montant est supérieur à 20€ : \">20\".",
+                position: 'left',
+              },
+
+              {
+                element: '#accountEntrie_<?php echo $account['AccountEntry'][0]['id'] ?>',
+                intro: "Un code couleur permet de savoir rapidement la nature de l'opération: <br/>Une ligne rouge indique que le solde total du compte est négatif à cette date précise, une ligne verte indique donc un solde positif.",
+                position: 'left',
+              },
+              {
+                element: '#value_<?php echo $account['AccountEntry'][0]['id'] ?>',
+                intro: "Un deuxième code couleur montre clairement la nature de l'opération: rouge un débit, vert un crédit",
+                position: 'left',
+              },
+              {
+                element: '#newAccountEntrie',
+                intro: "Pour ajouter une opération, remplissez simplement cette dernière ligne, et validez.",
+                position: 'left',
+              },
+                        ];
         </script>

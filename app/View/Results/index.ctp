@@ -56,7 +56,7 @@
 	 {
 		if ($firstWeek == -1 )
 		{
-		  $firstWeek = $weekId+1;
+		  $firstWeek = $date->format('W');
 		}
 	 ?>
 		<tr id="total_shop_<?php echo $shopId ?>_week_<?php echo $date->format('W'); ?>" class="total">
@@ -158,21 +158,21 @@
   introSteps = [];
   introSteps.push(
               { 
-                intro: 'Cette page affiche le chiffre d\'affaire, magasin par magasin, ainsi que le sous total, semaine par semaine, et le total complet'
+                intro: 'Cette page affiche le chiffre d\'affaire, magasin par magasin, ainsi que les sous-totaux semaines par semaines, et le total complet.'
               },
               {
                 element: '#resultsDateSelect',
-                intro: "Sélectionnez ici les dates qui vous interessent",
+                intro: "Sélectionnez ici les dates qui vous interessent.",
 		position: 'right'
               },
               {
                 element: '#dateSelect',
-                intro: "Et affichez les données correspondantes",
+                intro: "Et affichez les données correspondantes.",
 		position: 'right'
               },
               {
                 element: '#dateSelectExcel',
-                intro: "Ou téléchargez le document excel recapitulatif (pour envoyer au comptable par exemple)",
+                intro: "Ou téléchargez le document excel récapitulatif (pour envoyer au comptable par exemple)",
 		position: 'right'
               });
 	    <?php if(isset($data['entries'])): ?>
@@ -184,7 +184,7 @@
               },
               {
                 element: '#total_shop_<?php echo $entries[0] ?>_week_<?php echo $firstWeek ?>',
-                intro: "Retrouvez les sous-totaux semaine par semaine",
+                intro: "Retrouvez les sous-totaux semaines par semaines",
 		position: 'right'
               },
               {
@@ -194,7 +194,7 @@
               },
               {
                 element: '#mainTotal',
-                intro: "Et en bas de la page se trouve le total global, tous magasins confondus",
+                intro: "Et en bas de la page se trouve le total global, tous magasins confondus.",
 		position: 'right'
               });
 	      <?php else: ?>

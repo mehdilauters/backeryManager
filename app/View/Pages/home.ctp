@@ -105,46 +105,46 @@ if(!$slideshowInserted && count($products) != 0)
       <?php if(Configure::read('Settings.demo.active')) { ?>
 	introSteps.push(
               { 
-                intro: 'Bienvenue dans la version de démonstration de <b>BakeryManager</b><br/>Vous êtes maintenant dans la peau d\'un boulanger ayant récemment ouvert un dépot de pain et visitant la page principale de son outil <br/> <a href="mailto:mehdilauters@gmail.com" >Mehdi Lauters</a>'
+                intro: 'Bienvenue dans la version de démonstration de <b>TpeManager</b>.<br/>Vous êtes maintenant dans la peau d\'un boulanger ayant également ouvert un dépot de pain et visitant la page principale de son outil.<br/> <a href="mailto:mehdilauters@gmail.com" >Mehdi Lauters</a>'
               });
 	<?php } else { ?>
 	      introSteps.push(
               { 
                 element: '#helpLink',
                 position: 'left',
-                intro: 'Pour désactiver l\'aide automatique, cliquez ici <a href="<?php echo $this->webroot ?>users/setPresentationMode/0" >Désactiver</a>',
+                intro: 'Pour désactiver l\'aide automatique, cliquez ici <a href="<?php echo $this->webroot ?>users/setPresentationMode/0" >Désactiver</a>.',
               });
 	<?php } ?>
 	    introSteps.push(
               {
                 element: '#mainMenu',
-                intro: "Sur la droite se touve la barre de menu",
+                intro: "Sur la droite se touve la barre de menu.",
 		position: 'left'
               });
 	<?php if($tokens['isAdmin']) : ?>
               introSteps.push(
 	      {
                 element: '#menu',
-                intro: 'Ce menu est accessible à tous les visiteurs',
+                intro: 'Celui-ci est accessible à tous les visiteurs.',
                 position: 'left'
               },
               {
                 element: '#menuAdmin',
-                intro: "Ce menu est quant à lui accessible seulement aux gérants de la boulangerie",
+                intro: "Celui-là est, quant à lui, accessible seulement aux gérants de la boulangerie.",
                 position: 'left'
               });
 	  <?php endif; ?>
 	      introSteps.push(
               {
                 element: '#helpLink',
-                intro: "A tout moment, retrouvez cette aide en cliquant ici",
+                intro: "A tout moment, retrouvez cette aide en cliquant ici.",
                 position: 'left'
               });
             <?php if(count($receivedEmails) != 0) : ?>
               introSteps.push(
               {
                 element: '#emailsPreview',
-                intro: 'D\'un coup d\'oeil, vérifiez les mails que vous avez reçu',
+                intro: 'D\'un coup d\'oeil, vérifiez les mails que vous avez reçu.',
                 position: 'right'
               });
             <?php endif; ?>
@@ -152,55 +152,60 @@ if(!$slideshowInserted && count($products) != 0)
               introSteps.push(
 	      {
                 element: '#globalResults',
-                intro: 'Ici sont présentés les courbes des résultats comptables, par magasin',
+                intro: 'Ici sont présentés les courbes des résultats comptables, par magasin.',
 		position: 'right'
               }
 	      ,
               {
 		element: '#controlChart_resultsChart',
-                intro: 'Cochez / décochez les cases pour afficher / masquer les courbes',
+                intro: 'Cochez / décochez les cases pour afficher / masquer les courbes.',
 		position: 'right'
               });
 	      <?php endif; ?>
               introSteps.push(
 	      {
 		element: '#shopPreview_1',
-                intro: 'Ensuite sont disponibles un apercu des magasins',
+                intro: 'Ensuite sont disponibles un apercu des magasins,',
 		position: 'right'
               },
               {
 		element: '#shopStatus_1',
-                intro: 'Dont son statut (ouvert/fermé)',
+                intro: 'dont leur statut (ouvert/fermé),',
 		position: 'right'
               },
 	      {
 		element: '#timetable_1',
-                intro: 'Et les horaires complètes',
+                intro: 'et les horaires complètes.',
 		position: 'right'
               },
 	      {
 		element: '#slideshow',
-                intro: 'Sont présentées ici les produits du jours',
+                intro: 'Sont présentés ici les produits du jours.',
 		position: 'right'
               });
 	      <?php if(AuthComponent::user()): ?>
 	      introSteps.push({
 		element: '#logout',
-                intro: 'Pour passer en vue "Client", déconnectez vous, vous pourrez ensuite vous reconnecter si besoin',
+                intro: 'Pour passer en vue "Client", déconnectez vous, vous pourrez ensuite vous reconnecter si besoin.',
 		position: 'left'
               });
 	      <?php else: ?>
 	      introSteps.push({
 		element: '#login',
-                intro: 'Pour passer en vue "Artisan", connectez-vous avec le compte de démonstration',
+                intro: 'Pour passer en vue "Artisan", connectez-vous avec le compte de démonstration.',
 		position: 'left'
               });
 		<?php endif; ?>
 	      <?php if($tokens['isAdmin']) : ?>
 	      introSteps.push({
 		element: '#sales',
-                intro: 'Vous pourrez ensuite vous rendre sur la page de gestion de la production',
+                intro: 'Vous pourrez ensuite vous rendre sur la page de gestion de la production.',
 		position: 'left'
+              });
+              introSteps.push({
+                element: '#accountsLink',
+                intro: 'Ou encore suivre votre compte bancaire.',
+                position: 'left'
               });
 	      <?php endif; ?>
 

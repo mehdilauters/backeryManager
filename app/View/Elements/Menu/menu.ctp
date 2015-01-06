@@ -38,7 +38,7 @@ foreach($menu as $title => $subMenu)
 	  <li  id="ordersLink" ><a href="<?php echo $this->webroot ?>orders/">Commandes</a></li>
 	  <li><a href="<?php echo $this->webroot ?>news/add"><?php echo $this->Html->image('icons/news-subscribe.png', array('alt' => '')); ?> Ajouter une news</a></li>
 	  <li><a href="<?php echo $this->webroot ?>users"><?php echo $this->Html->image('icons/user-properties.png', array('alt' => '')); ?> Comptes utilisateurs</a></li>
-	  <li><a href="<?php echo $this->webroot ?>account_management/">Comptes</a></li>
+	  <li><a id="accountsLink" href="<?php echo $this->webroot ?>account_management/">Comptes</a></li>
 	  <?php if($tokens['isRoot']) : ?>
 	    <li><a href="<?php echo $this->webroot ?>companies/add">Entreprise</a></li>
 	    <?php else: ?>

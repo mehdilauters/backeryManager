@@ -8,7 +8,7 @@
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('rib_on_orders'); ?></th>
 			<th><?php echo $this->Paginator->sort('discount'); ?></th>
-			<th>Role</th>
+			<th>Administrateur</th>
 			<th>Régulier</th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
@@ -93,7 +93,7 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add'), array('id'=>'userAdd')); ?></li>
 		<li><?php echo $this->Html->link(__('List Media'), array('controller' => 'media', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Media'), array('controller' => 'media', 'action' => 'add')); ?> </li>
 	</ul>
@@ -101,27 +101,32 @@
 <script>
   introSteps = [
               {
-                intro: 'Cette page présente tous les utilisateurs inscrits sur le site, qu\'ils soient clients, ou internes. Vous ne pouvez créer des factures que pour les clients inscrits'
+                intro: 'Cette page présente tous les utilisateurs inscrits sur le site, qu\'ils soient clients, ou employés.'
               },
               {
                 element: '#user_<?php echo $users[0]['User']['id'] ?>',
-                intro: "Pour chaque utilisateur, retrouvez ses différents paramètres",
+                intro: "Pour chaque utilisateur, retrouvez ses différents paramètres:",
 		position: 'top'
               },
               {
                 element: '#userRib_<?php echo $users[0]['User']['id'] ?>',
-                intro: "Par exemple, si le rib de l'entreprise sera présent sur ses factures",
+                intro: "Par exemple, si le rib de l'entreprise sera présent sur ses factures,",
 		position: 'bottom'
               },
               {
                 element: '#userDiscount_<?php echo $users[0]['User']['id'] ?>',
-                intro: "ou combien de pourcentage de réduction il à",
+                intro: "ou combien de pourcentage de réduction il à,",
 		position: 'bottom'
               },
               {
-                element: '#userRoot_<?php echo $users[0]['User']['id'] ?>',
+                element: '#userRole_<?php echo $users[0]['User']['id'] ?>',
                 intro: "Mais aussi son rôle sur le site: administrateur? simple client?",
 		position: 'bottom'
+              },
+              {
+                element: '#userAdd',
+                intro: "Pour ajouter un nouveau client, c'est ici, ou directement à la création d'une commande.",
+                position: 'right'
               },
 			];
 </script>

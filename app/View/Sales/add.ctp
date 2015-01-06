@@ -219,51 +219,51 @@ function checkInputs(interactive)
   
   introSteps = [
               { 
-                intro: 'Cette page permet de saisir les données journalières de production, par magasin et par produit.<br/>Ce sont ensuite ces données qui sont utilisés pour tracer certains graphes'
+                intro: 'Cette page permet de saisir les données journalières de production, par magasin et par produit.<br/>Ce sont ensuite ces données qui sont utilisés pour tracer certains graphes et calculer des statistiques.'
               },
               {
                 element: '#selectDateInfo',
-                intro: "Commencez par sélectionner la date pour laquelle vous voulez saisir les données,<br/> puis cliquez sur le calendrier",
+                intro: "Commencez par sélectionner la date pour laquelle vous voulez saisir les données,<br/> puis cliquez sur le calendrier.",
 				position: 'top'
               },
 			  {
                 element: '#productRow_<?php echo $products[0]['Product']['id'] ?>',
-                intro: "Pour chaque produit, vous devrez ensuite saisir",
+                intro: "Pour chaque produit, vous devrez ensuite saisir:",
 				position: 'top'
               },
 			  {
                 element: '#produced_<?php echo $products[0]['Product']['id'] ?>',
-                intro: "Pour chaque magasin, le nombre de produit fabriqués",
+                intro: "pour chaque magasin, le nombre de produit fabriqués,",
 				position: 'top'
               },
 			  {
                 element: '#lost_<?php echo $products[0]['Product']['id'] ?>',
-                intro: "le nombre de produit perdus",
+                intro: "le nombre de produit perdus,",
 				position: 'top'
               },	  
 			  {
                 element: '#comments_<?php echo $products[0]['Product']['id'] ?>',
-                intro: "un commentaire si necessaire<br/>(jour de marché, concurrent malade...)",
+                intro: "et un commentaire si necessaire<br/>(jour de marché, concurrent malade...).",
 				position: 'top'
               },
 	      {
                 element: '#resultAddSubmit',
-                intro: "Attention, n'oubliez pas de valider",
+                intro: "Attention, n'oubliez pas de sauvegarder.",
 				position: 'top'
               },
 	      {
                 element: '#excelImport',
-                intro: "Afin de prévoir les coupures internet, veuillez télécharger le fichier Excel ci-contre. Lorsqu'une coupure d'internet survient, remplissez le simplement, et ce, même pendant plusieurs jours. Importez le ensuite directement sur le site lorsque l'accès à internet est rétabli. Toutes vos données seront ainsi automatiquement ajoutées",
+                intro: "Afin de prévoir les coupures internet, veuillez télécharger le fichier Excel ci-contre. Lorsqu'une coupure d'internet survient, remplissez le simplement, et ce, même pendant plusieurs jours. Importez le ensuite directement sur le site lorsque l'accès à internet est rétabli. Toutes vos données seront ainsi automatiquement ajoutées.",
 		position: 'right'
               },
 			  {
                 element: '#dailyResultsLink',
-                intro: "Ensuite rendez vous sur la page de saisie journalière comptable<br/>Si vous l'avez déjà visité, votre travail journalier est terminé",
+                intro: "Ensuite rendez-vous sur la page de saisie journalière comptable.<br/>Si vous l'avez déjà visité, votre travail journalier est terminé.",
 				position: 'left'
               },
 			  {
                 element: '#ordersLink',
-                intro: "Mais vous pouvez aussi gérer les commandes/factures de vos clients",
+                intro: "Mais vous pouvez aussi gérer les commandes / factures de vos clients.",
 				position: 'left'
               },
             ];

@@ -116,42 +116,42 @@
 <script>
   introSteps = [
               { 
-                intro: 'Cette page permet de visualiser les commandes / factures de vos clients'
+                intro: 'Cette page permet de visualiser les commandes / factures de vos clients.'
               },
               {
                 element: '#orderStatusSelect',
-                intro: "Vous pouvez lister les commandes par leur statut",
-				position: 'top'
+                intro: "Vous pouvez lister les commandes par leur statut.",
+                position: 'right'
               },
               {
                 element: '#ordersIndexTable',
-                intro: "Filtrez les resultats en remplissant les filtres",
-				position: 'top'
+                intro: "Filtrez les resultats en remplissant les filtres.",
+                position: 'right'
               },
               {
                 element: '#pdf_<?php echo $orders[0]['Order']['id'] ?>',
-                intro: "téléchargez le PDF pour impression",
-				position: 'top'
+                intro: "Téléchargez le PDF pour impression,",
+                position: 'top'
               },
 	      <?php if($tokens['isAdmin']) : ?>
 		{
 		  element: '#view_<?php echo $orders[0]['Order']['id'] ?>',
-		  intro: "Visualisez la",
-				  position: 'top'
+		  intro: "Visualisez la,",
+                  position: 'top'
 		},
 		{
 		  element: '#edit_<?php echo $orders[0]['Order']['id'] ?>',
-		  intro: "Editez la",
-				  position: 'top'
+		  intro: "Editez la,",
+                  position: 'top'
 		},
 			    {
 		  element: '#email_<?php echo $orders[0]['Order']['id'] ?>',
-		  intro: "Ou envoyez la directement par email au client concerné",
+		  intro: "Ou envoyez la directement par email au client concerné.",
 				  position: 'top'
 		},
 			    {
 		  element: '#newOrder',
-		  intro: "Cliquez maintenant ici pour créer une nouvelle commande",
+		  intro: "Cliquez maintenant ici pour créer une nouvelle commande.",
 				  position: 'top'
 		},
 	      <?php endif; ?>
