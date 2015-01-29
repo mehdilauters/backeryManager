@@ -148,7 +148,16 @@ echo $this->Html->css(
 		    <div id="gotoBottom" onclick="return gotoBottom()" class="gotoScroll alert alert-info" ><a href="#" onclick="return gotoBottom()" >Bas</a></div>
 		</div>
 		<div class="col-md-3" id="mainMenu" >  <!--  colonne de droite  -->
-		  	<?php echo $this->element('Menu/menu', array('menu'=>$menu)) ?>
+		  	<?php
+                          if(Configure::read('Settings.public') || $tokens['member'])
+                          {
+                            echo $this->element('Menu/menu', array('menu'=>$menu));
+                          }
+                          else
+                          { ?>
+                            <div class="alert alert-warning" >Ce site n'est pas ouvert au public</div>
+                          <?php }
+                          ?>
 		</div>
   	</div>
 

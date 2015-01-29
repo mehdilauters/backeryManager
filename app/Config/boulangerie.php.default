@@ -91,5 +91,7 @@ Configure::write('Settings.Emails', array(
   'maildirmake' => 'maildirmake',
 
 ));
-	
+
+Configure::write('Settings.public', true);
+
 ?>

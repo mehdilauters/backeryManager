@@ -312,6 +312,10 @@ class UsersController extends AppController {
 		{
 		  $url = $this->Auth->logout();
 		}
+		if(!Configure::read('Settings.public'))
+		{
+                  $url = '/users/login';
+		}
 		$this->redirect($url);
 	}	
 	

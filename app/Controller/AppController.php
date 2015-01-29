@@ -630,7 +630,18 @@ public function getFunctionText($coefficients)
 	if( count($this->publicActions) != 0)
 	{
 		// debug($this->publicActions);
-		$this->Auth->allow($this->publicActions);
+		if(Configure::read('Settings.public'))
+		{
+                  $this->Auth->allow($this->publicActions);
+		}
+		else
+		{
+                  if($this->request->params['controller'] == 'users' && ( $this->request->params['action'] == 'autologin' || $this->request->params['action'] == 'login' ) || $this->Auth->loggedIn())
+                  {
+                      $this->Auth->allow($this->publicActions);
+                  }
+		}
+		
 	}
 	
 	try
