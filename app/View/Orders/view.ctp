@@ -142,6 +142,13 @@ $order['Order']['id']),array('escape' => false)); ?> </li>
           _data.OrderedItem.product_id=row.find('td.OrderedItemProductId').attr('rel');
           _data.OrderedItem.productName=row.find('td.OrderedItemProductId').text();
           _data.OrderedItem.created=row.find('td.OrderedItemCreated').text();
+          if(_data.OrderedItem.created == "")
+          {
+            <?php
+            $date = new DateTime();
+            ?>
+            _data.OrderedItem.created = '<?php echo $date->format('d/m/Y') ?>';
+          }
           _data.OrderedItem.quantity=row.find('td.OrderedItemQuantity').text();
           _data.OrderedItem.comment=row.find('td.OrderedItemComment').text();
     }

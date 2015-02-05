@@ -527,6 +527,7 @@ def addItem(driver, item, js = false)
   else
     waitUntil { driver.find_element(:css => "#orderedItemsTable") }
     driver.find_element(:css => 'select[name="OrderedItemProductId"]').send_keys(item['product'])
+    driver.find_element(:css => 'input[name="OrderedItemCreated"]').clear()
     driver.find_element(:css => 'input[name="OrderedItemCreated"]').send_keys(item['date'])
     driver.find_element(:css => 'input[name="OrderedItemQuantity"]').send_keys(item['quantity'])
     driver.find_element(:css => 'textarea[name="OrderedItemComment"]').send_keys(item['comment'])

@@ -1,7 +1,7 @@
 <?php
 /**
 * setup:
-*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl courier-pop courier-imap postfix postfix-mysql roundcube courier-authlib-mysql
+*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl courier-pop courier-imap postfix postfix-mysql roundcube courier-authlib-mysql apache2-utils iptables-persistent
 *    optional
 *	apt-get install ruby
 *       gem install selenium
@@ -14,6 +14,21 @@
 *
 * https://workaround.org/ispmail/lenny/postfix-database-mappings
 * http://dannorth.net/2007/09/09/virtual-mailboxes-with-courier-imap-and-postfix/
+*
+* iptables
+* iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+* iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+* iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+* iptables -I INPUT 1 -i lo -j ACCEPT
+* iptables -P INPUT DROP
+* // allow apt-get downloads http://serverfault.com/questions/433295/what-is-the-right-iptables-rule-to-allow-apt-get-to-download-programs
+* iptables -F OUTPUT  # remove your existing OUTPUT rule which becomes redundant
+* iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+* iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW -j ACCEPT
+* iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW -j ACCEPT
+* iptables -A OUTPUT -p udp --dport 53 -m state --state NEW -j ACCEPT
+* iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
 */  
 
 

@@ -313,6 +313,9 @@ truncate acos;
 // change custommers name
 $row = 0;
 $names = array();
+$domains = array();
+
+$alreadyUsed = array();
 if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
 	if($row != 0)
@@ -326,12 +329,34 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 //         }
     }
     fclose($handle);
-    $users = $this->User->find('all');
-    $nbMaxNames = count($names) -1;
-    foreach($users as $user)
-    {
-	$name = strtolower($names[rand(0, $nbMaxNames)]);
-	$sql .= 'update '.$tablePrefix.'users set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', email = \''.$name.'@lauters.fr\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
+    if (($handle = fopen(APP."Model/Datasource/domains.csv", "r")) !== FALSE) {
+    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        if($row != 0)
+        {
+          $domains[] = $data[0];
+        }
+        $row++;
+//         for ($c=0; $c < $num; $c++) {
+//             echo $data[$c] . "<br />\n";
+//         }
+      }
+      fclose($handle);
+      $users = $this->User->find('all');
+      $nbMaxNames = count($names) -1;
+      $nbMaxDomains = count($domains) -1;
+      foreach($users as $user)
+      {
+        do
+        {
+          $name = strtolower($names[rand(0, $nbMaxNames)]);
+          $domain = strtolower($domains[rand(0, $nbMaxDomains)]); 
+          $email = $name.'@'.$domain;
+          break;
+        }
+        while(in_array($email, $alreadyUsed));
+        $alreadyUsed[] = $email;
+          $sql .= 'update '.$tablePrefix.'users set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', email = \''.$email.'\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
+      }
     }
 }
 
