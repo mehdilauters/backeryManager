@@ -1,7 +1,7 @@
 <?php
 /**
 * setup:
-*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl courier-pop courier-imap postfix postfix-mysql roundcube courier-authlib-mysql apache2-utils iptables-persistent
+*    apt-get install apache2 mysql-server phpmyadmin git fail2ban logwatch htop php5-curl courier-pop courier-imap postfix postfix-mysql roundcube courier-authlib-mysql apache2-utils iptables-persistent AutoMySQLBackup courier-imap-ssl
 *    optional
 *	apt-get install ruby
 *       gem install selenium
@@ -19,6 +19,7 @@
 * iptables -A INPUT -p tcp --dport ssh -j ACCEPT
 * iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 * iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+* iptables -A INPUT -p tcp --dport 995 -j ACCEPT
 * iptables -I INPUT 1 -i lo -j ACCEPT
 * iptables -P INPUT DROP
 * // allow apt-get downloads http://serverfault.com/questions/433295/what-is-the-right-iptables-rule-to-allow-apt-get-to-download-programs
@@ -79,7 +80,8 @@ Configure::write('Settings.demo', array(
   'active' => false,
   'dbPrefix' => 'demo_',
   'limit' => 2000,
-  'User' => array('email'=>'demo@lauters.fr', 'password'=> 'demo')
+  'User' => array('email'=>'demo@lauters.fr', 'password'=> 'demo'),
+  'root' => 'root'
 
 ));
 

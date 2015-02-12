@@ -45,6 +45,8 @@ MYSQL_WHERE_CLAUSE     e.company_id = c.id';
       $this->out($authmysqlrc);
       
       $postconf = array(
+        'postconf -e "mailbox_command = "',
+        'postconf -e "home_mailbox = Maildir/"',
         'postconf -e "postfix_mydestination = localhost"',
         'postconf -e "smtpd_use_tls = yes"',
         'postconf -e "virtual_gid_maps = static:'.Configure::read('Settings.Emails.gid').'"',

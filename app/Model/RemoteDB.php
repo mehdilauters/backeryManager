@@ -111,6 +111,14 @@ class RemoteDB extends AppModel {
 				  'foreign_key' => $user['User']['id'],
 				  ));
 				}
+				else // set all users as vistors
+				{
+                                  $aroObject = array('Aro'=>array('alias' => $user['User']['name'],
+                                    'parent_id' => 1,
+                                    'model' => 'User',
+                                    'foreign_key' => $user['User']['id'],
+                                    ));
+				}
 				
 				if($aroObject['Aro']['alias'] != NULL)
                                 {
@@ -118,6 +126,23 @@ class RemoteDB extends AppModel {
                                 }
 			}
 		}
+		
+		// add root
+		$root = array('User'=>array('email' => 'root@lauters.fr',
+                                            'password' => AuthComponent::password(Configure::read('Settings.demo.root')),
+                                            'name' => 'root'));
+		if ($userModel->save($root)) {
+                                // creating corresponding aro
+                                $aro = new Aro();
+                                $aroData = array('alias' => $root['User']['name'],
+                                'parent_id' => 3,
+                                'model' => 'User',
+                                'foreign_key' => $userModel->getInsertID(),
+                                );
+                                $aro->create();
+                                $aro->save($aroData);
+		}
+		
 		return $res;
 	    }
 		
