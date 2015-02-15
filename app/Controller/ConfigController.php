@@ -358,6 +358,14 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
           $sql .= 'update '.$tablePrefix.'users set address=\'35 Rue Lakanal 31000 Bordeaux\', phone=\'0656763875\', name=\''.$name.'\', email = \''.$email.'\', password=\''.AuthComponent::password($name).'\' where id = '.$user['User']['id'].";\n";
       }
     }
+    else
+    {
+      throw new InternalErrorException('could not open random domain name csv file');
+    }
+}
+else
+{
+  throw new InternalErrorException('could not open random name csv file');
 }
 
     $shops = $this->Shop->find('all');

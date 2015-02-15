@@ -19,7 +19,7 @@
 * iptables -A INPUT -p tcp --dport ssh -j ACCEPT
 * iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 * iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-* iptables -A INPUT -p tcp --dport 995 -j ACCEPT
+* iptables -A INPUT -p tcp --dport 993 -j ACCEPT
 * iptables -I INPUT 1 -i lo -j ACCEPT
 * iptables -P INPUT DROP
 * // allow apt-get downloads http://serverfault.com/questions/433295/what-is-the-right-iptables-rule-to-allow-apt-get-to-download-programs
@@ -29,7 +29,8 @@
 * iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW -j ACCEPT
 * iptables -A OUTPUT -p udp --dport 53 -m state --state NEW -j ACCEPT
 * iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-
+*
+* iptables -A INPUT -p tcp --dport 993 -j ACCEPT
 */  
 
 
