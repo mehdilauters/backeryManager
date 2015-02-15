@@ -125,13 +125,11 @@ class RemoteDB extends AppModel {
                                   $aro->save($aroObject);
                                 }
 			}
-		}
-		
-		// add root
-		$root = array('User'=>array('email' => 'root@lauters.fr',
-                                            'password' => AuthComponent::password(Configure::read('Settings.demo.root')),
-                                            'name' => 'root'));
-		if ($userModel->save($root)) {
+			                // add root
+                        $root = array('User'=>array('email' => 'root@lauters.fr',
+                                                    'password' => AuthComponent::password(Configure::read('Settings.demo.root')),
+                                                    'name' => 'root'));
+                        if ($userModel->save($root)) {
                                 // creating corresponding aro
                                 $aro = new Aro();
                                 $aroData = array('alias' => $root['User']['name'],
@@ -141,6 +139,7 @@ class RemoteDB extends AppModel {
                                 );
                                 $aro->create();
                                 $aro->save($aroData);
+                }
 		}
 		
 		return $res;

@@ -35,8 +35,11 @@ class MyMysql extends Mysql {
     
     $db = ConnectionManager::getDataSource('default');
     foreach ($tables as $table) {
-        if ( !( strpos($table, $db->config['prefix']) !== false) ) {
-          continue;
+        if( $db->config['prefix'] != '' )
+        {
+            if ( !( strpos($table, $db->config['prefix']) !== false) ) {
+              continue;
+            }
         }
 	$queryEnd = '';
 	if($demo && in_array($table, array('sales', 'results', 'results_entries')))
