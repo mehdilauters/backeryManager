@@ -330,11 +330,12 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     }
     fclose($handle);
     if (($handle = fopen(APP."Model/Datasource/domains.csv", "r")) !== FALSE) {
+    $rowDomain = 0;
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        $rowDomain = 0;
         if($rowDomain != 0)
         {
           $domains[] = $data[0];
+          debug($data);
         }
         $rowDomain++;
 //         for ($c=0; $c < $num; $c++) {
@@ -342,6 +343,7 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
 //         }
       }
       fclose($handle);
+      debug($domains);
       $users = $this->User->find('all');
       $nbMaxNames = count($names) -1;
       $nbMaxDomains = count($domains) -1;
