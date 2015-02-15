@@ -331,11 +331,12 @@ if (($handle = fopen(APP."Model/Datasource/names.csv", "r")) !== FALSE) {
     fclose($handle);
     if (($handle = fopen(APP."Model/Datasource/domains.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        if($row != 0)
+        $rowDomain = 0;
+        if($rowDomain != 0)
         {
           $domains[] = $data[0];
         }
-        $row++;
+        $rowDomain++;
 //         for ($c=0; $c < $num; $c++) {
 //             echo $data[$c] . "<br />\n";
 //         }
