@@ -56,10 +56,16 @@ class OrdersController extends AppController {
 		$this->Order->contain('OrderedItem.Product', 'Shop', 'User');
 		$options = array('conditions' => array('Order.' . $this->Order->primaryKey => $id));
 		
+                $tokens = $this->getUserTokens();
+                if(!$tokens['isAdmin'])
+                {
+                  $options['conditions']['Order.user_id'] = $this->Auth->user('id');
+                }
+		
 		$order = $this->Order->find('first', $options);
 		if($order['Shop']['company_id'] != $this->getCompanyId() )
 		{
-		  throw new NotFoundException(__('Invalid order for this company'));
+		  throw new NotFoundException(__('Invalid order'));
 		}
 		$company = $this->Company->findById($this->getCompanyId());
 		
