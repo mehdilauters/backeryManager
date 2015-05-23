@@ -10,6 +10,7 @@
     echo $this->Form->input('phone');
     echo $this->Form->input('description', array('class'=>'textEditor'));
     echo $this->Form->input('address');
+    echo $this->Form->input('enabled');
   ?>
   </fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

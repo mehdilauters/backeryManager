@@ -8,6 +8,7 @@
       <th><?php echo $this->Paginator->sort('phone'); ?></th>
       <th><?php echo $this->Paginator->sort('address'); ?></th>
       <th><?php echo $this->Paginator->sort('description'); ?></th>
+      <th><?php echo $this->Paginator->sort('enable'); ?></th>
       <th class="actions"><?php echo __('Actions'); ?></th>
   </tr>
   <?php foreach ($shops as $shop): ?>
@@ -20,6 +21,7 @@
     <td><?php echo h($shop['Shop']['phone']); ?>&nbsp;</td>
     <td><?php echo h($shop['Shop']['address']); ?>&nbsp;</td>
     <td><?php echo h($shop['Shop']['description']); ?>&nbsp;</td>
+    <td><?php echo h($shop['Shop']['enabled']); ?>&nbsp;</td>
     <td class="actions">
       <?php echo $this->Html->link(__('View'), array('action' => 'view', $shop['Shop']['id'])); ?>
       <?php if($tokens['isAdmin']) : ?>

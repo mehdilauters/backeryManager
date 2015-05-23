@@ -74,7 +74,7 @@ class PagesController extends AppController {
     $title_for_layout = 'Nos magasins';
     $this->menu['Menu']['Magasins']['active'] = true;
 //     $this->Shop->recursive = 3;
-    $shops = $this->Shop->find('all', array('conditions'=>array('company_id'=> $this->getCompanyId())));
+    $shops = $this->Shop->find('all', array('conditions'=>array('company_id'=> $this->getCompanyId(), 'enabled' => true)));
     foreach ($shops as $id=>$shop)
     {
       $shops[$id]['EventTypeClosed']['Event'] = $this->requestAction('/full_calendar/events/feed/'.$shops[$id]['EventTypeClosed']['id'].'/'.time().'/'.(time() + 60*60*24*7*2));

@@ -624,7 +624,7 @@ public function results()
     $this->Sale->Product->contain(array('ProductType'=>array(),'Sale'=>array('conditions'=>'Sale.date = \''.$date.'\''), 'Media.Photo'=>array()));
 
     $products = $this->Sale->Product->find('all', array('order'=>'Product.product_types_id', 'conditions'=>array('Product.production_display', 'ProductType.company_id'=>$this->getCompanyId())));
-    $shops = $this->Sale->Shop->find('all',array('conditions'=>array('Shop.company_id'=>$this->getCompanyId())));
+    $shops = $this->Sale->Shop->find('all',array('conditions'=>array('Shop.company_id'=>$this->getCompanyId(), 'Shop.enabled'=>true)));
 
     $this->set(compact('products', 'shops'));
   }

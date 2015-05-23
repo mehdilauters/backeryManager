@@ -1,21 +1,21 @@
   <script>
-  
+
   function toggleMap()
   {
    $("#mapPreview").toggle('slow');
   }
-  
+
 $(document).ready(function() {
-    
+
 });
   </script>
 
 <div class="shops view">
 
-<?php   
+<?php
 if($tokens['isAdmin'])
 {
-	echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('interactive'=>false))); 
+	echo $this->element('Results/stats/resultsEntries', array('resultsEntries'=>$resultsEntries, 'config'=>array('interactive'=>false)));
 }
 	?>
 <div>
@@ -31,7 +31,7 @@ if($tokens['isAdmin'])
       else
       {?>
 	<span class="shopClosed label label-danger">fermé <?php if($nextDates['nextOpened'] != 0){ ?> jusqu'au <?php echo date('d/m/Y',$nextDates['nextOpened']).' à '.date('G:i',$nextDates['nextOpened']); }?></span>
-      <?php } 
+      <?php }
     ?>
 </div>
       <div>
@@ -61,13 +61,21 @@ if($tokens['isAdmin'])
 
 </div>
 <div class="actions">
-  <ul>
-  <?php if($tokens['isAdmin']) : ?>
-    <li><?php echo $this->Html->link(__('Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>
-    <li><?php echo $this->Html->link(__('Fermetures', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventTypeClosed']['id'])); ?></li>
-    <li><?php echo $this->Html->link(__('Edit Shop'), array('action' => 'edit', $shop['Shop']['id'])); ?> </li>
-    <li><?php echo $this->Form->postLink(__('Delete Shop'), array('action' => 'delete', $shop['Shop']['id']), null, __('Are you sure you want to delete # %s?', $shop['Shop']['id'])); ?> </li>
-    <li><?php echo $this->Html->link(__('New Shop'), array('action' => 'add')); ?> </li>
+  <?php if($tokens['isAdmin']) :
+  if(!$shop['Shop']['enabled'])
+  {
+    ?>
+    <div>Ce magazin est desactivé</div>
+    <?php
+  }
+
+  ?>
+    <ul>
+      <li><?php echo $this->Html->link(__('Horaires', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventType']['id'])); ?></li>
+      <li><?php echo $this->Html->link(__('Fermetures', true), array('plugin' => 'full_calendar','controller'=>'eventTypes', 'action' => 'view', $shop['EventTypeClosed']['id'])); ?></li>
+      <li><?php echo $this->Html->link(__('Edit Shop'), array('action' => 'edit', $shop['Shop']['id'])); ?> </li>
+      <li><?php echo $this->Form->postLink(__('Delete Shop'), array('action' => 'delete', $shop['Shop']['id']), null, __('Are you sure you want to delete # %s?', $shop['Shop']['id'])); ?> </li>
+      <li><?php echo $this->Html->link(__('New Shop'), array('action' => 'add')); ?> </li>
+    </ul>
   <?php endif ?>
-  </ul>
 </div>

@@ -166,6 +166,7 @@ create table if not exists products (
 
 create table if not exists shops (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `enabled` boolean default TRUE,
   `company_id` int(10) NOT NULL,
   media_id int(10),
   `event_type_id` int(10),
