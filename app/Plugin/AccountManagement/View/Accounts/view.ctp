@@ -99,16 +99,15 @@
             $signClass = 'positive';
           }
 	?>
-	<tr class="<?php echo $signClass ?>" >
-          <td>Total</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td id="total" ><?php echo round($total,2) ?></td>
-          <td></td>
-	</tr>
 	</table>
+	<div>
+          Total <span id="displayed_total" ></span>
+	</div>
+	<div class="<?php echo $signClass ?>" >
+          Solde
+          <span id="total" ><?php echo round($total,2) ?></span>
+          </div>
+
 <?php endif; ?>
 
 	<div class="actions">
@@ -431,7 +430,7 @@
                 });
 
 
-                totalRow = $('#total').closest('tr');
+                totalRow = $('#total').closest('div');
                     if(parseFloat($('#total').text()) < 0)
                     {
                       totalRow.removeClass('positive');
@@ -450,7 +449,16 @@
       var tfConfig1 = {
               base_path: '<?php echo $this->webroot ?>js/TableFilter/',
               rows_counter:true,
-              on_after_refresh_counter: function(o,i){  }
+              on_after_refresh_counter: function(o,i){
+                total = 0;
+                $('td.accountEntryValue').each(function (i,v){
+                  if($(v).is(':visible')) {
+                    total += parseFloat($(v).text());
+                  }
+                }
+                )
+                $('#displayed_total').text(Math.round(total  * 100) / 100);
+              }
               };
               tf = new TF('account_entries', tfConfig1); tf.AddGrid();
 
