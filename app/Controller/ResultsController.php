@@ -517,7 +517,7 @@ public function getData($dateStart = '', $dateEnd = '')
 
     $results = $this->Result->find('all', array( 'conditions'=>$conditions, 'order' => 'Result.date'));
     $data = array(
-      'total' => array('cash'=>0, 'check'=> 0, 'card'=>0),
+      'total' => array('cash'=>0, 'check'=> 0, 'card'=>0, 'account'=>0),
       );
 
     $ids = array();
@@ -537,6 +537,7 @@ public function getData($dateStart = '', $dateEnd = '')
     'date' => $result['Result']['date'],
     'check' => $result['Result']['check'],
 	'card' => $result['Result']['card'],
+	'account' => $result['Result']['account'],
     'comment' => $result['Result']['comment'],
     'resultId' => $result['Result']['id'],
     'productTypes' => array()
@@ -549,16 +550,19 @@ public function getData($dateStart = '', $dateEnd = '')
   $data['entries'][$result['Result']['shop_id']]['total']['cash'] = 0;
   $data['entries'][$result['Result']['shop_id']]['total']['check'] = 0;
   $data['entries'][$result['Result']['shop_id']]['total']['card'] = 0;
+  $data['entries'][$result['Result']['shop_id']]['total']['account'] = 0;
       }
 
   
   $data['entries'][$result['Result']['shop_id']]['total']['cash'] += $result['Result']['cash'];
   $data['entries'][$result['Result']['shop_id']]['total']['check'] += $result['Result']['check'];
   $data['entries'][$result['Result']['shop_id']]['total']['card'] += $result['Result']['card'];
+  $data['entries'][$result['Result']['shop_id']]['total']['account'] += $result['Result']['account'];
 
    $data['total']['cash'] += $result['Result']['cash'];
    $data['total']['check'] += $result['Result']['check'];
    $data['total']['card'] += $result['Result']['card'];
+   $data['total']['account'] += $result['Result']['account'];
       
       foreach($result['ResultsEntry'] as $resultEntry)
       {
@@ -772,7 +776,6 @@ public function getData($dateStart = '', $dateEnd = '')
 
 	foreach($this->request->data['Result'] as $shopId => $result)
 	{
-
 	    $this->Result->create();
 	    $resultData = array();
 	    $resultData['Result'] = array(
@@ -791,6 +794,10 @@ public function getData($dateStart = '', $dateEnd = '')
 			  if($result['card'] != '')
 	      {
 				  $resultData['Result']['card'] = $result['card'];
+	      }
+	      if($result['account'] != '')
+	      {
+				  $resultData['Result']['account'] = $result['card'];
 	      }
 	      if($result['resultId'] != '')
 	      {

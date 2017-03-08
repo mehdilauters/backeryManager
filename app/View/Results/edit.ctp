@@ -9,6 +9,7 @@
 		echo $this->Form->input('cash');
 		echo $this->Form->input('check');
 		echo $this->Form->input('card');
+		echo $this->Form->input('account');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

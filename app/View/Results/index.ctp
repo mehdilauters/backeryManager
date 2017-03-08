@@ -28,6 +28,7 @@
     <th class="cash" >Especes</th>
     <th class="check" >Cheques</th>
 	<th class="card" >Carte Bleue</th>
+	<th class="account" >Compte clients</th>
     <?php foreach($productTypes as $typeId => $typeName): ?>
       <th><?php echo $typeName; ?></th>
     <?php endforeach ?>
@@ -40,6 +41,7 @@
 	$total['cash'] = 0;
 	$total['check'] = 0;
 	$total['card'] = 0;
+	$total['account'] = 0;
 	foreach($productTypes as $typeId => $typeName)
 	{
 		$total['productType'][$typeId] = 0;
@@ -61,10 +63,11 @@
 	 ?>
 		<tr id="total_shop_<?php echo $shopId ?>_week_<?php echo $date->format('W'); ?>" class="total">
 		  <td class="date" ><?php echo $date->format('W'); ?></td>
-		  <td class="total" ><?php echo round(($total['cash'] + $total['check'] + $total['card']),2); ?></td>
+		  <td class="total" ><?php echo round(($total['cash'] + $total['check'] + $total['card']+$total['account']),2); ?></td>
 		  <td class="cash" ><?php echo round($total['cash'],2); ?></td>
 		  <td class="check" ><?php echo round($total['check'],2); ?></td>
 		  <td class="card" ><?php echo round($total['card'],2); ?></td>
+<!-- 		  <td class="account" ><?php echo round($total['account'],2); ?></td> -->
 		  <?php 
 			foreach($productTypes as $typeId => $typeName): ?>
 			<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo round($total['productType'][$typeId],2); } ?></td>
@@ -89,6 +92,7 @@
       <td class="cash" ><?php echo round($results['cash'],2); $total['cash'] += $results['cash'];  ?></td>
       <td class="check" ><?php echo round($results['check'],2); $total['check'] += $results['check']; ?></td>
 	  <td class="card" ><?php echo round($results['card'],2); $total['card'] += $results['card']; ?></td>
+	  <td class="account" ><?php echo round($results['account'],2); $total['account'] += $results['account']; ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult" ><?php if(isset($results['productTypes'][$typeId])) { echo round($results['productTypes'][$typeId]['result'],2); $total['productType'][$typeId] += $results['productTypes'][$typeId]['result']; } ?></td>
@@ -102,6 +106,7 @@
 	  <td class="cash" ><?php echo $total['cash']; ?></td>
 	  <td class="check" ><?php echo $total['check']; ?></td>
 	  <td class="card" ><?php echo $total['card']; ?></td>
+	  <td class="account" ><?php echo $total['account']; ?></td>
 	  <?php 
 		foreach($productTypes as $typeId => $typeName): ?>
 		<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo round($total['productType'][$typeId],2); } ?></td>
@@ -114,6 +119,7 @@
       <td class="cash"><?php echo round($shopData['total']['cash'],2) ?></td>
       <td class="check"><?php echo round($shopData['total']['check'],2) ?></td>
 	  <td class="card"><?php echo round($shopData['total']['card'],2) ?></td>
+	  <td class="account"><?php echo round($shopData['total']['account'],2) ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult"><?php if(isset($shopData['total'][$typeId])) { echo round($shopData['total'][$typeId],2); } ?></td>
@@ -132,6 +138,7 @@
     <th class="cash" >Especes</th>
     <th class="check" >Cheques</th>
 	<th class="card" >Carte Bleue</th>
+	<th class="account" >Comptes clients</th>
     <?php foreach($productTypes as $typeId => $typeName): ?>
       <th class="productTypeResult" ><?php echo $typeName; ?></th>
     <?php endforeach ?>
@@ -142,6 +149,7 @@
       <td class="cash" ><?php echo round($data['total']['cash'],2) ?></td>
       <td class="check" ><?php echo round($data['total']['check'],2) ?></td>
 	  <td class="card" ><?php echo round($data['total']['card'],2) ?></td>
+	  <td class="account" ><?php echo round($data['total']['account'],2) ?></td>
       <?php 
         foreach($productTypes as $typeId => $typeName): ?>
         <td class="productTypeResult" ><?php if(isset($data['total'][$typeId])) { echo round($data['total'][$typeId],2); } ?></td>

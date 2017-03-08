@@ -252,6 +252,7 @@ create table if not exists results (
   `cash` float(10) NOT NULL,
   `check` float(10) NOT NULL,
   `card` float(10) NOT NULL,
+  `account` float(10) NOT NULL,
   `comment` text CHARACTER SET utf8 COLLATE utf8_bin not null,
   PRIMARY KEY (`id`),
   KEY `fk_results_shops` (`shop_id`)

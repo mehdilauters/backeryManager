@@ -32,6 +32,7 @@ echo $this->Form->end(__('Submit'));
 		  $cash = '';
 		  $check = '';
 		  $card = '';
+		  $account = '';
 		  $comment = '';
 		  if(isset($data['entries'][$shopId]['entries'][0]))
 		  {
@@ -39,6 +40,7 @@ echo $this->Form->end(__('Submit'));
 		    $cash = $data['entries'][$shopId]['entries'][0]['cash'];
 		    $check = $data['entries'][$shopId]['entries'][0]['check'];
 			$card = $data['entries'][$shopId]['entries'][0]['card'];
+			$account = $data['entries'][$shopId]['entries'][0]['account'];
 		    $comment = $data['entries'][$shopId]['entries'][0]['comment'];
 		  }
 		?>
@@ -65,6 +67,12 @@ echo $this->Form->end(__('Submit'));
 			<label>Carte Bleue</label>
 					</td><td>	
 			<input id="resultShop_<?php echo $shopId ?>_card" autocomplete="off"  type="number" name="Result[<?php echo $shopId; ?>][card]" value="<?php echo $card ?>" size="10" class="totalShop resultShop_<?php echo $shopId ?>" />€
+				</tr>
+				<tr>
+					<td>
+			<label>Comptes clients</label>
+					</td><td>	
+			<input id="resultShop_<?php echo $shopId ?>_account" autocomplete="off"  type="number" name="Result[<?php echo $shopId; ?>][account]" value="<?php echo $account ?>" size="10" class="totalShop resultShop_<?php echo $shopId ?>" />€
 				</tr>
 				<tr>
 					<td>
