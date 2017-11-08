@@ -797,7 +797,7 @@ public function getData($dateStart = '', $dateEnd = '')
 	      }
 	      if($result['account'] != '')
 	      {
-				  $resultData['Result']['account'] = $result['card'];
+				  $resultData['Result']['account'] = $result['account'];
 	      }
 	      if($result['resultId'] != '')
 	      {
