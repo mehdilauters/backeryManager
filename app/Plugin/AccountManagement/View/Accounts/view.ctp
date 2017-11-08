@@ -87,7 +87,7 @@
            <td class="AccountEntryDate" ><input type="text" class="datepicker" name="AccountEntryDate" /></td>
            <td class="AccountEntryName" ><input type="text" class="" name="AccountEntryName" /></td>
            <td class="AccountEntryComment" ><input type="text" class="" name="AccountEntryComment" /></td>
-           <td class="AccountEntryValue" ><input type="text" class="spinner changeValue" name="AccountEntryValue" /></td>
+           <td class="AccountEntryValue" ><input type="number" step="0.01" class="spinner changeValue" name="AccountEntryValue" /></td>
            <td class="AccountEntryChecked" ><input type="checkbox" name="AccountEntryChecked" /></td>
            <td class="AccountEntryChecked" ></td>
            <td class="actions" ><button type="button" class="saveButton" >Valider </button></td>

@@ -6,7 +6,7 @@
 		echo $this->Form->input('date', array('type'=> 'text', 'class' => 'datepicker', 'value' => $date));
 		echo $this->Form->input('name');
 		echo $this->Form->input('comment');
-		echo $this->Form->input('value');
+		echo $this->Form->input('value',array('type'=>'number', 'step'=>'0.01'));
 		echo $this->Form->input('checked');
 	?>
 	</fieldset>
