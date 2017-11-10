@@ -88,7 +88,7 @@
      ?>
     <tr>
       <td class="date" ><?php echo $date->format('d/m/Y'); ?></td>
-      <td class="total" ><?php echo round($results['cash'] + $results['check'] + $results['card'], 2); ?></td>
+      <td class="total" ><?php echo round($results['cash'] + $results['check'] + $results['card'] + $results['account'], 2); ?></td>
       <td class="cash" ><?php echo round($results['cash'],2); $total['cash'] += $results['cash'];  ?></td>
       <td class="check" ><?php echo round($results['check'],2); $total['check'] += $results['check']; ?></td>
 	  <td class="card" ><?php echo round($results['card'],2); $total['card'] += $results['card']; ?></td>
@@ -102,7 +102,7 @@
   <?php endforeach ?>
 	<tr class="total">
 	  <td class="date" ><?php echo $date->format('W'); ?></td>
-	  <td class="total" ><?php echo ($total['cash'] + $total['check'] + $total['card']); ?></td>
+	  <td class="total" ><?php echo ($total['cash'] + $total['check'] + $total['card'] + $total['account']); ?></td>
 	  <td class="cash" ><?php echo $total['cash']; ?></td>
 	  <td class="check" ><?php echo $total['check']; ?></td>
 	  <td class="card" ><?php echo $total['card']; ?></td>
@@ -115,7 +115,7 @@
 	</tr>
     <tr id="total_shop_<?php echo $shopId ?>" class="total" >
       <td class="total" >Totaux</td>
-      <td class="total"><?php echo round($shopData['total']['cash'] + $shopData['total']['check'] + $shopData['total']['card'] ,2) ?></td>
+	<td class="total"><?php echo round($shopData['total']['cash'] + $shopData['total']['check'] + $shopData['total']['card'] +  $shopData['total']['account'],2) ?></td>
       <td class="cash"><?php echo round($shopData['total']['cash'],2) ?></td>
       <td class="check"><?php echo round($shopData['total']['check'],2) ?></td>
 	  <td class="card"><?php echo round($shopData['total']['card'],2) ?></td>
@@ -145,7 +145,7 @@
   </tr>
   <tr class="" >
       <td class="date" >Totaux</td>
-      <td class="total" ><?php echo round($data['total']['cash'] + $data['total']['check'] + $data['total']['card'],2) ?></td>
+      <td class="total" ><?php echo round($data['total']['cash'] + $data['total']['check'] + $data['total']['card'] + $data['total']['account'], 2) ?></td>
       <td class="cash" ><?php echo round($data['total']['cash'],2) ?></td>
       <td class="check" ><?php echo round($data['total']['check'],2) ?></td>
 	  <td class="card" ><?php echo round($data['total']['card'],2) ?></td>
