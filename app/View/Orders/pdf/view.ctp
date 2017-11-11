@@ -47,7 +47,7 @@
 	  </div>
 	  <?php if($order['User']['rib_on_orders']): ?>
 	  <h3>Rib</h3>
-	  <img class="rib" src="<?php echo APP.'webroot/img/photos/normal/'.$company['Media']['path']; ?>" />
+	  <img class="rib" src="<?php echo Configure::read('Settings.Medias.Photos.path').'/normal/'.$company['Media']['path']; ?>" />
 	  <?php endif; ?>
 </center>
 	<p id="legalMentions">
