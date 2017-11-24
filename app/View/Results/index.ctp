@@ -67,7 +67,7 @@
 		  <td class="cash" ><?php echo round($total['cash'],2); ?></td>
 		  <td class="check" ><?php echo round($total['check'],2); ?></td>
 		  <td class="card" ><?php echo round($total['card'],2); ?></td>
-<!-- 		  <td class="account" ><?php echo round($total['account'],2); ?></td> -->
+ 		  <td class="account" ><?php echo round($total['account'],2); ?></td>
 		  <?php 
 			foreach($productTypes as $typeId => $typeName): ?>
 			<td class="productTypeResult" ><?php if(isset($total['productType'][$typeId])) { echo round($total['productType'][$typeId],2); } ?></td>
