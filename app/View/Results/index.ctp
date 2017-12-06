@@ -37,7 +37,6 @@
   </thead>
   <tbody>
   <?php 
-  
 	$total['cash'] = 0;
 	$total['check'] = 0;
 	$total['card'] = 0;
@@ -52,17 +51,14 @@
 	if($weekId == -1)
 	{
 		$weekId = $date->format('W');
+		$firstWeek = $weekId;
 	}
      
 	 if ($weekId != $date->format('W'))
 	 {
-		if ($firstWeek == -1 )
-		{
-		  $firstWeek = $date->format('W');
-		}
 	 ?>
-		<tr id="total_shop_<?php echo $shopId ?>_week_<?php echo $date->format('W'); ?>" class="total">
-		  <td class="date" ><?php echo $date->format('W'); ?></td>
+		<tr id="total_shop_<?php echo $shopId ?>_week_<?php echo $weekId; ?>" class="total">
+		  <td class="date" ><?php echo $weekId; ?></td>
 		  <td class="total" ><?php echo round(($total['cash'] + $total['check'] + $total['card']+$total['account']),2); ?></td>
 		  <td class="cash" ><?php echo round($total['cash'],2); ?></td>
 		  <td class="check" ><?php echo round($total['check'],2); ?></td>
@@ -76,9 +72,11 @@
 		</tr>
 	  <?php
 		$weekId = $date->format('W');
-		$total['cash'] = 0;
-		$total['check'] = 0;
-		$total['card'] = 0;
+	$total['cash'] = 0;
+	$total['check'] = 0;
+	$total['card'] = 0;
+	$total['account'] = 0;
+	$total['cash'] = 0;
 		foreach($productTypes as $typeId => $typeName)
 		{
 			$total['productType'][$typeId] = 0;
