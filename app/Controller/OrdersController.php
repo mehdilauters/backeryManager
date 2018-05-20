@@ -17,6 +17,9 @@ class OrdersController extends AppController {
  * @return void
  */
 	public function index($status = 'reserved' ) {
+	$this->paginate = array(
+			     'order' => array('Order.created'=>'desc')
+		     );
 	    $conditions = array('Shop.company_id' => $this->getCompanyId());
 	  // limit to current user if not admin
 	  $tokens = $this->getUserTokens();
