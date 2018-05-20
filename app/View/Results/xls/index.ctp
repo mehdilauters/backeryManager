@@ -17,16 +17,16 @@ foreach($data['entries'] as $shopId => $shopData)
 
   // define table cells
     $table = array(
-        array('label' => 'date', 'filter' => true),
-        array('label' => 'total'),
-        array('label' => 'especes'),
-        array('label' => 'chèques'),
-        array('label' => 'carte bleue'),
-        array('label' => 'Compte clients'),
+        array('label' => 'date', 'filter' => true, 'width'=>'10'),
+        array('label' => 'total', 'width'=>'10'),
+        array('label' => 'especes', 'width'=>'10'),
+        array('label' => 'chèques', 'width'=>'10'),
+        array('label' => 'carte bleue', 'width'=>'10'),
+        array('label' => 'Compte clients', 'width'=>'10'),
     );
     foreach($productTypes as $typeId => $typeName)
     {
-	  $table[] = array('label' => $typeName);
+	  $table[] = array('label' => $typeName, 'width'=>'10');
     }
 
     // add heading with different font and bold text
@@ -76,7 +76,6 @@ foreach($data['entries'] as $shopId => $shopData)
       $this->PhpExcel->addData($data);
   $this->PhpExcel->addTableFooter();
 }
-
 
 
 
