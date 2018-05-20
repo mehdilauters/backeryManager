@@ -201,7 +201,7 @@ class OrdersController extends AppController {
 			}
 		}
 		$shops = $this->Order->Shop->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
-		$users = $this->Order->User->find('list', array('conditions'=>array('company_id' => $this->getCompanyId())));
+		$users = $this->Order->User->find('list', array('conditions'=>array('company_id' => $this->getCompanyId(), 'enabled'=>true)));
 		$users = array(''=>'-') + $users;
 		$this->set(compact('shops', 'users'));
 	}

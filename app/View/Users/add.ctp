@@ -47,6 +47,12 @@
 					 'div'=>'form-group',
 					  'class'=>'form-control'
 					  ));
+    echo $this->Form->input('enabled', array('label'=>array('class'=>'col-sm-3 control-label', 'text'=>'Enabled'),
+					  'between' => '<div class="col-sm-5" >',
+					  'after' => '</div>',
+					 'div'=>'form-group',
+					  'class'=>'form-control'
+					  ));
 		echo $this->Form->input('discount', array('label'=>array('class'=>'col-sm-3 control-label','text'=>'Pourcentage de réduction'),
 					  'between' => '<div class="col-sm-5" >',
 					  'after' => '</div>',

@@ -20,6 +20,12 @@ Remise: <?php
 		      {
 			echo h($user['User']['discount'].'%'); 
 		      }?>
+		      
+<?php 
+		      if($user['User']['enabled'] )
+		      {
+			echo 'The user is enabled';
+		      } else { echo 'The user is disabled'; }?>
 
 <br/>
 mode presentation : <?php if($user['User']['autostart_help'])

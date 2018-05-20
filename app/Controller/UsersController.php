@@ -140,12 +140,6 @@ class UsersController extends AppController {
 			    }
 			}
 			
-			if(!$this->isUnique())
-                        {
-                            $this->Session->setFlash(__('User already exists.'),'flash/fail');
-                            $this->redirect(array('action' => 'add'));
-                        }
-			
 			if( $this->request->data['User']['password'] != '' )
 			{
 			  $this->request->data['User']['password'] = AuthComponent::password($this->data['User']['password']);
@@ -243,7 +237,7 @@ class UsersController extends AppController {
 		  $this->redirect(array('action' => 'index'));
 		}
 		$this->request->onlyAllow('post', 'delete');
-		if ($this->User->delete()) {
+		if ($this->User->delete($id, true)) {
 			$this->Session->setFlash(__('User deleted'),'flash/ok');
 			$this->redirect(array('action' => 'index'));
 		}

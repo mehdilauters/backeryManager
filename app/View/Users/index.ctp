@@ -3,6 +3,7 @@
 	<table cellpadding="0" cellspacing="0" class="table table-striped">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
+			<th><?php echo $this->Paginator->sort('enabled'); ?></th>
 <!-- 			<th><?php echo $this->Paginator->sort('media_id'); ?></th> -->
 			<th><?php echo $this->Paginator->sort('email'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
@@ -16,6 +17,7 @@
 	<?php foreach ($users as $user): ?>
 	<tr id="user_<?php echo $user['User']['id'] ?>">
 		<td><?php echo h($user['User']['id']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['enabled']); ?>&nbsp;</td>
 <!--		<td>
 			<?php echo $this->Html->link($user['Media']['name'], array('controller' => 'media', 'action' => 'view', $user['Media']['id'])); ?>
 		</td>-->
