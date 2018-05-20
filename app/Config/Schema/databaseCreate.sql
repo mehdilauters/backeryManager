@@ -123,6 +123,7 @@ create table if not exists users (
   `rib_on_orders` boolean default TRUE,
   `autostart_help` boolean default TRUE,
   `created` datetime DEFAULT NULL,
+  `enabled` boolean default TRUE,
   address text CHARACTER SET utf8 COLLATE utf8_bin ,
   phone int ,
   `discount` float(3) default 0 ,
