@@ -2,18 +2,18 @@
 /**
  * ModelDeleteTest file
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Model
  * @since         CakePHP(tm) v 1.2.0.4206
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 require_once dirname(__FILE__) . DS . 'ModelTestBase.php';
@@ -422,6 +422,20 @@ class ModelDeleteTest extends BaseModelTest {
 	}
 
 /**
+ * testDeleteAll diamond operator method
+ *
+ * @return void
+ */
+	public function testDeleteAllDiamondOperator() {
+		$this->loadFixtures('Article');
+		$article = new Article();
+
+		$result = $article->deleteAll(array('Article.id <>' => 1));
+		$this->assertTrue($result);
+		$this->assertFalse($article->exists(2));
+	}
+
+/**
  * testDeleteAllUnknownColumn method
  *
  * @expectedException PDOException
@@ -443,9 +457,7 @@ class ModelDeleteTest extends BaseModelTest {
  */
 	public function testDeleteAllFailedFind() {
 		$this->loadFixtures('Article');
-		$this->getMock('Article', array('find'), array(), 'ArticleDeleteAll');
-
-		$TestModel = new ArticleDeleteAll();
+		$TestModel = $this->getMock('Article', array('find'));
 		$TestModel->expects($this->once())
 			->method('find')
 			->will($this->returnValue(null));

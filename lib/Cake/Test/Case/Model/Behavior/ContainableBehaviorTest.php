@@ -2,18 +2,18 @@
 /**
  * ContainableBehaviorTest file
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Model.Behavior
  * @since         CakePHP(tm) v 1.2.0.5669
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('Model', 'Model');
@@ -43,6 +43,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 /**
  * Method executed before each test
  *
+ * @return void
  */
 	public function setUp() {
 		parent::setUp();
@@ -68,6 +69,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 /**
  * Method executed after each test
  *
+ * @return void
  */
 	public function tearDown() {
 		unset($this->Article);
@@ -3388,6 +3390,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 /**
  * testResetAddedAssociation method
  *
+ * @return void
  */
 	public function testResetAddedAssociation() {
 		$this->assertTrue(empty($this->Article->hasMany['ArticlesTag']));
@@ -3429,6 +3432,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 /**
  * testResetAssociation method
  *
+ * @return void
  */
 	public function testResetAssociation() {
 		$this->Article->Behaviors->load('Containable');
@@ -3460,6 +3464,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 /**
  * testResetDeeperHasOneAssociations method
  *
+ * @return void
  */
 	public function testResetDeeperHasOneAssociations() {
 		$this->Article->User->unbindModel(array(
@@ -3520,6 +3525,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 /**
  * testResetMultipleHabtmAssociations method
  *
+ * @return void
  */
 	public function testResetMultipleHabtmAssociations() {
 		$articleHabtm = array(
@@ -3610,6 +3616,8 @@ class ContainableBehaviorTest extends CakeTestCase {
 
 /**
  * test that bindModel and unbindModel work with find() calls in between.
+ *
+ * @return void
  */
 	public function testBindMultipleTimesWithFind() {
 		$binding = array(
@@ -3753,7 +3761,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 			'hasAndBelongsToMany' => array()
 		), $expected);
 		foreach ($expected as $binding => $expect) {
-			$this->assertEquals(array_keys($Model->$binding), $expect);
+			$this->assertEquals($expect, array_keys($Model->$binding));
 		}
 	}
 }
