@@ -12,8 +12,8 @@ bakerymanager-mysql:
   image: mysql:5.7
   container_name: bakerymanager-mysql
   volumes:
-      - ./mysql-data:/var/lib/mysql
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ${CURRENT_PATH}./mysql-data:/var/lib/mysql
+      - ${CURRENT_PATH}./mysql/my.cnf:/etc/mysql/my.cnf
   ports:
     - "8106:3306"
   environment:
@@ -26,8 +26,8 @@ bakerymanager-nginx:
   image: nginx
   container_name: bakerymanager-nginx
   volumes:
-      - ./src:/var/www/bakeryManager
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ${CURRENT_PATH}./src:/var/www/bakeryManager
+      - ${CURRENT_PATH}./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
   ports:
    - "8180:80"
   links:
@@ -38,8 +38,8 @@ bakerymanager-php-fpm:
   dockerfile: php-fpm/Dockerfile
   container_name: bakerymanager-php-fpm
   volumes:
-    - ./src:/var/www/bakeryManager
-    - ./php-fpm/php-ini-overrides.ini:/etc/php/7.1/fpm/conf.d/99-overrides.ini
+    - ${CURRENT_PATH}./src:/var/www/bakeryManager
+    - ${CURRENT_PATH}./php-fpm/php-ini-overrides.ini:/etc/php/7.1/fpm/conf.d/99-overrides.ini
   links:
     #- bakerymanager-mailhog
     - bakerymanager-mysql
