@@ -12,7 +12,7 @@ bakerymanager-mysql:
   image: mysql:5.7
   container_name: bakerymanager-mysql
   volumes:
-      - ./mysql:/var/lib/mysql
+      - ./mysql-data:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/my.cnf
   ports:
     - "8106:3306"

@@ -15,3 +15,10 @@ a demo version is available here http://lauters.fr/bakeryManager/
 
 
 ![Cake Power](https://raw.github.com/cakephp/cakephp/master/lib/Cake/Console/Templates/skel/webroot/img/cake.power.gif)
+
+
+
+## Setup
+- setup your .env files with mysql users/passwords
+- create initial database ````cat ./src/app/Config/Schema/databaseCreate.sql | dc exec -T bakerymanager-mysql mysql -u root -D MYSQL_DATABASE -pMYSQL_PASSWORD````
+- you may need to disable ONLY_FULL_GROUP_BY https://tableplus.com/blog/2018/08/mysql-how-to-turn-off-only-full-group-by.html
